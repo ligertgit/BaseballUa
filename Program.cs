@@ -1,9 +1,20 @@
+using BaseballUa.BlData;
+using BaseballUa.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<BaseballUaDbContext>(options =>
+					options.UseSqlServer(builder.Configuration.GetConnectionString("BaseballUaConnectString")));
+
+builder.Services.AddScoped<ICrud, CategoriesCrud>();
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

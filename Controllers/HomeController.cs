@@ -1,21 +1,29 @@
-﻿using BaseballUa.Models;
+﻿using BaseballUa.BlData;
+using BaseballUa.Data;
+using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+
 
 namespace BaseballUa.Controllers
 {
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
+		private readonly ICrud _categoryCrud; 
+		//private List<Category> allCategories;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger, ICrud categoryCrud)
 		{
 			_logger = logger;
+			//_dbContext = context;
+			_categoryCrud = categoryCrud;
 		}
 
 		public IActionResult Index()
 		{
-			return View();
+			var allCategories = _categoryCrud.GetAll().ToList();
+			return View(allCategories);
 		}
 
 		public IActionResult Privacy()
