@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
+using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Data
 {
@@ -10,6 +11,28 @@ namespace BaseballUa.Data
 		
 		}
 
-		public DbSet<Category> Category { get; set; }
-	}
+		public DbSet<Category> Categories { get; set; }
+		public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<Event> Events { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //tournament defaults
+            modelBuilder.Entity<Tournament>()
+                .Property(b => b.IsInternational)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Tournament>()
+                .Property(b => b.IsAnual)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Tournament>()
+                .Property(b => b.IsOfficial)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Tournament>()
+                .Property(b => b.Sport)
+                .HasDefaultValue(SportType.Both);
+        }
+    }
 }

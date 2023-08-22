@@ -28,7 +28,7 @@ namespace BaseballUa.BlData
 
 		public IEnumerable<Category> GetAll()
 		{
-			return _dbcontext.Category;
+			return _dbcontext.Categories;
 		}
 
 		public Category Update(Category category)
