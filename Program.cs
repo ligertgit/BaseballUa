@@ -1,5 +1,6 @@
 using BaseballUa.BlData;
 using BaseballUa.Data;
+using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<BaseballUaDbContext>(options =>
 					options.UseSqlServer(builder.Configuration.GetConnectionString("BaseballUaConnectString")));
 
-builder.Services.AddScoped<ICrud, CategoriesCrud>();
+builder.Services.AddScoped<ICrud<Category>, CategoriesCrud>();
 
 var app = builder.Build();
 

@@ -3,7 +3,7 @@ using BaseballUa.Models;
 
 namespace BaseballUa.BlData
 {
-	public class CategoriesCrud : ICrud
+	public class CategoriesCrud : ICrud<Category>
 	{
 		private readonly BaseballUaDbContext _dbcontext;
 

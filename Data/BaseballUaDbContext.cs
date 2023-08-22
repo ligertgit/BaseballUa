@@ -1,6 +1,7 @@
 ﻿using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
 using static BaseballUa.Data.Enums;
+using BaseballUa.ViewModels;
 
 namespace BaseballUa.Data
 {
@@ -34,5 +35,7 @@ namespace BaseballUa.Data
                 .Property(b => b.Sport)
                 .HasDefaultValue(SportType.Both);
         }
+
+        public DbSet<BaseballUa.ViewModels.CategoryViewModel>? CategoryViewModel { get; set; }
     }
 }

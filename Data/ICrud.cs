@@ -2,12 +2,12 @@
 
 namespace BaseballUa.Data
 {
-	public interface ICrud
+	public interface ICrud<T>
 	{
-		Category Add(Category category);
-		Category Update(Category category);
-		Category Delete(Category category);
-		Category Get(Category category);
-		IEnumerable<Category> GetAll();
+		T Add(T category);
+		T Update(T category);
+		T Delete(T category);
+		T Get(T category);
+		IEnumerable<T> GetAll();
 	}
 }
