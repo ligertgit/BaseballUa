@@ -11,19 +11,21 @@ namespace BaseballUa.BlData
         {
             _dbcontext = dbcontext;
         }
-        public Category Add(Category category)
+        public void Add(Category category)
+		{
+			_dbcontext.Categories.Add(category);
+			_dbcontext.SaveChanges();
+		}
+
+		public void Delete(Category category)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Category Delete(Category category)
+		public Category Get(int id)
 		{
-			throw new NotImplementedException();
-		}
-
-		public Category Get(Category category)
-		{
-			throw new NotImplementedException();
+			var category = _dbcontext.Categories.First(c => c.Id == id);
+			return category;
 		}
 
 		public IEnumerable<Category> GetAll()
@@ -31,9 +33,10 @@ namespace BaseballUa.BlData
 			return _dbcontext.Categories;
 		}
 
-		public Category Update(Category category)
+		public void Update(Category category)
 		{
-			throw new NotImplementedException();
+			_dbcontext.Categories.Update(category);
+			_dbcontext.SaveChanges();
 		}
 	}
 }

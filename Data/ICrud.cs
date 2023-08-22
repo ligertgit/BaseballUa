@@ -4,10 +4,10 @@ namespace BaseballUa.Data
 {
 	public interface ICrud<T>
 	{
-		T Add(T category);
-		T Update(T category);
-		T Delete(T category);
-		T Get(T category);
+		void Add(T category);
+		void Update(T category);
+		void Delete(T category);
+		T Get(int id);
 		IEnumerable<T> GetAll();
 	}
 }

@@ -1,18 +1,11 @@
-﻿@model List<BaseballUa.ViewModels.CategoryViewModel>
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">UA Baseball Softball page</h1>
+    <p>History:</p>
+    <p><img src="~/history/2208.jpg" class="img-thumbnail" /></p>
 </div>
 
-<ul>
-    @foreach (var category in Model)
-    {
-        <li>
-            Name: @category.Name Short name: @category.ShortName
-        </li>
-    }
-</ul>
+

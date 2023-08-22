@@ -11,18 +11,17 @@ namespace BaseballUa.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
-		private readonly ICrud<Category> _categoryCrud; 
+		 
 
-		public HomeController(ILogger<HomeController> logger, ICrud<Category> categoryCrud)
+		public HomeController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
-			_categoryCrud = categoryCrud;
 		}
 
 		public IActionResult Index()
 		{
-			var allCategories = _categoryCrud.GetAll().Select(a => CategoryToView.Convert(a)).ToList();
-			return View(allCategories);
+			
+			return View();
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
