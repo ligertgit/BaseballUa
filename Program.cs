@@ -1,5 +1,6 @@
 using BaseballUa.BlData;
 using BaseballUa.Data;
+using BaseballUa.DTO;
 using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<BaseballUaDbContext>(options =>
 					options.UseSqlServer(builder.Configuration.GetConnectionString("BaseballUaConnectString")));
 
 builder.Services.AddScoped<ICrud<Category>, CategoriesCrud>();
+builder.Services.AddScoped<ICrud<Tournament>, TournamentsCrud>();
 
 var app = builder.Build();
 

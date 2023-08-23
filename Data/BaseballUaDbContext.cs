@@ -37,5 +37,7 @@ namespace BaseballUa.Data
         }
 
         public DbSet<BaseballUa.ViewModels.CategoryViewModel>? CategoryViewModel { get; set; }
+
+        public DbSet<BaseballUa.ViewModels.TournamentViewModel>? TournamentViewModel { get; set; }
     }
 }

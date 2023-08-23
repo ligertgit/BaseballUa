@@ -5,38 +5,38 @@ namespace BaseballUa.BlData
 {
 	public class CategoriesCrud : ICrud<Category>
 	{
-		private readonly BaseballUaDbContext _dbcontext;
+		private readonly BaseballUaDbContext _dbContext;
 
         public CategoriesCrud(BaseballUaDbContext dbcontext)
         {
-            _dbcontext = dbcontext;
+            _dbContext = dbcontext;
         }
-        public void Add(Category category)
+        public void Add(Category item)
 		{
-			_dbcontext.Categories.Add(category);
-			_dbcontext.SaveChanges();
+			_dbContext.Categories.Add(item);
+			_dbContext.SaveChanges();
 		}
 
-		public void Delete(Category category)
+		public void Delete(Category item)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Category Get(int id)
+		public Category Get(int itemId)
 		{
-			var category = _dbcontext.Categories.First(c => c.Id == id);
+			var category = _dbContext.Categories.First(c => c.Id == itemId);
 			return category;
 		}
 
 		public IEnumerable<Category> GetAll()
 		{
-			return _dbcontext.Categories;
+			return _dbContext.Categories;
 		}
 
-		public void Update(Category category)
+		public void Update(Category item)
 		{
-			_dbcontext.Categories.Update(category);
-			_dbcontext.SaveChanges();
+			_dbContext.Categories.Update(item);
+			_dbContext.SaveChanges();
 		}
 	}
 }
