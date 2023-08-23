@@ -12,7 +12,7 @@ namespace BaseballUa.Data
 		
 		}
 
-		public DbSet<Category> Categories { get; set; }
+        public DbSet<Category> Categories { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Event> Events { get; set; }
 

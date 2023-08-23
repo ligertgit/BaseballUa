@@ -7,28 +7,32 @@ using System.Drawing.Text;
 
 namespace BaseballUa.DTO
 {
-    public static class TournamentToView
+    public class TournamentToView
     {
-        public static TournamentViewModel Convert(this Tournament tournament)
+        public TournamentViewModel Convert(Tournament tournament, BaseballUaDbContext _db)
         {
-            
             TournamentViewModel tournamentViewModel = new TournamentViewModel();
-        
-
 
             tournamentViewModel.Name = tournament.Name;
             tournamentViewModel.Description = tournament.Description;
             tournamentViewModel.Sport = tournament.Sport;
-            //tournamentViewModel.SelectedCategory = categoryCrud.Get(tournament.CategoryId).ShortName;
-            //tournamentViewModel.SelectedCategory = new CategoriesCrud().Get(tournament.CategoryId).ShortName;
-            //tournamentViewModel.Categories = 
-            tournamentViewModel.SelectedCategory = "asdf";
+            tournamentViewModel.SelectedCategory = _db.Categories.First(a => a.Id == tournament.CategoryId).ShortName;
             tournamentViewModel.IsAnual = tournament.IsAnual;
             tournamentViewModel.IsInternational = tournament.IsInternational;
             tournamentViewModel.IsOfficial = tournament.IsOfficial;
 
-
             return tournamentViewModel;
+        }
+
+        public List<TournamentViewModel> ConvertList(List<Tournament> tournaments, BaseballUaDbContext _db)
+        {
+            var tournamentList = new List<TournamentViewModel>();
+            foreach (var tournament in tournaments)
+            {
+                tournamentList.Add(Convert(tournament, _db));
+            }
+
+            return tournamentList;
         }
     }
 }

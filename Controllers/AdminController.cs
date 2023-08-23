@@ -1,21 +1,22 @@
-﻿using BaseballUa.Data;
+﻿using BaseballUa.BlData;
+using BaseballUa.Data;
 using BaseballUa.DTO;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly ICrud<Category> _categoryCrud;
-        private readonly ICrud<Tournament> _tournamentCrud;
+        private readonly BaseballUaDbContext _db;
 
-        public AdminController(ICrud<Category> categoryCrud, ICrud<Tournament> tournamentCrud)
+        public AdminController(BaseballUaDbContext dbcontext)
         {
-            _categoryCrud = categoryCrud;
-            _tournamentCrud = tournamentCrud;
+            _db = dbcontext;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -25,8 +26,9 @@ namespace BaseballUa.Controllers
 
         public IActionResult ListCategories() 
         {
-            var allCategories = _categoryCrud.GetAll().Select(a => CategoryToView.Convert(a)).ToList();
-            return View(allCategories);
+
+            var allCategoriesView = new CategoriesCrud(_db).GetAll().Select(a => CategoryToView.Convert(a, _db)).ToList();
+            return View(allCategoriesView);
         }
 
         public IActionResult CreateCategory() 
@@ -36,14 +38,14 @@ namespace BaseballUa.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateCategory(CategoryViewModel category)
+        public IActionResult CreateCategory(CategoryViewModel categoryView)
         {
             if (ModelState.IsValid) 
             {
                 Category categoryDAL = new Category();
-                categoryDAL.Name = category.Name;
-                categoryDAL.ShortName = category.ShortName;
-                _categoryCrud.Add(categoryDAL);
+                categoryDAL.Name = categoryView.Name;
+                categoryDAL.ShortName = categoryView.ShortName;
+                new CategoriesCrud(_db).Add(categoryDAL);
             }
             
             return RedirectToAction("ListCategories");
@@ -51,7 +53,7 @@ namespace BaseballUa.Controllers
 
         public IActionResult EditCategory(int id)
         {
-            var categoryItem = _categoryCrud.Get(id).Convert();
+            var categoryItem = new CategoriesCrud(_db).Get(id).Convert(_db);
             return View(categoryItem);
         }
 
@@ -65,7 +67,7 @@ namespace BaseballUa.Controllers
                 categoryDAL.Id = category.Id;
                 categoryDAL.Name = category.Name;
                 categoryDAL.ShortName = category.ShortName;
-                _categoryCrud.Update(categoryDAL);
+                new CategoriesCrud(_db).Update(categoryDAL);
             }
 
             return RedirectToAction("ListCategories");
@@ -73,11 +75,9 @@ namespace BaseballUa.Controllers
 #endregion
         public IActionResult ListTournaments()
         {
-        //    // List<Tournament> tournamentsDAL = new TournamentCrud().GetAll();
-        //    // List<TournamentViewModel> tournamentsView = new TournamentToView().ConvertList(tournamentsDAL);
-        //    //return View(tournamentsView);
-            var allTournaments = _tournamentCrud.GetAll().Select(a => TournamentToView.Convert(a)).ToList();
-            return View(allTournaments);
+            var tournamentsDTO = new TournamentsCrud(_db).GetAll().ToList();
+            var tournamentsView = new TournamentToView().ConvertList(tournamentsDTO, _db);
+            return View(tournamentsView);
         }
     }
 }

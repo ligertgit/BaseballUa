@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
 {
@@ -11,10 +12,11 @@ namespace BaseballUa.BlData
         {
             _dbContext = dbcontext;
         }
+
         public void Add(Category item)
 		{
-			_dbContext.Categories.Add(item);
-			_dbContext.SaveChanges();
+            _dbContext.Categories.Add(item);
+            _dbContext.SaveChanges();
 		}
 
 		public void Delete(Category item)
