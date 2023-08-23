@@ -34,6 +34,6 @@ namespace BaseballUa.ViewModels
         [Required]
         [DisplayName("Вікова категорія")]
         public string SelectedCategory { get; set; }
-        public IEnumerable<SelectListItem> Categories { get; set; }
+        //public IEnumerable<SelectListItem> Categories { get; set; }
     }
 }

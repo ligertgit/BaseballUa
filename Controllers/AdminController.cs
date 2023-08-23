@@ -73,9 +73,9 @@ namespace BaseballUa.Controllers
 #endregion
         public IActionResult ListTournaments()
         {
-            // List<Tournament> tournamentsDAL = new TournamentCrud().GetAll();
-            // List<TournamentViewModel> tournamentsView = new TournamentToView().ConvertList(tournamentsDAL);
-            //return View(tournamentsView);
+        //    // List<Tournament> tournamentsDAL = new TournamentCrud().GetAll();
+        //    // List<TournamentViewModel> tournamentsView = new TournamentToView().ConvertList(tournamentsDAL);
+        //    //return View(tournamentsView);
             var allTournaments = _tournamentCrud.GetAll().Select(a => TournamentToView.Convert(a)).ToList();
             return View(allTournaments);
         }
