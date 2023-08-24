@@ -79,5 +79,31 @@ namespace BaseballUa.Controllers
             var tournamentsView = new TournamentToView().ConvertList(tournamentsDTO, _db);
             return View(tournamentsView);
         }
+
+        public IActionResult CreateTournament()
+        {
+            //var tournamentDTO = new TournamentsCrud(_db).Get(1);
+            //var tournamentDTO = new TournamentsCrud(_db).GetEmpty();
+            var tournamentView = new TournamentToView().GetEmpty(_db);
+            return View(tournamentView);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateTournament(TournamentViewModel tournament)
+        {
+            if (ModelState.IsValid)
+            {
+                var tournamentDAL = new TournamentToView().ConvertBack(tournament);
+                new TournamentsCrud(_db).Add(tournamentDAL);
+            }
+            return RedirectToAction("ListTournaments");
+        }
+
+        public IActionResult EditTournament(TournamentViewModel tournament)
+        {
+            return RedirectToAction("ListTournament");
+        }
+
     }
 }

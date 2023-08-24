@@ -3,9 +3,12 @@ using static BaseballUa.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.ViewModels
 {
+    [Keyless]
     public class TournamentViewModel
     {
         public int Id { get; set; }
@@ -32,8 +35,13 @@ namespace BaseballUa.ViewModels
         public bool IsOfficial { get; set; }
 
         [Required]
-        [DisplayName("Вікова категорія")]
-        public string SelectedCategory { get; set; }
-        //public IEnumerable<SelectListItem> Categories { get; set; }
+        [DisplayName("Вікова категорія ID")]
+        public int CategoryId { get; set; }
+        [DisplayName("Вікова категорія short")]
+        public string? CategoryShortName { get; set; }
+        
+        public IEnumerable<SelectListItem>? CategoriesNames { get; set; }
     }
+
+
 }
