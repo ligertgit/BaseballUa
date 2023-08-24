@@ -28,6 +28,7 @@ namespace BaseballUa.DTO
             };
             categories.Insert(0, categoryDefault);
 
+            tournamentViewModel.Id = tournament.Id;
             tournamentViewModel.Name = tournament.Name;
             tournamentViewModel.Description = tournament.Description;
             tournamentViewModel.Sport = tournament.Sport;
@@ -73,7 +74,7 @@ namespace BaseballUa.DTO
         public Tournament ConvertBack(TournamentViewModel tournamentView)
         {
             var tournamentDAL = new Tournament();
-            //tournamentDAL.Id = tournamentView.Id;
+            tournamentDAL.Id = tournamentView.Id;
             tournamentDAL.Name = tournamentView.Name;
             tournamentDAL.Description = tournamentView.Description;
             tournamentDAL.Sport = tournamentView.Sport;
