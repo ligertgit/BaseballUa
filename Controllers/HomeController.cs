@@ -29,5 +29,10 @@ namespace BaseballUa.Controllers
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
+
+		public IActionResult History()
+		{
+			return View();
+		}
 	}
 }

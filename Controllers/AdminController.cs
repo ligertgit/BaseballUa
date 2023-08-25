@@ -5,6 +5,7 @@ using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Drawing;
 
 namespace BaseballUa.Controllers
 {
@@ -73,6 +74,7 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListCategories");
         }
 #endregion
+#region Tournaments
         public IActionResult ListTournaments()
         {
             var tournamentsDTO = new TournamentsCrud(_db).GetAll().ToList();
@@ -118,6 +120,63 @@ namespace BaseballUa.Controllers
             }
             return RedirectToAction("ListTournaments");
         }
+#endregion
 
+#region Events
+        public IActionResult ListEvents()
+        { 
+            var eventsDAL = new EventsCrud(_db).GetAll().ToList();
+            var eventsView = new EventToView().ConvertAll(eventsDAL, _db);
+            return View(eventsView); 
+        }
+
+        public IActionResult CreateEvent() 
+        {
+            var eventsView = new EventToView().CreateEmpty(_db);
+            return View(eventsView);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateEvent(EventViewModel eventView) 
+        { 
+            if (ModelState.IsValid) 
+            {
+                var eventDAL = new EventToView().ConvertBack(eventView);
+                new EventsCrud(_db).Add(eventDAL);
+            }
+
+            return RedirectToAction("ListEvents");
+        }
+
+        public IActionResult EditEvent(int id)
+        {
+            var eventDAL = new EventsCrud(_db).Get(id);
+            var eventView = new EventToView().Convert(eventDAL, _db);
+
+            return View(eventView);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditEvent(EventViewModel eventView) 
+        {
+            if (ModelState.IsValid) 
+            {
+                var eventDAL = new EventToView().ConvertBack(eventView);
+                new EventsCrud(_db).Update(eventDAL);
+            }
+
+            return RedirectToAction("ListEvents");
+        }
+
+        public IActionResult DetailsEvent(int id)
+        { 
+            var eventDAL = new EventsCrud(_db).Get(id);
+            var eventView = new EventToView().Convert(eventDAL, _db);
+
+            return View(eventView);
+        }
+#endregion
     }
 }
