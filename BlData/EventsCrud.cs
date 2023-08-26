@@ -38,5 +38,17 @@ namespace BaseballUa.BlData
             _dbContext.Events.Update(item);
             _dbContext.SaveChanges();
         }
+
+        public IEnumerable<Event> GetMonth(int monthShift)
+        {
+            var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(monthShift);
+            //var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month + monthShift, 1);
+            var endDate = startDate.AddMonths(1);
+            return _dbContext.Events.Where(i =>
+                                ((i.StartDate >= startDate && i.StartDate <= endDate)
+                                || (i.EndDate >= startDate && i.EndDate <= endDate))
+                                || (i.StartDate <= startDate && i.EndDate >= endDate)
+                                );
+        }
     }
 }

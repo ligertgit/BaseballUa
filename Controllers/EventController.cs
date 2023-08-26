@@ -15,10 +15,11 @@ namespace BaseballUa.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int monthShift = 0)
         {
-            var eventsDAL = new EventsCrud(_db).GetAll().ToList();
+            var eventsDAL = new EventsCrud(_db).GetMonth(monthShift).ToList();
             var eventsView = new EventToView().ConvertAll(eventsDAL, _db);
+            ViewBag.monthShift = monthShift;
             return View(eventsView);
         }
 

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Tournamets";
 }
 
-@{
+@*@{
     var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
     var endDate = startDate.AddMonths(1);
     var eventsThisMonth = Model.Where(i => 
@@ -12,9 +12,29 @@
                             || (i.EndDate >= startDate && i.EndDate <= endDate))
                             || (i.StartDate <= startDate && i.EndDate >= endDate)
                             ).OrderByDescending(i => i.StartDate).ToList();
-}
+}*@
+
 
 <h1>Турніри за місяць</h1>
+<div class="row">
+    <div class="col-4">
+    </div>
+    <div class="col-1 bg-primary">
+        @*<p class="text-right">Минулий</p>*@
+        <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((ViewBag.monthShift - 1).ToString())" class="text-white">Минулий</a>
+        
+    </div>
+    <div class="col-2 bg-info">
+        <p class="text-center">@DateTime.Now.AddMonths(ViewBag.monthShift).ToString("MMMM")</p>
+    </div>
+    <div class="col-1 bg-primary">
+        @*<p class="text-left">Наступний</p>*@
+        <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((ViewBag.monthShift + 1).ToString())" class="text-white">Наступний</a>
+    </div>
+    <div class="col-4">
+    </div>
+
+</div>
 
 <table class="table">
     <thead>
@@ -44,7 +64,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in eventsThisMonth)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
@@ -86,34 +106,6 @@
                 </td>
             </tr>
         }
-@*        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tournament.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tournament.Sport)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Tournament.CategoryShortName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EndDate)
-                </td>
-                <td>
-                    <a asp-action="DetailsEvent" asp-route-id="@item.EventViewModelId">Деталі</a>
-                </td>
-            </tr>
-        }*@
     </tbody>
 </table>
