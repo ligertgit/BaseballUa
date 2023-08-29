@@ -53,6 +53,10 @@ namespace BaseballUa.ViewModels
         public bool IsOfficial { get; set; }
         
         [Required]
+        [DisplayName("Фановий")]
+        public bool IsFun { get; set; }
+
+        [Required]
         [DisplayName("Вікова категорія ID")]
         public int CategoryId { get; set; }
         

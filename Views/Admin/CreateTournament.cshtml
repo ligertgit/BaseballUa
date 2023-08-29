@@ -43,6 +43,11 @@
                     <input class="form-check-input" asp-for="IsOfficial" /> @Html.DisplayNameFor(model => model.IsOfficial)
                 </label>
             </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsFun" /> @Html.DisplayNameFor(model => model.IsFun)
+                </label>
+            </div>
             <div class="form-group">
                 @Html.LabelFor(x => Model.CategoryId, htmlAttributes: new { @class = "control-label" })
                 <div class="">

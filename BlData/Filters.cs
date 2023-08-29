@@ -11,9 +11,10 @@ namespace BaseballUa.BlData
         public bool U12 { get; set; }
         public bool U15 { get; set; }
         public bool U18 { get; set; }
+        public bool U23 { get; set; }
         public bool Adult { get; set; }
         public bool Veteran { get; set; }
-        public bool Mix { get; set; }
+        public bool Fun { get; set; }
 
         public Filters()
         {
@@ -23,9 +24,10 @@ namespace BaseballUa.BlData
             U12 = false;
             U15 = false;
             U18 = false;
+            U23 = false;
             Adult = false;
             Veteran = false;
-            Mix = false;
+            Fun = false;
         }
 
         public Filters FixForSelect(Filters? filters)
@@ -38,9 +40,10 @@ namespace BaseballUa.BlData
                 U12 = true;
                 U15 = true;
                 U18 = true;
+                U23 = true;
                 Adult = true;
                 Veteran = true;
-                Mix = true;
+                Fun = true;
             }
             else
             {
@@ -50,29 +53,29 @@ namespace BaseballUa.BlData
                 U12 = filters.U12;
                 U15 = filters.U15;
                 U18 = filters.U18;
+                U23 = filters.U23;
                 Adult = filters.Adult;
                 Veteran = filters.Veteran;
-                Mix = filters.Mix;
+                Fun = filters.Fun;
             }
 
-            if (!filters.Baseball && !filters.Softball)
+            if (!Baseball && !Softball)
             {
                 Baseball = true;
                 Softball = true;
             }
 
-            if (!filters.U10 && !filters.U12 && !filters.U15 && !filters.Adult && !filters.Veteran && !filters.Mix)
+            if (!U10 && !U12 && !U15 && !U18 && !U23 && !Adult && !Veteran)
             {
                 U10 = true;
                 U12 = true;
                 U15 = true;
                 U18 = true;
+                U23 = true;
                 Adult = true;
                 Veteran = true;
-                Mix = true;
             }
 
-            //var ttt = this;
             return this;
         }
 
@@ -96,6 +99,10 @@ namespace BaseballUa.BlData
             return U18 ? "U18" : "do not show";
         }
 
+        public string chkU23()
+        {
+            return U23 ? "U23" : "do not show";
+        }
         public string chkAdult()
         {
             return Adult ? "Вишка" : "do not show";
@@ -106,10 +113,10 @@ namespace BaseballUa.BlData
             return Veteran ? "Ветерани" : "do not show";
         }
 
-        public string chkMix()
-        {
-            return Mix ? "Мішана" : "do not show";
-        }
+        //public bool chkFun()
+        //{
+        //    return Fun ? true : false;
+        //}
 
         public SportType chkBaseball()
         {

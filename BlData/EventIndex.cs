@@ -21,24 +21,32 @@ namespace BaseballUa.BlData
             var result = (from eventt in _dbContext.Events
                           join tournament in _dbContext.Tournaments on eventt.TournamentId equals tournament.Id
                           join category in _dbContext.Categories on tournament.CategoryId equals category.Id
-                          where ((
-                                  (eventt.StartDate >= startDate && eventt.StartDate <= endDate)
-                                  || (eventt.EndDate >= startDate && eventt.EndDate <= endDate)
+                          where (
+                                    (
+                                        (eventt.StartDate >= startDate && eventt.StartDate <= endDate)
+                                        || (eventt.EndDate >= startDate && eventt.EndDate <= endDate)
+                                    )
+                                    || (eventt.StartDate <= startDate && eventt.EndDate >= endDate)
                                  )
-                                 || (eventt.StartDate <= startDate && eventt.EndDate >= endDate)
-                                ) && 
-                                ( category.ShortName == fixxedFilters.chkU10()
-                                 || category.ShortName == fixxedFilters.chkU12()
-                                 || category.ShortName == fixxedFilters.chkU15()
-                                 || category.ShortName == fixxedFilters.chkU18()
-                                 || category.ShortName == fixxedFilters.chkAdult()
-                                 || category.ShortName == fixxedFilters.chkVeteran()
-                                 || category.ShortName == fixxedFilters.chkMix()
-                                )
-                                &&
-                                (tournament.Sport == fixxedFilters.chkBaseball()
-                                 || tournament.Sport == fixxedFilters.chkSoftball()
-                                )
+                                 &&
+                                 (
+                                    (
+                                        (
+                                            category.ShortName == fixxedFilters.chkU10()
+                                            || category.ShortName == fixxedFilters.chkU12()
+                                            || category.ShortName == fixxedFilters.chkU15()
+                                            || category.ShortName == fixxedFilters.chkU18()
+                                            || category.ShortName == fixxedFilters.chkAdult()
+                                            || category.ShortName == fixxedFilters.chkVeteran()
+                                        )
+                                        &&
+                                        (
+                                            tournament.Sport == fixxedFilters.chkBaseball()
+                                            || tournament.Sport == fixxedFilters.chkSoftball()
+                                        )
+                                    )
+                                    || ( tournament.IsFun == fixxedFilters.Fun && tournament.IsFun == true)
+                                 )
                           select new EventIndexModel
                           {
                               Id = eventt.Id,
@@ -52,6 +60,7 @@ namespace BaseballUa.BlData
                               IsAnual = tournament.IsAnual,
                               IsInternational = tournament.IsInternational,
                               IsOfficial = tournament.IsOfficial,
+                              IsFun = tournament.IsFun,
                               CategoryId = tournament.CategoryId,
                               CategoryShortName = category.ShortName
                           }).ToList();

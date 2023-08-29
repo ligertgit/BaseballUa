@@ -20,6 +20,7 @@ namespace BaseballUa.Models
         public bool IsAnual { get; set; }
         public bool IsInternational { get; set; }
         public bool IsOfficial { get; set; }
+        public bool IsFun { get; set; }
 
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;

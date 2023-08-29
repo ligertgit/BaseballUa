@@ -21,7 +21,6 @@ namespace BaseballUa.Controllers
         public IActionResult Index(int monthShift = 0)
         {
 
-            //Filters filters = TempData["filters"] == null ? new Filters() : TempData.Get<Filters>("filters");
             Filters filters = new Filters();
             filters.Baseball = Convert.ToBoolean(Request.Cookies["filterBaseball"]);
             filters.Softball = Convert.ToBoolean(Request.Cookies["filterSoftball"]);
@@ -31,7 +30,7 @@ namespace BaseballUa.Controllers
             filters.U18 = Convert.ToBoolean(Request.Cookies["filterU18"]);
             filters.Adult = Convert.ToBoolean(Request.Cookies["filterAdult"]);
             filters.Veteran = Convert.ToBoolean(Request.Cookies["filterVeteran"]);
-            filters.Mix = Convert.ToBoolean(Request.Cookies["filterMix"]);
+            filters.Fun = Convert.ToBoolean(Request.Cookies["filterFun"]);
 
             var eventsData = new EventIndex(_db).GetMonthFilters(monthShift, filters);
             var eventsView = new EventIndexToView().ConvertAll(eventsData);
@@ -65,9 +64,10 @@ namespace BaseballUa.Controllers
             if (fc["chkU12"] == "on") filters.U12 = true;
             if (fc["chkU15"] == "on") filters.U15 = true;
             if (fc["chkU18"] == "on") filters.U18 = true;
+            if (fc["chkU23"] == "on") filters.U23 = true;
             if (fc["chkAdult"] == "on") filters.Adult = true;
             if (fc["chkVeteran"] == "on") filters.Veteran = true;
-            if (fc["chkMix"] == "on") filters.Mix = true;
+            if (fc["chkFun"] == "on") filters.Fun = true;
 
             Response.Cookies.Append("filterBaseball", filters.Baseball.ToString(), option);
             Response.Cookies.Append("filterSoftball", filters.Softball.ToString(), option);
@@ -77,7 +77,7 @@ namespace BaseballUa.Controllers
             Response.Cookies.Append("filterU18", filters.U18.ToString(), option);
             Response.Cookies.Append("filterAdult", filters.Adult.ToString(), option);
             Response.Cookies.Append("filterVeteran", filters.Veteran.ToString(), option);
-            Response.Cookies.Append("filterMix", filters.Mix.ToString(), option);
+            Response.Cookies.Append("filterFun", filters.Fun.ToString(), option);
 
             var monthShift = (fc["monthShift"].IsNullOrEmpty()) ? 0 : Convert.ToInt32(fc["monthShift"]);
             TempData.Put("filters", filters);

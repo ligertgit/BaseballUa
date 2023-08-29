@@ -35,6 +35,7 @@ namespace BaseballUa.DTO
             tournamentViewModel.IsAnual = tournament.IsAnual;
             tournamentViewModel.IsInternational = tournament.IsInternational;
             tournamentViewModel.IsOfficial = tournament.IsOfficial;
+            tournamentViewModel.IsFun = tournament.IsFun;
             tournamentViewModel.CategoryId = _db.Categories.First(a => a.Id == tournament.CategoryId).Id;
             tournamentViewModel.CategoryShortName = _db.Categories.First(a => a.Id == tournament.CategoryId).ShortName;
 
@@ -81,6 +82,7 @@ namespace BaseballUa.DTO
             tournamentDAL.IsOfficial = tournamentView.IsOfficial;
             tournamentDAL.IsInternational = tournamentView.IsInternational;
             tournamentDAL.IsAnual = tournamentView.IsAnual;
+            tournamentDAL.IsFun = tournamentView.IsFun;
             tournamentDAL.CategoryId = tournamentView.CategoryId;
 
             return tournamentDAL;

@@ -31,6 +31,9 @@
                 @Html.DisplayNameFor(model => model.IsOfficial)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.IsFun)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.CategoryId)
             </th>
             <th></th>
@@ -56,6 +59,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsOfficial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsFun)
             </td>
             <td>
                     @Html.DisplayFor(modelItem => item.CategoryShortName)

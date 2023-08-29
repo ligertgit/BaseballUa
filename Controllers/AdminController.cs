@@ -27,7 +27,7 @@ namespace BaseballUa.Controllers
 
         public IActionResult ListCategories() 
         {
-
+            //fix fromDTO to VIEW model and fix method _db
             var allCategoriesView = new CategoriesCrud(_db).GetAll().Select(a => CategoryToView.Convert(a, _db)).ToList();
             return View(allCategoriesView);
         }

@@ -80,7 +80,7 @@
                 @:checked
             }
                    autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-adult">Дорослі</label>
+            <label class="btn btn-outline-primary" for="btn-check-adult">Вишка</label>
         </div>
         <div class="col-1">
             <input type="checkbox" name="chkVeteran" class="btn-check" id="btn-check-veteran"
@@ -92,17 +92,17 @@
             <label class="btn btn-outline-primary" for="btn-check-veteran">Ветерани</label>
         </div>
         <div class="col-1">
-            <input type="checkbox" name="chkMix" class="btn-check" id="btn-check-mix"
-            @if (ViewBag.filters.Mix)
+            <input type="checkbox" name="chkFun" class="btn-check" id="btn-check-fun"
+            @if (ViewBag.filters.Fun)
             {
                 @:checked
             }
                    autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-mix">Змішані</label>
+            <label class="btn btn-outline-primary" for="btn-check-fun">Фанові ігри</label>
         </div>
         <div class="col-1">
             <div class="form-group">
-                <input type="submit" value="Застосувати фыльтри" class="btn btn-primary" />
+                <input type="submit" value="Застосувати фільтри" class="btn btn-primary" />
             </div>
         </div>
     </div>

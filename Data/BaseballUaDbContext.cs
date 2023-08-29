@@ -15,6 +15,7 @@ namespace BaseballUa.Data
         public DbSet<Category> Categories { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Game> Games { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,15 +33,19 @@ namespace BaseballUa.Data
                 .HasDefaultValue(false);
 
             modelBuilder.Entity<Tournament>()
+                .Property(b => b.IsFun)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<Tournament>()
                 .Property(b => b.Sport)
                 .HasDefaultValue(SportType.NotDefined);
         }
 
-        public DbSet<BaseballUa.ViewModels.TournamentViewModel>? TournamentViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.TournamentViewModel>? TournamentViewModel { get; set; }
 
-        public DbSet<BaseballUa.ViewModels.CategoryViewModel>? CategoryViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.CategoryViewModel>? CategoryViewModel { get; set; }
 
-        public DbSet<BaseballUa.ViewModels.EventViewModel>? EventViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.EventViewModel>? EventViewModel { get; set; }
 
     }
 }
