@@ -9,7 +9,7 @@ namespace BaseballUa.Data
         {
             Baseball = 1,
             Softball = 2,
-            Both = 3
+            NotDefined = 3
         }
     }
 }

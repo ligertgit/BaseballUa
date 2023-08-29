@@ -1,5 +1,8 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.EntityFrameworkCore.Internal;
+using System.Drawing;
+using System.Linq;
 
 namespace BaseballUa.BlData
 {
@@ -39,6 +42,8 @@ namespace BaseballUa.BlData
             _dbContext.SaveChanges();
         }
 
+
+        //remove
         public IEnumerable<Event> GetMonth(int monthShift)
         {
             var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(monthShift);
@@ -50,5 +55,7 @@ namespace BaseballUa.BlData
                                 || (i.StartDate <= startDate && i.EndDate >= endDate)
                                 );
         }
+
+        
     }
 }

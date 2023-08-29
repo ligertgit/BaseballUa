@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BaseballUa.ViewModels.EventViewModel>
+﻿@model IEnumerable<BaseballUa.ViewModels.EventIndexViewModel>
 
 @{
     ViewData["Title"] = "Tournamets";
@@ -15,8 +15,103 @@
 }*@
 
 
+
+<form asp-action="ApplyFilters">
+    <div class="row mb-5">
+        <input type="hidden" name="monthShift" value="@ViewBag.monthShift" />
+        <div class="col-1">
+            <input type="checkbox" name="chkBaseball" class="btn-check" id="btn-check-bb"
+                @if(ViewBag.filters.Baseball)
+                {
+                    @:checked
+                }
+            autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-bb">Baseball</label>
+        </div>
+        <div class="col-1">
+            <input type="checkbox" name="chkSoftball" class="btn-check" id="btn-check-sb"
+                @if (ViewBag.filters.Softball)
+                {
+                    @:checked
+                }
+            autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-sb">Softball</label>
+        </div>
+        <div class="col-1">
+            <input type="checkbox" name="chkU10" class="btn-check" id="btn-check-u10"
+            @if (ViewBag.filters.U10)
+            {
+                @:checked
+            }
+                   autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-u10">U10</label>
+        </div>
+        <div class="col-1">
+            <input type="checkbox" name="chkU12" class="btn-check" id="btn-check-u12"
+            @if (ViewBag.filters.U12)
+            {
+                @:checked
+            }
+                   autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-u12">U12</label>
+        </div>
+        <div class="col-1">
+            <input type="checkbox" name="chkU15" class="btn-check" id="btn-check-u15"
+            @if (ViewBag.filters.U15)
+            {
+                @:checked
+            }
+                   autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-u15">U15</label>
+        </div>
+        <div class="col-1">
+            <input type="checkbox" name="chkU18" class="btn-check" id="btn-check-u18"
+            @if (ViewBag.filters.U18)
+            {
+                @:checked
+            }
+                   autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-u18">U18</label>
+        </div>
+        <div class="col-1">
+            <input type="checkbox" name="chkAdult" class="btn-check" id="btn-check-adult"
+            @if (ViewBag.filters.Adult)
+            {
+                @:checked
+            }
+                   autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-adult">Дорослі</label>
+        </div>
+        <div class="col-1">
+            <input type="checkbox" name="chkVeteran" class="btn-check" id="btn-check-veteran"
+            @if (ViewBag.filters.Veteran)
+            {
+                @:checked
+            }
+                   autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-veteran">Ветерани</label>
+        </div>
+        <div class="col-1">
+            <input type="checkbox" name="chkMix" class="btn-check" id="btn-check-mix"
+            @if (ViewBag.filters.Mix)
+            {
+                @:checked
+            }
+                   autocomplete="off">
+            <label class="btn btn-outline-primary" for="btn-check-mix">Змішані</label>
+        </div>
+        <div class="col-1">
+            <div class="form-group">
+                <input type="submit" value="Застосувати фыльтри" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+</form>
+
 <h1>Турніри за місяць</h1>
-<div class="row">
+<hr />
+<div class="row mb-5">
     <div class="col-4">
     </div>
     <div class="col-1 bg-primary">
@@ -43,16 +138,16 @@
                 
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tournament.Name)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Year)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tournament.Sport)
+                @Html.DisplayNameFor(model => model.Sport)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tournament.CategoryShortName)
+                @Html.DisplayNameFor(model => model.CategoryShortName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StartDate)
@@ -84,16 +179,16 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Tournament.Name)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Year)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Tournament.Sport)
+                    @Html.DisplayFor(modelItem => item.Sport)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Tournament.CategoryShortName)
+                    @Html.DisplayFor(modelItem => item.CategoryShortName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.StartDate)
@@ -102,7 +197,7 @@
                     @Html.DisplayFor(modelItem => item.EndDate)
                 </td>
                 <td>
-                    <a asp-action="DetailsEvent" asp-route-id="@item.EventViewModelId">Деталі</a>
+                    <a asp-action="DetailsEvent" asp-route-id="@item.EventIndexViewModelId" asp-route-monthshift="@ViewBag.monthShift">Деталі</a>
                 </td>
             </tr>
         }

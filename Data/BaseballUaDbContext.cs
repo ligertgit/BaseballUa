@@ -33,7 +33,7 @@ namespace BaseballUa.Data
 
             modelBuilder.Entity<Tournament>()
                 .Property(b => b.Sport)
-                .HasDefaultValue(SportType.Both);
+                .HasDefaultValue(SportType.NotDefined);
         }
 
         public DbSet<BaseballUa.ViewModels.TournamentViewModel>? TournamentViewModel { get; set; }
