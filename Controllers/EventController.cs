@@ -32,8 +32,8 @@ namespace BaseballUa.Controllers
             filters.Veteran = Convert.ToBoolean(Request.Cookies["filterVeteran"]);
             filters.Fun = Convert.ToBoolean(Request.Cookies["filterFun"]);
 
-            var eventsData = new EventIndex(_db).GetMonthFilters(monthShift, filters);
-            var eventsView = new EventIndexToView().ConvertAll(eventsData);
+            var eventsView = new EventIndex(_db).GetMonthFilters(monthShift, filters);
+            //var eventsView = new EventIndexToView().ConvertAll(eventsData);
 
             ViewBag.monthShift = monthShift;
             ViewBag.filters = filters;
@@ -43,7 +43,9 @@ namespace BaseballUa.Controllers
 
         public IActionResult DetailsEvent(int id, int monthShift = 0)
         {
+            // probably should use EventIndexViewModel
             var eventDAL = new EventsCrud(_db).Get(id);
+            // move dbcontext to constructor
             var eventView = new EventToView().Convert(eventDAL, _db);
             ViewBag.monthShift = monthShift;
             return View(eventView);

@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using BaseballUa.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
@@ -12,7 +13,7 @@ namespace BaseballUa.BlData
         {
             _dbContext = dbContext;
         }
-        public List<EventIndexModel> GetMonthFilters(int monthShift, Filters? filters)
+        public List<EventIndexViewModel> GetMonthFilters(int monthShift, Filters? filters)
         {
             var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(monthShift);
             var endDate = startDate.AddMonths(1);
@@ -45,11 +46,11 @@ namespace BaseballUa.BlData
                                             || tournament.Sport == fixxedFilters.chkSoftball()
                                         )
                                     )
-                                    || ( tournament.IsFun == fixxedFilters.Fun && tournament.IsFun == true)
+                                    || ( tournament.IsFun == fixxedFilters.Fun && tournament.IsFun )
                                  )
-                          select new EventIndexModel
+                          select new EventIndexViewModel
                           {
-                              Id = eventt.Id,
+                              EventIndexViewModelId = eventt.Id,
                               Year = eventt.Year,
                               StartDate = eventt.StartDate,
                               EndDate = eventt.EndDate,
