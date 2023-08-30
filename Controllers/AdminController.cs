@@ -28,7 +28,8 @@ namespace BaseballUa.Controllers
         public IActionResult ListCategories() 
         {
             //fix fromDTO to VIEW model and fix method _db
-            var allCategoriesView = new CategoriesCrud(_db).GetAll().Select(a => CategoryToView.Convert(a, _db)).ToList();
+            var allCategoriesDTO = new CategoriesCrud(_db).GetAll().ToList();
+            var allCategoriesView = new CategoryToView(_db).ConvertList(allCategoriesDTO);
             return View(allCategoriesView);
         }
 
@@ -43,9 +44,9 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid) 
             {
-                Category categoryDAL = new Category();
-                categoryDAL.Name = categoryView.Name;
-                categoryDAL.ShortName = categoryView.ShortName;
+                Category categoryDAL = new CategoryToView(_db).ConvertBack(categoryView);
+                //categoryDAL.Name = categoryView.Name;
+                //categoryDAL.ShortName = categoryView.ShortName;
                 new CategoriesCrud(_db).Add(categoryDAL);
             }
             
@@ -54,8 +55,9 @@ namespace BaseballUa.Controllers
 
         public IActionResult EditCategory(int id)
         {
-            var categoryItem = new CategoriesCrud(_db).Get(id).Convert(_db);
-            return View(categoryItem);
+            var categoryDTO = new CategoriesCrud(_db).Get(id);
+            var categoryView = new CategoryToView(_db).Convert(categoryDTO);
+            return View(categoryView);
         }
 
         [HttpPost]
@@ -64,10 +66,10 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid) 
             {
-                Category categoryDAL = new Category();
-                categoryDAL.Id = category.Id;
-                categoryDAL.Name = category.Name;
-                categoryDAL.ShortName = category.ShortName;
+                Category categoryDAL = new CategoryToView(_db).ConvertBack(category);
+                //categoryDAL.Id = category.Id;
+                //categoryDAL.Name = category.Name;
+                //categoryDAL.ShortName = category.ShortName;
                 new CategoriesCrud(_db).Update(categoryDAL);
             }
 
