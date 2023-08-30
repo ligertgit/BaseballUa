@@ -16,6 +16,7 @@ namespace BaseballUa.Data
 		public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<EventSchemaItem> EventSchemaItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,6 +41,8 @@ namespace BaseballUa.Data
                 .Property(b => b.Sport)
                 .HasDefaultValue(SportType.NotDefined);
         }
+
+        public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.TournamentViewModel>? TournamentViewModel { get; set; }
 

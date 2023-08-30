@@ -17,7 +17,7 @@ namespace BaseballUa.Data
             Upcoming = 1,
             Runnig = 2,
             Deleyed = 3,
-            Finnished = 4,
+            Finished = 4,
             Canceled = 5
         }
 

@@ -10,5 +10,6 @@
         public int TournamentId { get; set; }
         public Tournament Tournament { get; set; } = null!;
         public ICollection<Game> Games { get; set; } = new List<Game>();
+        public ICollection<EventSchemaItem> EventSchemaItems { get;} = new List<EventSchemaItem>();
     }
 }

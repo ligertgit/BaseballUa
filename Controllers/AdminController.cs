@@ -76,6 +76,7 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListCategories");
         }
 #endregion
+
 #region Tournaments
         public IActionResult ListTournaments()
         {
@@ -178,6 +179,28 @@ namespace BaseballUa.Controllers
             var eventView = new EventToView().Convert(eventDAL, _db);
 
             return View(eventView);
+        }
+        #endregion
+
+#region Games
+
+        public IActionResult AddGame(int eventId)
+        {
+            var gameView = new GameToView(_db).CreateEmpty(eventId);
+            return View(gameView);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddGame(GameViewModel gameVL)
+        {
+            if (ModelState.IsValid)
+            {
+                var gameDAL = new GameToView(_db).ConvertBack(gameVL);
+                new GamesCrud(_db).Add(gameDAL);
+            }
+            
+            return RedirectToAction("ListEvents", gameVL.EventId);
         }
 #endregion
     }

@@ -1,0 +1,97 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.GameViewModel
+
+@{
+    ViewData["Title"] = "AddGame";
+}
+
+<h1>AddGame</h1>
+
+<h4>GameViewModel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddGame">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="EventId" />
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdditionalInfo" class="control-label"></label>
+                <input asp-for="AdditionalInfo" class="form-control" />
+                <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RunsVisitor" class="control-label"></label>
+                <input asp-for="RunsVisitor" class="form-control" />
+                <span asp-validation-for="RunsVisitor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RunsHome" class="control-label"></label>
+                <input asp-for="RunsHome" class="form-control" />
+                <span asp-validation-for="RunsHome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlacedAt" class="control-label"></label>
+                <input asp-for="PlacedAt" class="form-control" />
+                <span asp-validation-for="PlacedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HalfinningsPlayed" class="control-label"></label>
+                <input asp-for="HalfinningsPlayed" class="form-control" />
+                <span asp-validation-for="HalfinningsPlayed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GameStatus" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.GameStatus, Enums.GameStatus.Upcoming.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
+                <span asp-validation-for="GameStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PointsVisitor" class="control-label"></label>
+                <input asp-for="PointsVisitor" class="form-control" />
+                <span asp-validation-for="PointsVisitor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PointsHome" class="control-label"></label>
+                <input asp-for="PointsHome" class="form-control" />
+                <span asp-validation-for="PointsHome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GameType" class="control-label"></label>
+                @*<select asp-for="GameType" class="form-control"></select>*@
+                @Html.DropDownListFor(x => Model.GameType, Enums.GameType.Group1.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
+                <span asp-validation-for="GameType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tour" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.Tour, Enums.TourNumber.Tour1.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
+                <span asp-validation-for="Tour" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConditionVisitor" class="control-label"></label>
+                <input asp-for="ConditionVisitor" class="form-control" />
+                <span asp-validation-for="ConditionVisitor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConditionHome" class="control-label"></label>
+                <input asp-for="ConditionHome" class="form-control" />
+                <span asp-validation-for="ConditionHome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ListEvent">Повернутися до турнірів</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
