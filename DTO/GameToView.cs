@@ -2,6 +2,7 @@
 using BaseballUa.Data;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BaseballUa.DTO
 {
@@ -27,7 +28,17 @@ namespace BaseballUa.DTO
             gameView.GameStatus = gameDAL.GameStatus;
             gameView.PointsVisitor = gameDAL.PointsVisitor;
             gameView.PointsHome = gameDAL.PointsHome;
-            gameView.GameType = gameDAL.GameType;
+            //gameView.GameType = gameDAL.GameType;
+            gameView.EventSchemaItemId = gameDAL.EventSchemaItemId;
+            gameView.EventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
+            //gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId);
+            gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId).
+                                                Select(i => new SelectListItem 
+                                                                { 
+                                                                    Text = i.SchemaItem.ToString(), 
+                                                                    Value = i.Id.ToString()
+                                                                }
+                                                      ).ToList();
             gameView.Tour = gameDAL.Tour;
             gameView.ConditionVisitor = gameDAL.ConditionVisitor;
             gameView.ConditionHome = gameDAL.ConditionHome;
@@ -53,7 +64,8 @@ namespace BaseballUa.DTO
             gameDAL.GameStatus = gameVL.GameStatus;
             gameDAL.PointsVisitor = gameVL.PointsVisitor;
             gameDAL.PointsHome = gameVL.PointsHome;
-            gameDAL.GameType = gameVL.GameType;
+            //gameDAL.GameType = gameVL.GameType;
+            gameDAL.EventSchemaItemId = gameVL.EventSchemaItemId;
             gameDAL.Tour = gameVL.Tour;
             gameDAL.ConditionVisitor = gameVL.ConditionVisitor;
             gameDAL.ConditionHome = gameVL.ConditionHome;

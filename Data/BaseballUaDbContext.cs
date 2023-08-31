@@ -40,9 +40,33 @@ namespace BaseballUa.Data
             modelBuilder.Entity<Tournament>()
                 .Property(b => b.Sport)
                 .HasDefaultValue(SportType.NotDefined);
+
+            //modelBuilder.Entity<Game>()
+            //    .HasOne(b => b.EventSchemaItem)
+            //    .WithMany()
+            //    .OnDelete(DeleteBehavior.ClientNoAction);
+
+            /////////////////////
+            //modelBuilder.Entity<Game>()
+            //    .HasOne(b => b.EventSchemaItem)
+            //    .WithMany(e => e.Games)
+            //    .OnDelete(DeleteBehavior.ClientNoAction);
+
+            modelBuilder.Entity<Event>()
+                .HasMany(e => e.Games)
+                .WithOne(g => g.Event)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //entity.HasOne(d => d.Team1)
+            //        .WithMany(p => p.GameTeam1)
+            //        .HasForeignKey(d => d.Team1Id)
+            //        .OnDelete(DeleteBehavior.ClientNoAction)
+            //        .HasConstraintName("FK_Games_Teams_Team1ID");
         }
 
-        public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
+
+        //public DbSet<BaseballUa.ViewModels.EventSchemaItemViewModel>? EventSchemaItemViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.TournamentViewModel>? TournamentViewModel { get; set; }
 

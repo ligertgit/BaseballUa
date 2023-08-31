@@ -200,8 +200,32 @@ namespace BaseballUa.Controllers
                 new GamesCrud(_db).Add(gameDAL);
             }
             
-            return RedirectToAction("ListEvents", gameVL.EventId);
+            return RedirectToAction("ListEvents");
         }
 #endregion
+
+#region GameSchema
+
+        public IActionResult AddSchemaItem(int eventId)
+        {
+            var eventSchemaItemVL = new EventSchemaItemToView(_db).CreateEmpty(eventId);
+            return View(eventSchemaItemVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddSchemaItem(EventSchemaItemViewModel eventSchemaItemVL)
+        {
+            if (ModelState.IsValid)
+            { 
+                var eventSchemaItemDAL = new EventSchemaItemToView(_db).ConvertBack(eventSchemaItemVL);
+                new EventSchemaItemsCrud(_db).Add(eventSchemaItemDAL);
+
+            }
+            return RedirectToAction("ListEvents");
+        }
+#endregion
+
+
     }
 }

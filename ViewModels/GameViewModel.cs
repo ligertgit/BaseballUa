@@ -3,6 +3,8 @@ using static BaseballUa.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseballUa.ViewModels
 {
@@ -44,9 +46,9 @@ namespace BaseballUa.ViewModels
         [Range(0, 2)]
         public int? PointsHome { get; set; }
         
-        [DisplayName("З якої частини турніру")]
-        [Range(0, 100)]
-        public GameType GameType { get; set; }
+        //[DisplayName("З якої частини турніру")]
+        //[Range(0, 100)]
+        //public GameType GameType { get; set; }
 
         [DisplayName("Тур")]
         public TourNumber? Tour { get; set; }
@@ -58,7 +60,17 @@ namespace BaseballUa.ViewModels
         [StringLength(50)]
         [DisplayName("Умова для команди-володаря")]
         public string? ConditionHome { get; set; }
+
+        [DisplayName("З якої частини турніру")]
+        public int EventSchemaItemId { get; set; }
         
+        [DisplayName("Тип частини турніру")]
+        public GameType? EventSchemaItem { get; set; }
+
+        //public ICollection<EventSchemaItem>? EventSchemaItems { get; set; } = new List<EventSchemaItem>();
+        [NotMapped]
+        public IEnumerable<SelectListItem> EventSchemaItems { get; set; }
+
         public int EventId { get; set; }
         
         

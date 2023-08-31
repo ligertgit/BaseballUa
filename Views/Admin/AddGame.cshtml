@@ -50,6 +50,9 @@
                 @Html.DropDownListFor(x => Model.GameStatus, Enums.GameStatus.Upcoming.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
                 <span asp-validation-for="GameStatus" class="text-danger"></span>
             </div>
+
+
+            
             <div class="form-group">
                 <label asp-for="PointsVisitor" class="control-label"></label>
                 <input asp-for="PointsVisitor" class="form-control" />
@@ -60,12 +63,19 @@
                 <input asp-for="PointsHome" class="form-control" />
                 <span asp-validation-for="PointsHome" class="text-danger"></span>
             </div>
-            <div class="form-group">
+@*            <div class="form-group">
                 <label asp-for="GameType" class="control-label"></label>
-                @*<select asp-for="GameType" class="form-control"></select>*@
                 @Html.DropDownListFor(x => Model.GameType, Enums.GameType.Group1.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
                 <span asp-validation-for="GameType" class="text-danger"></span>
+            </div>*@
+
+            <div class="form-group">
+                <label asp-for="EventSchemaItemId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.EventSchemaItemId, new SelectList(Model.EventSchemaItems, "Text", "Value"), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
+                <span asp-validation-for="GameStatus" class="text-danger"></span>
             </div>
+
+
             <div class="form-group">
                 <label asp-for="Tour" class="control-label"></label>
                 @Html.DropDownListFor(x => Model.Tour, Enums.TourNumber.Tour1.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})

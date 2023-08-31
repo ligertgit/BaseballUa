@@ -17,13 +17,15 @@ namespace BaseballUa.Models
         public GameStatus GameStatus { get; set; }
         public int? PointsVisitor { get; set; }
         public int? PointsHome { get; set;}
-        public GameType GameType { get; set; }
+        //public GameType GameType { get; set; }
         public TourNumber? Tour { get; set; }
         [StringLength(50)]
         public string? ConditionVisitor { get; set; }
         [StringLength(50)]
         public string? ConditionHome { get; set; }
 
+        public int EventSchemaItemId { get; set; }
+        public EventSchemaItem EventSchemaItem { get; set; } = null!;
         public int EventId { get; set; }
         public Event Event { get; set; } = null!;
     }
