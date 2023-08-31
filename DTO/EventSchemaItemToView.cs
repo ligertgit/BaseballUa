@@ -1,5 +1,6 @@
 ﻿using BaseballUa.BlData;
 using BaseballUa.Data;
+using BaseballUa.Migrations;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
 
@@ -19,7 +20,7 @@ namespace BaseballUa.DTO
             var eventSchemaItemVL = new EventSchemaItemViewModel();
             eventSchemaItemVL.EventSchemaItemViewModelId = eventSchemaItemDAL.Id;
             eventSchemaItemVL.Order = eventSchemaItemDAL.Order;
-            eventSchemaItemVL.SchemaItem = eventSchemaItemVL.SchemaItem;
+            eventSchemaItemVL.SchemaItem = eventSchemaItemDAL.SchemaItem;
             eventSchemaItemVL.EventId = eventSchemaItemDAL.EventId;
             eventSchemaItemVL.Event = new EventsCrud(_dbContext).Get(eventSchemaItemDAL.EventId);
             eventSchemaItemVL.Tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
@@ -46,6 +47,17 @@ namespace BaseballUa.DTO
             eventSchemaItemVL.Tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
 
             return eventSchemaItemVL;
+        }
+
+        public List<EventSchemaItemViewModel> ConvertAll(List<EventSchemaItem> eventSchemaItemsDAL)
+        {
+            var eventSchemaItemsVL = new List<EventSchemaItemViewModel>();
+            foreach (var item in eventSchemaItemsDAL)
+            {
+                eventSchemaItemsVL.Add(Convert(item));
+            }
+
+            return eventSchemaItemsVL;
         }
     }
 }

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<BaseballUa.ViewModels.GameViewModel>
+
+@{
+    ViewData["Title"] = "ListGames";
+}
+
+<h1>ListGames</h1>
+
+<p>
+    <a asp-action="AddGame" asp-route-eventId="@Model.FirstOrDefault()?.EventSchemaItemId">Додати нову ігру до цього блока турніру</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdditionalInfo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RunsVisitor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RunsHome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlacedAt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HalfinningsPlayed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GameStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PointsVisitor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PointsHome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConditionVisitor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConditionHome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventSchemaItemId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventSchemaItem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Event)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdditionalInfo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RunsVisitor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RunsHome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlacedAt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HalfinningsPlayed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GameStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PointsVisitor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PointsHome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tour)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConditionVisitor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConditionHome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventSchemaItemId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventSchemaItem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Event.Id)
+            </td>
+            <td>
+               @* <a asp-action="Edit" asp-route-id="@item.GameViewModelId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.GameViewModelId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.GameViewModelId">Delete</a>*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

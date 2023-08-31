@@ -44,5 +44,6 @@ namespace BaseballUa.BlData
             var eventSchemaItems = _dbContext.EventSchemaItems.Where(i => i.EventId == eventId).ToList();
             return eventSchemaItems;
         }
+
     }
 }

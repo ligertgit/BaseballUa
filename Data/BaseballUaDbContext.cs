@@ -64,6 +64,10 @@ namespace BaseballUa.Data
             //        .HasConstraintName("FK_Games_Teams_Team1ID");
         }
 
+        public DbSet<BaseballUa.ViewModels.EventSchemaItemViewModel>? EventSchemaItemViewModel { get; set; }
+
+        public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
+
         //public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.EventSchemaItemViewModel>? EventSchemaItemViewModel { get; set; }

@@ -38,5 +38,11 @@ namespace BaseballUa.BlData
             _dbContext.Games.Update(item);
             _dbContext.SaveChanges();
         }
+
+        public List<Game> GetForEventSchema(int eventSchemaId) 
+        {
+            var gamesForEventSchema = _dbContext.Games.Where(g => g.EventSchemaItemId == eventSchemaId).ToList();
+            return gamesForEventSchema;
+        }
     }
 }

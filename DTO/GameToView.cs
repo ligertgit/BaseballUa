@@ -82,5 +82,16 @@ namespace BaseballUa.DTO
 
             return gameVL;
         }
+
+        public List<GameViewModel> ConvertAll(List<Game> gamesDAL)
+        { 
+            var gamesVL = new List<GameViewModel>();
+            foreach (var game in gamesDAL) 
+            { 
+                gamesVL.Add(Convert(game));
+            }
+
+            return gamesVL;
+        }
     }
 }

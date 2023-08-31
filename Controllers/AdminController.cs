@@ -184,12 +184,16 @@ namespace BaseballUa.Controllers
 
 #region Games
 
+
+        // need refactor with FK key to schema only
         public IActionResult AddGame(int eventId)
         {
             var gameView = new GameToView(_db).CreateEmpty(eventId);
             return View(gameView);
         }
 
+
+        // need refactor with FK key to schema only
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddGame(GameViewModel gameVL)
@@ -202,9 +206,17 @@ namespace BaseballUa.Controllers
             
             return RedirectToAction("ListEvents");
         }
+
+        public IActionResult ListGames(int eventSchemaItemId)
+        {
+            var gamesDAL = new GamesCrud(_db).GetForEventSchema(eventSchemaItemId);
+            var gamesVL = new GameToView(_db).ConvertAll(gamesDAL);
+
+            return View(gamesVL);
+        }
 #endregion
 
-#region GameSchema
+        #region EventSchema
 
         public IActionResult AddSchemaItem(int eventId)
         {
@@ -224,6 +236,22 @@ namespace BaseballUa.Controllers
             }
             return RedirectToAction("ListEvents");
         }
+
+        public IActionResult ListSchemaItems(int eventId) 
+        { 
+            var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
+            var eventSchemaItemsVL = new EventSchemaItemToView(_db).ConvertAll(eventSchemaItemsDAL);
+
+            return View(eventSchemaItemsVL);
+        }
+
+        //public IActionResult DetailsEventSchemaItem(int eventSchemaItemId)
+        //{
+        //    var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(eventSchemaItemId);
+        //    var eventSchemaItemVL = new EventSchemaItemToView(_db).Convert(eventSchemaItemDAL);
+
+        //    return View(eventSchemaItemVL);
+        //}
 #endregion
 
 

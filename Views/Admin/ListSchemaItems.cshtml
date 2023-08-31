@@ -1,0 +1,40 @@
+﻿@model IEnumerable<BaseballUa.ViewModels.EventSchemaItemViewModel>
+
+@{
+    ViewData["Title"] = "ListSchemaItems";
+}
+
+<h1>ListSchemaItems</h1>
+@Model.FirstOrDefault().Tournament.Name
+@Model.FirstOrDefault().Event.Year
+<p>
+    <a asp-action="AddSchemaItem" asp-route-eventId="@Model.FirstOrDefault().Event.Id">Додати блок до турніру</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Order)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SchemaItem)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Order)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SchemaItem)
+            </td>
+            <td>
+                    <a asp-action="ListGames" asp-route-eventSchemaItemId="@item.EventSchemaItemViewModelId">Подивитися ігри</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
