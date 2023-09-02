@@ -5,10 +5,10 @@
 }
 
 <h1>ListSchemaItems</h1>
-@Model.FirstOrDefault().Tournament.Name
-@Model.FirstOrDefault().Event.Year
+@ViewData["tournamentName"]
+@ViewData["eventId"]
 <p>
-    <a asp-action="AddSchemaItem" asp-route-eventId="@Model.FirstOrDefault().Event.Id">Додати блок до турніру</a>
+    <a asp-action="AddSchemaItem" asp-route-eventId="@ViewData["eventId"]">Додати блок до турніру</a>
 </p>
 <table class="table">
     <thead>

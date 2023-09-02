@@ -52,10 +52,10 @@ namespace BaseballUa.Data
             //    .WithMany(e => e.Games)
             //    .OnDelete(DeleteBehavior.ClientNoAction);
 
-            modelBuilder.Entity<Event>()
-                .HasMany(e => e.Games)
-                .WithOne(g => g.Event)
-                .OnDelete(DeleteBehavior.NoAction);
+            ////modelBuilder.Entity<Event>()
+            ////    .HasMany(e => e.Games)
+            ////    .WithOne(g => g.Event)
+            ////    .OnDelete(DeleteBehavior.NoAction);
 
             //entity.HasOne(d => d.Team1)
             //        .WithMany(p => p.GameTeam1)
@@ -64,9 +64,9 @@ namespace BaseballUa.Data
             //        .HasConstraintName("FK_Games_Teams_Team1ID");
         }
 
-        public DbSet<BaseballUa.ViewModels.EventSchemaItemViewModel>? EventSchemaItemViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.EventSchemaItemViewModel>? EventSchemaItemViewModel { get; set; }
 
-        public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
 

@@ -63,18 +63,18 @@ namespace BaseballUa.ViewModels
 
         [DisplayName("З якої частини турніру")]
         public int EventSchemaItemId { get; set; }
-        
+
         [DisplayName("Тип частини турніру")]
-        public GameType? EventSchemaItem { get; set; }
+        public GameType? EventSchemaItemItem { get; set; }
 
         //public ICollection<EventSchemaItem>? EventSchemaItems { get; set; } = new List<EventSchemaItem>();
-        [NotMapped]
-        public IEnumerable<SelectListItem> EventSchemaItems { get; set; }
+        //[NotMapped]
+        //public IEnumerable<SelectListItem> EventSchemaItems { get; set; }
 
-        public int EventId { get; set; }
-        
-        
-        public Event? Event { get; set; }
-        public Tournament? Tournament { get; set; }
+        //public int EventId { get; set; }
+
+
+        //public Event? Event { get; set; }
+        //public Tournament? Tournament { get; set; }
     }
 }

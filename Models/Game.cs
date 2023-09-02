@@ -26,7 +26,7 @@ namespace BaseballUa.Models
 
         public int EventSchemaItemId { get; set; }
         public EventSchemaItem EventSchemaItem { get; set; } = null!;
-        public int EventId { get; set; }
-        public Event Event { get; set; } = null!;
+        //public int EventId { get; set; }
+        //public Event Event { get; set; } = null!;
     }
 }

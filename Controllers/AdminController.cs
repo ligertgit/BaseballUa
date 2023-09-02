@@ -186,9 +186,9 @@ namespace BaseballUa.Controllers
 
 
         // need refactor with FK key to schema only
-        public IActionResult AddGame(int eventId)
+        public IActionResult AddGame(int eventSchemaItemId)
         {
-            var gameView = new GameToView(_db).CreateEmpty(eventId);
+            var gameView = new GameToView(_db).CreateEmpty(eventSchemaItemId);
             return View(gameView);
         }
 
@@ -212,11 +212,13 @@ namespace BaseballUa.Controllers
             var gamesDAL = new GamesCrud(_db).GetForEventSchema(eventSchemaItemId);
             var gamesVL = new GameToView(_db).ConvertAll(gamesDAL);
 
+            ViewData["eventSchemaItemId"] = eventSchemaItemId;
+
             return View(gamesVL);
         }
 #endregion
 
-        #region EventSchema
+#region EventSchema
 
         public IActionResult AddSchemaItem(int eventId)
         {
@@ -241,6 +243,10 @@ namespace BaseballUa.Controllers
         { 
             var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
             var eventSchemaItemsVL = new EventSchemaItemToView(_db).ConvertAll(eventSchemaItemsDAL);
+
+            var eventt = new EventsCrud(_db).Get(eventId);
+            ViewData["eventId"] = eventId;
+            ViewData["tournamentName"] = new TournamentsCrud(_db).Get(eventt.TournamentId).Name;
 
             return View(eventSchemaItemsVL);
         }

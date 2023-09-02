@@ -30,23 +30,22 @@ namespace BaseballUa.DTO
             gameView.PointsHome = gameDAL.PointsHome;
             //gameView.GameType = gameDAL.GameType;
             gameView.EventSchemaItemId = gameDAL.EventSchemaItemId;
-            gameView.EventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
+            gameView.EventSchemaItemItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
+            //gameView.EventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
             //gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId);
-            gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId).
-                                                Select(i => new SelectListItem 
-                                                                { 
-                                                                    Text = i.SchemaItem.ToString(), 
-                                                                    Value = i.Id.ToString()
-                                                                }
-                                                      ).ToList();
+            //gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId).
+            //                                    Select(i => new SelectListItem 
+            //                                                    { 
+            //                                                        Text = i.SchemaItem.ToString(), 
+            //                                                        Value = i.Id.ToString()
+            //                                                    }
+            //                                          ).ToList();
             gameView.Tour = gameDAL.Tour;
             gameView.ConditionVisitor = gameDAL.ConditionVisitor;
             gameView.ConditionHome = gameDAL.ConditionHome;
-            gameView.EventId = gameDAL.EventId;
-            //gameView.Event = _dbContext.Events.First(i => i.Id == gameDAL.EventId);
-            gameView.Event = new EventsCrud(_dbContext).Get(gameDAL.EventId);
-            //gameView.Tournament = _dbContext.Tournaments.First(i => i.Id == gameView.Event.TournamentId);
-            gameView.Tournament = new TournamentsCrud(_dbContext).Get(gameView.Event.TournamentId);
+            //gameView.EventId = gameDAL.EventId;
+            //gameView.Event = new EventsCrud(_dbContext).Get(gameDAL.EventId);
+            //gameView.Tournament = new TournamentsCrud(_dbContext).Get(gameView.Event.TournamentId);
 
             return gameView;
         }
@@ -64,21 +63,20 @@ namespace BaseballUa.DTO
             gameDAL.GameStatus = gameVL.GameStatus;
             gameDAL.PointsVisitor = gameVL.PointsVisitor;
             gameDAL.PointsHome = gameVL.PointsHome;
-            //gameDAL.GameType = gameVL.GameType;
             gameDAL.EventSchemaItemId = gameVL.EventSchemaItemId;
             gameDAL.Tour = gameVL.Tour;
             gameDAL.ConditionVisitor = gameVL.ConditionVisitor;
             gameDAL.ConditionHome = gameVL.ConditionHome;
-            gameDAL.EventId = gameVL.EventId;
+            //gameDAL.EventId = gameVL.EventId;
 
             return gameDAL;
         }
 
-        public GameViewModel CreateEmpty(int eventId)
+        public GameViewModel CreateEmpty(int eventSchemaItemId)
         {
             var gameVL = new GameViewModel();
-            gameVL.Event = _dbContext.Events.First(i => i.Id == eventId);
-            gameVL.Tournament = _dbContext.Tournaments.First(i => i.Id == gameVL.Event.TournamentId);
+            gameVL.EventSchemaItemId = eventSchemaItemId;
+            gameVL.EventSchemaItemItem = new EventSchemaItemsCrud(_dbContext).Get(eventSchemaItemId).SchemaItem;
 
             return gameVL;
         }
