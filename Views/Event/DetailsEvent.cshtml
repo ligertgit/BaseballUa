@@ -56,6 +56,14 @@
     </dl>
     <hr />
 </div>
+
+<div class="row">
+    @await Html.PartialAsync("_EventMenu", Model.EventViewModelId)
+</div>
+
+
+
+
 <div>
     <a asp-action="Index" asp-route-monthShift="@ViewBag.monthShift">Повернутися до списку</a>
 </div>

@@ -41,13 +41,14 @@ namespace BaseballUa.Controllers
             return View(eventsView);
         }
 
-        public IActionResult DetailsEvent(int id, int monthShift = 0)
+        public IActionResult DetailsEvent(int id, string ShowMenu = "schema", int monthShift = 0)
         {
             // probably should use EventIndexViewModel
             var eventDAL = new EventsCrud(_db).Get(id);
             // move dbcontext to constructor
             var eventView = new EventToView().Convert(eventDAL, _db);
-            ViewBag.monthShift = monthShift;
+            ViewData["monthShift"] = monthShift;
+            ViewData["ShowMenu"] = ShowMenu;
             return View(eventView);
         }
         
@@ -82,7 +83,7 @@ namespace BaseballUa.Controllers
             Response.Cookies.Append("filterFun", filters.Fun.ToString(), option);
 
             var monthShift = (fc["monthShift"].IsNullOrEmpty()) ? 0 : Convert.ToInt32(fc["monthShift"]);
-            TempData.Put("filters", filters);
+            //TempData.Put("filters", filters);
 
             return RedirectToAction("Index", new { monthShift = monthShift });
         }
