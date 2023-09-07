@@ -15,8 +15,10 @@ namespace BaseballUa.Data
         public DbSet<Category> Categories { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<Game> Games { get; set; }
         public DbSet<EventSchemaItem> EventSchemaItems { get; set; }
+        public DbSet<SchemaGroup> SchemaGroups { get; set; }
+        public DbSet<Game> Games { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +65,9 @@ namespace BaseballUa.Data
             //        .OnDelete(DeleteBehavior.ClientNoAction)
             //        .HasConstraintName("FK_Games_Teams_Team1ID");
         }
+
+
+        public DbSet<BaseballUa.ViewModels.SchemaGroupViewModel>? SchemaGroupViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.EventSchemaItemViewModel>? EventSchemaItemViewModel { get; set; }
 

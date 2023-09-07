@@ -9,6 +9,7 @@ namespace BaseballUa.Models
         public GameType SchemaItem { get; set; }
         public int EventId { get; set; }
         public Event Event { get; set; } = null!;
-        public ICollection<Game>? Games { get; set; } = new List<Game>();
+        //public ICollection<Game>? Games { get; set; } = new List<Game>();
+        public ICollection<SchemaGroup>? SchemaGroups { get; set; } = new List<SchemaGroup>();
     }
 }

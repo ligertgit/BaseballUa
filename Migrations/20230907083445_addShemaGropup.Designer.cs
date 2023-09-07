@@ -4,6 +4,7 @@ using BaseballUa.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseballUa.Migrations
 {
     [DbContext(typeof(BaseballUaDbContext))]
-    partial class BaseballUaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230907083445_addShemaGropup")]
+    partial class addShemaGropup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,9 +141,6 @@ namespace BaseballUa.Migrations
                     b.Property<int?>("RunsVisitor")
                         .HasColumnType("int");
 
-                    b.Property<int>("SchemaGroupId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -148,8 +148,6 @@ namespace BaseballUa.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SchemaGroupId");
 
                     b.ToTable("Games");
                 });
@@ -251,17 +249,6 @@ namespace BaseballUa.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("BaseballUa.Models.Game", b =>
-                {
-                    b.HasOne("BaseballUa.Models.SchemaGroup", "SchemaGroup")
-                        .WithMany("Games")
-                        .HasForeignKey("SchemaGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SchemaGroup");
-                });
-
             modelBuilder.Entity("BaseballUa.Models.SchemaGroup", b =>
                 {
                     b.HasOne("BaseballUa.Models.EventSchemaItem", "EventSchemaItem")
@@ -297,11 +284,6 @@ namespace BaseballUa.Migrations
             modelBuilder.Entity("BaseballUa.Models.EventSchemaItem", b =>
                 {
                     b.Navigation("SchemaGroups");
-                });
-
-            modelBuilder.Entity("BaseballUa.Models.SchemaGroup", b =>
-                {
-                    b.Navigation("Games");
                 });
 
             modelBuilder.Entity("BaseballUa.Models.Tournament", b =>

@@ -23,10 +23,10 @@ namespace BaseballUa.Models
         public string? ConditionVisitor { get; set; }
         [StringLength(50)]
         public string? ConditionHome { get; set; }
+        
+        public int SchemaGroupId { get; set; }
+        
+        public SchemaGroup SchemaGroup { get; set; } = null!;
 
-        public int EventSchemaItemId { get; set; }
-        public EventSchemaItem EventSchemaItem { get; set; } = null!;
-        //public int EventId { get; set; }
-        //public Event Event { get; set; } = null!;
     }
 }

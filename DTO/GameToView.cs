@@ -29,8 +29,8 @@ namespace BaseballUa.DTO
             gameView.PointsVisitor = gameDAL.PointsVisitor;
             gameView.PointsHome = gameDAL.PointsHome;
             //gameView.GameType = gameDAL.GameType;
-            gameView.EventSchemaItemId = gameDAL.EventSchemaItemId;
-            gameView.EventSchemaItemItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
+//!            gameView.EventSchemaItemId = gameDAL.EventSchemaItemId;
+//!            gameView.EventSchemaItemItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
             //gameView.EventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
             //gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId);
             //gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId).
@@ -63,7 +63,7 @@ namespace BaseballUa.DTO
             gameDAL.GameStatus = gameVL.GameStatus;
             gameDAL.PointsVisitor = gameVL.PointsVisitor;
             gameDAL.PointsHome = gameVL.PointsHome;
-            gameDAL.EventSchemaItemId = gameVL.EventSchemaItemId;
+//!!!            gameDAL.EventSchemaItemId = gameVL.EventSchemaItemId;
             gameDAL.Tour = gameVL.Tour;
             gameDAL.ConditionVisitor = gameVL.ConditionVisitor;
             gameDAL.ConditionHome = gameVL.ConditionHome;

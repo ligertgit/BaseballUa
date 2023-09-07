@@ -1,0 +1,42 @@
+﻿@model IEnumerable<BaseballUa.ViewModels.SchemaGroupViewModel>
+
+@{
+    ViewData["Title"] = "List Schema Groups";
+}
+
+@ViewBag.EventSchemaItem.Tournament.Name
+@ViewBag.EventSchemaItem.Event.Year
+
+<h1>Список груп для @ViewBag.EventSchemaItem.SchemaItem</h1>
+
+<p>
+    <a asp-action="AddSchemaGroup" asp-route-eventSchemaItemId="@ViewBag.EventSchemaItem.EventSchemaItemViewModelId">Додати групу</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventSchemaItemId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.GroupName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventSchemaItemId)
+            </td>
+            <td>
+                <a asp-action="ListGames" asp-route-id="@item.Id">Details</a> |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

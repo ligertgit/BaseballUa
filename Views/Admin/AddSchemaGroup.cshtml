@@ -1,0 +1,34 @@
+﻿@model BaseballUa.ViewModels.SchemaGroupViewModel
+
+@{
+    ViewData["Title"] = "Add Group in Schema block";
+}
+
+<h1>Додати групу до @Model.EventSchemaItem.SchemaItem</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddSchemaGroup">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="EventSchemaItemId" value="@Model.EventSchemaItemId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="GroupName" class="control-label"></label>
+                <input asp-for="GroupName" class="form-control" />
+                <span asp-validation-for="GroupName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Додати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ListSchemaGroups" asp-route-EventSchemaItemId="@Model.EventSchemaItemId">Повернутися до схеми</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
