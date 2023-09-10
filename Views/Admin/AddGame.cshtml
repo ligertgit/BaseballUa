@@ -14,7 +14,7 @@
         <form asp-action="AddGame">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="EventSchemaItemId" value="@Model.EventSchemaItemId" />
+            <input type="hidden" asp-for="SchemaGroupId" value="@Model.SchemaGroupId" />
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
                 <input asp-for="StartDate" class="form-control" />
@@ -99,7 +99,7 @@
 </div>
 
 <div>
-    <a asp-action="ListEvent">Повернутися до турнірів</a>
+    <a asp-action="ListGames" asp-route-schemaGroupId="@Model.SchemaGroupId">Повернутися до турнірів</a>
 </div>
 
 @section Scripts {

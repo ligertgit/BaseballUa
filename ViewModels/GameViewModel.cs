@@ -61,11 +61,11 @@ namespace BaseballUa.ViewModels
         [DisplayName("Умова для команди-володаря")]
         public string? ConditionHome { get; set; }
 
-        [DisplayName("З якої частини турніру")]
-        public int EventSchemaItemId { get; set; }
+        [DisplayName("Блок схеми турніру")]
+        public int SchemaGroupId { get; set; }
 
-        [DisplayName("Тип частини турніру")]
-        public GameType? EventSchemaItemItem { get; set; }
+        //[DisplayName("Тип частини турніру")]
+        //public GameType? EventSchemaItemItem { get; set; }
 
         //public ICollection<EventSchemaItem>? EventSchemaItems { get; set; } = new List<EventSchemaItem>();
         //[NotMapped]

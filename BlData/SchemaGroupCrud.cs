@@ -36,5 +36,12 @@ namespace BaseballUa.BlData
         {
             throw new NotImplementedException();
         }
+
+        public IEnumerable<SchemaGroup> GetAllForSchema(int eventSchemaItemId)
+        {
+            
+            return _dbContext.SchemaGroups.Where(s => s.EventSchemaItemId == eventSchemaItemId);
+        }
+
     }
 }

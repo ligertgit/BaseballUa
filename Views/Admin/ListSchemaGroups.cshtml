@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.EventSchemaItemId)
             </td>
             <td>
-                <a asp-action="ListGames" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="ListGames" asp-route-schemaGroupId="@item.Id">Показати ігри в групі</a>
             </td>
         </tr>
 }

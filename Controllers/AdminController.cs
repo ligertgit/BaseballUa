@@ -227,7 +227,7 @@ namespace BaseballUa.Controllers
 #region EventSchemaGroups
         public IActionResult ListSchemaGroups(int EventSchemaItemId)
         {
-            var groupsDAL = new SchemaGroupCrud(_db).GetAll().ToList();
+            var groupsDAL = new SchemaGroupCrud(_db).GetAllForSchema(EventSchemaItemId).ToList();
             var groupsVL = new SchemaGroupToView(_db).ConvertAll(groupsDAL);
 
             var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(EventSchemaItemId);
@@ -261,15 +261,23 @@ namespace BaseballUa.Controllers
         #endregion
 
         #region Games
-        // need refactor with FK key to schema only
-        public IActionResult AddGame(int eventSchemaItemId)
+
+        public IActionResult ListGames(int schemaGroupId)
         {
-            var gameView = new GameToView(_db).CreateEmpty(eventSchemaItemId);
+            var gamesDAL = new GamesCrud(_db).GetAllForGroup(schemaGroupId).ToList();
+            var gamesVL = new GameToView(_db).ConvertAll(gamesDAL);
+
+            ViewData["schemaGroupId"] = schemaGroupId;
+
+            return View(gamesVL);
+        }
+
+        public IActionResult AddGame(int schemaGroupId)
+        {
+            var gameView = new GameToView(_db).CreateEmpty(schemaGroupId);
             return View(gameView);
         }
 
-
-        // need refactor with FK key to schema only
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddGame(GameViewModel gameVL)
@@ -280,21 +288,10 @@ namespace BaseballUa.Controllers
                 new GamesCrud(_db).Add(gameDAL);
             }
 
-            return RedirectToAction("ListEvents");
+            return RedirectToAction("ListGames", new { schemaGroupId = gameVL.SchemaGroupId});
         }
 
-        public IActionResult ListGames(int eventSchemaItemId)
-        {
-            //!            var gamesDAL = new GamesCrud(_db).GetForEventSchema(eventSchemaItemId);
-            var gamesDAL = new List<Game>();
-            //!
 
-            var gamesVL = new GameToView(_db).ConvertAll(gamesDAL);
-
-            ViewData["eventSchemaItemId"] = eventSchemaItemId;
-
-            return View(gamesVL);
-        }
 #endregion       
 
 

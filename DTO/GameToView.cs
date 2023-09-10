@@ -43,6 +43,7 @@ namespace BaseballUa.DTO
             gameView.Tour = gameDAL.Tour;
             gameView.ConditionVisitor = gameDAL.ConditionVisitor;
             gameView.ConditionHome = gameDAL.ConditionHome;
+            gameView.SchemaGroupId = gameDAL.SchemaGroupId;
             //gameView.EventId = gameDAL.EventId;
             //gameView.Event = new EventsCrud(_dbContext).Get(gameDAL.EventId);
             //gameView.Tournament = new TournamentsCrud(_dbContext).Get(gameView.Event.TournamentId);
@@ -67,16 +68,17 @@ namespace BaseballUa.DTO
             gameDAL.Tour = gameVL.Tour;
             gameDAL.ConditionVisitor = gameVL.ConditionVisitor;
             gameDAL.ConditionHome = gameVL.ConditionHome;
+            gameDAL.SchemaGroupId = gameVL.SchemaGroupId;
             //gameDAL.EventId = gameVL.EventId;
 
             return gameDAL;
         }
 
-        public GameViewModel CreateEmpty(int eventSchemaItemId)
+        public GameViewModel CreateEmpty(int schemaGroupId)
         {
             var gameVL = new GameViewModel();
-            gameVL.EventSchemaItemId = eventSchemaItemId;
-            gameVL.EventSchemaItemItem = new EventSchemaItemsCrud(_dbContext).Get(eventSchemaItemId).SchemaItem;
+            gameVL.SchemaGroupId = schemaGroupId;
+            //gameVL.EventSchemaItemItem = new EventSchemaItemsCrud(_dbContext).Get(eventSchemaItemId).SchemaItem;
 
             return gameVL;
         }

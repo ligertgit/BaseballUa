@@ -28,8 +28,17 @@ namespace BaseballUa.BlData
             return _dbContext.Games.First(i => i.Id == itemId);
         }
 
-        public IEnumerable<Game> GetAll()
+        public IEnumerable<Game> GetAll() 
         {
+            return _dbContext.Games;
+        }
+
+        public IEnumerable<Game> GetAllForGroup(int schemaGroupId = 0)
+        {
+            if (schemaGroupId != 0) 
+            { 
+                return _dbContext.Games.Where(g => g.SchemaGroupId == schemaGroupId);
+            }
             return _dbContext.Games;
         }
 
