@@ -67,7 +67,7 @@ namespace BaseballUa.Data
         }
 
 
-        public DbSet<BaseballUa.ViewModels.SchemaGroupViewModel>? SchemaGroupViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.SchemaGroupViewModel>? SchemaGroupViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.EventSchemaItemViewModel>? EventSchemaItemViewModel { get; set; }
 

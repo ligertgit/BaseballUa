@@ -13,6 +13,9 @@ namespace BaseballUa.ViewModels
         [Key]
         public int GameViewModelId { get; set; }
         
+        [DisplayName("Назва гри")]
+        public string Name { get; set; }
+        
         [DisplayName("Дата та час гри")]
         public DateTime? StartDate { get; set; }
         

@@ -6,6 +6,8 @@ namespace BaseballUa.Models
     public class Game
     {
         public int Id { get; set; }
+        [StringLength(10)]
+        public string Name { get; set; }
         public DateTime? StartDate { get; set; }
         [StringLength(250)]
         public string? AdditionalInfo { get; set; }
