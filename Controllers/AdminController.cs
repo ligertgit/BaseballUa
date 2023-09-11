@@ -260,7 +260,7 @@ namespace BaseballUa.Controllers
 
         #endregion
 
-        #region Games
+#region Games
 
         public IActionResult ListGames(int schemaGroupId)
         {
@@ -292,8 +292,16 @@ namespace BaseballUa.Controllers
         }
 
 
-#endregion       
+        #endregion
 
+        #region Country
+        #endregion
+
+        #region Club
+        #endregion
+
+        #region Team
+        #endregion
 
     }
 }

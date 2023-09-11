@@ -4,6 +4,7 @@ using BaseballUa.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseballUa.Migrations
 {
     [DbContext(typeof(BaseballUaDbContext))]
-    partial class BaseballUaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230911082330_CountryClubTeam")]
+    partial class CountryClubTeam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,9 +195,6 @@ namespace BaseballUa.Migrations
                     b.Property<int?>("HalfinningsPlayed")
                         .HasColumnType("int");
 
-                    b.Property<int>("HomeTeamId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -225,16 +225,9 @@ namespace BaseballUa.Migrations
                     b.Property<int?>("Tour")
                         .HasColumnType("int");
 
-                    b.Property<int>("VisitorTeamId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("HomeTeamId");
-
                     b.HasIndex("SchemaGroupId");
-
-                    b.HasIndex("VisitorTeamId");
 
                     b.ToTable("Games");
                 });
@@ -392,29 +385,13 @@ namespace BaseballUa.Migrations
 
             modelBuilder.Entity("BaseballUa.Models.Game", b =>
                 {
-                    b.HasOne("BaseballUa.Models.Team", "HomeTeam")
-                        .WithMany("HomeGames")
-                        .HasForeignKey("HomeTeamId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("BaseballUa.Models.SchemaGroup", "SchemaGroup")
                         .WithMany("Games")
                         .HasForeignKey("SchemaGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BaseballUa.Models.Team", "VisitorTeam")
-                        .WithMany("VisitorGames")
-                        .HasForeignKey("VisitorTeamId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("HomeTeam");
-
                     b.Navigation("SchemaGroup");
-
-                    b.Navigation("VisitorTeam");
                 });
 
             modelBuilder.Entity("BaseballUa.Models.SchemaGroup", b =>
@@ -476,13 +453,6 @@ namespace BaseballUa.Migrations
             modelBuilder.Entity("BaseballUa.Models.SchemaGroup", b =>
                 {
                     b.Navigation("Games");
-                });
-
-            modelBuilder.Entity("BaseballUa.Models.Team", b =>
-                {
-                    b.Navigation("HomeGames");
-
-                    b.Navigation("VisitorGames");
                 });
 
             modelBuilder.Entity("BaseballUa.Models.Tournament", b =>

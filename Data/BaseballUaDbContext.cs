@@ -18,7 +18,9 @@ namespace BaseballUa.Data
         public DbSet<EventSchemaItem> EventSchemaItems { get; set; }
         public DbSet<SchemaGroup> SchemaGroups { get; set; }
         public DbSet<Game> Games { get; set; }
-
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Club> Clubs { get; set; }
+        public DbSet<Team> Teams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -64,6 +66,31 @@ namespace BaseballUa.Data
             //        .HasForeignKey(d => d.Team1Id)
             //        .OnDelete(DeleteBehavior.ClientNoAction)
             //        .HasConstraintName("FK_Games_Teams_Team1ID");
+
+            //modelBuilder.Entity<Game>()
+            //            .HasOne<Team>(g => g.HomeTeam)
+            //            .WithMany(t => t.Games)
+            //            .HasForeignKey(g => g.HomeTeamId)
+            //            .OnDelete(DeleteBehavior.ClientNoAction);
+
+            //modelBuilder.Entity<Game>()
+            //            .HasOne<Team>(g => g.VisitorTeam)
+            //            .WithMany(t => t.Games)
+            //            .HasForeignKey(g => g.VisitorTeamId)
+            //            .OnDelete(DeleteBehavior.ClientNoAction);
+
+            modelBuilder.Entity<Team>()
+                            .HasMany(t => t.HomeGames)
+                            .WithOne(g => g.HomeTeam)
+                            .HasForeignKey(g => g.HomeTeamId)
+                            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Team>()
+                            .HasMany(t => t.VisitorGames)
+                            .WithOne(g => g.VisitorTeam)
+                            .HasForeignKey(g => g.VisitorTeamId)
+                            .OnDelete(DeleteBehavior.Restrict);
+            
         }
 
 

@@ -45,6 +45,8 @@ namespace BaseballUa.DTO
             gameView.ConditionVisitor = gameDAL.ConditionVisitor;
             gameView.ConditionHome = gameDAL.ConditionHome;
             gameView.SchemaGroupId = gameDAL.SchemaGroupId;
+            gameView.HomeTeamId = gameDAL.HomeTeamId;
+            gameView.VisitorTeamId = gameDAL.VisitorTeamId;
             //gameView.EventId = gameDAL.EventId;
             //gameView.Event = new EventsCrud(_dbContext).Get(gameDAL.EventId);
             //gameView.Tournament = new TournamentsCrud(_dbContext).Get(gameView.Event.TournamentId);
@@ -71,6 +73,8 @@ namespace BaseballUa.DTO
             gameDAL.ConditionVisitor = gameVL.ConditionVisitor;
             gameDAL.ConditionHome = gameVL.ConditionHome;
             gameDAL.SchemaGroupId = gameVL.SchemaGroupId;
+            gameDAL.HomeTeamId = gameVL.HomeTeamId;
+            gameDAL.VisitorTeamId = gameVL.VisitorTeamId;
             //gameDAL.EventId = gameVL.EventId;
 
             return gameDAL;
