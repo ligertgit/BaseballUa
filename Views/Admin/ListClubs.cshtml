@@ -1,0 +1,55 @@
+﻿@model IEnumerable<BaseballUa.ViewModels.ClubViewModel>
+
+@{
+    ViewData["Title"] = "List Clubs";
+}
+
+<p>
+    <a asp-action="AddClub">Додати клуб</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FnameLogoSmall)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FnameLogoBig)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FnameLogoSmall)
+                <img src="~/images/club/logoSmall/@item.FnameLogoSmall" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FnameLogoBig)
+                <img src="~/images/club/logoBig/@item.FnameLogoBig" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Country.Id)
+                <img src="~/images/country/flagBig/@item.Country.FnameFlagBig" />
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

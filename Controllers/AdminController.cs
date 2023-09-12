@@ -5,6 +5,7 @@ using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using System.Drawing;
 
 namespace BaseballUa.Controllers
@@ -294,10 +295,73 @@ namespace BaseballUa.Controllers
 
         #endregion
 
-        #region Country
-        #endregion
+#region Country
+
+        public IActionResult ListCountries()
+        {
+            var countriesDAL = new CountryCrud(_db).GetAll().ToList();
+            var countriesVL = new CountryToView(_db).ConvertAll(countriesDAL);
+
+            return View(countriesVL);
+        }
+
+        public IActionResult AddCountry()
+        {
+            var CountryVL = new CountryToView(_db).CreateEmpty();
+
+            return View(CountryVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddCountry(CountryViewModel countryVL)
+        {
+            if (ModelState.IsValid)
+            {
+                var countryDAL = new CountryToView(_db).ConvertBack(countryVL);
+                new CountryCrud(_db).Add(countryDAL);
+            }
+
+            return RedirectToAction("ListCountries");
+        }
+
+#endregion
 
         #region Club
+        public IActionResult ListClubs()
+        {
+            var clubsDAL = new ClubCrud(_db).GetAll().ToList();
+            var clubsVL = new ClubToView(_db).ConvertAll(clubsDAL);
+
+            //ViewBag.CountriesSL = new CountryCrud(_db).GetSelectItemList();
+
+            return View(clubsVL);
+        }
+
+        public IActionResult AddClub()
+        {
+            var clubVl = new ClubToView(_db).CreateEmpty();
+
+            ViewBag.CountriesSL = new CountryCrud(_db).GetSelectItemList();
+
+            return View(clubVl);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddClub(ClubViewModel clubVl)
+        {
+            if (ModelState.IsValid)
+            {
+                var clubDAL = new ClubToView(_db).ConvertBack(clubVl);
+                new ClubCrud(_db).Add(clubDAL);
+            }
+
+            return RedirectToAction("ListClubs");
+        }
+
+
+
         #endregion
 
         #region Team

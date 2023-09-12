@@ -1,0 +1,49 @@
+﻿@model BaseballUa.ViewModels.CountryViewModel
+
+@{
+    ViewData["Title"] = "Add Country";
+}
+
+<h1>Додати нову країну</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddCountry">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.Id)
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShortName" class="control-label"></label>
+                <input asp-for="ShortName" class="form-control" />
+                <span asp-validation-for="ShortName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FnameFlagSmall" class="control-label"></label>
+                <input asp-for="FnameFlagSmall" class="form-control" />
+                <span asp-validation-for="FnameFlagSmall" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FnameFlagBig" class="control-label"></label>
+                <input asp-for="FnameFlagBig" class="form-control" />
+                <span asp-validation-for="FnameFlagBig" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Додати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ListCountries">Повернутися до списку стран</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

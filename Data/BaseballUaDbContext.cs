@@ -93,6 +93,10 @@ namespace BaseballUa.Data
             
         }
 
+        public DbSet<BaseballUa.ViewModels.CountryViewModel>? CountryViewModel { get; set; }
+
+        public DbSet<BaseballUa.ViewModels.ClubViewModel>? ClubViewModel { get; set; }
+
 
         //public DbSet<BaseballUa.ViewModels.SchemaGroupViewModel>? SchemaGroupViewModel { get; set; }
 
