@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BaseballUa.ViewModels.GameViewModel>
+﻿@model IEnumerable<BaseballUa.ViewModels.Custom.GameWithTeamsViewModel>
 
 @{
     ViewData["Title"] = "ListGames";
@@ -13,53 +13,53 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Game.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                @Html.DisplayNameFor(model => model.Game.StartDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AdditionalInfo)
+                @Html.DisplayNameFor(model => model.Game.AdditionalInfo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RunsVisitor)
+                @Html.DisplayNameFor(model => model.Game.RunsVisitor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RunsHome)
+                @Html.DisplayNameFor(model => model.Game.RunsHome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PlacedAt)
+                @Html.DisplayNameFor(model => model.Game.PlacedAt)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HalfinningsPlayed)
+                @Html.DisplayNameFor(model => model.Game.HalfinningsPlayed)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.GameStatus)
+                @Html.DisplayNameFor(model => model.Game.GameStatus)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PointsVisitor)
+                @Html.DisplayNameFor(model => model.Game.PointsVisitor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PointsHome)
+                @Html.DisplayNameFor(model => model.Game.PointsHome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Tour)
+                @Html.DisplayNameFor(model => model.Game.Tour)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ConditionVisitor)
+                @Html.DisplayNameFor(model => model.Game.ConditionVisitor)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ConditionHome)
+                @Html.DisplayNameFor(model => model.Game.ConditionHome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SchemaGroupId)
+                @Html.DisplayNameFor(model => model.Game.SchemaGroupId)
             </th>
-@*            <th>
-                @Html.DisplayNameFor(model => model.EventSchemaItem)
-            </th>*@
-@*            <th>
-                @Html.DisplayNameFor(model => model.Event)
-            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Game.HomeTeam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Game.VisitorTeam)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -67,53 +67,74 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => item.Game.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                    @Html.DisplayFor(modelItem => item.Game.StartDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AdditionalInfo)
+                    @Html.DisplayFor(modelItem => item.Game.AdditionalInfo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RunsVisitor)
+                    @Html.DisplayFor(modelItem => item.Game.RunsVisitor)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RunsHome)
+                    @Html.DisplayFor(modelItem => item.Game.RunsHome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PlacedAt)
+                    @Html.DisplayFor(modelItem => item.Game.PlacedAt)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HalfinningsPlayed)
+                    @Html.DisplayFor(modelItem => item.Game.HalfinningsPlayed)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.GameStatus)
+                    @Html.DisplayFor(modelItem => item.Game.GameStatus)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PointsVisitor)
+                    @Html.DisplayFor(modelItem => item.Game.PointsVisitor)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PointsHome)
+                    @Html.DisplayFor(modelItem => item.Game.PointsHome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tour)
+                    @Html.DisplayFor(modelItem => item.Game.Tour)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ConditionVisitor)
+                    @Html.DisplayFor(modelItem => item.Game.ConditionVisitor)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ConditionHome)
+                    @Html.DisplayFor(modelItem => item.Game.ConditionHome)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SchemaGroupId)
+                    @Html.DisplayFor(modelItem => item.Game.SchemaGroupId)
             </td>
-@*            <td>
-                @Html.DisplayFor(modelItem => item.EventSchemaItem)
-            </td>*@
-@*            <td>
-                @Html.DisplayFor(modelItem => item.Event.Id)
-            </td>*@
+            <td>
+                    @{
+                        if (item.HomeTeam != null)
+                        {
+                            <img src="~/images/team/logosmall/@item.HomeTeam.FnameLogoSmall" />
+                        }
+                        else
+                        {
+                            <label> ??? </label>    
+                        }
+                    }
+
+                    
+            </td>
+            <td>
+                    @{
+                        if(item.VisitorTeam != null)
+                        {
+                            <img src="~/images/team/logoSmall/@item.VisitorTeam.FnameLogoSmall" />
+                        }
+                        else
+                        {
+                            <label> ??? </label>
+                        }
+                    }
+                    
+            </td>
             <td>
                @* <a asp-action="Edit" asp-route-id="@item.GameViewModelId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.GameViewModelId">Details</a> |

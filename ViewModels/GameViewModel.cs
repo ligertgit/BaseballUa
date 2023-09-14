@@ -68,10 +68,15 @@ namespace BaseballUa.ViewModels
         public int SchemaGroupId { get; set; }
         
         [DisplayName("Команда господар")]
-        public int HomeTeamId { get; set; }
-        
+        public int? HomeTeamId { get; set; }
+
+        [DisplayName("Команда господар")]
+        public TeamViewModel? HomeTeam { get; set; }
+
         [DisplayName("Команда гість")]
-        public int VisitorTeamId { get; set; }
+        public int? VisitorTeamId { get; set; }
+        [DisplayName("Команда гість")]
+        public TeamViewModel? VisitorTeam { get; set; }
 
         //[DisplayName("Тип частини турніру")]
         //public GameType? EventSchemaItemItem { get; set; }

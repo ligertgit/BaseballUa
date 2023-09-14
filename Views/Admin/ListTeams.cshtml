@@ -1,15 +1,22 @@
-﻿@model IEnumerable<BaseballUa.ViewModels.ClubViewModel>
+﻿@model IEnumerable<BaseballUa.ViewModels.TeamViewModel>
 
 @{
-    ViewData["Title"] = "List Clubs";
+    ViewData["Title"] = "List Teams";
 }
 
+<h1>Список команд клубу: </h1>
+@ViewBag.Club.Name
+<img src="~/images/club/logoBig/@ViewBag.Club.FnameLogoBig" />
+
 <p>
-    <a asp-action="AddClub">Додати клуб</a>
+    <a asp-action="AddTeam" asp-route-clubId="@ViewBag.Club.Id">Додати команду</a>
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.SportType)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -23,14 +30,16 @@
                 @Html.DisplayNameFor(model => model.FnameLogoBig)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Country)
+                @Html.DisplayNameFor(model => model.IsTemp)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SportType)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
@@ -39,18 +48,14 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FnameLogoSmall)
-                <img src="~/images/club/logoSmall/@item.FnameLogoSmall" />
+                <img src="~/images/team/logoSmall/@item.FnameLogoSmall" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FnameLogoBig)
-                <img src="~/images/club/logoBig/@item.FnameLogoBig" />
+                <img src="~/images/team/logoBig/@item.FnameLogoBig" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Country.Id)
-                <img src="~/images/country/flagBig/@item.Country.FnameFlagBig" />
-            </td>
-            <td>
-                    <a asp-action="ListTeams" asp-route-clubId="@item.Id">Список команд</a>
+                @Html.DisplayFor(modelItem => item.IsTemp)
             </td>
         </tr>
 }

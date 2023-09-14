@@ -2,6 +2,7 @@
 using static BaseballUa.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseballUa.ViewModels
 {
@@ -36,7 +37,10 @@ namespace BaseballUa.ViewModels
         public int ClubId { get; set; }
 
         [DisplayName("Клуб")]
-        public Club Club { get; } = null!;
+        public Club? Club { get; set; }
+
+        [NotMapped]
+        public List<Game>? Games { get; set; }
 
     }
 }

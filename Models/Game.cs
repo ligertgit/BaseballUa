@@ -27,11 +27,11 @@ namespace BaseballUa.Models
         public string? ConditionHome { get; set; }
         
         public int SchemaGroupId { get; set; }
-        public int HomeTeamId { get; set; }
-        public int VisitorTeamId { get; set; }
+        public int? HomeTeamId { get; set; }
+        public int? VisitorTeamId { get; set; }
 
-        public Team HomeTeam { get; set; } = null!;
-        public Team VisitorTeam { get; set; } = null!;
+        public Team? HomeTeam { get; set; } = null!;
+        public Team? VisitorTeam { get; set; } = null!;
         public SchemaGroup SchemaGroup { get; set; } = null!;
 
     }

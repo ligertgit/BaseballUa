@@ -1,5 +1,8 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using BaseballUa.Models.Custom;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging.Signing;
 
 namespace BaseballUa.BlData
 {
@@ -33,13 +36,59 @@ namespace BaseballUa.BlData
             return _dbContext.Games;
         }
 
-        public IEnumerable<Game> GetAllForGroup(int schemaGroupId = 0)
+        public IEnumerable<GameWithTeams> GetAllForGroupWithTeams(int schemaGroupId = 0)
         {
             if (schemaGroupId != 0) 
-            { 
-                return _dbContext.Games.Where(g => g.SchemaGroupId == schemaGroupId);
+            {
+                var temp = (from game in _dbContext.Games
+                            join homeTeam in _dbContext.Teams on game.HomeTeamId equals homeTeam.Id into subght
+                            from ght in subght.DefaultIfEmpty()
+                            join visitorTeam in _dbContext.Teams on game.VisitorTeamId equals visitorTeam.Id into subgvt
+                            from gvt in subgvt.DefaultIfEmpty()
+                            where game.SchemaGroupId == schemaGroupId
+                            select new GameWithTeams
+                            {
+                                Game = game,
+                                HomeTeam = ght,
+                                VisitorTeam = gvt
+                            }
+                            );
+                return temp;
+
+
+                //from a in objContext.FileProgresses
+                //                    join pg in objContext.V01_PG on a.ProDocsId equals (int?)pg.ID into pgs
+                //                    from m in pgs.DefaultIfEmpty()
+                //                    join pr in objContext.V01_PR on m.ID equals pr.PAGE into prs
+                //                    from p in prs.DefaultIfEmpty()
+                //                    join ds in objContext.DOCSTATs on p.DOCSTAT equals ds.ID into docs
+                //                    from docst in docs.DefaultIfEmpty()
+                //                    where a.FullPath.Contains(txtSearchText.Text)
+                //                    select new
+                //                    {
+                //                        a.Id,
+
+                //from a in objContext.FileProgresses
+                //                        join pg in objContext.V01_PG on a.ProDocsId equals (int?)pg.ID into pgs
+                //                        from g in pgs.DefaultIfEmpty()
+                //                        join pr in objContext.V01_PR on g.ID equals pr.PAGE into prs
+                //                        from p in prs.DefaultIfEmpty()
+                //                        where a.FullPath.Contains(extension)
+                //                        select new
+                //                        {
+                //                            a.Id,
+
             }
-            return _dbContext.Games;
+            return (from game in _dbContext.Games
+                    join homeTeam in _dbContext.Teams on game.HomeTeamId equals homeTeam.Id
+                    join visitorTeam in _dbContext.Teams on game.VisitorTeamId equals visitorTeam.Id
+                    select new GameWithTeams
+                    {
+                        Game = game,
+                        HomeTeam = homeTeam,
+                        VisitorTeam = visitorTeam
+                    }
+                    );
         }
 
         public void Update(Game item)

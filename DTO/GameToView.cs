@@ -1,6 +1,7 @@
 ﻿using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.Models;
+using BaseballUa.Models.Custom;
 using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -8,12 +9,12 @@ namespace BaseballUa.DTO
 {
     public class GameToView
     {
-        private readonly BaseballUaDbContext _dbContext;
+        //private readonly BaseballUaDbContext _dbContext;
 
-        public GameToView(BaseballUaDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        //public GameToView(BaseballUaDbContext dbContext)
+        //{
+        //    _dbContext = dbContext;
+        //}
 
         public GameViewModel Convert(Game gameDAL)
         {
@@ -99,5 +100,17 @@ namespace BaseballUa.DTO
 
             return gamesVL;
         }
+
+        //public GameWithTeamsViewModel ConvertWithTeams(GameWithTeams)
+        //public List<GameWithTeamsViewModel> ConvertAllWithTeams(List<GameWithTeams> gamesDAL)
+        //{
+        //    var gamesVL = new List<GameWithTeams>();
+        //    foreach (var game in gamesDAL)
+        //    {
+        //        gamesVL.Add(ConvertWithTeams(game));
+        //    }
+
+        //    return gamesVL;
+        //}
     }
 }

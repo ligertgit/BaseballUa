@@ -68,19 +68,6 @@
                 <input asp-for="PointsHome" class="form-control" />
                 <span asp-validation-for="PointsHome" class="text-danger"></span>
             </div>
-@*            <div class="form-group">
-                <label asp-for="GameType" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.GameType, Enums.GameType.Group1.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
-                <span asp-validation-for="GameType" class="text-danger"></span>
-            </div>*@
-
-@*            <div class="form-group">
-                <label asp-for="EventSchemaItemId" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.EventSchemaItemId, new SelectList(Model.EventSchemaItems, "Text", "Value"), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
-                <span asp-validation-for="GameStatus" class="text-danger"></span>
-            </div>*@
-
-
             <div class="form-group">
                 <label asp-for="Tour" class="control-label"></label>
                 @Html.DropDownListFor(x => Model.Tour, Enums.TourNumber.Tour1.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
@@ -96,8 +83,18 @@
                 <input asp-for="ConditionHome" class="form-control" />
                 <span asp-validation-for="ConditionHome" class="text-danger"></span>
             </div>
+            <div>
+                <label asp-for="HomeTeamId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.HomeTeamId, new SelectList(ViewBag.teamsList,"Value", "Text"), optionLabel: "--- оберіть ---" )
+                <span asp-validation-for="HomeTeamId" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="VisitorTeamId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.VisitorTeamId, new SelectList(ViewBag.teamsList, "Value", "Text"), optionLabel: "--- оберіть ---" )
+                <span asp-validation-for="VisitorTeamId" class="text-danger"></span>
+            </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Додати гру" class="btn btn-primary" />
             </div>
         </form>
     </div>

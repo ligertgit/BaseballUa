@@ -1,7 +1,9 @@
 ﻿using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.DTO;
+using BaseballUa.DTO.Custom;
 using BaseballUa.Models;
+using BaseballUa.Models.Custom;
 using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -261,21 +263,25 @@ namespace BaseballUa.Controllers
 
         #endregion
 
-#region Games
+        #region Games
 
         public IActionResult ListGames(int schemaGroupId)
         {
-            var gamesDAL = new GamesCrud(_db).GetAllForGroup(schemaGroupId).ToList();
-            var gamesVL = new GameToView(_db).ConvertAll(gamesDAL);
+            var gamesWithTeamsDAL = new GamesCrud(_db).GetAllForGroupWithTeams(schemaGroupId).ToList();
+            var gamesWithTeamsVL = new GameWithTeamsToView().ConvertAll(gamesWithTeamsDAL);
 
             ViewData["schemaGroupId"] = schemaGroupId;
 
-            return View(gamesVL);
+            return View(gamesWithTeamsVL);
         }
 
         public IActionResult AddGame(int schemaGroupId)
         {
-            var gameView = new GameToView(_db).CreateEmpty(schemaGroupId);
+            var gameView = new GameToView().CreateEmpty(schemaGroupId);
+            var teamsWithClubCountry = new TeamCrud(_db).GetAllWithClubCountry().ToList();
+
+            ViewBag.teamsList = new TeamToView().GetFullSelestList(teamsWithClubCountry);
+
             return View(gameView);
         }
 
@@ -285,7 +291,7 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid)
             {
-                var gameDAL = new GameToView(_db).ConvertBack(gameVL);
+                var gameDAL = new GameToView().ConvertBack(gameVL);
                 new GamesCrud(_db).Add(gameDAL);
             }
 
@@ -327,7 +333,7 @@ namespace BaseballUa.Controllers
 
 #endregion
 
-        #region Club
+#region Club
         public IActionResult ListClubs()
         {
             var clubsDAL = new ClubCrud(_db).GetAll().ToList();
@@ -362,9 +368,45 @@ namespace BaseballUa.Controllers
 
 
 
-        #endregion
+#endregion
 
-        #region Team
+#region Team
+
+        public IActionResult ListTeams(int clubId) 
+        { 
+            var teamsDAL = new TeamCrud(_db).GetAllForClub(clubId).ToList();
+            var teamsVL = new TeamToView().ConvertAll(teamsDAL); 
+            
+            var clubDAL = new ClubCrud(_db).Get(clubId);
+            ViewBag.Club = new ClubToView(_db).Convert(clubDAL);
+            
+            return View(teamsVL);
+        }
+
+        public IActionResult AddTeam(int clubId)
+        {
+            var teamVL = new TeamToView().CreateEmpty();
+            teamVL.ClubId = clubId;
+
+            return View(teamVL);
+        }
+
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult AddTeam(TeamViewModel teamVL)
+        {
+            if (ModelState.IsValid)
+            {
+                var teamDAL = new TeamToView().ConvertBack(teamVL);
+                new TeamCrud(_db).Add(teamDAL);
+            }
+
+            return RedirectToAction("ListTeams", new { clubId = teamVL.ClubId });
+        }
+
+
+
         #endregion
 
     }
