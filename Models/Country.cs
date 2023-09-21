@@ -14,6 +14,6 @@ namespace BaseballUa.Models
         [StringLength(50)]
         public string FnameFlagBig { get; set; }
 
-        public ICollection<Club> Clubs { get; } = new List<Club>();
+        public ICollection<Club>? Clubs { get; set; }
     }
 }

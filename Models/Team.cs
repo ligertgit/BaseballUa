@@ -22,8 +22,8 @@ namespace BaseballUa.Models
         public int ClubId { get; set; }
         public Club Club { get; } = null!;
 
-        public ICollection<Game> HomeGames { get; } = new List<Game>();
-        public ICollection<Game> VisitorGames { get; } = new List<Game>();
+        public ICollection<Game>? HomeGames { get; set; }
+        public ICollection<Game>? VisitorGames { get; set; }
 
 
     }

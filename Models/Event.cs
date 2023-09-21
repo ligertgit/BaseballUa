@@ -9,7 +9,7 @@
 
         public int TournamentId { get; set; }
         public Tournament Tournament { get; set; } = null!;
-        //public ICollection<Game> Games { get; } = new List<Game>();
-        public ICollection<EventSchemaItem> EventSchemaItems { get;} = new List<EventSchemaItem>();
+        public ICollection<EventSchemaItem>? EventSchemaItems { get; set; }
+        //public ICollection<EventSchemaItem> EventSchemaItems { get;} = new List<EventSchemaItem>();
     }
 }

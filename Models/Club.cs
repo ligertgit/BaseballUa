@@ -18,6 +18,6 @@ namespace BaseballUa.Models
         
         public Country Country { get; set; } = null!;
 
-        public ICollection<Team> Teams { get; } = new List<Team>();
+        public ICollection<Team>? Teams { get; set; }
     }
 }

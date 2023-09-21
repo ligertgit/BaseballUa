@@ -10,6 +10,6 @@ namespace BaseballUa.Models
         public int EventSchemaItemId { get; set; }
         public EventSchemaItem EventSchemaItem { get; set; } = null!;
        
-        public ICollection<Game>? Games { get; set; } = new List<Game>();
+        public ICollection<Game>? Games { get; set; }
     }
 }

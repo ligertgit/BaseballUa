@@ -24,7 +24,7 @@ namespace BaseballUa.Models
 
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
-        public ICollection<Event> Events { get; } = new List<Event>();
+        public ICollection<Event>? Events { get; set; }
     }
 
 }
