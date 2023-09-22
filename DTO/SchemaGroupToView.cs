@@ -33,7 +33,26 @@ namespace BaseballUa.DTO
                                                                         Text = i.SchemaItem.ToString()
                                                                     }
                                                     ).ToList();
-            schemaGroupVL.Games = schemaGroupDAL.Games?.ToList();
+            schemaGroupVL.Games = new GameToView().ConvertAll(schemaGroupDAL.Games?.ToList());
+            schemaGroupVL.VirtualTeams = new List<TeamViewModel>();
+            // get uniq teams for group
+            if (schemaGroupVL.Games.Count > 0) 
+            { 
+                List<TeamViewModel> groupTeams = new List<TeamViewModel>();
+                foreach(var game in schemaGroupVL.Games)
+                {
+                    if (game.HomeTeamId != null)
+                    {
+                        groupTeams.Add(game.HomeTeam);
+                    }
+                    if (game.VisitorTeamId != null) 
+                    {
+                        groupTeams.Add(game.VisitorTeam);
+                    }
+                    
+                }
+                schemaGroupVL.VirtualTeams = groupTeams.GroupBy(t => t.Id).Select(g => g.First()).ToList(); ;
+            }
 
             return schemaGroupVL;
         }

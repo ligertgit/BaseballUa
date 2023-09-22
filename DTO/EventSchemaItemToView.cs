@@ -24,6 +24,7 @@ namespace BaseballUa.DTO
             eventSchemaItemVL.EventId = eventSchemaItemDAL.EventId;
             eventSchemaItemVL.Event = new EventsCrud(_dbContext).Get(eventSchemaItemDAL.EventId);
             eventSchemaItemVL.Tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
+            eventSchemaItemVL.Groups = new SchemaGroupToView(_dbContext).ConvertAll(eventSchemaItemDAL.SchemaGroups.ToList());
 
             return eventSchemaItemVL;
         }
@@ -49,14 +50,17 @@ namespace BaseballUa.DTO
             return eventSchemaItemVL;
         }
 
-        public List<EventSchemaItemViewModel> ConvertAll(List<EventSchemaItem> eventSchemaItemsDAL)
+        public List<EventSchemaItemViewModel> ConvertAll(List<EventSchemaItem>? eventSchemaItemsDAL)
         {
             var eventSchemaItemsVL = new List<EventSchemaItemViewModel>();
-            foreach (var item in eventSchemaItemsDAL)
+            if (eventSchemaItemsDAL != null) 
             {
-                eventSchemaItemsVL.Add(Convert(item));
+                foreach (var item in eventSchemaItemsDAL)
+                {
+                    eventSchemaItemsVL.Add(Convert(item));
+                }
             }
-
+            
             return eventSchemaItemsVL;
         }
     }

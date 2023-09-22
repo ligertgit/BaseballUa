@@ -8,9 +8,9 @@ namespace BaseballUa.Data
     public class BaseballUaDbContext : DbContext
     {
 		public BaseballUaDbContext(DbContextOptions<BaseballUaDbContext> options) : base(options)
-		{ 
-		
-		}
+		{
+            this.ChangeTracker.LazyLoadingEnabled = false;
+        }
 
         public DbSet<Category> Categories { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
@@ -92,6 +92,8 @@ namespace BaseballUa.Data
                             .OnDelete(DeleteBehavior.Restrict);
             
         }
+
+        public DbSet<BaseballUa.ViewModels.EventViewModel>? EventViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.CountryViewModel>? CountryViewModel { get; set; }
 

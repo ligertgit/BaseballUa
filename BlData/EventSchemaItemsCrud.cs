@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
 {
@@ -43,6 +44,21 @@ namespace BaseballUa.BlData
         { 
             var eventSchemaItems = _dbContext.EventSchemaItems.Where(i => i.EventId == eventId).ToList();
             return eventSchemaItems;
+        }
+
+        public IEnumerable<EventSchemaItem> GetAll(int eventId)
+        {
+            var schemaItems = _dbContext.EventSchemaItems.Where(s => s.EventId == eventId)
+                                        .Include(i => i.SchemaGroups)
+                                            .ThenInclude(g => g.Games)
+                                                .ThenInclude(g => g.HomeTeam)
+                                        .Include(i => i.SchemaGroups)
+                                            .ThenInclude(g => g.Games)
+                                                .ThenInclude(g => g.VisitorTeam);
+
+
+
+            return schemaItems;
         }
 
     }

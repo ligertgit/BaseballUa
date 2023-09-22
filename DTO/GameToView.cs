@@ -9,13 +9,6 @@ namespace BaseballUa.DTO
 {
     public class GameToView
     {
-        //private readonly BaseballUaDbContext _dbContext;
-
-        //public GameToView(BaseballUaDbContext dbContext)
-        //{
-        //    _dbContext = dbContext;
-        //}
-
         public GameViewModel Convert(Game gameDAL)
         {
             var gameView = new GameViewModel();
@@ -30,27 +23,14 @@ namespace BaseballUa.DTO
             gameView.GameStatus = gameDAL.GameStatus;
             gameView.PointsVisitor = gameDAL.PointsVisitor;
             gameView.PointsHome = gameDAL.PointsHome;
-            //gameView.GameType = gameDAL.GameType;
-//!            gameView.EventSchemaItemId = gameDAL.EventSchemaItemId;
-//!            gameView.EventSchemaItemItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
-            //gameView.EventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(gameDAL.EventSchemaItemId).SchemaItem;
-            //gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId);
-            //gameView.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(gameDAL.EventId).
-            //                                    Select(i => new SelectListItem 
-            //                                                    { 
-            //                                                        Text = i.SchemaItem.ToString(), 
-            //                                                        Value = i.Id.ToString()
-            //                                                    }
-            //                                          ).ToList();
             gameView.Tour = gameDAL.Tour;
             gameView.ConditionVisitor = gameDAL.ConditionVisitor;
             gameView.ConditionHome = gameDAL.ConditionHome;
             gameView.SchemaGroupId = gameDAL.SchemaGroupId;
             gameView.HomeTeamId = gameDAL.HomeTeamId;
             gameView.VisitorTeamId = gameDAL.VisitorTeamId;
-            //gameView.EventId = gameDAL.EventId;
-            //gameView.Event = new EventsCrud(_dbContext).Get(gameDAL.EventId);
-            //gameView.Tournament = new TournamentsCrud(_dbContext).Get(gameView.Event.TournamentId);
+            gameView.HomeTeam = new TeamToView().Convert(gameDAL.HomeTeam);
+            gameView.VisitorTeam = new TeamToView().Convert(gameDAL.VisitorTeam);
 
             return gameView;
         }
@@ -101,16 +81,5 @@ namespace BaseballUa.DTO
             return gamesVL;
         }
 
-        //public GameWithTeamsViewModel ConvertWithTeams(GameWithTeams)
-        //public List<GameWithTeamsViewModel> ConvertAllWithTeams(List<GameWithTeams> gamesDAL)
-        //{
-        //    var gamesVL = new List<GameWithTeams>();
-        //    foreach (var game in gamesDAL)
-        //    {
-        //        gamesVL.Add(ConvertWithTeams(game));
-        //    }
-
-        //    return gamesVL;
-        //}
     }
 }

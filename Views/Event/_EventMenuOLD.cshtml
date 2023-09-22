@@ -1,0 +1,54 @@
+﻿@using System.Web;
+@model int
+
+@{
+    var fullURL = new Uri($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}");
+    //var l1 = location.AbsolutePath;
+    //var l2 = location.PathAndQuery;
+    //var l3 = location.Query;
+
+    var uriBuilder = new UriBuilder(fullURL);
+    var paramsURL = HttpUtility.ParseQueryString(uriBuilder.Query);
+    if (paramsURL.Get("ShowMenu") != null) paramsURL.Remove("ShowMenu");
+
+
+}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                @{
+                    paramsURL.Add("ShowMenu", "schema");
+                    uriBuilder.Query = paramsURL.ToString();
+                    paramsURL.Remove("ShowMenu");
+                }
+                <a class="nav-link" href="@uriBuilder.Uri">Схема змагань <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                @{
+                    paramsURL.Add("ShowMenu", "groups");
+                    uriBuilder.Query = paramsURL.ToString();
+                    paramsURL.Remove("ShowMenu");
+                }
+                <a class="nav-link" href="@uriBuilder.Query">Групи</a>
+            </li>
+            <li class="nav-item">
+                @{
+                    paramsURL.Add("ShowMenu", "games");
+                    uriBuilder.Query = paramsURL.ToString();
+                    paramsURL.Remove("ShowMenu");
+                }
+                <a class="nav-link" href="@uriBuilder.Uri">Ігри</a>
+            </li>
+            <li class="nav-item">
+                @{
+                    paramsURL.Add("ShowMenu", "table");
+                    uriBuilder.Query = paramsURL.ToString();
+                    paramsURL.Remove("ShowMenu");
+                }
+                <a class="nav-link" href="@uriBuilder.Uri">Турнірна таблиця</a>
+            </li>
+        </ul>
+    </div>
+</nav>

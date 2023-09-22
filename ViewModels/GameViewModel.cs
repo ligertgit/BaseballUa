@@ -49,10 +49,6 @@ namespace BaseballUa.ViewModels
         [Range(0, 2)]
         public int? PointsHome { get; set; }
         
-        //[DisplayName("З якої частини турніру")]
-        //[Range(0, 100)]
-        //public GameType GameType { get; set; }
-
         [DisplayName("Тур")]
         public TourNumber? Tour { get; set; }
         
@@ -78,17 +74,5 @@ namespace BaseballUa.ViewModels
         [DisplayName("Команда гість")]
         public TeamViewModel? VisitorTeam { get; set; }
 
-        //[DisplayName("Тип частини турніру")]
-        //public GameType? EventSchemaItemItem { get; set; }
-
-        //public ICollection<EventSchemaItem>? EventSchemaItems { get; set; } = new List<EventSchemaItem>();
-        //[NotMapped]
-        //public IEnumerable<SelectListItem> EventSchemaItems { get; set; }
-
-        //public int EventId { get; set; }
-
-
-        //public Event? Event { get; set; }
-        //public Tournament? Tournament { get; set; }
     }
 }

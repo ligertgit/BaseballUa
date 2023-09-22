@@ -27,6 +27,7 @@ namespace BaseballUa.BlData
 
         public Event Get(int itemId)
         {
+            //check for null here
             var eventItem = _dbContext.Events.First(a => a.Id == itemId);
             return eventItem;
         }

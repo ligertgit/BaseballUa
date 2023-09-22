@@ -1,4 +1,5 @@
 ﻿using BaseballUa.Data;
+using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
@@ -35,7 +36,8 @@ namespace BaseballUa.ViewModels
         [NotMapped]
         public IEnumerable<SelectListItem>? TournamentList { get; set; }
 
-
+        [NotMapped]
+        public List<EventSchemaItemViewModel>? SchemaItems { get; set; }
     }
 
 

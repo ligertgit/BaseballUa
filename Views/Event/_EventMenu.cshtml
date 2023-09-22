@@ -8,8 +8,8 @@
     //var l3 = location.Query;
 
     var uriBuilder = new UriBuilder(fullURL);
-    var paramsURL = HttpUtility.ParseQueryString(uriBuilder.Query);
-    if (paramsURL.Get("ShowMenu") != null) paramsURL.Remove("ShowMenu");
+    //var paramsURL = HttpUtility.ParseQueryString(uriBuilder.Query);
+    //if (paramsURL.Get("ShowMenu") != null) paramsURL.Remove("ShowMenu");
 
 
 }
@@ -19,33 +19,37 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 @{
-                    paramsURL.Add("ShowMenu", "schema");
-                    uriBuilder.Query = paramsURL.ToString();
-                    paramsURL.Remove("ShowMenu");
+                    //paramsURL.Add("ShowMenu", "schema");
+                    //uriBuilder.Query = paramsURL.ToString();
+                    uriBuilder.Path = Url.Action("Schema", new { id = Model });
+                    //paramsURL.Remove("ShowMenu");
                 }
                 <a class="nav-link" href="@uriBuilder.Uri">Схема змагань <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 @{
-                    paramsURL.Add("ShowMenu", "groups");
-                    uriBuilder.Query = paramsURL.ToString();
-                    paramsURL.Remove("ShowMenu");
+                    //paramsURL.Add("ShowMenu", "groups");
+                    //uriBuilder.Query = paramsURL.ToString();
+                    uriBuilder.Path = Url.Action("Groups", new { id = Model });
+                    //paramsURL.Remove("ShowMenu");
                 }
-                <a class="nav-link" href="@uriBuilder.Query">Групи</a>
+                <a class="nav-link" href="@uriBuilder.Uri">Групи</a>
             </li>
             <li class="nav-item">
                 @{
-                    paramsURL.Add("ShowMenu", "games");
-                    uriBuilder.Query = paramsURL.ToString();
-                    paramsURL.Remove("ShowMenu");
+                    //paramsURL.Add("ShowMenu", "games");
+                    //uriBuilder.Query = paramsURL.ToString();
+                    //paramsURL.Remove("ShowMenu");
+                    uriBuilder.Path = Url.Action("Games", new { id = Model });
                 }
                 <a class="nav-link" href="@uriBuilder.Uri">Ігри</a>
             </li>
             <li class="nav-item">
                 @{
-                    paramsURL.Add("ShowMenu", "table");
-                    uriBuilder.Query = paramsURL.ToString();
-                    paramsURL.Remove("ShowMenu");
+                    //paramsURL.Add("ShowMenu", "table");
+                    //uriBuilder.Query = paramsURL.ToString();
+                    //paramsURL.Remove("ShowMenu");
+                    uriBuilder.Path = Url.Action("Table", new { id = Model });
                 }
                 <a class="nav-link" href="@uriBuilder.Uri">Турнірна таблиця</a>
             </li>

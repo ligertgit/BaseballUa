@@ -23,6 +23,10 @@ namespace BaseballUa.DTO
                 Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",
                 Value = a.Id.ToString()
             }).ToList();
+
+            // convert schema
+            eventView.SchemaItems = new EventSchemaItemToView(_dbContext).ConvertAll(eventDAL.SchemaItems?.ToList());
+
             return eventView;
         }
 

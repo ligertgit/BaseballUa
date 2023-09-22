@@ -1,0 +1,100 @@
+﻿@model BaseballUa.ViewModels.EventViewModel
+
+@{
+    ViewData["Title"] = "Detail Tournament";
+}
+
+@*<div>
+    <div class="row">
+        <div class="col-4">
+            <h5>@Html.DisplayFor(model => model.Tournament.Name)</h5>
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(model => model.Year)
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(model => model.Tournament.Sport)
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(model => model.Tournament.CategoryShortName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.IsAnual)
+            @Html.DisplayFor(model => model.Tournament.IsAnual)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.IsInternational)
+            @Html.DisplayFor(model => model.Tournament.IsInternational)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.IsOfficial)
+            @Html.DisplayFor(model => model.Tournament.IsOfficial)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.IsFun)
+            @Html.DisplayFor(model => model.Tournament.IsFun)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1">
+            @Model.StartDate.Value.ToString("yyyy-MM-dd")
+        </div>
+        <div class="col-1">
+            @Model.EndDate.Value.ToString("yyyy-MM-dd")
+        </div>
+    </div>
+    <hr />
+    <dl class="row">
+        <dt class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.Description)
+        </dt>
+        <dd class="col-11">
+            @Html.DisplayFor(model => model.Tournament.Description)
+        </dd>
+    </dl>
+    <hr />
+</div>*@
+<div class="row">
+    @await Html.PartialAsync("_EventDetails", Model)
+</div>
+
+<div class="row">
+    @await Html.PartialAsync("_EventMenu", Model.EventViewModelId)
+</div>
+
+
+<div class="row mt-3">
+
+    @{
+        foreach (var schemaItem in Model.SchemaItems)
+        {
+            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+                <div class="card-header">@schemaItem.Order</div>
+                <div class="card-body">
+                    <h4 class="card-title">Групи етапу:</h4>
+                    @{
+                        foreach (var group in schemaItem.Groups)
+                        {
+                            <p class="card-text">@group.GroupName</p>
+                            foreach (var team in group.VirtualTeams)
+                            {
+                                <img src="~/images/team/logoSmall/@team.FnameLogoSmall" />
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+
+
+
+
+<div>
+    <a asp-action="Index" asp-route-monthShift="@ViewBag.monthShift">Повернутися до списку</a>
+</div>

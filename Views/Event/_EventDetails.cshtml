@@ -1,0 +1,55 @@
+﻿@model BaseballUa.ViewModels.EventViewModel
+
+<div>
+    <div class="row">
+        <div class="col-4">
+            <h5>@Html.DisplayFor(model => model.Tournament.Name)</h5>
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(model => model.Year)
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(model => model.Tournament.Sport)
+        </div>
+        <div class="col-1">
+            @Html.DisplayFor(model => model.Tournament.CategoryShortName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.IsAnual)
+            @Html.DisplayFor(model => model.Tournament.IsAnual)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.IsInternational)
+            @Html.DisplayFor(model => model.Tournament.IsInternational)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.IsOfficial)
+            @Html.DisplayFor(model => model.Tournament.IsOfficial)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.IsFun)
+            @Html.DisplayFor(model => model.Tournament.IsFun)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1">
+            @Model.StartDate.Value.ToString("yyyy-MM-dd")
+        </div>
+        <div class="col-1">
+            @Model.EndDate.Value.ToString("yyyy-MM-dd")
+        </div>
+    </div>
+    <hr />
+    <dl class="row">
+        <dt class="col-1">
+            @Html.DisplayNameFor(model => model.Tournament.Description)
+        </dt>
+        <dd class="col-11">
+            @Html.DisplayFor(model => model.Tournament.Description)
+        </dd>
+    </dl>
+    <hr />
+</div>
+

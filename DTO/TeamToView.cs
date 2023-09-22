@@ -30,7 +30,10 @@ namespace BaseballUa.DTO
                 teamVL.IsTemp = teamDAL.IsTemp;
                 teamVL.ClubId = teamDAL.ClubId;
                 teamVL.Club = teamDAL.Club;
-                teamVL.Games = teamDAL.HomeGames.Concat(teamDAL.VisitorGames).ToList();
+                teamVL.Games = new List<Game>();
+                if ( teamDAL.HomeGames != null ) teamVL.Games.AddRange(teamDAL.HomeGames);
+                if ( teamDAL.VisitorGames != null ) teamVL.Games.AddRange(teamDAL.VisitorGames);
+                //teamVL.Games = teamDAL.HomeGames.Concat(teamDAL.VisitorGames).ToList();
                 return teamVL;
             } 
             else

@@ -1,6 +1,7 @@
 ﻿using BaseballUa.Models;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.ViewModels
@@ -22,5 +23,8 @@ namespace BaseballUa.ViewModels
 
         public Event? Event { get; set; }
         public Tournament? Tournament { get; set; }
+
+        [NotMapped]
+        public List<SchemaGroupViewModel>? Groups { get; set; }
     }
 }
