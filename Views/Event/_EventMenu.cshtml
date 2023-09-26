@@ -30,10 +30,10 @@
                 @{
                     //paramsURL.Add("ShowMenu", "groups");
                     //uriBuilder.Query = paramsURL.ToString();
-                    uriBuilder.Path = Url.Action("Groups", new { id = Model });
+                    uriBuilder.Path = Url.Action("Schedule", new { id = Model });
                     //paramsURL.Remove("ShowMenu");
                 }
-                <a class="nav-link" href="@uriBuilder.Uri">Групи</a>
+                <a class="nav-link" href="@uriBuilder.Uri">Розклад ігр</a>
             </li>
             <li class="nav-item">
                 @{

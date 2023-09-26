@@ -40,6 +40,10 @@ namespace BaseballUa.ViewModels
         [Required]
         [DisplayName("Вікова категорія ID")]
         public int CategoryId { get; set; }
+
+        [NotMapped]
+        public CategoryViewModel? Category { get; set; }
+
         [DisplayName("Вікова категорія short")]
         public string? CategoryShortName { get; set; }
         

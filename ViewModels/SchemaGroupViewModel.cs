@@ -21,7 +21,7 @@ namespace BaseballUa.ViewModels
         public int EventSchemaItemId { get; set; }
 
         [NotMapped]
-        public EventSchemaItem? EventSchemaItem { get; set; }
+        public EventSchemaItemViewModel? EventSchemaItem { get; set; }
         [NotMapped]
         public IEnumerable<SelectListItem>? EventSchemaItems { get; set; } // for select
         [NotMapped]

@@ -21,8 +21,8 @@ namespace BaseballUa.ViewModels
         public int EventId { get; set; }
 
 
-        public Event? Event { get; set; }
-        public Tournament? Tournament { get; set; }
+        public EventViewModel? Event { get; set; }
+        public TournamentViewModel? Tournament { get; set; }
 
         [NotMapped]
         public List<SchemaGroupViewModel>? Groups { get; set; }

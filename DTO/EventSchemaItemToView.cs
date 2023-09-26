@@ -3,6 +3,8 @@ using BaseballUa.Data;
 using BaseballUa.Migrations;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace BaseballUa.DTO
 {
@@ -22,8 +24,15 @@ namespace BaseballUa.DTO
             eventSchemaItemVL.Order = eventSchemaItemDAL.Order;
             eventSchemaItemVL.SchemaItem = eventSchemaItemDAL.SchemaItem;
             eventSchemaItemVL.EventId = eventSchemaItemDAL.EventId;
-            eventSchemaItemVL.Event = new EventsCrud(_dbContext).Get(eventSchemaItemDAL.EventId);
-            eventSchemaItemVL.Tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
+
+            //fix -dbaccess. and get this navigation data from crud directrly
+            var eventt = new EventsCrud(_dbContext).Get(eventSchemaItemDAL.EventId);
+            eventSchemaItemVL.Event = new EventToView().Convert(eventt, _dbContext);
+
+            //fix -dbaccess. and get this navigation data from crud directrly
+            var tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
+            eventSchemaItemVL.Tournament = new TournamentToView().Convert(tournament, _dbContext);
+
             eventSchemaItemVL.Groups = new SchemaGroupToView(_dbContext).ConvertAll(eventSchemaItemDAL.SchemaGroups.ToList());
 
             return eventSchemaItemVL;
@@ -44,8 +53,14 @@ namespace BaseballUa.DTO
         {
             var eventSchemaItemVL = new EventSchemaItemViewModel();
             eventSchemaItemVL.EventId = eventId;
-            eventSchemaItemVL.Event = new EventsCrud(_dbContext).Get(eventId);
-            eventSchemaItemVL.Tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
+
+            //fix -dbaccess. and get this navigation data from crud directrly
+            var eventt = new EventsCrud(_dbContext).Get(eventId);
+            eventSchemaItemVL.Event = new EventToView().Convert(eventt, _dbContext);
+
+            //fix -dbaccess. and get this navigation data from crud directrly
+            var tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
+            eventSchemaItemVL.Tournament = new TournamentToView().Convert(tournament, _dbContext);
 
             return eventSchemaItemVL;
         }
@@ -63,5 +78,15 @@ namespace BaseballUa.DTO
             
             return eventSchemaItemsVL;
         }
+
+        //public List<(DateTime, List<GameViewModel>)> ConvertALLToGamesByDay(List<EventSchemaItem> schemaItemsFullDAL)
+        //{
+        //    List<(DateTime, List<GameViewModel>)> gamesByDay = new List<(DateTime, List<GameViewModel>)> ();
+
+        //    if (schemaItemsFullDAL != null)
+        //    {
+        //        foreach (var schemaItem )
+        //    }
+        //}
     }
 }

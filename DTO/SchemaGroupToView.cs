@@ -21,10 +21,14 @@ namespace BaseballUa.DTO
             schemaGroupVL.Id = schemaGroupDAL.Id;
             schemaGroupVL.GroupName = schemaGroupDAL.GroupName;
             schemaGroupVL.EventSchemaItemId = schemaGroupDAL.EventSchemaItemId;
-            schemaGroupVL.EventSchemaItem = schemaGroupDAL.EventSchemaItem;
+
+            //fix -dbaccess. and get this navigation data from crud directrly
+            schemaGroupVL.EventSchemaItem = new EventSchemaItemToView(_dbContext).Convert(schemaGroupDAL.EventSchemaItem);
             if (schemaGroupVL.EventSchemaItem == null)
             {
-                schemaGroupVL.EventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(schemaGroupDAL.EventSchemaItemId);
+                //fix -dbaccess. and get this navigation data from crud directrly
+                var eventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(schemaGroupDAL.EventSchemaItemId);
+                schemaGroupVL.EventSchemaItem = new EventSchemaItemToView(_dbContext).Convert(eventSchemaItem);
             }
             schemaGroupVL.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(schemaGroupVL.EventSchemaItem.EventId)
                                                     .Select(i => new SelectListItem
@@ -73,14 +77,10 @@ namespace BaseballUa.DTO
             var schemaGroupVL = new SchemaGroupViewModel();
             schemaGroupVL.EventSchemaItemId = eventSchemaItemId;
             schemaGroupVL.GroupName = string.Empty;
-            schemaGroupVL.EventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(eventSchemaItemId);
-            //schemaGroupVL.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(eventSchemaItemId)
-            //                                        .Select(i => new SelectListItem
-            //                                        {
-            //                                            Value = i.Id.ToString(),
-            //                                            Text = i.SchemaItem.ToString()
-            //                                        }
-            //                                        ).ToList();
+
+            //fix -dbaccess. and get this navigation data from crud directrly
+            var eventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(eventSchemaItemId);
+            schemaGroupVL.EventSchemaItem = new EventSchemaItemToView(_dbContext).Convert(eventSchemaItem);
 
             return schemaGroupVL;
         }

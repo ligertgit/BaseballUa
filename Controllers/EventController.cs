@@ -3,6 +3,7 @@ using BaseballUa.Data;
 using BaseballUa.DTO;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
+using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
@@ -100,6 +101,19 @@ namespace BaseballUa.Controllers
             var eventVL = new EventToView().Convert(eventDAL, _db);
 
             return  View(eventVL);
+        }
+
+        public IActionResult Schedule(int id)
+        {
+            var gamesByDay = new EventGamesByDayVM();
+            
+            //var eventDAL = new EventsCrud(_db).Get(id);
+            //gamesByDay.Event = new EventToView().Convert(eventDAL, _db);
+
+            //var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAll(id);
+            //gamesByDay.GamesByDay = new EventSchemaItemToView(_db).ConvertALLToGamesByDay(schemaItemsFullDAL.ToList());
+
+            return View(gamesByDay);
         }
     }
 }

@@ -62,7 +62,10 @@ namespace BaseballUa.ViewModels
 
         [DisplayName("Блок схеми турніру")]
         public int SchemaGroupId { get; set; }
-        
+
+        [NotMapped]
+        public SchemaGroupViewModel? SchemaGroup { get; set; }
+
         [DisplayName("Команда господар")]
         public int? HomeTeamId { get; set; }
 
