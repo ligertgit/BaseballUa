@@ -194,7 +194,7 @@ namespace BaseballUa.Controllers
 
         public IActionResult AddSchemaItem(int eventId)
         {
-            var eventSchemaItemVL = new EventSchemaItemToView(_db).CreateEmpty(eventId);
+            var eventSchemaItemVL = new EventSchemaItemToView().CreateEmpty(eventId);
             return View(eventSchemaItemVL);
         }
 
@@ -204,7 +204,7 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid)
             { 
-                var eventSchemaItemDAL = new EventSchemaItemToView(_db).ConvertBack(eventSchemaItemVL);
+                var eventSchemaItemDAL = new EventSchemaItemToView().ConvertBack(eventSchemaItemVL);
                 new EventSchemaItemsCrud(_db).Add(eventSchemaItemDAL);
 
             }
@@ -215,11 +215,12 @@ namespace BaseballUa.Controllers
         { 
             var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetAll(eventId);
             //var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
-            var eventSchemaItemsVL = new EventSchemaItemToView(_db).ConvertAll(eventSchemaItemsDAL);
+            var eventSchemaItemsVL = new EventSchemaItemToView().ConvertAll(eventSchemaItemsDAL.ToList());
 
             var eventt = new EventsCrud(_db).Get(eventId);
             ViewData["eventId"] = eventId;
-            ViewData["tournamentName"] = new TournamentsCrud(_db).Get(eventt.TournamentId).Name;
+            //ViewData["tournamentName"] = new TournamentsCrud(_db).Get(eventt.TournamentId).Name;
+            ViewData["tournamentName"] = eventt.Tournament.Name;
 
             return View(eventSchemaItemsVL);
         }
