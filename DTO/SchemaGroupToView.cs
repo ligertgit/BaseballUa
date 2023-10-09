@@ -23,14 +23,15 @@ namespace BaseballUa.DTO
             schemaGroupVL.EventSchemaItemId = schemaGroupDAL.EventSchemaItemId;
 
             //fix -dbaccess. and get this navigation data from crud directrly
-            schemaGroupVL.EventSchemaItem = new EventSchemaItemToView(_dbContext).Convert(schemaGroupDAL.EventSchemaItem);
+            schemaGroupVL.EventSchemaItem = new EventSchemaItemToView().Convert(schemaGroupDAL.EventSchemaItem);
             if (schemaGroupVL.EventSchemaItem == null)
             {
                 //fix -dbaccess. and get this navigation data from crud directrly
                 var eventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(schemaGroupDAL.EventSchemaItemId);
-                schemaGroupVL.EventSchemaItem = new EventSchemaItemToView(_dbContext).Convert(eventSchemaItem);
+                schemaGroupVL.EventSchemaItem = new EventSchemaItemToView().Convert(eventSchemaItem);
             }
-            schemaGroupVL.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(schemaGroupVL.EventSchemaItem.EventId)
+            //schemaGroupVL.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(schemaGroupVL.EventSchemaItem.EventId)
+            schemaGroupVL.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetAll(schemaGroupVL.EventSchemaItem.EventId)
                                                     .Select(i => new SelectListItem
                                                                     {
                                                                         Value = i.Id.ToString(),
@@ -80,7 +81,7 @@ namespace BaseballUa.DTO
 
             //fix -dbaccess. and get this navigation data from crud directrly
             var eventSchemaItem = new EventSchemaItemsCrud(_dbContext).Get(eventSchemaItemId);
-            schemaGroupVL.EventSchemaItem = new EventSchemaItemToView(_dbContext).Convert(eventSchemaItem);
+            schemaGroupVL.EventSchemaItem = new EventSchemaItemToView().Convert(eventSchemaItem);
 
             return schemaGroupVL;
         }

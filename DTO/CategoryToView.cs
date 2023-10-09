@@ -2,17 +2,14 @@
 using BaseballUa.Data;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BaseballUa.DTO
 {
     public class CategoryToView
     {
-        private readonly BaseballUaDbContext _dbContext;
-
-        public CategoryToView(BaseballUaDbContext dbContext)
-        {
-            _dbContext = dbContext;        
-        }
         public CategoryViewModel Convert(Category category)
         {
             CategoryViewModel categoryViewModel = new CategoryViewModel();
@@ -20,6 +17,11 @@ namespace BaseballUa.DTO
             categoryViewModel.Name = category.Name;
             categoryViewModel.ShortName = category.ShortName;
 
+            if (category.Tournaments != null) 
+            { 
+                categoryViewModel.Tournaments = new TournamentToView().ConvertList(category.Tournaments.ToList());
+                categoryViewModel.SelectTournaments = categoryViewModel.Tournaments.Select(t => new SelectListItem { Value = t.Id.ToString(), Text = t.Name });
+            }
             return categoryViewModel;
         }
 
@@ -41,8 +43,13 @@ namespace BaseballUa.DTO
             categoryDAL.Name = category.Name;
             categoryDAL.ShortName = category.ShortName;
 
-            return categoryDAL;
 
+            return categoryDAL;
+        }
+
+        public List<SelectListItem> GetSelect(List<Category> categoriesListDAL)
+        {
+            return categoriesListDAL.Select(c => new SelectListItem { Value = c.Id.ToString(), Text =  c.Name }).ToList();
         }
     }
 }

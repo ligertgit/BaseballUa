@@ -1,6 +1,8 @@
 ﻿using BaseballUa.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseballUa.ViewModels
 {
@@ -17,6 +19,12 @@ namespace BaseballUa.ViewModels
         [Required]
         [DisplayName("Скорочена назва")]
         public string ShortName { get; set; }
+
+        [NotMapped]
+        public List<TournamentViewModel>? Tournaments { get; set;}
+
+        [NotMapped]
+        public IEnumerable<SelectListItem>? SelectTournaments { get; set; }
 
     }
 }

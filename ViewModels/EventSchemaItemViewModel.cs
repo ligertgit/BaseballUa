@@ -1,4 +1,5 @@
 ﻿using BaseballUa.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,9 +21,14 @@ namespace BaseballUa.ViewModels
         
         public int EventId { get; set; }
 
-
+        [NotMapped]
         public EventViewModel? Event { get; set; }
-        public TournamentViewModel? Tournament { get; set; }
+
+        [NotMapped]
+        public List<SelectListItem>? selectEvent { get; set; }
+
+        // its not coorect to have it here. Probably custom view model OR get it from Event
+        //public TournamentViewModel? Tournament { get; set; }
 
         [NotMapped]
         public List<SchemaGroupViewModel>? Groups { get; set; }

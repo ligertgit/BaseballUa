@@ -32,7 +32,7 @@ namespace BaseballUa.Controllers
         {
             //fix fromDTO to VIEW model and fix method _db
             var allCategoriesDTO = new CategoriesCrud(_db).GetAll().ToList();
-            var allCategoriesView = new CategoryToView(_db).ConvertList(allCategoriesDTO);
+            var allCategoriesView = new CategoryToView().ConvertList(allCategoriesDTO);
             return View(allCategoriesView);
         }
 
@@ -47,9 +47,7 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid) 
             {
-                Category categoryDAL = new CategoryToView(_db).ConvertBack(categoryView);
-                //categoryDAL.Name = categoryView.Name;
-                //categoryDAL.ShortName = categoryView.ShortName;
+                Category categoryDAL = new CategoryToView().ConvertBack(categoryView);
                 new CategoriesCrud(_db).Add(categoryDAL);
             }
             
@@ -59,7 +57,7 @@ namespace BaseballUa.Controllers
         public IActionResult EditCategory(int id)
         {
             var categoryDTO = new CategoriesCrud(_db).Get(id);
-            var categoryView = new CategoryToView(_db).Convert(categoryDTO);
+            var categoryView = new CategoryToView().Convert(categoryDTO);
             return View(categoryView);
         }
 
@@ -69,7 +67,7 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid) 
             {
-                Category categoryDAL = new CategoryToView(_db).ConvertBack(category);
+                Category categoryDAL = new CategoryToView().ConvertBack(category);
                 //categoryDAL.Id = category.Id;
                 //categoryDAL.Name = category.Name;
                 //categoryDAL.ShortName = category.ShortName;
@@ -84,7 +82,7 @@ namespace BaseballUa.Controllers
         public IActionResult ListTournaments()
         {
             var tournamentsDTO = new TournamentsCrud(_db).GetAll().ToList();
-            var tournamentsView = new TournamentToView().ConvertList(tournamentsDTO, _db);
+            var tournamentsView = new TournamentToView().ConvertList(tournamentsDTO);
             return View(tournamentsView);
         }
 
@@ -92,7 +90,9 @@ namespace BaseballUa.Controllers
         {
             //var tournamentDTO = new TournamentsCrud(_db).Get(1);
             //var tournamentDTO = new TournamentsCrud(_db).GetEmpty();
-            var tournamentView = new TournamentToView().GetEmpty(_db);
+            var tournamentView = new TournamentToView().GetEmpty();
+            var categoriesList = new CategoriesCrud(_db).GetAll().ToList();
+            tournamentView.SelectCategories = new CategoryToView().GetSelect(categoriesList);
             return View(tournamentView);
         }
 
@@ -110,8 +110,11 @@ namespace BaseballUa.Controllers
 
         public IActionResult EditTournament(int id)
         {
-            var tournamentDAL = new TournamentsCrud(_db).Get(id);//.Convert(_db);
-            var tournamentView = new TournamentToView().Convert(tournamentDAL, _db);
+            var tournamentDAL = new TournamentsCrud(_db).Get(id);
+            var tournamentView = new TournamentToView().Convert(tournamentDAL);
+            var categoriesList = new CategoriesCrud(_db).GetAll().ToList();
+            tournamentView.SelectCategories = new CategoryToView().GetSelect(categoriesList);
+
             return View(tournamentView);
         }
 
@@ -132,13 +135,15 @@ namespace BaseballUa.Controllers
         public IActionResult ListEvents()
         { 
             var eventsDAL = new EventsCrud(_db).GetAll().ToList();
-            var eventsView = new EventToView().ConvertAll(eventsDAL, _db);
+            var eventsView = new EventToView().ConvertAll(eventsDAL);
             return View(eventsView); 
         }
 
         public IActionResult CreateEvent() 
         {
-            var eventsView = new EventToView().CreateEmpty(_db);
+            var eventsView = new EventToView().CreateEmpty();
+            var tournamentList = new TournamentsCrud(_db).GetAll().ToList();
+            eventsView.SelectTournament = new TournamentToView().GetSelect(tournamentList);
             return View(eventsView);
         }
 
@@ -158,7 +163,7 @@ namespace BaseballUa.Controllers
         public IActionResult EditEvent(int id)
         {
             var eventDAL = new EventsCrud(_db).Get(id);
-            var eventView = new EventToView().Convert(eventDAL, _db);
+            var eventView = new EventToView().Convert(eventDAL);
 
             return View(eventView);
         }
@@ -179,7 +184,7 @@ namespace BaseballUa.Controllers
         public IActionResult DetailsEvent(int id)
         { 
             var eventDAL = new EventsCrud(_db).Get(id);
-            var eventView = new EventToView().Convert(eventDAL, _db);
+            var eventView = new EventToView().Convert(eventDAL);
 
             return View(eventView);
         }
@@ -208,7 +213,8 @@ namespace BaseballUa.Controllers
 
         public IActionResult ListSchemaItems(int eventId) 
         { 
-            var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
+            var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetAll(eventId);
+            //var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
             var eventSchemaItemsVL = new EventSchemaItemToView(_db).ConvertAll(eventSchemaItemsDAL);
 
             var eventt = new EventsCrud(_db).Get(eventId);
@@ -233,8 +239,9 @@ namespace BaseballUa.Controllers
             var groupsDAL = new SchemaGroupCrud(_db).GetAllForSchema(EventSchemaItemId).ToList();
             var groupsVL = new SchemaGroupToView(_db).ConvertAll(groupsDAL);
 
-            var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(EventSchemaItemId);
-            var eventSchemaItemVL = new EventSchemaItemToView(_db).Convert(eventSchemaItemDAL);
+            var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).GetWithCategory(EventSchemaItemId);
+            var eventSchemaItemVL = new EventSchemaItemToView().Convert(eventSchemaItemDAL);
+            // tournament removed from viewmodel. Now it can be reached via eventSchemaItemVL.Event.Tournament + (.category)
 
             ViewBag.EventSchemaItem = eventSchemaItemVL;
 
@@ -263,7 +270,7 @@ namespace BaseballUa.Controllers
 
         #endregion
 
-        #region Games
+#region Games
 
         public IActionResult ListGames(int schemaGroupId)
         {

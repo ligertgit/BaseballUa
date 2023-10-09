@@ -95,7 +95,7 @@ namespace BaseballUa.Controllers
         public IActionResult Schema(int id)
         {
             var eventDAL = new EventsCrud(_db).Get(id);
-            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAll(id);
+            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
             eventDAL.SchemaItems = (ICollection<EventSchemaItem>)schemaItemsFullDAL.ToList();
 
             var eventVL = new EventToView().Convert(eventDAL, _db);

@@ -25,28 +25,28 @@ namespace BaseballUa.BlData
 
         public EventSchemaItem Get(int itemId)
         {
-            return _dbContext.EventSchemaItems.First(i => i.Id == itemId);
+            return _dbContext.EventSchemaItems.Where(i => i.Id == itemId).Include(i => i.Event).FirstOrDefault();
+            //return _dbContext.EventSchemaItems.First(i => i.Id == itemId);
         }
 
         public IEnumerable<EventSchemaItem> GetAll()
         {
-            return _dbContext.EventSchemaItems;
+            return _dbContext.EventSchemaItems.Include(i => i.Event);
         }
 
+        public IEnumerable<EventSchemaItem> GetAll(int eventId)
+        {
+            var eventSchemaItems = _dbContext.EventSchemaItems.Where(i => i.EventId == eventId).Include(i => i.Event);
+            return eventSchemaItems;
+        }
         public void Update(EventSchemaItem item)
         {
             _dbContext.EventSchemaItems.Update(item);
             _dbContext.SaveChanges();
         }
 
-        //=====================
-        public List<EventSchemaItem> GetEventSchemaItems(int eventId)
-        { 
-            var eventSchemaItems = _dbContext.EventSchemaItems.Where(i => i.EventId == eventId).ToList();
-            return eventSchemaItems;
-        }
-
-        public IEnumerable<EventSchemaItem> GetAll(int eventId)
+        //custom methods
+        public IEnumerable<EventSchemaItem> GetAllWithGames(int eventId)
         {
             var schemaItems = _dbContext.EventSchemaItems.Where(s => s.EventId == eventId)
                                         .Include(i => i.SchemaGroups)
@@ -59,6 +59,17 @@ namespace BaseballUa.BlData
 
 
             return schemaItems;
+        }
+
+        public EventSchemaItem GetWithCategory(int eventSchemaItemId)
+        {
+            var schemaItem = _dbContext.EventSchemaItems.Where(i => i.Id == eventSchemaItemId)
+                                                            .Include(i => i.Event)
+                                                                .ThenInclude(e => e.Tournament)
+                                                                    .ThenInclude(t => t.Category)
+                                                            .FirstOrDefault();
+
+            return schemaItem;
         }
 
     }

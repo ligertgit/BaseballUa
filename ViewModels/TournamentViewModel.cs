@@ -44,10 +44,14 @@ namespace BaseballUa.ViewModels
         [NotMapped]
         public CategoryViewModel? Category { get; set; }
 
-        [DisplayName("Вікова категорія short")]
-        public string? CategoryShortName { get; set; }
-        
-        public IEnumerable<SelectListItem>? CategoriesNames { get; set; }
+        //[DisplayName("Вікова категорія short")]
+        //public string? CategoryShortName { get; set; }
+
+        [NotMapped]
+        public IEnumerable<SelectListItem>? SelectCategories { get; set; }
+
+        [NotMapped]
+        public IEnumerable<EventViewModel>? Events { get; set; }
     }
 
 

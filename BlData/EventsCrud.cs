@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Drawing;
 using System.Linq;
@@ -28,13 +29,15 @@ namespace BaseballUa.BlData
         public Event Get(int itemId)
         {
             //check for null here
-            var eventItem = _dbContext.Events.First(a => a.Id == itemId);
+            //var eventItem = _dbContext.Events.First(a => a.Id == itemId);
+            var eventItem = _dbContext.Events.Where(e => e.Id == itemId).Include(e => e.Tournament).FirstOrDefault();
+            
             return eventItem;
         }
 
         public IEnumerable<Event> GetAll()
         {
-            return _dbContext.Events;
+            return _dbContext.Events.Include(e => e.Tournament);
         }
 
         public void Update(Event item)
@@ -44,17 +47,16 @@ namespace BaseballUa.BlData
         }
 
 
-        //remove
+        //remove??
         public IEnumerable<Event> GetMonth(int monthShift)
         {
             var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(monthShift);
-            //var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month + monthShift, 1);
             var endDate = startDate.AddMonths(1);
             return _dbContext.Events.Where(i =>
                                 ((i.StartDate >= startDate && i.StartDate <= endDate)
                                 || (i.EndDate >= startDate && i.EndDate <= endDate))
                                 || (i.StartDate <= startDate && i.EndDate >= endDate)
-                                );
+                                ).Include(e => e.Tournament);
         }
 
         

@@ -10,12 +10,12 @@ namespace BaseballUa.DTO
 {
     public class EventSchemaItemToView
     {
-        private readonly BaseballUaDbContext _dbContext;
+        //private readonly BaseballUaDbContext _dbContext;
 
-        public EventSchemaItemToView(BaseballUaDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        //public EventSchemaItemToView(BaseballUaDbContext dbContext)
+        //{
+        //    _dbContext = dbContext;
+        //}
 
         public EventSchemaItemViewModel Convert(EventSchemaItem eventSchemaItemDAL)
         {
@@ -24,16 +24,20 @@ namespace BaseballUa.DTO
             eventSchemaItemVL.Order = eventSchemaItemDAL.Order;
             eventSchemaItemVL.SchemaItem = eventSchemaItemDAL.SchemaItem;
             eventSchemaItemVL.EventId = eventSchemaItemDAL.EventId;
+            eventSchemaItemVL.Event = new EventToView().Convert(eventSchemaItemDAL.Event);
+            //fix -dbaccess. and get this navigation data from crud directrly
+            //var eventt = new EventsCrud(_dbContext).Get(eventSchemaItemDAL.EventId);
+            //eventSchemaItemVL.Event = new EventToView().Convert(eventt, _dbContext);
 
             //fix -dbaccess. and get this navigation data from crud directrly
-            var eventt = new EventsCrud(_dbContext).Get(eventSchemaItemDAL.EventId);
-            eventSchemaItemVL.Event = new EventToView().Convert(eventt, _dbContext);
-
-            //fix -dbaccess. and get this navigation data from crud directrly
-            var tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
-            eventSchemaItemVL.Tournament = new TournamentToView().Convert(tournament, _dbContext);
-
-            eventSchemaItemVL.Groups = new SchemaGroupToView(_dbContext).ConvertAll(eventSchemaItemDAL.SchemaGroups.ToList());
+            //should be passed through viewBag
+            //var tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
+            //eventSchemaItemVL.Tournament = new TournamentToView().Convert(tournament, _dbContext);
+            if (eventSchemaItemDAL.SchemaGroups != null) 
+            { 
+                eventSchemaItemVL.Groups = new SchemaGroupToView().ConvertAll(eventSchemaItemDAL.SchemaGroups.ToList());
+            }
+            //eventSchemaItemVL.Groups = new SchemaGroupToView(_dbContext).ConvertAll(eventSchemaItemDAL.SchemaGroups.ToList());
 
             return eventSchemaItemVL;
         }
@@ -53,14 +57,14 @@ namespace BaseballUa.DTO
         {
             var eventSchemaItemVL = new EventSchemaItemViewModel();
             eventSchemaItemVL.EventId = eventId;
+            
+            //fix -dbaccess. and get this navigation data from crud directrly
+            //var eventt = new EventsCrud(_dbContext).Get(eventId);
+            //eventSchemaItemVL.Event = new EventToView().Convert(eventt, _dbContext);
 
             //fix -dbaccess. and get this navigation data from crud directrly
-            var eventt = new EventsCrud(_dbContext).Get(eventId);
-            eventSchemaItemVL.Event = new EventToView().Convert(eventt, _dbContext);
-
-            //fix -dbaccess. and get this navigation data from crud directrly
-            var tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
-            eventSchemaItemVL.Tournament = new TournamentToView().Convert(tournament, _dbContext);
+            //var tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
+            //eventSchemaItemVL.Tournament = new TournamentToView().Convert(tournament, _dbContext);
 
             return eventSchemaItemVL;
         }

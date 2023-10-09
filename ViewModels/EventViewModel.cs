@@ -34,7 +34,7 @@ namespace BaseballUa.ViewModels
         public TournamentViewModel? Tournament { get; set; }
 
         [NotMapped]
-        public IEnumerable<SelectListItem>? TournamentList { get; set; }
+        public IEnumerable<SelectListItem>? SelectTournament { get; set; }
 
         [NotMapped]
         public List<EventSchemaItemViewModel>? SchemaItems { get; set; }

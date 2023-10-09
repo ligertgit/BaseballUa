@@ -26,12 +26,24 @@ namespace BaseballUa.BlData
 
         public Tournament Get(int itemId)
         {
-            return _dbContext.Tournaments.First(c => c.Id == itemId);
+            //return _dbContext.Tournaments.First(c => c.Id == itemId);
+            //var tournament = (from tournamentt in _dbContext.Tournaments
+            //                  join category in _dbContext.Categories on tournamentt.CategoryId equals category.Id
+            //                  where tournamentt.Id == itemId
+            //                  select new Tournament
+            //                  {
+            //                      Id = tournamentt.Id,
+            //                      //...
+            //                  }
+            //                  );
+
+            // fix. result may be null
+            return _dbContext.Tournaments.Where(t => t.Id == itemId).Include(c => c.Category).FirstOrDefault();
         }
 
         public IEnumerable<Tournament> GetAll()
         {
-            return _dbContext.Tournaments;
+            return _dbContext.Tournaments.Include(c => c.Category);
         }
 
         public void Update(Tournament item)

@@ -2,13 +2,14 @@
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 
 namespace BaseballUa.DTO
 {
     public class EventToView
     {
-        public EventViewModel Convert(Event eventDAL, BaseballUaDbContext _dbContext)
+        public EventViewModel Convert(Event eventDAL)
         {
             EventViewModel eventView = new EventViewModel();
             eventView.EventViewModelId = eventDAL.Id;
@@ -16,32 +17,35 @@ namespace BaseballUa.DTO
             eventView.StartDate = eventDAL.StartDate;
             eventView.EndDate = eventDAL.EndDate;
             eventView.TournamentId = eventDAL.TournamentId;
-            var curTournamentDAL = _dbContext.Tournaments.First(a => a.Id == eventDAL.TournamentId);
-            eventView.Tournament = new TournamentToView().Convert(curTournamentDAL, _dbContext);
-            eventView.TournamentList = _dbContext.Tournaments.Select(a => new SelectListItem
-            {
-                Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",
-                Value = a.Id.ToString()
-            }).ToList();
+            //var curTournamentDAL = _dbContext.Tournaments.First(a => a.Id == eventDAL.TournamentId);
+            eventView.Tournament = new TournamentToView().Convert(eventDAL.Tournament);
+            //eventView.TournamentList = _dbContext.Tournaments.Select(a => new SelectListItem
+            //{
+            //    Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",
+            //    Value = a.Id.ToString()
+            //}).ToList();
 
             // convert schema
-            eventView.SchemaItems = new EventSchemaItemToView(_dbContext).ConvertAll(eventDAL.SchemaItems?.ToList());
+            if (eventDAL.SchemaItems != null) 
+            {
+                eventView.SchemaItems = new EventSchemaItemToView().ConvertAll(eventDAL.SchemaItems.ToList());
+            }
 
             return eventView;
         }
 
-        public List<EventViewModel> ConvertAll(List<Event> eventsDAL, BaseballUaDbContext _dbContext) 
+        public List<EventViewModel> ConvertAll(List<Event> eventsDAL) 
         { 
             List<EventViewModel> eventsView = new List<EventViewModel>();
             foreach (var eventDAL in eventsDAL)
             {
-                eventsView.Add(Convert(eventDAL, _dbContext));
+                eventsView.Add(Convert(eventDAL));
             }
 
             return eventsView;
         }
 
-        public EventViewModel CreateEmpty(BaseballUaDbContext _dbContext)
+        public EventViewModel CreateEmpty()
         {
             var eventView = new EventViewModel();
             eventView.Year = DateTime.Now.Year;
@@ -49,11 +53,11 @@ namespace BaseballUa.DTO
             eventView.EndDate = DateTime.Now;
             eventView.TournamentId = default;
             eventView.Tournament = null;
-            eventView.TournamentList = _dbContext.Tournaments.Select(a => new SelectListItem
-                                                {
-                                                    Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",
-                                                    Value = a.Id.ToString()
-                                                });
+            //eventView.TournamentList = _dbContext.Tournaments.Select(a => new SelectListItem
+            //                                    {
+            //                                        Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",
+            //                                        Value = a.Id.ToString()
+            //                                    });
             return eventView;
         }
 
@@ -67,6 +71,8 @@ namespace BaseballUa.DTO
             eventDAL.TournamentId = eventView.TournamentId;
 
             return eventDAL;
-        }
+        } 
+
+
     }
 }
