@@ -29,7 +29,7 @@ namespace BaseballUa.BlData
 
         public Team Get(int itemId)
         {
-            return _dbContext.Teams.First(t => t.Id == itemId);
+            return _dbContext.Teams.Where(t => t.Id == itemId).Include(t => t.Club).FirstOrDefault();
         }
 
         public IEnumerable<Team> GetAll()
@@ -39,7 +39,7 @@ namespace BaseballUa.BlData
 
         public IEnumerable<Team> GetAllForClub(int clubId)
         {
-            return _dbContext.Teams.Where(t => t.ClubId == clubId);
+            return _dbContext.Teams.Where(t => t.ClubId == clubId).Include(t => t.Club);
         }
 
         public void Update(Team item)

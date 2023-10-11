@@ -28,12 +28,18 @@ namespace BaseballUa.BlData
 
         public Game Get(int itemId)
         {
-            return _dbContext.Games.First(i => i.Id == itemId);
+            return _dbContext.Games.Where(i => i.Id == itemId)
+                                    .Include(g => g.SchemaGroup)
+                                    .Include(g => g.HomeTeam)
+                                    .Include(g => g.VisitorTeam)
+                                    .FirstOrDefault();
         }
 
         public IEnumerable<Game> GetAll() 
         {
-            return _dbContext.Games;
+            return _dbContext.Games.Include(g => g.SchemaGroup)
+                                    .Include(g => g.HomeTeam)
+                                    .Include(g => g.VisitorTeam);
         }
 
         public IEnumerable<GameWithTeams> GetAllForGroupWithTeams(int schemaGroupId = 0)

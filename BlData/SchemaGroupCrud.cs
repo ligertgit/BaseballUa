@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
 {
@@ -24,12 +25,18 @@ namespace BaseballUa.BlData
 
         public SchemaGroup Get(int itemId)
         {
-            return _dbContext.SchemaGroups.First(g => g.Id == itemId);
+            return _dbContext.SchemaGroups.Where(g => g.Id == itemId).Include(g => g.EventSchemaItem).FirstOrDefault();
         }
 
         public IEnumerable<SchemaGroup> GetAll()
         {
-            return _dbContext.SchemaGroups;
+            return _dbContext.SchemaGroups.Include(g => g.EventSchemaItem);
+        }
+
+        public IEnumerable<SchemaGroup> GetAll(int eventSchemaItemId)
+        {
+            
+            return _dbContext.SchemaGroups.Where(s => s.EventSchemaItemId == eventSchemaItemId).Include(g => g.EventSchemaItem);
         }
 
         public void Update(SchemaGroup item)
@@ -37,11 +44,10 @@ namespace BaseballUa.BlData
             throw new NotImplementedException();
         }
 
-        public IEnumerable<SchemaGroup> GetAllForSchema(int eventSchemaItemId)
-        {
-            
-            return _dbContext.SchemaGroups.Where(s => s.EventSchemaItemId == eventSchemaItemId);
-        }
+        //public IEnumerable<SchemaGroup> GetAllForSchema(int eventSchemaItemId)
+        //{
 
+        //    return _dbContext.SchemaGroups.Where(s => s.EventSchemaItemId == eventSchemaItemId).Include(g => g.EventSchemaItem);
+        //}
     }
 }

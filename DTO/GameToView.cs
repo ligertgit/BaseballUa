@@ -27,6 +27,7 @@ namespace BaseballUa.DTO
             gameView.ConditionVisitor = gameDAL.ConditionVisitor;
             gameView.ConditionHome = gameDAL.ConditionHome;
             gameView.SchemaGroupId = gameDAL.SchemaGroupId;
+            gameView.SchemaGroup = new SchemaGroupToView().Convert(gameDAL.SchemaGroup);
             gameView.HomeTeamId = gameDAL.HomeTeamId;
             gameView.VisitorTeamId = gameDAL.VisitorTeamId;
             gameView.HomeTeam = new TeamToView().Convert(gameDAL.HomeTeam);

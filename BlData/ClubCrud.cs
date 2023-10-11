@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
 {
@@ -24,8 +25,8 @@ namespace BaseballUa.BlData
 
         public Club Get(int itemId)
         {
-            var clubWithCountry = _dbContext.Clubs.First(c => c.Id == itemId);
-            clubWithCountry.Country = _dbContext.Countries.First(c => c.Id == clubWithCountry.CountryId);
+            var clubWithCountry = _dbContext.Clubs.Where(c => c.Id == itemId).Include(c => c.Country).FirstOrDefault();
+            //clubWithCountry.Country = _dbContext.Countries.First(c => c.Id == clubWithCountry.CountryId);
 
             return clubWithCountry;
             //return _dbContext.Clubs.First(c => c.Id == itemId);

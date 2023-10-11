@@ -237,8 +237,8 @@ namespace BaseballUa.Controllers
 #region EventSchemaGroups
         public IActionResult ListSchemaGroups(int EventSchemaItemId)
         {
-            var groupsDAL = new SchemaGroupCrud(_db).GetAllForSchema(EventSchemaItemId).ToList();
-            var groupsVL = new SchemaGroupToView(_db).ConvertAll(groupsDAL);
+            var groupsDAL = new SchemaGroupCrud(_db).GetAll(EventSchemaItemId).ToList();
+            var groupsVL = new SchemaGroupToView().ConvertAll(groupsDAL);
 
             var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).GetWithCategory(EventSchemaItemId);
             var eventSchemaItemVL = new EventSchemaItemToView().Convert(eventSchemaItemDAL);
@@ -251,7 +251,10 @@ namespace BaseballUa.Controllers
 
         public IActionResult AddSchemaGroup(int eventSchemaItemId)
         {
-            var groupVL = new SchemaGroupToView(_db).CreateEmpty(eventSchemaItemId);
+            var groupVL = new SchemaGroupToView().CreateEmpty(eventSchemaItemId);
+
+            var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(eventSchemaItemId);
+            groupVL.EventSchemaItem = new EventSchemaItemToView().Convert(eventSchemaItemDAL);
 
             return View(groupVL);
         }
@@ -262,7 +265,7 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid)
             {
-                var schemaGroupDAL = new SchemaGroupToView(_db).ConvertBack(schemaGroupVL);
+                var schemaGroupDAL = new SchemaGroupToView().ConvertBack(schemaGroupVL);
                 new SchemaGroupCrud(_db).Add(schemaGroupDAL);
             }
 
@@ -314,14 +317,14 @@ namespace BaseballUa.Controllers
         public IActionResult ListCountries()
         {
             var countriesDAL = new CountryCrud(_db).GetAll().ToList();
-            var countriesVL = new CountryToView(_db).ConvertAll(countriesDAL);
+            var countriesVL = new CountryToView().ConvertAll(countriesDAL);
 
             return View(countriesVL);
         }
 
         public IActionResult AddCountry()
         {
-            var CountryVL = new CountryToView(_db).CreateEmpty();
+            var CountryVL = new CountryToView().CreateEmpty();
 
             return View(CountryVL);
         }
@@ -332,7 +335,7 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid)
             {
-                var countryDAL = new CountryToView(_db).ConvertBack(countryVL);
+                var countryDAL = new CountryToView().ConvertBack(countryVL);
                 new CountryCrud(_db).Add(countryDAL);
             }
 
@@ -345,7 +348,7 @@ namespace BaseballUa.Controllers
         public IActionResult ListClubs()
         {
             var clubsDAL = new ClubCrud(_db).GetAll().ToList();
-            var clubsVL = new ClubToView(_db).ConvertAll(clubsDAL);
+            var clubsVL = new ClubToView().ConvertAll(clubsDAL);
 
             //ViewBag.CountriesSL = new CountryCrud(_db).GetSelectItemList();
 
@@ -354,7 +357,7 @@ namespace BaseballUa.Controllers
 
         public IActionResult AddClub()
         {
-            var clubVl = new ClubToView(_db).CreateEmpty();
+            var clubVl = new ClubToView().CreateEmpty();
 
             ViewBag.CountriesSL = new CountryCrud(_db).GetSelectItemList();
 
@@ -367,7 +370,7 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid)
             {
-                var clubDAL = new ClubToView(_db).ConvertBack(clubVl);
+                var clubDAL = new ClubToView().ConvertBack(clubVl);
                 new ClubCrud(_db).Add(clubDAL);
             }
 
@@ -386,7 +389,7 @@ namespace BaseballUa.Controllers
             var teamsVL = new TeamToView().ConvertAll(teamsDAL); 
             
             var clubDAL = new ClubCrud(_db).Get(clubId);
-            ViewBag.Club = new ClubToView(_db).Convert(clubDAL);
+            ViewBag.Club = new ClubToView().Convert(clubDAL);
             
             return View(teamsVL);
         }

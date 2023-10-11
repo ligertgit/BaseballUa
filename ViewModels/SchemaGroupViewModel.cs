@@ -23,7 +23,7 @@ namespace BaseballUa.ViewModels
         [NotMapped]
         public EventSchemaItemViewModel? EventSchemaItem { get; set; }
         [NotMapped]
-        public IEnumerable<SelectListItem>? EventSchemaItems { get; set; } // for select
+        public IEnumerable<SelectListItem>? SelectEventSchemaItems { get; set; } // for select
         [NotMapped]
         public List<GameViewModel>? Games { get; set; } // to show if neccesary
 

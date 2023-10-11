@@ -7,12 +7,12 @@ namespace BaseballUa.DTO
 {
     public class CountryToView
     {
-        private readonly BaseballUaDbContext _dbContext;
+        //private readonly BaseballUaDbContext _dbContext;
 
-        public CountryToView(BaseballUaDbContext dbContext)
-        {
-            _dbContext = dbContext;   
-        }
+        //public CountryToView(BaseballUaDbContext dbContext)
+        //{
+        //    _dbContext = dbContext;   
+        //}
 
         public CountryViewModel Convert(Country countryDAL)
         {

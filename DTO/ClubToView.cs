@@ -8,12 +8,12 @@ namespace BaseballUa.DTO
 {
     public class ClubToView
     {
-        private readonly BaseballUaDbContext _dbContext;
+        //private readonly BaseballUaDbContext _dbContext;
 
-        public ClubToView(BaseballUaDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        //public ClubToView(BaseballUaDbContext dbContext)
+        //{
+        //    _dbContext = dbContext;
+        //}
 
         public ClubViewModel Convert(Club clubDAL)
         {
