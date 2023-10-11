@@ -28,7 +28,7 @@
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
 
-            @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.TournamentList, "Value", "Text"), optionLabel: "--- оберіть ---")
+            @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.SelectTournament, "Value", "Text"), optionLabel: "--- оберіть ---")
             @Html.ValidationMessageFor(x => x.TournamentId, "", new { @class = "text-danger" })
 
             <div class="form-group">

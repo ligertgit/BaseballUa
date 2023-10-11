@@ -30,7 +30,7 @@
             </div>
 
 
-            @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.TournamentList, "Value", "Text", Model.TournamentId))
+            @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.SelectTournament, "Value", "Text", Model.TournamentId))
             @Html.ValidationMessageFor(x => x.TournamentId, "", new { @class = "text-danger" })
 
 

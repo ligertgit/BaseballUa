@@ -48,7 +48,7 @@ namespace BaseballUa.Controllers
         {
             // probably should use EventIndexViewModel
             var eventDAL = new EventsCrud(_db).Get(id);
-            // move dbcontext to constructor
+            eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
             var eventView = new EventToView().Convert(eventDAL);
             
             ViewData["monthShift"] = monthShift;
@@ -97,7 +97,8 @@ namespace BaseballUa.Controllers
             var eventDAL = new EventsCrud(_db).Get(id);
             var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
             eventDAL.SchemaItems = (ICollection<EventSchemaItem>)schemaItemsFullDAL.ToList();
-
+            eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
+            
             var eventVL = new EventToView().Convert(eventDAL);
 
             return  View(eventVL);

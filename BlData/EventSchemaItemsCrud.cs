@@ -25,18 +25,18 @@ namespace BaseballUa.BlData
 
         public EventSchemaItem Get(int itemId)
         {
-            return _dbContext.EventSchemaItems.Where(i => i.Id == itemId).Include(i => i.Event).FirstOrDefault();
+            return _dbContext.EventSchemaItems.Where(i => i.Id == itemId).Include(i => i.Event).ThenInclude(e => e.Tournament).ThenInclude(t => t.Category).FirstOrDefault();
             //return _dbContext.EventSchemaItems.First(i => i.Id == itemId);
         }
 
         public IEnumerable<EventSchemaItem> GetAll()
         {
-            return _dbContext.EventSchemaItems.Include(i => i.Event);
+            return _dbContext.EventSchemaItems.Include(i => i.Event).ThenInclude(e => e.Tournament).ThenInclude(t => t.Category);
         }
 
         public IEnumerable<EventSchemaItem> GetAll(int eventId)
         {
-            var eventSchemaItems = _dbContext.EventSchemaItems.Where(i => i.EventId == eventId).Include(i => i.Event);
+            var eventSchemaItems = _dbContext.EventSchemaItems.Where(i => i.EventId == eventId).Include(i => i.Event).ThenInclude(e => e.Tournament).ThenInclude(t => t.Category);
             return eventSchemaItems;
         }
         public void Update(EventSchemaItem item)
@@ -59,17 +59,6 @@ namespace BaseballUa.BlData
 
 
             return schemaItems;
-        }
-
-        public EventSchemaItem GetWithCategory(int eventSchemaItemId)
-        {
-            var schemaItem = _dbContext.EventSchemaItems.Where(i => i.Id == eventSchemaItemId)
-                                                            .Include(i => i.Event)
-                                                                .ThenInclude(e => e.Tournament)
-                                                                    .ThenInclude(t => t.Category)
-                                                            .FirstOrDefault();
-
-            return schemaItem;
         }
 
     }

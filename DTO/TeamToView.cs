@@ -74,17 +74,30 @@ namespace BaseballUa.DTO
             return new TeamViewModel();
         }
 
-        public List<SelectListItem> GetFullSelestList(List<TeamWithClubCountry> teamsWithClubCountry)
+        public List<SelectListItem> GetFullSelestList(List<Team> teamsWithClubCountry)
         {
             var selectListItems = (from teams in teamsWithClubCountry
                                    select new SelectListItem
                                    {
-                                        Text = $"{teams.Team.Name} | {teams.Club.Name} | {teams.Country.Name}",
-                                        Value = teams.Team.Id.ToString()
+                                        Text = $"{teams.Name} | {teams.Club.Name} | {teams.Club.Country.Name}",
+                                        Value = teams.Id.ToString()
                                    }
                                    );
 
             return selectListItems.ToList();
         }
+
+        //public List<SelectListItem> GetFullSelestList(List<TeamWithClubCountry> teamsWithClubCountry)
+        //{
+        //    var selectListItems = (from teams in teamsWithClubCountry
+        //                           select new SelectListItem
+        //                           {
+        //                               Text = $"{teams.Team.Name} | {teams.Club.Name} | {teams.Country.Name}",
+        //                               Value = teams.Team.Id.ToString()
+        //                           }
+        //                           );
+
+        //    return selectListItems.ToList();
+        //}
     }
 }

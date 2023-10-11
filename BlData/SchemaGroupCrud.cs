@@ -25,18 +25,30 @@ namespace BaseballUa.BlData
 
         public SchemaGroup Get(int itemId)
         {
-            return _dbContext.SchemaGroups.Where(g => g.Id == itemId).Include(g => g.EventSchemaItem).FirstOrDefault();
+            return _dbContext.SchemaGroups.Where(g => g.Id == itemId)
+                                            .Include(g => g.EventSchemaItem)
+                                                .ThenInclude(s => s.Event)
+                                                    .ThenInclude(e => e.Tournament)
+                                                        .ThenInclude(t => t.Category)
+                                            .FirstOrDefault();
         }
 
         public IEnumerable<SchemaGroup> GetAll()
         {
-            return _dbContext.SchemaGroups.Include(g => g.EventSchemaItem);
+            return _dbContext.SchemaGroups.Include(g => g.EventSchemaItem)
+                                                .ThenInclude(s => s.Event)
+                                                    .ThenInclude(e => e.Tournament)
+                                                        .ThenInclude(t => t.Category);
         }
 
         public IEnumerable<SchemaGroup> GetAll(int eventSchemaItemId)
         {
             
-            return _dbContext.SchemaGroups.Where(s => s.EventSchemaItemId == eventSchemaItemId).Include(g => g.EventSchemaItem);
+            return _dbContext.SchemaGroups.Where(s => s.EventSchemaItemId == eventSchemaItemId)
+                                            .Include(g => g.EventSchemaItem)
+                                                .ThenInclude(s => s.Event)
+                                                    .ThenInclude(e => e.Tournament)
+                                                        .ThenInclude(t => t.Category);
         }
 
         public void Update(SchemaGroup item)

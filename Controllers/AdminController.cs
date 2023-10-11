@@ -112,6 +112,7 @@ namespace BaseballUa.Controllers
         {
             var tournamentDAL = new TournamentsCrud(_db).Get(id);
             var tournamentView = new TournamentToView().Convert(tournamentDAL);
+
             var categoriesList = new CategoriesCrud(_db).GetAll().ToList();
             tournamentView.SelectCategories = new CategoryToView().GetSelect(categoriesList);
 
@@ -134,8 +135,9 @@ namespace BaseballUa.Controllers
 #region Events
         public IActionResult ListEvents()
         { 
-            var eventsDAL = new EventsCrud(_db).GetAll().ToList();
-            var eventsView = new EventToView().ConvertAll(eventsDAL);
+            var eventsDAL = new EventsCrud(_db).GetAll();
+            var eventsView = new EventToView().ConvertAll(eventsDAL.ToList());
+
             return View(eventsView); 
         }
 
@@ -164,6 +166,9 @@ namespace BaseballUa.Controllers
         {
             var eventDAL = new EventsCrud(_db).Get(id);
             var eventView = new EventToView().Convert(eventDAL);
+
+            var tournamentsDTO = new TournamentsCrud(_db).GetAll().ToList();
+            eventView.SelectTournament = new TournamentToView().GetSelect(tournamentsDTO);
 
             return View(eventView);
         }
@@ -240,7 +245,7 @@ namespace BaseballUa.Controllers
             var groupsDAL = new SchemaGroupCrud(_db).GetAll(EventSchemaItemId).ToList();
             var groupsVL = new SchemaGroupToView().ConvertAll(groupsDAL);
 
-            var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).GetWithCategory(EventSchemaItemId);
+            var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(EventSchemaItemId);
             var eventSchemaItemVL = new EventSchemaItemToView().Convert(eventSchemaItemDAL);
             // tournament removed from viewmodel. Now it can be reached via eventSchemaItemVL.Event.Tournament + (.category)
 
@@ -289,7 +294,8 @@ namespace BaseballUa.Controllers
         public IActionResult AddGame(int schemaGroupId)
         {
             var gameView = new GameToView().CreateEmpty(schemaGroupId);
-            var teamsWithClubCountry = new TeamCrud(_db).GetAllWithClubCountry().ToList();
+            var teamsWithClubCountry = new TeamCrud(_db).GetAll().ToList();
+            //var teamsWithClubCountry = new TeamCrud(_db).GetAllWithClubCountry().ToList();
 
             ViewBag.teamsList = new TeamToView().GetFullSelestList(teamsWithClubCountry);
 
@@ -385,7 +391,7 @@ namespace BaseballUa.Controllers
 
         public IActionResult ListTeams(int clubId) 
         { 
-            var teamsDAL = new TeamCrud(_db).GetAllForClub(clubId).ToList();
+            var teamsDAL = new TeamCrud(_db).GetAll(clubId).ToList();
             var teamsVL = new TeamToView().ConvertAll(teamsDAL); 
             
             var clubDAL = new ClubCrud(_db).Get(clubId);
