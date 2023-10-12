@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseballUa.Models
 {
@@ -17,7 +18,7 @@ namespace BaseballUa.Models
 
         
         public Country Country { get; set; } = null!;
-
+        [NotMapped]
         public ICollection<Team>? Teams { get; set; }
     }
 }

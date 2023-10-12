@@ -30,6 +30,7 @@ namespace BaseballUa.BlData
         {
             //check for null here
             //var eventItem = _dbContext.Events.First(a => a.Id == itemId);
+            //_dbContext.ChangeTracker.LazyLoadingEnabled = false;
             var eventItem = _dbContext.Events.Where(e => e.Id == itemId).Include(e => e.Tournament).ThenInclude(t => t.Category).FirstOrDefault();
             
             return eventItem;

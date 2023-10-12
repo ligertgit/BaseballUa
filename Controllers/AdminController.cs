@@ -283,8 +283,11 @@ namespace BaseballUa.Controllers
 
         public IActionResult ListGames(int schemaGroupId)
         {
-            var gamesWithTeamsDAL = new GamesCrud(_db).GetAllForGroupWithTeams(schemaGroupId).ToList();
-            var gamesWithTeamsVL = new GameWithTeamsToView().ConvertAll(gamesWithTeamsDAL);
+            //var gamesWithTeamsDAL = new GamesCrud(_db).GetAllForGroupWithTeams(schemaGroupId).ToList();
+            //var gamesWithTeamsVL = new GameWithTeamsToView().ConvertAll(gamesWithTeamsDAL);
+            
+            var gamesWithTeamsDAL = new GamesCrud(_db).GetAll(schemaGroupId).ToList();
+            var gamesWithTeamsVL = new GameToView().ConvertAll(gamesWithTeamsDAL).ToList();
 
             ViewData["schemaGroupId"] = schemaGroupId;
 

@@ -1,6 +1,7 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 
 namespace BaseballUa.BlData
 {
@@ -38,12 +39,14 @@ namespace BaseballUa.BlData
             //                  );
 
             // fix. result may be null
-            return _dbContext.Tournaments.Where(t => t.Id == itemId).Include(c => c.Category).FirstOrDefault();
+            var temp = _dbContext.Tournaments.Where(t => t.Id == itemId).Include(c => c.Category).FirstOrDefault();
+            return temp;
         }
 
         public IEnumerable<Tournament> GetAll()
         {
-            return _dbContext.Tournaments.Include(c => c.Category);
+            var temp = _dbContext.Tournaments.Include(c => c.Category);
+            return temp;
         }
 
         public void Update(Tournament item)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Models
@@ -24,6 +25,7 @@ namespace BaseballUa.Models
 
         public int CategoryId { get; set; }
         public Category Category { get; set; } = null!;
+        [NotMapped]
         public ICollection<Event>? Events { get; set; }
     }
 

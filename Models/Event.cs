@@ -1,4 +1,6 @@
-﻿namespace BaseballUa.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace BaseballUa.Models
 {
     public class Event
     {
@@ -9,6 +11,7 @@
 
         public int TournamentId { get; set; }
         public Tournament Tournament { get; set; } = null!;
+        [NotMapped]
         public ICollection<EventSchemaItem>? SchemaItems { get; set; }
         //public ICollection<EventSchemaItem> EventSchemaItems { get;} = new List<EventSchemaItem>();
     }

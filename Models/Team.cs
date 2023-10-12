@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Migrations;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Models
@@ -20,9 +21,11 @@ namespace BaseballUa.Models
         public bool IsTemp { get; set; }
 
         public int ClubId { get; set; }
-        public Club Club { get; } = null!;
+        public Club Club { get; set; } = null!;
 
+        [NotMapped]
         public ICollection<Game>? HomeGames { get; set; }
+        [NotMapped]
         public ICollection<Game>? VisitorGames { get; set; }
 
 

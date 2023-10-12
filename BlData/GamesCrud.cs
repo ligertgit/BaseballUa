@@ -3,6 +3,8 @@ using BaseballUa.Models;
 using BaseballUa.Models.Custom;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
+using static BaseballUa.Data.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace BaseballUa.BlData
 {
@@ -42,6 +44,28 @@ namespace BaseballUa.BlData
                                     .Include(g => g.VisitorTeam);
         }
 
+        public IEnumerable<Game> GetAll(int schemaGroupId)
+        {
+            if (schemaGroupId != 0) 
+            {
+                return _dbContext.Games.Include(g => g.SchemaGroup)
+                                        .ThenInclude(g => g.EventSchemaItem)
+                                            .ThenInclude(i => i.Event)
+                                                .ThenInclude(e => e.Tournament)
+                                                    .ThenInclude(t => t.Category)
+                                    .Include(g => g.HomeTeam)
+                                    .Include(g => g.VisitorTeam)
+                                    .Where(g => g.SchemaGroupId == schemaGroupId);
+            }
+            return _dbContext.Games.Include(g => g.SchemaGroup)
+                                        .ThenInclude(g => g.EventSchemaItem)
+                                            .ThenInclude(i => i.Event)
+                                                .ThenInclude(e => e.Tournament)
+                                                    .ThenInclude(t => t.Category)
+                                    .Include(g => g.HomeTeam)
+                                    .Include(g => g.VisitorTeam);
+        }
+
         public IEnumerable<GameWithTeams> GetAllForGroupWithTeams(int schemaGroupId = 0)
         {
             if (schemaGroupId != 0) 
@@ -51,14 +75,50 @@ namespace BaseballUa.BlData
                             from ght in subght.DefaultIfEmpty()
                             join visitorTeam in _dbContext.Teams on game.VisitorTeamId equals visitorTeam.Id into subgvt
                             from gvt in subgvt.DefaultIfEmpty()
+                            join schemaGroup in _dbContext.SchemaGroups on game.SchemaGroupId equals schemaGroup.Id
                             where game.SchemaGroupId == schemaGroupId
                             select new GameWithTeams
                             {
-                                Game = game,
+                                Game = new Game
+                                        {
+                                            Id = game.Id,
+                                            Name = game.Name,
+                                            StartDate = game.StartDate,
+                                            AdditionalInfo = game.AdditionalInfo,
+                                            RunsVisitor = game.RunsVisitor,
+                                            RunsHome = game.RunsHome,
+                                            PlacedAt = game.PlacedAt,
+                                            HalfinningsPlayed = game.HalfinningsPlayed,
+                                            GameStatus = game.GameStatus,
+                                            PointsVisitor = game.PointsVisitor,
+                                            PointsHome = game.PointsHome,
+                                            Tour = game.Tour,
+                                            ConditionVisitor = game.ConditionVisitor,
+                                            ConditionHome = game.ConditionHome,
+                                            SchemaGroupId = game.SchemaGroupId,
+                                            HomeTeamId = game.HomeTeamId,
+                                            VisitorTeamId = game.VisitorTeamId,
+                                            HomeTeam = game.HomeTeam,
+                                            VisitorTeam = game.VisitorTeam,
+                                            SchemaGroup = schemaGroup
+                                        },
                                 HomeTeam = ght,
                                 VisitorTeam = gvt
                             }
                             );
+                //return (from game in _dbContext.Games
+                //        join homeTeam in _dbContext.Teams on game.HomeTeamId equals homeTeam.Id into subght
+                //        from ght in subght.DefaultIfEmpty()
+                //        join visitorTeam in _dbContext.Teams on game.VisitorTeamId equals visitorTeam.Id into subgvt
+                //        from gvt in subgvt.DefaultIfEmpty()
+                //        where game.SchemaGroupId == schemaGroupId
+                //        select new GameWithTeams
+                //        {
+                //            Game = game,
+                //            HomeTeam = ght,
+                //            VisitorTeam = gvt
+                //        }
+                //        );
             }
             return (from game in _dbContext.Games
                     join homeTeam in _dbContext.Teams on game.HomeTeamId equals homeTeam.Id into subght

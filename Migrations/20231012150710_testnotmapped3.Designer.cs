@@ -4,6 +4,7 @@ using BaseballUa.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseballUa.Migrations
 {
     [DbContext(typeof(BaseballUaDbContext))]
-    partial class BaseballUaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231012150710_testnotmapped3")]
+    partial class testnotmapped3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -393,8 +396,9 @@ namespace BaseballUa.Migrations
             modelBuilder.Entity("BaseballUa.Models.Game", b =>
                 {
                     b.HasOne("BaseballUa.Models.Team", "HomeTeam")
-                        .WithMany()
-                        .HasForeignKey("HomeTeamId");
+                        .WithMany("HomeGames")
+                        .HasForeignKey("HomeTeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("BaseballUa.Models.SchemaGroup", "SchemaGroup")
                         .WithMany()
@@ -403,8 +407,9 @@ namespace BaseballUa.Migrations
                         .IsRequired();
 
                     b.HasOne("BaseballUa.Models.Team", "VisitorTeam")
-                        .WithMany()
-                        .HasForeignKey("VisitorTeamId");
+                        .WithMany("VisitorGames")
+                        .HasForeignKey("VisitorTeamId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("HomeTeam");
 
@@ -444,6 +449,13 @@ namespace BaseballUa.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("BaseballUa.Models.Team", b =>
+                {
+                    b.Navigation("HomeGames");
+
+                    b.Navigation("VisitorGames");
                 });
 #pragma warning restore 612, 618
         }

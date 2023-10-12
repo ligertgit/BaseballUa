@@ -27,12 +27,20 @@ namespace BaseballUa.DTO
             gameView.ConditionVisitor = gameDAL.ConditionVisitor;
             gameView.ConditionHome = gameDAL.ConditionHome;
             gameView.SchemaGroupId = gameDAL.SchemaGroupId;
-            gameView.SchemaGroup = new SchemaGroupToView().Convert(gameDAL.SchemaGroup);
+            if (gameDAL.SchemaGroup != null)
+            {
+                gameView.SchemaGroup = new SchemaGroupToView().Convert(gameDAL.SchemaGroup);
+            }
             gameView.HomeTeamId = gameDAL.HomeTeamId;
             gameView.VisitorTeamId = gameDAL.VisitorTeamId;
-            gameView.HomeTeam = new TeamToView().Convert(gameDAL.HomeTeam);
-            gameView.VisitorTeam = new TeamToView().Convert(gameDAL.VisitorTeam);
-
+            if (gameDAL.HomeTeam != null) 
+            {
+                gameView.HomeTeam = new TeamToView().Convert(gameDAL.HomeTeam);
+            }
+            if (gameDAL.VisitorTeam != null)
+            {
+                gameView.VisitorTeam = new TeamToView().Convert(gameDAL.VisitorTeam);
+            }
             return gameView;
         }
 
@@ -58,6 +66,7 @@ namespace BaseballUa.DTO
             gameDAL.HomeTeamId = gameVL.HomeTeamId;
             gameDAL.VisitorTeamId = gameVL.VisitorTeamId;
             //gameDAL.EventId = gameVL.EventId;
+
 
             return gameDAL;
         }

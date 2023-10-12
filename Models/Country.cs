@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseballUa.Models
 {
@@ -14,6 +15,7 @@ namespace BaseballUa.Models
         [StringLength(50)]
         public string FnameFlagBig { get; set; }
 
+        [NotMapped]
         public ICollection<Club>? Clubs { get; set; }
     }
 }

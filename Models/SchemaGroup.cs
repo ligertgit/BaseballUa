@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseballUa.Models
 {
@@ -9,7 +10,8 @@ namespace BaseballUa.Models
         public string GroupName { get; set; }
         public int EventSchemaItemId { get; set; }
         public EventSchemaItem EventSchemaItem { get; set; } = null!;
-       
+
+        [NotMapped]
         public ICollection<Game>? Games { get; set; }
     }
 }

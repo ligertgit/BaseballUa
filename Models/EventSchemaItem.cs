@@ -1,4 +1,5 @@
-﻿using static BaseballUa.Data.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Models
 {
@@ -9,6 +10,7 @@ namespace BaseballUa.Models
         public GameType SchemaItem { get; set; }
         public int EventId { get; set; }
         public Event Event { get; set; } = null!;
+        [NotMapped]
         public ICollection<SchemaGroup>? SchemaGroups { get; set; }
     }
 }

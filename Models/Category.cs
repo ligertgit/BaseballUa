@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BaseballUa.Models
 {
@@ -12,6 +13,7 @@ namespace BaseballUa.Models
 		[StringLength(15)]
 		public string ShortName { get; set; }
 
+		[NotMapped]
 		public ICollection<Tournament>? Tournaments { get; set; }
 		//public ICollection<Tournament> Tournaments { get; } = new List<Tournament>();
 

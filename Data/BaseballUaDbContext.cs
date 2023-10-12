@@ -83,17 +83,19 @@ namespace BaseballUa.Data
                             .HasMany(t => t.HomeGames)
                             .WithOne(g => g.HomeTeam)
                             .HasForeignKey(g => g.HomeTeamId)
-                            .OnDelete(DeleteBehavior.Restrict);
+                            .OnDelete(DeleteBehavior.Restrict); // ondelete not working due to lines with ignore. looks like can be removed
 
             modelBuilder.Entity<Team>()
                             .HasMany(t => t.VisitorGames)
                             .WithOne(g => g.VisitorTeam)
                             .HasForeignKey(g => g.VisitorTeamId)
-                            .OnDelete(DeleteBehavior.Restrict);
-            
+                            .OnDelete(DeleteBehavior.Restrict); // ondelete not working due to lines with ignore. looks like can be removed
+
+            modelBuilder.Entity<Team>().Ignore(t => t.VisitorGames);
+            modelBuilder.Entity<Team>().Ignore(t => t.HomeGames);
         }
 
-        public DbSet<BaseballUa.ViewModels.EventViewModel>? EventViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.EventViewModel>? EventViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.CountryViewModel>? CountryViewModel { get; set; }
 

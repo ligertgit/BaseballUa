@@ -39,11 +39,14 @@ namespace BaseballUa.DTO
             //                                                            Text = i.SchemaItem.ToString()
             //                                                        }
             //                                        ).ToList();
-
-            schemaGroupVL.Games = new GameToView().ConvertAll(schemaGroupDAL.Games?.ToList());
+            if (schemaGroupDAL.Games != null)
+            {
+                schemaGroupVL.Games = new GameToView().ConvertAll(schemaGroupDAL.Games.ToList());
+            }
+            
             schemaGroupVL.VirtualTeams = new List<TeamViewModel>();
             // get uniq teams for group
-            if (schemaGroupVL.Games.Count > 0) 
+            if (schemaGroupVL.Games?.Count > 0) 
             { 
                 List<TeamViewModel> groupTeams = new List<TeamViewModel>();
                 foreach(var game in schemaGroupVL.Games)
