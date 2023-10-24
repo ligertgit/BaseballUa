@@ -10,8 +10,7 @@
     var uriBuilder = new UriBuilder(fullURL);
     //var paramsURL = HttpUtility.ParseQueryString(uriBuilder.Query);
     //if (paramsURL.Get("ShowMenu") != null) paramsURL.Remove("ShowMenu");
-
-
+    
 }
 
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
@@ -24,7 +23,7 @@
                     uriBuilder.Path = Url.Action("Schema", new { id = Model });
                     //paramsURL.Remove("ShowMenu");
                 }
-                <a class="nav-link" href="@uriBuilder.Uri">Схема змагань <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="@uriBuilder.Uri">Схема змагань</a>
             </li>
             <li class="nav-item">
                 @{

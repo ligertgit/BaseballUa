@@ -1,5 +1,6 @@
 ﻿using BaseballUa.BlData;
 using BaseballUa.Data;
+using BaseballUa.DTO.Custom;
 using BaseballUa.Migrations;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
@@ -24,7 +25,10 @@ namespace BaseballUa.DTO
             eventSchemaItemVL.Order = eventSchemaItemDAL.Order;
             eventSchemaItemVL.SchemaItem = eventSchemaItemDAL.SchemaItem;
             eventSchemaItemVL.EventId = eventSchemaItemDAL.EventId;
-            eventSchemaItemVL.Event = new EventToView().Convert(eventSchemaItemDAL.Event);
+            if (eventSchemaItemDAL.Event != null)
+            {
+                eventSchemaItemVL.Event = new EventToView().Convert(eventSchemaItemDAL.Event);
+            }
             //fix -dbaccess. and get this navigation data from crud directrly
             //var eventt = new EventsCrud(_dbContext).Get(eventSchemaItemDAL.EventId);
             //eventSchemaItemVL.Event = new EventToView().Convert(eventt, _dbContext);
@@ -83,14 +87,33 @@ namespace BaseballUa.DTO
             return eventSchemaItemsVL;
         }
 
-        //public List<(DateTime, List<GameViewModel>)> ConvertALLToGamesByDay(List<EventSchemaItem> schemaItemsFullDAL)
-        //{
-        //    List<(DateTime, List<GameViewModel>)> gamesByDay = new List<(DateTime, List<GameViewModel>)> ();
 
+        public List<DayGames> ConvertAllToGamesByDay(List<EventSchemaItem> schemaItemsFullDAL)
+        {
+            var allGamesByDayVL = new List<DayGames>();
+            //List<(DateTime, List<GameViewModel>)> gamesByDay = new List<(DateTime, List<GameViewModel>)> ();
+            //  Array gamesByDay = new Array() 
+            //List<GameViewModel> allGames = new List<GameViewModel> ();
+            if (schemaItemsFullDAL != null)
+            {
+                var allGames = schemaItemsFullDAL.SelectMany(si => si.SchemaGroups).SelectMany(sg => sg.Games).ToList();
+                allGamesByDayVL = allGames.Where(d => d.StartDate != null).GroupBy(
+                                                game => game.StartDate?.Date,
+                                                game => game,
+                                                (gamesDate, GroupedGames) => new DayGames
+                                                {
+                                                    GamesDate = gamesDate,
+                                                    Games = new GameToView().ConvertAll(GroupedGames.ToList()),
+                                                }).ToList();
+                //allGamesByDayVL = allGamesByDayDAL;
+            }
+            
+
+            return allGamesByDayVL;
         //    if (schemaItemsFullDAL != null)
         //    {
         //        foreach (var schemaItem )
         //    }
-        //}
+        }
     }
 }

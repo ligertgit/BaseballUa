@@ -1,6 +1,7 @@
 ﻿using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.DTO;
+using BaseballUa.DTO.Custom;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
@@ -48,7 +49,7 @@ namespace BaseballUa.Controllers
         {
             // probably should use EventIndexViewModel
             var eventDAL = new EventsCrud(_db).Get(id);
-            eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
+            //eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
             var eventView = new EventToView().Convert(eventDAL);
             
             ViewData["monthShift"] = monthShift;
@@ -96,23 +97,41 @@ namespace BaseballUa.Controllers
         {
             var eventDAL = new EventsCrud(_db).Get(id);
             var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
-            eventDAL.SchemaItems = (ICollection<EventSchemaItem>)schemaItemsFullDAL.ToList();
-            eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
+            //eventDAL.SchemaItems = (ICollection<EventSchemaItem>)schemaItemsFullDAL.ToList();
+            eventDAL.SchemaItems = schemaItemsFullDAL.ToList();
+            //var temp = schemaItemsFullDAL.ToList();
+            //eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
             
             var eventVL = new EventToView().Convert(eventDAL);
 
             return  View(eventVL);
         }
 
-        public IActionResult Schedule(int id)
+        public IActionResult Schedule(int id, int dateIndex = -1)
         {
+            int showIndex;
             var gamesByDay = new EventGamesByDayVM();
             
-            //var eventDAL = new EventsCrud(_db).Get(id);
-            //gamesByDay.Event = new EventToView().Convert(eventDAL, _db);
+            var eventDAL = new EventsCrud(_db).Get(id);
+            gamesByDay.Event = new EventToView().Convert(eventDAL);
 
-            //var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAll(id);
-            //gamesByDay.GamesByDay = new EventSchemaItemToView(_db).ConvertALLToGamesByDay(schemaItemsFullDAL.ToList());
+            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
+            if (schemaItemsFullDAL == null)
+            {
+                gamesByDay.GamesByDay = new List<DayGames>
+                {
+                    new DayGames { GamesDate = DateTime.Now.Date, Games = new List<GameViewModel>() }
+                };
+                showIndex = 0;
+            }
+            else 
+            {
+                gamesByDay.GamesByDay = new EventSchemaItemToView().ConvertAllToGamesByDay(schemaItemsFullDAL.ToList()).OrderBy(gd => gd.GamesDate).ToList();
+                showIndex = (dateIndex >= 0) && (dateIndex < gamesByDay.GamesByDay.Count) ? dateIndex : gamesByDay.GamesByDay.GetShowIndex();
+                    //showIndex = gamesByDay.GamesByDay.GetShowIndex();
+            }
+            
+            ViewBag.ShowIndex = showIndex;
 
             return View(gamesByDay);
         }

@@ -21,8 +21,10 @@ namespace BaseballUa.DTO
             schemaGroupVL.Id = schemaGroupDAL.Id;
             schemaGroupVL.GroupName = schemaGroupDAL.GroupName;
             schemaGroupVL.EventSchemaItemId = schemaGroupDAL.EventSchemaItemId;
-
-            schemaGroupVL.EventSchemaItem = new EventSchemaItemToView().Convert(schemaGroupDAL.EventSchemaItem);
+            if (schemaGroupDAL.EventSchemaItem != null)
+            {
+                schemaGroupVL.EventSchemaItem = new EventSchemaItemToView().Convert(schemaGroupDAL.EventSchemaItem);
+            }
             //if (schemaGroupVL.EventSchemaItem == null)
             //{
             //    //fix -dbaccess. and get this navigation data from crud directrly
@@ -30,7 +32,7 @@ namespace BaseballUa.DTO
             //    schemaGroupVL.EventSchemaItem = new EventSchemaItemToView().Convert(eventSchemaItem);
             //}
             //schemaGroupVL.EventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetEventSchemaItems(schemaGroupVL.EventSchemaItem.EventId)
-            
+
             // move this to controller when neccesary
             //schemaGroupVL.SelectEventSchemaItems = new EventSchemaItemsCrud(_dbContext).GetAll(schemaGroupVL.EventSchemaItem.EventId)
             //                                        .Select(i => new SelectListItem

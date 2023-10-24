@@ -95,6 +95,8 @@ namespace BaseballUa.Data
             modelBuilder.Entity<Team>().Ignore(t => t.HomeGames);
         }
 
+        public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
+
         //public DbSet<BaseballUa.ViewModels.EventViewModel>? EventViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.CountryViewModel>? CountryViewModel { get; set; }

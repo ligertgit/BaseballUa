@@ -1,0 +1,45 @@
+﻿@using System.Web;
+@model List<string>
+
+@{
+    //var fullURL = new Uri($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}{Context.Request.QueryString}");
+    var fullURL = new Uri($"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}");
+    //var l1 = location.AbsolutePath;
+    //var l2 = location.PathAndQuery;
+    //var l3 = location.Query;
+
+    var uriBuilder = new UriBuilder(fullURL);
+    //var paramsURL = HttpUtility.ParseQueryString(uriBuilder.Query);
+    //if (paramsURL.Get("ShowMenu") != null) paramsURL.Remove("ShowMenu");
+
+
+}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            @{
+                for (int i = 0; i < Model.Count(); i++)
+                {
+                    <li class="nav-item">
+                        @{
+                            uriBuilder.Path = Url.Action("Schedule");
+                            uriBuilder.Query = $"?dateIndex={i}";
+                            //uriBuilder.Query = "?" + "dateIndex=" + i;
+                            //uriBuilder.Path = Url.Action("Schedule", new { dateIndex = i });
+                            //uriBuilder.Path = Url.Action("Schedule", new { dateIndex = 3 });
+                            if (i == ViewBag.ShowIndex)
+                            {
+                                <a class="nav-link fw-bold" href="@uriBuilder.Uri">@Model[i]</a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" href="@uriBuilder.Uri">@Model[i]</a>
+                            }
+                        }
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</nav>
