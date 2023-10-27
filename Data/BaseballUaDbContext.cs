@@ -21,6 +21,7 @@ namespace BaseballUa.Data
         public DbSet<Country> Countries { get; set; }
         public DbSet<Club> Clubs { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<Staff> Staffs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -95,7 +96,9 @@ namespace BaseballUa.Data
             modelBuilder.Entity<Team>().Ignore(t => t.HomeGames);
         }
 
-        public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.StaffViewModel>? StaffViewModel { get; set; }
+
+        //public DbSet<BaseballUa.ViewModels.GameViewModel>? GameViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.EventViewModel>? EventViewModel { get; set; }
 

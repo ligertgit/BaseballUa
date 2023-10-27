@@ -428,6 +428,39 @@ namespace BaseballUa.Controllers
 
 
         #endregion
+        #region Staff
+
+        public IActionResult ListStaffs(int clubId) 
+        {
+            var staffsDAL = new StaffsCrud(_db).GetAll(clubId).ToList();
+            var staffsVL = new StaffToView().ConvertAll(staffsDAL);
+
+            var clubDAL = new ClubCrud(_db).Get(clubId);
+            ViewBag.club = new ClubToView().Convert(clubDAL);
+
+            return View(staffsVL);
+        }
+
+        public IActionResult AddStaff(int clubId)
+        {
+            var emptyStaff = new StaffToView().CreateEmpty(clubId);
+
+            return View(emptyStaff);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult AddStaff(StaffViewModel staffVL)
+        {
+            if (ModelState.IsValid)
+            {
+                new StaffsCrud(_db).Add(new StaffToView().ConvertBack(staffVL));
+            }
+
+            return RedirectToAction("ListStaffs", new { clubId = staffVL.ClubId } );
+        }
+
+        #endregion
 
     }
 }

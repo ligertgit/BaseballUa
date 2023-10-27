@@ -21,6 +21,7 @@ namespace BaseballUa.DTO
             clubVL.Id = clubDAL.Id;
             clubVL.Name = clubDAL.Name;
             clubVL.Description = clubDAL.Description;
+            clubVL.Invitation = clubDAL.Invitation;
             clubVL.FnameLogoSmall = clubDAL.FnameLogoSmall;
             clubVL.FnameLogoBig = clubDAL.FnameLogoBig;
             clubVL.CountryId = clubDAL.CountryId;
@@ -30,7 +31,14 @@ namespace BaseballUa.DTO
             //                                Value = c.Id.ToString(),
             //                                Text = c.Name
             //                            });
-            clubVL.Teams = clubDAL.Teams.ToList();
+            if (clubDAL.Teams != null) 
+            {
+                clubVL.Teams = new TeamToView().ConvertAll(clubDAL.Teams.ToList());
+            }
+            if (clubDAL.Staffs != null) 
+            {
+                clubVL.Staffs = new StaffToView().ConvertAll(clubDAL.Staffs.ToList());
+            }
 
             return clubVL;
         }
@@ -52,6 +60,7 @@ namespace BaseballUa.DTO
             clubDAL.Id = clubVL.Id;
             clubDAL.Name = clubVL.Name;
             clubDAL.Description = clubVL.Description;
+            clubDAL.Invitation = clubVL.Invitation;
             clubDAL.FnameLogoSmall = clubVL.FnameLogoSmall;
             clubDAL.FnameLogoBig = clubVL.FnameLogoBig;
             clubDAL.CountryId = clubVL.CountryId;

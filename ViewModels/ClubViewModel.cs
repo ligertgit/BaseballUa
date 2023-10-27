@@ -13,12 +13,16 @@ namespace BaseballUa.ViewModels
 
         [DisplayName("Назва клубу")]
         [StringLength(50)]
+        [Required]
         public string Name { get; set; }
 
 
         [DisplayName("Опис")]
         [StringLength(100)]
         public string? Description { get; set; }
+        [DisplayName("Як записатися")]
+        [StringLength(100)]
+        public string? Invitation { get; set; }
 
         [DisplayName("Маленьке лого")]
         [StringLength(50)]
@@ -36,6 +40,8 @@ namespace BaseballUa.ViewModels
         //public IEnumerable<SelectListItem>? CountriesList { get; set; }
 
         [NotMapped]
-        public List<Team>? Teams { get; set; }
+        public List<TeamViewModel>? Teams { get; set; }
+        [NotMapped]
+        public List<StaffViewModel>? Staffs { get; set; }
     }
 }

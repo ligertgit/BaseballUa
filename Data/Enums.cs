@@ -56,5 +56,13 @@ namespace BaseballUa.Data
             Tour19 = 19,
             Tour20 = 20
         }
+
+        public enum ClubRole
+        {
+            Admin = 1,
+            HeadCoach = 2,
+            Coach = 3,
+            Manager = 4
+        }
     }
 }
