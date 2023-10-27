@@ -135,5 +135,23 @@ namespace BaseballUa.Controllers
 
             return View(gamesByDay);
         }
+
+        public IActionResult Standing(int id)
+        {
+            var EventDAL = new EventsCrud(_db).Get(id);
+
+            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
+            var standingsByEventItemVM = new EventSchemaItemToView().ConvertAllToStanding(schemaItemsFullDAL.ToList());
+            //var t1 = new GamesCrud(_db).G;
+            //var t1v = new GameToView().CreateEmpty(5);
+            //var x = new TeamStandingVM();
+            //x.TotalGames = 10;
+            //t1v.HomeTeam = x;
+
+            ViewBag.Eventt = new EventToView().Convert(EventDAL);
+
+            //var z = (t1v.HomeTeam as TeamStandingVM).TotalGames;
+            return View(standingsByEventItemVM);
+        }
     }
 }

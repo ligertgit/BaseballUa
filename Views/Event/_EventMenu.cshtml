@@ -36,19 +36,10 @@
             </li>
             <li class="nav-item">
                 @{
-                    //paramsURL.Add("ShowMenu", "games");
-                    //uriBuilder.Query = paramsURL.ToString();
-                    //paramsURL.Remove("ShowMenu");
-                    uriBuilder.Path = Url.Action("Games", new { id = Model });
-                }
-                <a class="nav-link" href="@uriBuilder.Uri">Ігри</a>
-            </li>
-            <li class="nav-item">
-                @{
                     //paramsURL.Add("ShowMenu", "table");
                     //uriBuilder.Query = paramsURL.ToString();
                     //paramsURL.Remove("ShowMenu");
-                    uriBuilder.Path = Url.Action("Table", new { id = Model });
+                    uriBuilder.Path = Url.Action("Standing", new { id = Model });
                 }
                 <a class="nav-link" href="@uriBuilder.Uri">Турнірна таблиця</a>
             </li>

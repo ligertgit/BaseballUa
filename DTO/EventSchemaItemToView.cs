@@ -4,8 +4,10 @@ using BaseballUa.DTO.Custom;
 using BaseballUa.Migrations;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
+using BaseballUa.ViewModels.Custom;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.DTO
 {
@@ -87,6 +89,87 @@ namespace BaseballUa.DTO
             return eventSchemaItemsVL;
         }
 
+        public List<EventItemStandingVM> ConvertAllToStanding(List<EventSchemaItem> schemaItemsFullDAL)
+        {
+            //var ttt = schemaItemsFullDAL.Select(li => new EventItemStandingVM
+            //{
+            //    EventItem = new EventSchemaItemToView().Convert(li),
+            //    GroupStandings = li.SchemaGroups.Select(sg => new GroupStandingVM
+            //    {
+            //        SchemaGroup = new SchemaGroupToView().Convert(sg),
+            //        TeamStandings = sg.Games.SelectMany(g => new[]
+            //                                            {
+            //                                                new {
+            //                                                        Team = new TeamToView().Convert(g.HomeTeam),
+            //                                                        RunsHome = g.RunsHome,
+            //                                                        RunsVisitor = g.RunsVisitor
+            //                                                    },
+            //                                                new {
+            //                                                        Team = new TeamToView().Convert(g.VisitorTeam),
+            //                                                        RunsHome = g.RunsVisitor,
+            //                                                        RunsVisitor = g.RunsHome
+            //                                                    }
+            //                                            }).GroupBy(hg => hg.Team,
+            //                                            hg => hg,
+            //                                            (gTeam, groupedGames) => new TeamStandingVM
+            //                                            {
+            //                                                Team = gTeam,
+            //                                                TotalGames = groupedGames.Count(),
+            //                                                WinGames = groupedGames.Select(gg => gg.RunsHome > gg.RunsVisitor).Count(),
+            //                                                LooseGames = groupedGames.Select(gg => gg.RunsVisitor > gg.RunsHome).Count(),
+            //                                                PCT = groupedGames.Any() ? groupedGames.Select(gg => gg.RunsHome > gg.RunsVisitor).Count() / groupedGames.Count() : 0
+            //                                            }
+            //                                           ).ToList()
+            //    }).ToList()
+            //});
+
+            var eventItemsStandinfVM = schemaItemsFullDAL.Select(li => new EventItemStandingVM
+            {
+                EventItem = new EventSchemaItemToView().Convert(li),
+                GroupStandings = li.SchemaGroups.Select(sg => new GroupStandingVM
+                {
+                    SchemaGroup = new SchemaGroupToView().Convert(sg),
+                    TeamStandings = sg.Games.Where(i => i.HomeTeam != null && i.VisitorTeam != null)
+                                                        .SelectMany(g => new[]
+                                                        {
+                                                            new {
+                                                                    Team = new TeamToView().Convert(g.HomeTeam),
+                                                                    RunsHome = g.RunsHome,
+                                                                    RunsVisitor = g.RunsVisitor,
+                                                                    GameStatus = g.GameStatus
+                                                                },
+                                                            new {
+                                                                    Team = new TeamToView().Convert(g.VisitorTeam),
+                                                                    RunsHome = g.RunsVisitor,
+                                                                    RunsVisitor = g.RunsHome,
+                                                                    GameStatus = g.GameStatus
+                                                                }
+                                                        })
+                                                        .Select(i => new
+                                                        {
+                                                            TeamId = i.Team.Id,
+                                                            Team = i.Team,
+                                                            RunsHome = i.RunsHome,
+                                                            RunsVisitor = i.RunsVisitor,
+                                                            GameStatus = i.GameStatus
+                                                        })
+                                                        .GroupBy(hg => hg.TeamId, hg => hg, (gTeamId, groupedGames) => new TeamStandingVM
+                                                        {
+                                                            Team = groupedGames.First().Team,
+                                                            TotalGames = groupedGames.Count(i => i.GameStatus == GameStatus.Finished),
+                                                            WinGames = groupedGames.Count(i => i.RunsHome > i.RunsVisitor && i.GameStatus == GameStatus.Finished),
+                                                            LooseGames = groupedGames.Count(i => i.RunsVisitor > i.RunsHome && i.GameStatus == GameStatus.Finished),
+                                                            PCT = groupedGames.Any(i => i.GameStatus == GameStatus.Finished) 
+                                                                    ? groupedGames.Count(i => i.RunsHome > i.RunsVisitor && i.GameStatus == GameStatus.Finished) / groupedGames.Count(i => i.GameStatus == GameStatus.Finished) 
+                                                                    : 0
+                                                        }
+                                                       )
+                                                       .ToList()
+                }).ToList()
+            }).ToList();
+
+            return eventItemsStandinfVM;
+        }
 
         public List<DayGames> ConvertAllToGamesByDay(List<EventSchemaItem> schemaItemsFullDAL)
         {

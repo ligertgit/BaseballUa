@@ -1,0 +1,75 @@
+﻿@using BaseballUa.ViewModels;
+@model List<BaseballUa.ViewModels.Custom.EventItemStandingVM>
+
+@{
+    ViewData["Title"] = "Standing";
+}
+
+
+<div class="row">
+    @await Html.PartialAsync("_EventDetails", (EventViewModel)ViewBag.Eventt)
+</div>
+
+<div class="row">
+    @await Html.PartialAsync("_EventMenu", (int)ViewBag.Eventt.EventViewModelId)
+</div>
+
+
+
+<div class="row mt-3">
+
+    @{
+        foreach (var schemaItem in Model)
+        {
+            <div class="row mb-3">
+                <h4>Блок турніру: @schemaItem.EventItem.Order Назва блоку: @schemaItem.EventItem.SchemaItem</h4>
+                    @{
+                        foreach (var group in schemaItem.GroupStandings)
+                        {
+                            <div class="row">
+                                <div class="card text-white bg-primary mb-3" style="max-width: 50rem;">
+                                    <div class="card-header">Група: @group.SchemaGroup.GroupName</div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="row">
+                                                <div class="col">
+                                                    <strong>Команда</strong>
+                                                </div>
+                                                <div class="col">
+                                                    <strong>Win</strong>
+                                                </div>
+                                                <div class="col">
+                                                    <strong>Losses</strong>
+                                                </div>
+                                                <div class="col">
+                                                    <strong>PCT</strong>
+                                                </div>
+                                            </div>
+                                            @foreach (var team in group.TeamStandings)
+                                            {
+                                                <div class="row">
+                                                    <div class="col">
+                                                        @team.Team.Name
+                                                        <img src="~/images/team/logoSmall/@team.Team.FnameLogoSmall" />                                        
+                                                    </div>
+                                                    <div class="col">
+                                                        @team.WinGames
+                                                    </div>
+                                                    <div class="col">
+                                                        @team.LooseGames
+                                                    </div>
+                                                    <div class="col">
+                                                        @team.PCT
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+            </div>
+        }
+    }
+</div>
