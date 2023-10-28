@@ -41,6 +41,7 @@ namespace BaseballUa.BlData
                                         Id = club.Id,
                                         Name = club.Name,
                                         Description = club.Description,
+                                        Invitation = club.Invitation,
                                         FnameLogoSmall = club.FnameLogoSmall,
                                         FnameLogoBig = club.FnameLogoBig,
                                         CountryId = club.Id,
@@ -57,6 +58,29 @@ namespace BaseballUa.BlData
             return clubsWithCountry;
             //return _dbContext.Clubs;
         }
+
+        public IEnumerable<Club> GetAllWithTeams()
+        {
+            var result = (from club in _dbContext.Clubs
+                          join team in _dbContext.Teams on club.Id equals team.ClubId into subTeams
+                          from gTeams in subTeams.DefaultIfEmpty()
+                          group gTeams by club into g
+                          select new Club
+                          {
+                              Id = g.Key.Id,
+                              Name = g.Key.Name,
+                              Description = g.Key.Description,
+                              Invitation = g.Key.Invitation,
+                              FnameLogoSmall = g.Key.FnameLogoSmall,
+                              FnameLogoBig = g.Key.FnameLogoBig,
+                              CountryId = g.Key.CountryId,
+                              Teams = g.ToList()
+                          }
+                          );
+
+            return result;
+        }
+
 
         public void Update(Club item)
         {
