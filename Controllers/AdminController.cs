@@ -428,7 +428,7 @@ namespace BaseballUa.Controllers
 
 
         #endregion
-        #region Staff
+#region Staff
 
         public IActionResult ListStaffs(int clubId) 
         {
@@ -461,6 +461,40 @@ namespace BaseballUa.Controllers
         }
 
         #endregion
+#region Players
+        public IActionResult ListPlayers(int teamId)
+        {
+            var playersDAL = new PlayersCrud(_db).GetAll(teamId).ToList();
+            var playersVL = new PlayerToView().ConvertAll(playersDAL);
+
+            var teamDAL = new TeamCrud(_db).Get(teamId);
+            ViewBag.team = new TeamToView().Convert(teamDAL);
+
+            return View(playersVL);
+        }
+
+        public IActionResult AddPlayer(int teamId)
+        {
+            var playerVL = new PlayerToView().CreateEmpty(teamId);
+
+            return View(playerVL);
+        }
+
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult AddPlayer(PlayerViewModel playerVL)
+        {
+            if (ModelState.IsValid)
+            {
+                var playerDAL = new PlayerToView().ConvertBack(playerVL);
+                new PlayersCrud(_db).Add(playerDAL);
+            }
+
+            return RedirectToAction("ListPlayers", new { teamId = playerVL.TeamId });
+        }
+
+
+#endregion
 
     }
 }

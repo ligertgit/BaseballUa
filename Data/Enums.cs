@@ -64,5 +64,12 @@ namespace BaseballUa.Data
             Coach = 3,
             Manager = 4
         }
+
+        public enum Sex
+        {
+            Male = 1,
+            Female = 2,
+            NotDefined = 3
+        }
     }
 }

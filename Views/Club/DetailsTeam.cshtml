@@ -1,0 +1,118 @@
+﻿@model BaseballUa.ViewModels.TeamViewModel
+
+@{
+    ViewData["Title"] = "DetailsTeam";
+}
+
+<h4>
+    <div class="row">
+            <div class="col">
+                <img src="~/images/team/logoBig/@Model.FnameLogoBig" />
+            </div>
+            <div class="col">
+                @Model.Name
+            </div>
+            <div class="col">
+                (@Model.SportType)
+            </div>
+            <div class="col">
+            </div>
+            <div class="col">
+                <img src="~/images/club/logoSmall/@Model.Club.FnameLogoSmall" />
+            </div>
+            <div class="col">
+                @Model.Club.Name
+            </div>
+    </div>
+</h4>
+
+<div class="row">
+    <dt class = "col-sm-2">
+        Додаткова інформація:
+    </dt>
+    <dd class = "col-sm-10">
+        @Html.DisplayFor(model => model.Description)
+    </dd>
+</div>
+
+<div class="row m-1">
+    Актуальні ігри:
+    <hr />
+    @foreach(var game in Model.Games)
+    {
+        <div class="row m-1">
+            <div class="col-1">
+                @game.Name
+            </div>
+            <div class="col-2">
+                @game.StartDate
+            </div>
+            <div class="col-1">
+                @game.Tour
+            </div>
+            <div class="col-1">
+                @game.GameStatus
+            </div>
+            <div class="col-7">
+                <div class="row">
+                    <div class="col">
+                        @game.HomeTeam.Name
+                    </div>
+                    <div class="col">
+                        <img src="~/images/team/logoSmall/@game.HomeTeam.FnameLogoSmall" />
+                    </div>
+                    <div class="col">
+                        <h4>@(game.RunsHome == null ? 0 : game.RunsHome) : @(game.RunsVisitor == null ? 0 : game.RunsVisitor)</h4>
+                    </div>
+                    @*<div class="col">
+                        <h4>:</h4>
+                    </div>
+                    <div class="col">
+                        <h4>@(game.RunsVisitor == null ? 0 : game.RunsVisitor)</h4>
+                    </div>*@
+                    <div class="col">
+                        <img src="~/images/team/logoSmall/@game.VisitorTeam.FnameLogoSmall" />
+                    </div>
+                    <div class="col">
+                        @game.VisitorTeam.Name
+                    </div>
+                </div>
+                @*<div class="row">
+                    <div class="col">
+                        @(game.RunsHome == null ? 0 : game.RunsHome)
+                    </div>
+                    <div class="col">
+                        @(game.RunsVisitor == null ? 0 : game.RunsVisitor)
+                    </div>
+                </div>*@
+            </div>
+        </div>
+    }
+</div>
+
+
+<div class="row m-1">
+    Гравці:
+    <hr />
+    @foreach(var player in Model.Players)
+    {
+        <div class="row m-1">
+            <div class="col">
+                <img src="~/images/player/avatarBig/@player.AvatarBig" />
+            </div>
+            <div class="col">
+                @player.FirstName
+            </div>
+            <div class="col">
+                @player.SecondName
+            </div>
+            <div class="col">
+                @player.Sex
+            </div>
+            <div class="col">
+                @player.Birthdate.ToString()
+            </div>
+        </div>
+    }
+</div>
+

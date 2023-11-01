@@ -32,6 +32,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsTemp)
             </th>
+            <th>
+
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -56,6 +59,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsTemp)
+            </td>
+            <td>
+                <a asp-action="ListPlayers" asp-route-teamId="@item.Id">Подивитися гравців команди</a>
             </td>
         </tr>
 }

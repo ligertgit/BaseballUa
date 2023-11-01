@@ -9,7 +9,7 @@ namespace BaseballUa.DTO
 {
     public class GameToView
     {
-        public GameViewModel Convert(Game gameDAL)
+        public GameViewModel Convert(Game gameDAL, bool doSubConvert = true)
         {
             var gameView = new GameViewModel();
             gameView.Name = gameDAL.Name;
@@ -33,11 +33,11 @@ namespace BaseballUa.DTO
             }
             gameView.HomeTeamId = gameDAL.HomeTeamId;
             gameView.VisitorTeamId = gameDAL.VisitorTeamId;
-            if (gameDAL.HomeTeam != null) 
+            if (gameDAL.HomeTeam != null && doSubConvert) 
             {
                 gameView.HomeTeam = new TeamToView().Convert(gameDAL.HomeTeam);
             }
-            if (gameDAL.VisitorTeam != null)
+            if (gameDAL.VisitorTeam != null && doSubConvert)
             {
                 gameView.VisitorTeam = new TeamToView().Convert(gameDAL.VisitorTeam);
             }
@@ -80,12 +80,12 @@ namespace BaseballUa.DTO
             return gameVL;
         }
 
-        public List<GameViewModel> ConvertAll(List<Game> gamesDAL)
+        public List<GameViewModel> ConvertAll(List<Game> gamesDAL, bool doSubConvert = true)
         { 
             var gamesVL = new List<GameViewModel>();
             foreach (var game in gamesDAL) 
             { 
-                gamesVL.Add(Convert(game));
+                gamesVL.Add(Convert(game, doSubConvert));
             }
 
             return gamesVL;

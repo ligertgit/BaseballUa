@@ -24,10 +24,10 @@ namespace BaseballUa.ViewModels
         [DisplayName("Задачі")]
         public string? RoleDescription { get; set; }
         [StringLength(50)]
-        [DisplayName("Аватар")]
+        [DisplayName("Аватар малий")]
         public string? AvatarSmall { get; set; }
         [StringLength(50)]
-        [DisplayName("Аватар")]
+        [DisplayName("Аватар великий")]
         public string? AvatarLarge { get; set; }
         public int ClubId { get; set; }
         [NotMapped]

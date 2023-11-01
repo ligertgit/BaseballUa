@@ -1,0 +1,95 @@
+﻿@model BaseballUa.ViewModels.Custom.ClubFullDetailVM
+
+<div class="row m-1">
+	<div class="col-1">
+		<img src="~/images/club/logoBig/@Model.Club.FnameLogoBig" />
+	</div>
+	<div class="col-11">
+		<h4>
+			@Model.Club.Name
+		</h4>
+	</div>
+</div>
+<div class="row m-1">
+	@Model.Club.Description
+</div>
+<div class="row m-1">
+	<h4>
+		Як записатися до клубу:
+	</h4>
+	<hr/>
+	@Model.Club.Invitation
+</div>
+<div class="row m-1">
+	<h4>
+		Актуальні Турніри:
+	</h4>
+	<hr />
+	@foreach (var eventt in Model.Events)
+	{
+		<div class="row m-1">
+			<div class="col-2">
+				<a asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@eventt.EventViewModelId">
+					@eventt.Tournament.Name
+				</a>
+			</div>
+			<div class="col-2">
+				@eventt.StartDate
+			</div>
+			<div class="col-2">
+				@eventt.Tournament.Category.Name
+			</div>
+			<div class="col-2">
+				@eventt.Tournament.Sport
+			</div>
+		</div>
+	}
+</div>
+<div class="row m-1">
+	<h4>
+		Керівний склад:
+	</h4>
+	<hr />
+	@foreach (var staff in Model.Club.Staffs)
+	{
+		<div class="row m-1">
+			<div class="col-2">
+				<img src="~/images/staff/avatarBig/@staff.AvatarLarge" />
+			</div>
+			<div class="col-2">
+				@staff.FirsName
+			</div>
+			<div class="col-2">
+				@staff.SecondName
+			</div>
+			<div class="col-2">
+				@staff.Role
+			</div>
+			<div class="col-4">
+				@staff.RoleDescription
+			</div>
+		</div>
+	}
+</div>
+<div class="row m-1">
+	<h4>
+		Команди:
+	</h4>
+	<hr />
+	@foreach (var team in Model.Club.Teams)
+	{
+		<div class="row m-1">
+			<div class="col-2">
+				<a asp-action="DetailsTeam" asp-route-teamId="@team.Id">
+					<img src="~/images/team/logoSmall/@team.FnameLogoSmall" />
+				</a>
+			</div>
+			<div class="col-2">
+				@team.Name
+			</div>
+			<div class="col-2">
+				@team.SportType
+			</div>
+		</div>
+	}
+</div>

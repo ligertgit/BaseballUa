@@ -37,10 +37,13 @@ namespace BaseballUa.ViewModels
         public int ClubId { get; set; }
 
         [DisplayName("Клуб")]
-        public Club? Club { get; set; }
+        public ClubViewModel? Club { get; set; }
 
         [NotMapped]
-        public List<Game>? Games { get; set; }
+        public List<GameViewModel>? Games { get; set; }
+
+        [NotMapped]
+        public List<PlayerViewModel>? Players { get; set; }
 
     }
 }

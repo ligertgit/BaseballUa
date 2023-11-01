@@ -15,7 +15,7 @@ namespace BaseballUa.DTO
         //    _dbContext = dbContext;
         //}
 
-        public ClubViewModel Convert(Club clubDAL)
+        public ClubViewModel Convert(Club clubDAL, bool doSubConvert = true)
         {
             var clubVL = new ClubViewModel();
             clubVL.Id = clubDAL.Id;
@@ -31,24 +31,24 @@ namespace BaseballUa.DTO
             //                                Value = c.Id.ToString(),
             //                                Text = c.Name
             //                            });
-            if (clubDAL.Teams != null) 
+            if (clubDAL.Teams != null && doSubConvert) 
             {
-                clubVL.Teams = new TeamToView().ConvertAll(clubDAL.Teams.ToList());
+                clubVL.Teams = new TeamToView().ConvertAll(clubDAL.Teams.ToList(), false);
             }
-            if (clubDAL.Staffs != null) 
+            if (clubDAL.Staffs != null && doSubConvert) 
             {
-                clubVL.Staffs = new StaffToView().ConvertAll(clubDAL.Staffs.ToList());
+                clubVL.Staffs = new StaffToView().ConvertAll(clubDAL.Staffs.ToList(), false);
             }
 
             return clubVL;
         }
 
-        public List<ClubViewModel> ConvertAll(List<Club> clubsDAL) 
+        public List<ClubViewModel> ConvertAll(List<Club> clubsDAL, bool doSubConvert = true) 
         {
             var clubsVL = new List<ClubViewModel>();
             foreach (var clubDAL in clubsDAL)
             {
-                clubsVL.Add(Convert(clubDAL));
+                clubsVL.Add(Convert(clubDAL, doSubConvert));
             }
 
             return clubsVL;

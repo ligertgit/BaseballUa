@@ -58,6 +58,129 @@ namespace BaseballUa.BlData
         //                                    .ThenInclude(c => c.Country);
         //}
 
+        public IEnumerable<Game> GetHomeGames(int teamId)
+        {
+            return _dbContext.Games.Where(g => g.HomeTeamId == teamId)
+                                   .Where(g => (g.StartDate > DateTime.Now.AddMonths(-1) && g.StartDate < DateTime.Now.AddMonths(1)))
+                                   .Include(g => g.HomeTeam)
+                                   .Include(g => g.VisitorTeam);
+        }
+
+        public IEnumerable<Game> GetVisitorGames(int teamId)
+        {
+            return _dbContext.Games.Where(g => g.VisitorTeamId == teamId)
+                                   .Where(g => (g.StartDate > DateTime.Now.AddMonths(-1) && g.StartDate < DateTime.Now.AddMonths(1)))
+                                   .Include(g => g.HomeTeam)
+                                   .Include(g => g.VisitorTeam);
+        }
+
+        //public TeamFullDetail GetFullDetails(int teamId)
+        //{
+            //var result = new TeamFullDetail();
+
+            //result.Team = _dbContext.Teams.Include(t => t.Club).Where(t => t.Id == teamId).FirstOrDefault();
+            //if (result.Team != null)
+            //{
+
+            //}
+
+            //var temp = from ttt in _dbContext.Teams.Include(t => t.Club).Where(t => t.Id == teamId)
+            //           join phv in ({ teamId, list(hgames), list(vgames), list(players) }) into g
+            //           select new
+            //           {
+            //               team = ttt,
+            //               players = g.players,
+            //               homeG = g.homeG,
+            //               visitorG = g.visitorG
+            //           };
+
+            //teamId, list(hgames), list(vgames), list(players)
+
+            //var result = from team2 in
+            //                 (from team in _dbContext.Teams
+            //                  join homeGame in _dbContext.Games on team.Id equals homeGame.HomeTeamId into ght
+            //                  select new
+            //                  {
+            //                      Id = team.Id,
+            //                      Name = team.Name,
+            //                      hgames = ght.ToList(),
+            //                  }).ToList()
+            //             join visitorGame in _dbContext.Games on team2.Id equals visitorGame.VisitorTeamId into gvt
+            //             select new
+            //             {
+            //                 Id = team2.Id,
+            //                 name = team2.Name,
+            //                 hgames = team2.hgames,
+            //                 vgames = gvt.ToList()
+            //             };
+
+            //var result = from team in _dbContext.Teams
+            //             join homeGame in _dbContext.Games on team.Id equals homeGame.HomeTeamId into subhg
+            //             from ghg in subhg.DefaultIfEmpty()
+            //             join visitorGame in _dbContext.Games on team.Id equals visitorGame.VisitorTeamId into subvt
+            //             from gvg in subvt.DefaultIfEmpty()
+            //             group gvg by team into zzz1
+            //             group ghg by team into zzz2
+            //             select new
+            //             {
+            //                 Id = team.Id,
+            //                 name = team.Name,
+            //                 hgames = zzz2,
+            //                 vgames = zzz1
+            //             }
+
+
+
+            ////join visitorGame in _dbContext.Games.Include(g => g.HomeTeam).Include(g => g.VisitorTeam) on team.Id equals visitorGame.VisitorTeamId into gvt
+            //select new
+            //{
+            //    Team = team,
+            //    TeamHomeGames = ght.ToList(),
+            //    //Team.HomeGames = gvt
+
+            //};
+
+            //var result = from team in
+            //                  (from team in _dbContext.Teams //.Include(t => t.Club)
+            //                   join homeGame in _dbContext.Games.Include(g => g.HomeTeam).Include(g => g.VisitorTeam) on team.Id equals homeGame.HomeTeamId
+            //                   //join visitorGame in _dbContext.Games on team.Id equals visitorGame.VisitorTeamId
+            //                   where team.Id == teamId
+            //                   group homeGame by team into g
+            //                   select new Team
+            //                   {
+            //                       Id = g.Key.Id,
+            //                       //Club = g.Key.Club,
+            //                       ClubId = g.Key.ClubId,
+            //                       Description = g.Key.Description,
+            //                       FnameLogoBig = g.Key.FnameLogoBig,
+            //                       FnameLogoSmall = g.Key.FnameLogoSmall,
+            //                       HomeGames = g.ToList(),
+            //                       IsTemp = g.Key.IsTemp,
+            //                       Name = g.Key.Name,
+            //                       SportType = g.Key.SportType
+            //                   }
+            //                  )
+            //             join visitorTeam in _dbContext.Games.Include(g => g.HomeTeam).Include(g => g.VisitorTeam) on team.Id equals visitorTeam.VisitorTeamId
+            //             where team.Id == teamId
+            //             group visitorTeam by team into g
+            //             select new Team
+            //             {
+            //                 Id = g.Key.Id,
+            //                 //Club = g.Key.Club,
+            //                 ClubId = g.Key.ClubId,
+            //                 Description = g.Key.Description,
+            //                 FnameLogoBig = g.Key.FnameLogoBig,
+            //                 FnameLogoSmall = g.Key.FnameLogoSmall,
+            //                 HomeGames = g.Key.HomeGames,
+            //                 VisitorGames = g.ToList(),
+            //                 IsTemp = g.Key.IsTemp,
+            //                 Name = g.Key.Name,
+            //                 SportType = g.Key.SportType
+            //             };
+
+        //    return new TeamFullDetail();
+        //}
+
         public void Update(Team item)
         {
             throw new NotImplementedException();

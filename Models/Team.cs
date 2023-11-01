@@ -27,6 +27,8 @@ namespace BaseballUa.Models
         public ICollection<Game>? HomeGames { get; set; }
         [NotMapped]
         public ICollection<Game>? VisitorGames { get; set; }
+        [NotMapped]
+        public ICollection<Player>? Players { get; set; }
 
 
     }

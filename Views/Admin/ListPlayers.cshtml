@@ -1,0 +1,65 @@
+﻿@model IEnumerable<BaseballUa.ViewModels.PlayerViewModel>
+
+@{
+    ViewData["Title"] = "ListPlayers";
+}
+
+<h1>ListPlayers</h1>
+
+<p>
+    <a asp-action="AddPlayer" asp-route-teamId="@ViewBag.team.Id">Додати гравця</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AvatarSmall)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AvatarBig)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Birthdate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Team)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AvatarSmall)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AvatarBig)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Birthdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Team.Id)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

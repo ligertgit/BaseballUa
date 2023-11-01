@@ -9,7 +9,7 @@ namespace BaseballUa.DTO
 {
     public class StaffToView
     {
-        public StaffViewModel Convert(Staff staffDAL)
+        public StaffViewModel Convert(Staff staffDAL, bool doSubConvert = true)
         {
             var staffVL = new StaffViewModel();
             staffVL.Id = staffDAL.Id;
@@ -20,20 +20,20 @@ namespace BaseballUa.DTO
             staffVL.AvatarSmall = staffDAL.AvatarSmall;
             staffVL.AvatarLarge = staffDAL.AvatarLarge;
             staffVL.ClubId = staffDAL.ClubId;
-            if (staffDAL.Club != null) 
+            if (staffDAL.Club != null && doSubConvert) 
             { 
-                staffVL.Club = new ClubToView().Convert(staffDAL.Club);
+                staffVL.Club = new ClubToView().Convert(staffDAL.Club, false);
             }
 
             return staffVL;
         }
 
-        public List<StaffViewModel> ConvertAll(List<Staff> staffsDAL) 
+        public List<StaffViewModel> ConvertAll(List<Staff> staffsDAL, bool doSubConvert = true) 
         { 
             List<StaffViewModel> staffsVL = new List<StaffViewModel>();
             foreach (var staffDAL in staffsDAL)
             {
-                staffsVL.Add(Convert(staffDAL));
+                staffsVL.Add(Convert(staffDAL, doSubConvert));
             }
 
             return staffsVL;

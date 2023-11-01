@@ -15,7 +15,7 @@ namespace BaseballUa.DTO
         //    _dbContext = dbContext;
         //}
 
-        public TeamViewModel? Convert(Team teamDAL)
+        public TeamViewModel? Convert(Team teamDAL, bool doSubConvert = true)
         {
             
             if (teamDAL != null) 
@@ -29,11 +29,15 @@ namespace BaseballUa.DTO
                 teamVL.FnameLogoBig = teamDAL.FnameLogoBig;
                 teamVL.IsTemp = teamDAL.IsTemp;
                 teamVL.ClubId = teamDAL.ClubId;
-                teamVL.Club = teamDAL.Club;
-                teamVL.Games = new List<Game>();
-                if ( teamDAL.HomeGames != null ) teamVL.Games.AddRange(teamDAL.HomeGames);
-                if ( teamDAL.VisitorGames != null ) teamVL.Games.AddRange(teamDAL.VisitorGames);
-                //teamVL.Games = teamDAL.HomeGames.Concat(teamDAL.VisitorGames).ToList();
+                if (teamDAL.Club != null && doSubConvert)
+                {
+                    teamVL.Club = new ClubToView().Convert(teamDAL.Club, false);
+                }
+                //var ttt = new GameToView().ConvertAll(teamDAL.HomeGames.ToList());
+                teamVL.Games = new List<GameViewModel>();
+                if (teamDAL.HomeGames != null && doSubConvert) teamVL.Games.AddRange(new GameToView().ConvertAll(teamDAL.HomeGames.ToList(), false));
+                if (teamDAL.VisitorGames != null && doSubConvert) teamVL.Games.AddRange(new GameToView().ConvertAll(teamDAL.VisitorGames.ToList(), false));
+                if (teamDAL.Players != null && doSubConvert) teamVL.Players = new PlayerToView().ConvertAll(teamDAL.Players.ToList(), false);
                 return teamVL;
             } 
             else
@@ -42,12 +46,12 @@ namespace BaseballUa.DTO
             }
         }
 
-        public List<TeamViewModel> ConvertAll(List<Team> teamsDAL)
+        public List<TeamViewModel> ConvertAll(List<Team> teamsDAL, bool doSubConvert = true)
         {
             var teamVL = new List<TeamViewModel>();
             foreach (var teamDAL in teamsDAL)
             {
-                teamVL.Add(Convert(teamDAL));
+                teamVL.Add(Convert(teamDAL, doSubConvert));
             }
 
             return teamVL;

@@ -12,16 +12,23 @@
         {
            
             <div class="card text-white bg-primary mb-3" style="max-width: 50rem;">
-                <div class="card-header"><img src="~/images/club/logoSmall/@club.FnameLogoSmall" /> @club.Name </div>
+                <div class="card-header">
+                    <a asp-action="DetailsClub" asp-route-clubId="@club.Id">
+                        <img src="~/images/club/logoSmall/@club.FnameLogoSmall" /> @club.Name
+                    </a>
+                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
+                            Команда:
                         </div>
                         <div class="col">
                             Назва:
                         </div>
                         <div class="col">
                             Спорт:
+                        </div>
+                        <div class="col">
                         </div>
                     </div>
                     <hr>
@@ -36,6 +43,9 @@
                             </div>
                             <div class="col">
                                 @team.SportType
+                            </div>
+                            <div class="col">
+                                <a class="text-white" asp-action="DetailsTeam" asp-route-teamId="@team.Id">Детальніше</a>
                             </div>
                         </div>
                     }

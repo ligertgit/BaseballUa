@@ -1,0 +1,58 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.PlayerViewModel
+
+@{
+    ViewData["Title"] = "AddPlayer";
+}
+
+<h1>AddPlayer</h1>
+
+<h4>For team ID: @Model.TeamId</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddPlayer">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecondName" class="control-label"></label>
+                <input asp-for="SecondName" class="form-control" />
+                <span asp-validation-for="SecondName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvatarSmall" class="control-label"></label>
+                <input asp-for="AvatarSmall" class="form-control" />
+                <span asp-validation-for="AvatarSmall" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvatarBig" class="control-label"></label>
+                <input asp-for="AvatarBig" class="form-control" />
+                <span asp-validation-for="AvatarBig" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sex" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.Sex, Enums.Sex.NotDefined.ToSelectList(), optionLabel: "--- оберіть ---")
+                @*<select asp-for="Sex" class="form-control"></select>*@
+                <span asp-validation-for="Sex" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthdate" class="control-label"></label>
+                <input asp-for="Birthdate" class="form-control" />
+                <span asp-validation-for="Birthdate" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="TeamId" value="@Model.TeamId" />
+            <div class="form-group">
+                <input type="submit" value="Додати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
