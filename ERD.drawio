@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-11-01T10:54:00.390Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.76" etag="qNKRFDyPCiw5Ztu5lNwe" version="21.7.4" type="github">
+<mxfile host="app.diagrams.net" modified="2023-11-01T13:45:45.174Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.76" etag="fxEPxp6ctEf5djW_RhFG" version="21.7.4" type="github">
   <diagram name="Page-1" id="c4acf3e9-155e-7222-9cf6-157b1a14988f">
     <mxGraphModel dx="2520" dy="3105" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="none" math="0" shadow="0">
       <root>
@@ -1516,7 +1516,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="T5EUuINFrIoEq7Kfc8ZZ-131" value="NewsTitlePhotos" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1000" y="-1740" width="160" height="180" as="geometry" />
+          <mxGeometry x="1100" y="-1730" width="160" height="180" as="geometry" />
         </mxCell>
         <mxCell id="T5EUuINFrIoEq7Kfc8ZZ-132" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" parent="T5EUuINFrIoEq7Kfc8ZZ-131" vertex="1">
           <mxGeometry y="30" width="160" height="30" as="geometry" />
@@ -2725,6 +2725,12 @@
           <mxGeometry width="100" height="100" relative="1" as="geometry">
             <mxPoint x="-290" y="-770" as="sourcePoint" />
             <mxPoint x="-190" y="-870" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Ed2pfpnJjL8fZCJ1bJvd-13" value="" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERzeroToMany;endFill=1;rounded=0;" edge="1" parent="1" source="mZXLlO7PQuXniERjBIcv-155" target="T5EUuINFrIoEq7Kfc8ZZ-124">
+          <mxGeometry width="100" height="100" relative="1" as="geometry">
+            <mxPoint x="610" y="-1180" as="sourcePoint" />
+            <mxPoint x="710" y="-1280" as="targetPoint" />
           </mxGeometry>
         </mxCell>
       </root>
