@@ -13,6 +13,7 @@ namespace BaseballUa.Models
         public Tournament Tournament { get; set; } = null!;
         [NotMapped]
         public ICollection<EventSchemaItem>? SchemaItems { get; set; }
+        public ICollection<News>? News { get; set; }
         //public ICollection<EventSchemaItem> EventSchemaItems { get;} = new List<EventSchemaItem>();
     }
 }

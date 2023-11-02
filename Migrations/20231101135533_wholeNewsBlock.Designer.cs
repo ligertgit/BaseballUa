@@ -4,6 +4,7 @@ using BaseballUa.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseballUa.Migrations
 {
     [DbContext(typeof(BaseballUaDbContext))]
-    partial class BaseballUaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231101135533_wholeNewsBlock")]
+    partial class wholeNewsBlock
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,9 +53,6 @@ namespace BaseballUa.Migrations
 
                     b.Property<int?>("NewsId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("PublishDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("SportType")
                         .HasColumnType("int");
@@ -650,9 +650,6 @@ namespace BaseballUa.Migrations
                     b.Property<int?>("NewsId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PublishDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("SportType")
                         .HasColumnType("int");
 
@@ -757,23 +754,17 @@ namespace BaseballUa.Migrations
 
             modelBuilder.Entity("BaseballUa.Models.News", b =>
                 {
-                    b.HasOne("BaseballUa.Models.Category", "Category")
+                    b.HasOne("BaseballUa.Models.Category", null)
                         .WithMany("News")
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("BaseballUa.Models.Event", "Event")
+                    b.HasOne("BaseballUa.Models.Event", null)
                         .WithMany("News")
                         .HasForeignKey("EventId");
 
-                    b.HasOne("BaseballUa.Models.Team", "Team")
+                    b.HasOne("BaseballUa.Models.Team", null)
                         .WithMany("News")
                         .HasForeignKey("TeamId");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Team");
                 });
 
             modelBuilder.Entity("BaseballUa.Models.NewsTitlePhoto", b =>
@@ -798,7 +789,7 @@ namespace BaseballUa.Migrations
             modelBuilder.Entity("BaseballUa.Models.Photo", b =>
                 {
                     b.HasOne("BaseballUa.Models.Album", "Album")
-                        .WithMany("Photos")
+                        .WithMany()
                         .HasForeignKey("AlbumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -886,11 +877,6 @@ namespace BaseballUa.Migrations
                     b.Navigation("News");
 
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("BaseballUa.Models.Album", b =>
-                {
-                    b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("BaseballUa.Models.Category", b =>

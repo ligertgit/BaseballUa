@@ -35,6 +35,8 @@ namespace BaseballUa.Models
         [NotMapped]
         public Team? VisitorTeam { get; set; } = null!;
         public SchemaGroup SchemaGroup { get; set; } = null!;
+        public ICollection<Album>? Albums { get; set; }
+        public ICollection<Video>? Videos { get; set; }
 
     }
 }

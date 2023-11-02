@@ -23,6 +23,11 @@ namespace BaseballUa.Data
         public DbSet<Team> Teams { get; set; }
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<Player> Players { get; set; }
+        public DbSet<News> News { get; set; }
+        public DbSet<Album> Albums { get; set; }
+        public DbSet<NewsTitlePhoto> NewsTitlePhotos { get; set; }
+        public DbSet<Photo> Photos { get; set; }
+        public DbSet<Video> Videos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -97,9 +102,9 @@ namespace BaseballUa.Data
             modelBuilder.Entity<Team>().Ignore(t => t.HomeGames);
         }
 
-        public DbSet<BaseballUa.ViewModels.PlayerViewModel>? PlayerViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.PlayerViewModel>? PlayerViewModel { get; set; }
 
-        public DbSet<BaseballUa.ViewModels.TeamViewModel>? TeamViewModel { get; set; }
+        //public DbSet<BaseballUa.ViewModels.TeamViewModel>? TeamViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.ClubViewModel>? ClubViewModel { get; set; }
 

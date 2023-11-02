@@ -4,6 +4,7 @@ using BaseballUa.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseballUa.Migrations
 {
     [DbContext(typeof(BaseballUaDbContext))]
-    partial class BaseballUaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231102104043_addnewsdate")]
+    partial class addnewsdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +54,7 @@ namespace BaseballUa.Migrations
                     b.Property<int?>("NewsId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PublishDate")
+                    b.Property<DateTime>("PDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SportType")
@@ -315,6 +318,9 @@ namespace BaseballUa.Migrations
 
                     b.Property<bool>("IsGeneral")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("PDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("PublishDate")
                         .HasColumnType("datetime2");
@@ -650,7 +656,7 @@ namespace BaseballUa.Migrations
                     b.Property<int?>("NewsId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PublishDate")
+                    b.Property<DateTime>("PDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("SportType")

@@ -15,7 +15,8 @@ namespace BaseballUa.Models
 
 		[NotMapped]
 		public ICollection<Tournament>? Tournaments { get; set; }
-		//public ICollection<Tournament> Tournaments { get; } = new List<Tournament>();
-
+        public ICollection<News>? News { get; set; }
+        public ICollection<Album>? Albums { get; set; }
+        public ICollection<Video>? Videos { get; set; }
     }
 }

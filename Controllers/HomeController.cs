@@ -17,12 +17,14 @@ namespace BaseballUa.Controllers
 		{
 			_logger = logger;
 		}
-
+		#region news
 		public IActionResult Index()
 		{
-			
+
 			return View();
 		}
+		#endregion
+
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
