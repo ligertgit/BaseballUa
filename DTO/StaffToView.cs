@@ -20,7 +20,7 @@ namespace BaseballUa.DTO
             staffVL.AvatarSmall = staffDAL.AvatarSmall;
             staffVL.AvatarLarge = staffDAL.AvatarLarge;
             staffVL.ClubId = staffDAL.ClubId;
-            if (staffDAL.Club != null && doSubConvert) 
+            if (staffDAL.Club != null) 
             { 
                 staffVL.Club = new ClubToView().Convert(staffDAL.Club, false);
             }

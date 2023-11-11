@@ -47,7 +47,7 @@ namespace BaseballUa.BlData
                          join eventItem in _dbContext.EventSchemaItems on eventt.Id equals eventItem.EventId
                          join schemaGroup in _dbContext.SchemaGroups on eventItem.Id equals schemaGroup.EventSchemaItemId
                          join game in _dbContext.Games.Include(g => g.HomeTeam).Include(g => g.VisitorTeam) on schemaGroup.Id equals game.SchemaGroupId
-                         where (    (eventt.StartDate > DateTime.Now.AddMonths(-1) && eventt.StartDate < DateTime.Now.AddMonths(1)) &&
+                         where (    (eventt.StartDate > DateTime.Now.AddMonths(-3) && eventt.StartDate < DateTime.Now.AddMonths(1)) &&
                                     (game.HomeTeam.ClubId == clubId || game.VisitorTeam.ClubId == clubId)
                                )
                          select eventt).Distinct();

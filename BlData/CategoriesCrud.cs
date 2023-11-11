@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
@@ -24,8 +25,10 @@ namespace BaseballUa.BlData
 			throw new NotImplementedException();
 		}
 
-		public Category Get(int itemId)
+		public Category Get(int? itemId)
 		{
+			if (itemId == null) return null;
+
 			var category = _dbContext.Categories.First(c => c.Id == itemId);
 			return category;
 		}
@@ -40,5 +43,17 @@ namespace BaseballUa.BlData
 			_dbContext.Categories.Update(item);
 			_dbContext.SaveChanges();
 		}
-	}
+
+        public List<SelectListItem> GetSelectItemList()
+        {
+            var categoriesSL = new List<SelectListItem>();
+            categoriesSL = _dbContext.Categories.Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            }).ToList();
+
+            return categoriesSL;
+        }
+    }
 }

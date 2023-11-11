@@ -10,27 +10,32 @@ namespace BaseballUa.DTO
 {
     public class CategoryToView
     {
-        public CategoryViewModel Convert(Category category)
+        public CategoryViewModel Convert(Category category, bool doSubConvert = true)
         {
             CategoryViewModel categoryViewModel = new CategoryViewModel();
-            categoryViewModel.Id = category.Id;
-            categoryViewModel.Name = category.Name;
-            categoryViewModel.ShortName = category.ShortName;
+            if (category != null)
+            {
+                categoryViewModel.Id = category.Id;
+                categoryViewModel.Name = category.Name;
+                categoryViewModel.ShortName = category.ShortName;
 
-            if (category.Tournaments != null) 
-            { 
-                categoryViewModel.Tournaments = new TournamentToView().ConvertList(category.Tournaments.ToList());
-                categoryViewModel.SelectTournaments = categoryViewModel.Tournaments.Select(t => new SelectListItem { Value = t.Id.ToString(), Text = t.Name });
+                if (doSubConvert && category.Tournaments != null)
+                {
+                    categoryViewModel.Tournaments = new TournamentToView().ConvertList(category.Tournaments.ToList(), false);
+                    categoryViewModel.SelectTournaments = categoryViewModel.Tournaments.Select(t => new SelectListItem { Value = t.Id.ToString(), Text = t.Name });
+                }
             }
+
+
             return categoryViewModel;
         }
 
-        public List<CategoryViewModel> ConvertList(List<Category> categoriesDTO)
+        public List<CategoryViewModel> ConvertList(List<Category> categoriesDTO, bool doSubConvert = true)
         {
             List<CategoryViewModel> categoryViewModels = new List<CategoryViewModel>();
             foreach (var categoryDTO in categoriesDTO)
             {
-                categoryViewModels.Add(Convert(categoryDTO));
+                categoryViewModels.Add(Convert(categoryDTO, doSubConvert));
             }
 
             return categoryViewModels;

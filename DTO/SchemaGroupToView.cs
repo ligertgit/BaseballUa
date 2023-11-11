@@ -15,7 +15,7 @@ namespace BaseballUa.DTO
         //    _dbContext = dbContext;
         //}
 
-        public SchemaGroupViewModel Convert(SchemaGroup schemaGroupDAL)
+        public SchemaGroupViewModel Convert(SchemaGroup schemaGroupDAL, bool doSubConvert = true)
         {
             var schemaGroupVL = new SchemaGroupViewModel();
             schemaGroupVL.Id = schemaGroupDAL.Id;
@@ -23,7 +23,7 @@ namespace BaseballUa.DTO
             schemaGroupVL.EventSchemaItemId = schemaGroupDAL.EventSchemaItemId;
             if (schemaGroupDAL.EventSchemaItem != null)
             {
-                schemaGroupVL.EventSchemaItem = new EventSchemaItemToView().Convert(schemaGroupDAL.EventSchemaItem);
+                schemaGroupVL.EventSchemaItem = new EventSchemaItemToView().Convert(schemaGroupDAL.EventSchemaItem, false);
             }
             //if (schemaGroupVL.EventSchemaItem == null)
             //{
@@ -41,9 +41,9 @@ namespace BaseballUa.DTO
             //                                                            Text = i.SchemaItem.ToString()
             //                                                        }
             //                                        ).ToList();
-            if (schemaGroupDAL.Games != null)
+            if (doSubConvert && schemaGroupDAL.Games != null)
             {
-                schemaGroupVL.Games = new GameToView().ConvertAll(schemaGroupDAL.Games.ToList());
+                schemaGroupVL.Games = new GameToView().ConvertAll(schemaGroupDAL.Games.ToList(), false);
             }
             
             schemaGroupVL.VirtualTeams = new List<TeamViewModel>();
@@ -69,12 +69,12 @@ namespace BaseballUa.DTO
             return schemaGroupVL;
         }
 
-        public List<SchemaGroupViewModel> ConvertAll(List<SchemaGroup> schemaGroupsDAL) 
+        public List<SchemaGroupViewModel> ConvertAll(List<SchemaGroup> schemaGroupsDAL, bool doSubConvert = true) 
         { 
             var schemaGroupsVL = new List<SchemaGroupViewModel>();
             foreach (var schemaGroupDAL in schemaGroupsDAL) 
             {
-                schemaGroupsVL.Add(Convert(schemaGroupDAL));
+                schemaGroupsVL.Add(Convert(schemaGroupDAL, doSubConvert));
             }
 
             return schemaGroupsVL;

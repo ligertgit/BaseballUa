@@ -11,7 +11,7 @@ namespace BaseballUa.DTO
 {
     public class TournamentToView
     {
-        public TournamentViewModel Convert(Tournament tournament)
+        public TournamentViewModel Convert(Tournament tournament, bool doSubConvert = true)
         {
             TournamentViewModel tournamentViewModel = new TournamentViewModel();
 
@@ -38,25 +38,28 @@ namespace BaseballUa.DTO
             tournamentViewModel.IsFun = tournament.IsFun;
             //tournamentViewModel.CategoryId = _db.Categories.First(a => a.Id == tournament.CategoryId).Id;
             tournamentViewModel.CategoryId = tournament.CategoryId;
-            tournamentViewModel.Category = new CategoryToView().Convert(tournament.Category);
-            //tournamentViewModel.CategoryShortName = _db.Categories.First(a => a.Id == tournament.CategoryId).ShortName;
-            //tournamentViewModel.CategoryIdText = _db.Categories.First(a => a.Id == tournament.CategoryId).Id.ToString();
-            //tournamentViewModel.CategoriesNames = new SelectList(categories, "Value", "Text");
-            //tournamentViewModel.CategoriesNames = categories;
-            if (tournament.Events != null) 
+            if (tournament.Category != null) 
             { 
-                tournamentViewModel.Events = new EventToView().ConvertAll(tournament.Events.ToList());
+                tournamentViewModel.Category = new CategoryToView().Convert(tournament.Category, false);
+			}
+			//tournamentViewModel.CategoryShortName = _db.Categories.First(a => a.Id == tournament.CategoryId).ShortName;
+			//tournamentViewModel.CategoryIdText = _db.Categories.First(a => a.Id == tournament.CategoryId).Id.ToString();
+			//tournamentViewModel.CategoriesNames = new SelectList(categories, "Value", "Text");
+			//tournamentViewModel.CategoriesNames = categories;
+			if (doSubConvert && tournament.Events != null) 
+            { 
+                tournamentViewModel.Events = new EventToView().ConvertAll(tournament.Events.ToList(), false);
             }
 
             return tournamentViewModel;
         }
 
-        public List<TournamentViewModel> ConvertList(List<Tournament> tournaments)
+        public List<TournamentViewModel> ConvertList(List<Tournament> tournaments, bool doSubConvert = true)
         {
             var tournamentList = new List<TournamentViewModel>();
             foreach (var tournament in tournaments)
             {
-                tournamentList.Add(Convert(tournament));
+                tournamentList.Add(Convert(tournament, doSubConvert));
             }
 
             return tournamentList;

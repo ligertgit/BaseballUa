@@ -46,5 +46,6 @@ namespace BaseballUa.ViewModels
 		public int? GameId { get; set; }
 		[DisplayName("Гра")]
 		public GameViewModel? Game { get; set; }
+		//public EventViewModel? GameEvent { get; set; }
 	}
 }

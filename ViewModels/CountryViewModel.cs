@@ -27,6 +27,6 @@ namespace BaseballUa.ViewModels
         public string FnameFlagBig { get; set; }
 
         [NotMapped]
-        public IEnumerable<Club>? Clubs { get; set; } = new List<Club>();
+        public IEnumerable<ClubViewModel>? Clubs { get; set; } = new List<ClubViewModel>();
     }
 }

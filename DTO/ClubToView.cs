@@ -25,7 +25,11 @@ namespace BaseballUa.DTO
             clubVL.FnameLogoSmall = clubDAL.FnameLogoSmall;
             clubVL.FnameLogoBig = clubDAL.FnameLogoBig;
             clubVL.CountryId = clubDAL.CountryId;
-            clubVL.Country = clubDAL.Country;
+            if (clubDAL.Country != null) 
+            {
+				clubVL.Country = new CountryToView().Convert(clubDAL.Country, false);
+			}
+            
             //clubVL.CountriesList = _dbContext.Countries.Select(c => new SelectListItem
             //                            {
             //                                Value = c.Id.ToString(),

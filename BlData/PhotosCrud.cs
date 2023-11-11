@@ -33,7 +33,12 @@ namespace BaseballUa.BlData
 			return _dbContext.Photos;
 		}
 
-		public void Update(Photo item)
+        public IEnumerable<Photo> GetAll(int albumId)
+        {
+            return _dbContext.Photos.Where(p => p.AlbumId == albumId);
+        }
+
+        public void Update(Photo item)
 		{
 			throw new NotImplementedException();
 		}

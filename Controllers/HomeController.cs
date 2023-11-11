@@ -17,13 +17,13 @@ namespace BaseballUa.Controllers
 		{
 			_logger = logger;
 		}
-		#region news
+#region news
 		public IActionResult Index()
 		{
-
+			//var NewsListDAL = 
 			return View();
 		}
-		#endregion
+#endregion
 
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

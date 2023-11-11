@@ -1,0 +1,127 @@
+﻿@model BaseballUa.ViewModels.AlbumVM
+
+@{
+    ViewData["Title"] = "Album photos list";
+}
+
+<h1>Фотки в альбомі:</h1>
+
+
+
+@if (Model == null)
+{
+    <div class="row m-1">
+        <h4>
+            Невідомий альбом
+        </h4>
+    </div>
+} 
+else
+{
+    <p>
+        <a asp-action="AddPhoto" asp-route-albumId="@Model.Id">Додати фото</a>
+    </p>
+    
+    <div class="row">
+        
+        <div class="row">
+            <div class="col-2">
+                @Html.DisplayNameFor(model => model.Name)
+            </div>
+            <div class="col-2">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </div>
+            <div class="col-2">
+                @Html.DisplayFor(model => model.Description)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                @Html.DisplayNameFor(model => model.SportType)
+            </div>
+            <div class="col-2">
+                @Html.DisplayFor(model => model.SportType)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                @Html.DisplayNameFor(model => model.IsGeneral)
+            </div>
+            <div class="col-2">
+                @Html.DisplayFor(model => model.IsGeneral)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2">
+                @Html.DisplayNameFor(model => model.PublishDate)
+            </div>
+            <div class="col-2">
+                @Html.DisplayFor(model => model.PublishDate)
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    @if (Model.Photos == null || Model.Photos.Count == 0)
+    {
+        <label>Нема фоток</label>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Photos.First().Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Photos.First().Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Photos.First().FnameOrig)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Photos.First().FnameSmall)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Photos.First().FnameBig)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var photo in Model.Photos)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => photo.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => photo.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => photo.FnameOrig)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => photo.FnameSmall)
+                            <img src="~/images/photo/small/@Model.Id/@photo.FnameSmall" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => photo.FnameBig)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    
+}
+

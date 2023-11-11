@@ -96,13 +96,16 @@ namespace BaseballUa.Controllers
         public IActionResult Schema(int id)
         {
             var eventDAL = new EventsCrud(_db).Get(id);
-            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
-            //eventDAL.SchemaItems = (ICollection<EventSchemaItem>)schemaItemsFullDAL.ToList();
-            eventDAL.SchemaItems = schemaItemsFullDAL.ToList();
-            //var temp = schemaItemsFullDAL.ToList();
-            //eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
-            
-            var eventVL = new EventToView().Convert(eventDAL);
+			var eventVL = new EventToView().Convert(eventDAL, false);
+
+			var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
+			eventVL.SchemaItems = new List<EventSchemaItemViewModel>();
+            foreach(var schemaItemDAL in schemaItemsFullDAL.ToList())
+            {
+                var schemaItemVL = new EventSchemaItemToView().Convert(schemaItemDAL, false);
+                schemaItemVL.Groups = new SchemaGroupToView().ConvertAll(schemaItemDAL.SchemaGroups.ToList(), true);
+                eventVL.SchemaItems.Add(schemaItemVL);
+			}
 
             return  View(eventVL);
         }

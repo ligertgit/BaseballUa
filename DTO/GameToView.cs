@@ -12,35 +12,39 @@ namespace BaseballUa.DTO
         public GameViewModel Convert(Game gameDAL, bool doSubConvert = true)
         {
             var gameView = new GameViewModel();
-            gameView.Name = gameDAL.Name;
-            gameView.GameViewModelId = gameDAL.Id;
-            gameView.StartDate = gameDAL.StartDate;
-            gameView.AdditionalInfo = gameDAL.AdditionalInfo;
-            gameView.RunsVisitor = gameDAL.RunsVisitor;
-            gameView.RunsHome = gameDAL.RunsHome;
-            gameView.PlacedAt = gameDAL.PlacedAt;
-            gameView.HalfinningsPlayed = gameDAL.HalfinningsPlayed;
-            gameView.GameStatus = gameDAL.GameStatus;
-            gameView.PointsVisitor = gameDAL.PointsVisitor;
-            gameView.PointsHome = gameDAL.PointsHome;
-            gameView.Tour = gameDAL.Tour;
-            gameView.ConditionVisitor = gameDAL.ConditionVisitor;
-            gameView.ConditionHome = gameDAL.ConditionHome;
-            gameView.SchemaGroupId = gameDAL.SchemaGroupId;
-            if (gameDAL.SchemaGroup != null)
+            if (gameDAL != null)
             {
-                gameView.SchemaGroup = new SchemaGroupToView().Convert(gameDAL.SchemaGroup);
+                gameView.Name = gameDAL.Name;
+                gameView.GameViewModelId = gameDAL.Id;
+                gameView.StartDate = gameDAL.StartDate;
+                gameView.AdditionalInfo = gameDAL.AdditionalInfo;
+                gameView.RunsVisitor = gameDAL.RunsVisitor;
+                gameView.RunsHome = gameDAL.RunsHome;
+                gameView.PlacedAt = gameDAL.PlacedAt;
+                gameView.HalfinningsPlayed = gameDAL.HalfinningsPlayed;
+                gameView.GameStatus = gameDAL.GameStatus;
+                gameView.PointsVisitor = gameDAL.PointsVisitor;
+                gameView.PointsHome = gameDAL.PointsHome;
+                gameView.Tour = gameDAL.Tour;
+                gameView.ConditionVisitor = gameDAL.ConditionVisitor;
+                gameView.ConditionHome = gameDAL.ConditionHome;
+                gameView.SchemaGroupId = gameDAL.SchemaGroupId;
+                if (gameDAL.SchemaGroup != null)
+                {
+                    gameView.SchemaGroup = new SchemaGroupToView().Convert(gameDAL.SchemaGroup, false);
+                }
+                gameView.HomeTeamId = gameDAL.HomeTeamId;
+                gameView.VisitorTeamId = gameDAL.VisitorTeamId;
+                if (gameDAL.HomeTeam != null)
+                {
+                    gameView.HomeTeam = new TeamToView().Convert(gameDAL.HomeTeam, false);
+                }
+                if (gameDAL.VisitorTeam != null)
+                {
+                    gameView.VisitorTeam = new TeamToView().Convert(gameDAL.VisitorTeam, false);
+                }
             }
-            gameView.HomeTeamId = gameDAL.HomeTeamId;
-            gameView.VisitorTeamId = gameDAL.VisitorTeamId;
-            if (gameDAL.HomeTeam != null && doSubConvert) 
-            {
-                gameView.HomeTeam = new TeamToView().Convert(gameDAL.HomeTeam);
-            }
-            if (gameDAL.VisitorTeam != null && doSubConvert)
-            {
-                gameView.VisitorTeam = new TeamToView().Convert(gameDAL.VisitorTeam);
-            }
+
             return gameView;
         }
 

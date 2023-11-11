@@ -17,10 +17,10 @@ namespace BaseballUa.DTO
 
         public TeamViewModel? Convert(Team teamDAL, bool doSubConvert = true)
         {
-            
+            var teamVL = new TeamViewModel();
+
             if (teamDAL != null) 
             {
-                var teamVL = new TeamViewModel();
                 teamVL.Id = teamDAL.Id;
                 teamVL.Name = teamDAL.Name;
                 teamVL.Description = teamDAL.Description;
@@ -29,7 +29,7 @@ namespace BaseballUa.DTO
                 teamVL.FnameLogoBig = teamDAL.FnameLogoBig;
                 teamVL.IsTemp = teamDAL.IsTemp;
                 teamVL.ClubId = teamDAL.ClubId;
-                if (teamDAL.Club != null && doSubConvert)
+                if (teamDAL.Club != null)
                 {
                     teamVL.Club = new ClubToView().Convert(teamDAL.Club, false);
                 }
@@ -38,12 +38,9 @@ namespace BaseballUa.DTO
                 if (teamDAL.HomeGames != null && doSubConvert) teamVL.Games.AddRange(new GameToView().ConvertAll(teamDAL.HomeGames.ToList(), false));
                 if (teamDAL.VisitorGames != null && doSubConvert) teamVL.Games.AddRange(new GameToView().ConvertAll(teamDAL.VisitorGames.ToList(), false));
                 if (teamDAL.Players != null && doSubConvert) teamVL.Players = new PlayerToView().ConvertAll(teamDAL.Players.ToList(), false);
-                return teamVL;
             } 
-            else
-            {
-                return null;
-            }
+                
+            return teamVL;
         }
 
         public List<TeamViewModel> ConvertAll(List<Team> teamsDAL, bool doSubConvert = true)

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using System.Drawing;
+using System.Net;
+using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Controllers
 {
@@ -428,6 +430,7 @@ namespace BaseballUa.Controllers
 
 
         #endregion
+
 #region Staff
 
         public IActionResult ListStaffs(int clubId) 
@@ -461,6 +464,7 @@ namespace BaseballUa.Controllers
         }
 
         #endregion
+
 #region Players
         public IActionResult ListPlayers(int teamId)
         {
@@ -494,7 +498,154 @@ namespace BaseballUa.Controllers
         }
 
 
+		#endregion
+
+#region News
+        public IActionResult ListVideos()
+        {
+            var videosDAL = new VideosCrud(_db).GetAll();
+            var videosVL = new VideoToView().ConvertAll(videosDAL.ToList());
+
+            return View(videosVL);
+        }
+
+        public IActionResult AddVideo()
+        {
+            var VideoVL = new VideoToView().CreateEmpty();
+
+            ViewBag.CategorySL = new CategoriesCrud(_db).GetSelectItemList();
+            ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
+            ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList();
+            ViewBag.GamesSL = new GamesCrud(_db).GetSelectItemList();
+
+            return View(VideoVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddVideo(VideoVM videoVM)
+        {
+            if (ModelState.IsValid)
+            {
+                new VideosCrud(_db).Add(new VideoToView().ConvertBack(videoVM));
+            }
+
+            return RedirectToAction("ListVideos");
+        }
+
+
+
+        public IActionResult ListAlbums(SportType? sportType,
+                                        bool? isGeneral,
+                                        int? newsId,
+                                        int? categoryId,
+                                        int? teamId,
+                                        int? gameId,
+                                        DateTime? lastDate = null,
+                                        int? lastId = null,
+                                        int? amount = null
+                                        )
+        {
+            var albumsDAL = new AlbumsCrud(_db).GetAll(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount).ToList();
+            var albumsVL = new AlbumToView().ConvertAll(albumsDAL, false);
+
+            ViewBag.sportType = sportType;
+            ViewBag.isGeneral = isGeneral;
+            ViewBag.news = new NewsToView().Convert(new NewsCrud(_db).Get(newsId));
+            ViewBag.category = new CategoryToView().Convert(new CategoriesCrud(_db).Get(categoryId));
+            ViewBag.team = new TeamToView().Convert(new TeamCrud(_db).Get(teamId));
+            ViewBag.game = new GameToView().Convert(new GamesCrud(_db).Get(gameId));
+            ViewBag.lastDate = lastDate;
+            ViewBag.lastId = lastId;
+
+            return View(albumsVL);
+        }
+
+        public IActionResult AddAlbum()
+        {
+            var albumVL = new AlbumToView().CreateEmpty();
+
+            ViewBag.CategorySL = new CategoriesCrud(_db).GetSelectItemList();
+            ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
+            ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList();
+            ViewBag.GamesSL = new GamesCrud(_db).GetSelectItemList();
+
+            return View(albumVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddAlbum(AlbumVM albumVL)
+        {
+            if (ModelState.IsValid)
+            {
+                new AlbumsCrud(_db).Add(new AlbumToView().ConvertBack(albumVL));
+            }
+
+            return RedirectToAction("ListAlbums");
+        }
+
+
+
+        public IActionResult ListPhotos(int albumId)
+        {
+            var albumDAL = new AlbumsCrud(_db).Get(albumId);
+            var albumVL = new AlbumToView().Convert(albumDAL);
+
+            return View(albumVL);
+        }
+
+        public IActionResult AddPhoto(int albumId)
+        {
+            var albumDAL = new AlbumsCrud(_db).Get(albumId);
+            if (albumDAL == null)
+            {
+                return NotFound();
+            }
+
+            var photoVL = new PhotoToView().CreateEmpty(albumId);
+            var albumVL = new AlbumToView().Convert(albumDAL);
+
+            ViewBag.album = albumVL;
+
+            return View(photoVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddPhoto(PhotoVM photoVM)
+        {
+            photoVM.FnameBig = photoVM.FnameOrig;
+            photoVM.FnameSmall = photoVM.FnameOrig;
+            if (ModelState.IsValid) 
+            {
+                var photoDAL = new PhotoToView().ConvertBack(photoVM);
+                new PhotosCrud(_db).Add(photoDAL);
+            }
+
+            return RedirectToAction("ListPhotos", new { albumId = photoVM.AlbumId });
+        }
+
+
+
+        public IActionResult ListNews(SportType? sportType = null,
+                                        bool? isGeneral = null,
+                                        int? eventId = null,
+                                        int? categoryId = null,
+                                        int? teamId = null,
+                                        DateTime? lastDate = null,
+                                        int? lastId = null,
+                                        int? amount = null)
+        {
+
+            var newsDAL = new NewsCrud(_db).GetAll(sportType, isGeneral, eventId, categoryId, teamId, lastDate, lastId, amount).ToList();
+            var newsVL = new NewsToView().ConvertAll(newsDAL);
+
+            return View(newsVL);
+        }
+
+
 #endregion
 
-    }
+	}
 }

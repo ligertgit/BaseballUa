@@ -1,0 +1,245 @@
+﻿@model List<BaseballUa.ViewModels.AlbumVM>
+
+@{
+    ViewData["Title"] = "Albums list";
+}
+
+<h1>Альбоми, що підходять ВСІМ умовам:</h1>
+<div class="row">
+    <div class="row">
+        <div class="col-2">
+            Спорт:
+        </div>
+        <div class="col-2">
+            @if (ViewBag.sportType == null)
+            {
+                <label>Будь який</label>
+            } 
+            else
+            {
+                <label>@ViewBag.sportType</label>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            Глобального розповсюдження:
+        </div>
+        <div class="col-2">
+            @if (ViewBag.isGeneral == null)
+            {
+                <label>Не має значення</label>
+            }
+            else
+            {
+                <label>@ViewBag.isGeneral</label>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            Належить до новини:
+        </div>
+        <div class="col-2">
+            @if (ViewBag.news == null)
+            {
+                <label>Будь якої</label>
+            }
+            else
+            {
+                <label>@ViewBag.news.Title</label>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            Категорія:
+        </div>
+        <div class="col-2">
+            @if (ViewBag.category == null)
+            {
+                <label>Будь яка</label>
+            }
+            else
+            {
+                <label>@ViewBag.category.Name</label>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            Команда:
+        </div>
+        <div class="col-2">
+            @if (ViewBag.team == null)
+            {
+                <label>Будь яка</label>
+            }
+            else
+            {
+                <label>@ViewBag.team.Name</label>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            Гра:
+        </div>
+        <div class="col-2">
+            @if (ViewBag.game == null)
+            {
+                <label>Будь яка</label>
+            }
+            else
+            {
+                <label>
+                    @if (ViewBag.game.SchemaGroup != null && ViewBag.game.SchemaGroup.EventSchemaItem != null && ViewBag.game.SchemaGroup.EventSchemaItem.Event != null && ViewBag.game.SchemaGroup.EventSchemaItem.Event.Tournament != null)
+                    {
+                            <div>@ViewBag.game.SchemaGroup.EventSchemaItem.Event.Tournament.Name | </div>
+                    }
+                    @ViewBag.game.Name
+                </label>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            Педжинейшн:
+        </div>
+        <div class="col-2">
+            @if (ViewBag.lastDate == null)
+            {
+                <label>Будь яка дата</label>
+            }
+            else
+            {
+                <label>
+                    Новини не пізніше: @ViewBag.lastDate
+                </label>
+            }
+        </div>
+        <div class="col-2">
+            @if (ViewBag.lastId == null)
+            {
+                <label>ID не меньше:</label>
+            }
+            else
+            {
+                <label>
+                    Новини не пізніше: @ViewBag.lastId
+                </label>
+            }
+        </div>
+    </div>
+</div>
+
+<p>
+    <a asp-action="AddAlbum">Додати альбом</a>
+</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="row m-1">
+        <h4>
+            Пусто
+        </h4>
+    </div>
+} 
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().SportType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().IsGeneral)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().PublishDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().News)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Team)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Game)
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SportType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsGeneral)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PublishDate)
+                    </td>
+                    <td>
+                        @if (item.News != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.News.Id)
+                            @Html.DisplayFor(modelItem => item.News.Title)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Category != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Team != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Team.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Game != null && item.Game.HomeTeam != null && item.Game.VisitorTeam != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Game.Name)
+                            @Html.DisplayFor(modelItem => item.Game.HomeTeam.Name)
+                            @Html.DisplayFor(modelItem => item.Game.VisitorTeam.Name)
+                            @if (item.Game.SchemaGroup?.EventSchemaItem?.Event?.Tournament != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Game.SchemaGroup.EventSchemaItem.Event.Tournament.Name)
+                            }
+
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="AddPhoto" asp-route-albumId="@item.Id">Додати фото</a>
+                        <a asp-action="ListPhotos" asp-route-albumId="@item.Id">Список фоток</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

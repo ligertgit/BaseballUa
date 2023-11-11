@@ -1,0 +1,117 @@
+﻿@model List<BaseballUa.ViewModels.VideoVM>
+
+@{
+    ViewData["Title"] = "Videos list";
+}
+
+<h1>Відео:</h1>
+
+<p>
+    <a asp-action="AddVideo">Додати відео</a>
+</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="row m-1">
+        <h4>
+            Пусто
+        </h4>
+    </div>
+} 
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().SportType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().IsGeneral)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().PublishDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Fname)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().News)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Team)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Game)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SportType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsGeneral)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PublishDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fname)
+                    </td>
+                    <td>
+                        @if (item.News != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.News.Id)
+                            @Html.DisplayFor(modelItem => item.News.Title)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Category != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Team != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Team.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Game != null && item.Game.HomeTeam != null && item.Game.VisitorTeam != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Game.Name)
+                            @Html.DisplayFor(modelItem => item.Game.HomeTeam.Name)
+                            @Html.DisplayFor(modelItem => item.Game.VisitorTeam.Name)
+                            @if (item.Game.SchemaGroup?.EventSchemaItem?.Event?.Tournament != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Game.SchemaGroup.EventSchemaItem.Event.Tournament.Name)
+                            }
+
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

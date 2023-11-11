@@ -18,22 +18,20 @@ namespace BaseballUa.ViewModels
 		public string? Description { get; set; }
 		[StringLength(50)]
 		[Required]
-		[DisplayName("Оригінальне фото")]
+		[DisplayName("Ім'я файлу оригіналу")]
 		public string FnameOrig { get; set; }
 		[StringLength(50)]
-		[Required]
-		[DisplayName("Зменьшене фото")]
-		public string FnameSmall { get; set; }
+		[DisplayName("Ім'я файлу зменшеного")]
+		public string? FnameSmall { get; set; }
 		[StringLength(50)]
-		[Required]
-		[DisplayName("Збільшене фото")]
-		public string FnameBig { get; set; }
+		[DisplayName("Ім'я файлу збільшеного")]
+		public string? FnameBig { get; set; }
 		[Required]
 		[DisplayName("Id альбому")]
 		public int AlbumId { get; set; }
 		[DisplayName("Альбом")]
 		public AlbumVM? Album { get; set; }
-		[DisplayName("Новини")]
-		public List<NewsVM>? News { get; set; }
+		//[DisplayName("Новини")]
+		//public List<NewsVM>? News { get; set; }
 	}
 }

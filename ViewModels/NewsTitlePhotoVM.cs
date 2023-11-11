@@ -19,12 +19,12 @@ namespace BaseballUa.ViewModels
 		[Required]
 		[DisplayName("Id новини")]
 		public int NewsId { get; set; }
-		[DisplayName("Новина")]
-		public NewsVM? News { get; set; }
+		//[DisplayName("Новина")]
+		//public NewsVM? News { get; set; }
 		[Required]
 		[DisplayName("Id фото")]
 		public int PhotoId { get; set; }
-		[DisplayName("Фото")]
-		public PhotoVM? Photo { get; set; }
+		//[DisplayName("Фото")]
+		//public PhotoVM? Photo { get; set; }
 	}
 }

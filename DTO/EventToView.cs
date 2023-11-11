@@ -9,7 +9,7 @@ namespace BaseballUa.DTO
 {
     public class EventToView
     {
-        public EventViewModel Convert(Event eventDAL)
+        public EventViewModel Convert(Event eventDAL, bool doSubConvert = true)
         {
             EventViewModel eventView = new EventViewModel();
             eventView.EventViewModelId = eventDAL.Id;
@@ -18,7 +18,11 @@ namespace BaseballUa.DTO
             eventView.EndDate = eventDAL.EndDate;
             eventView.TournamentId = eventDAL.TournamentId;
             //var curTournamentDAL = _dbContext.Tournaments.First(a => a.Id == eventDAL.TournamentId);
-            eventView.Tournament = new TournamentToView().Convert(eventDAL.Tournament);
+            if (eventDAL.Tournament != null) 
+            {
+				eventView.Tournament = new TournamentToView().Convert(eventDAL.Tournament, false);
+			}
+            
             //eventView.TournamentList = _dbContext.Tournaments.Select(a => new SelectListItem
             //{
             //    Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",
@@ -26,20 +30,20 @@ namespace BaseballUa.DTO
             //}).ToList();
 
             // convert schema
-            if (eventDAL.SchemaItems != null) 
+            if (doSubConvert && eventDAL.SchemaItems != null) 
             {
-                eventView.SchemaItems = new EventSchemaItemToView().ConvertAll(eventDAL.SchemaItems.ToList());
+                eventView.SchemaItems = new EventSchemaItemToView().ConvertAll(eventDAL.SchemaItems.ToList(), false);
             }
 
             return eventView;
         }
 
-        public List<EventViewModel> ConvertAll(List<Event> eventsDAL) 
+        public List<EventViewModel> ConvertAll(List<Event> eventsDAL, bool doSubConvert = true) 
         { 
             List<EventViewModel> eventsView = new List<EventViewModel>();
             foreach (var eventDAL in eventsDAL)
             {
-                eventsView.Add(Convert(eventDAL));
+                eventsView.Add(Convert(eventDAL, doSubConvert));
             }
 
             return eventsView;

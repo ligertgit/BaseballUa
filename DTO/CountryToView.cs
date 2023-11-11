@@ -14,7 +14,8 @@ namespace BaseballUa.DTO
         //    _dbContext = dbContext;   
         //}
 
-        public CountryViewModel Convert(Country countryDAL)
+
+        public CountryViewModel Convert(Country countryDAL, bool doSubConvert = true)
         {
             var countryVL = new CountryViewModel();
             countryVL.Id = countryDAL.Id;
@@ -22,9 +23,12 @@ namespace BaseballUa.DTO
             countryVL.ShortName = countryDAL.ShortName;
             countryVL.FnameFlagSmall = countryDAL.FnameFlagSmall;
             countryVL.FnameFlagBig = countryDAL.FnameFlagBig;
-            countryVL.Clubs = countryDAL.Clubs;
+            if ( doSubConvert && countryDAL.Clubs != null) 
+            { 
+                countryVL.Clubs = new ClubToView().ConvertAll(countryDAL.Clubs.ToList(), false);
+			}
 
-            return countryVL;
+			return countryVL;
         }
 
         public Country ConvertBack(CountryViewModel countryVL) 
@@ -39,13 +43,13 @@ namespace BaseballUa.DTO
             return countryDAL;
         }
 
-        public List<CountryViewModel> ConvertAll(List<Country> countriesDAL)
+        public List<CountryViewModel> ConvertAll(List<Country> countriesDAL, bool doSubConvert = true)
         {
             var countriesVL = new List<CountryViewModel>();
 
             foreach (var countryDAL in countriesDAL) 
             {
-                countriesVL.Add(Convert(countryDAL));
+                countriesVL.Add(Convert(countryDAL, doSubConvert));
             }
 
             return countriesVL;

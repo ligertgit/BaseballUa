@@ -20,7 +20,7 @@ namespace BaseballUa.DTO
         //    _dbContext = dbContext;
         //}
 
-        public EventSchemaItemViewModel Convert(EventSchemaItem eventSchemaItemDAL)
+        public EventSchemaItemViewModel Convert(EventSchemaItem eventSchemaItemDAL, bool doSubConvert = true)
         {
             var eventSchemaItemVL = new EventSchemaItemViewModel();
             eventSchemaItemVL.EventSchemaItemViewModelId = eventSchemaItemDAL.Id;
@@ -29,7 +29,7 @@ namespace BaseballUa.DTO
             eventSchemaItemVL.EventId = eventSchemaItemDAL.EventId;
             if (eventSchemaItemDAL.Event != null)
             {
-                eventSchemaItemVL.Event = new EventToView().Convert(eventSchemaItemDAL.Event);
+                eventSchemaItemVL.Event = new EventToView().Convert(eventSchemaItemDAL.Event, false);
             }
             //fix -dbaccess. and get this navigation data from crud directrly
             //var eventt = new EventsCrud(_dbContext).Get(eventSchemaItemDAL.EventId);
@@ -39,9 +39,9 @@ namespace BaseballUa.DTO
             //should be passed through viewBag
             //var tournament = new TournamentsCrud(_dbContext).Get(eventSchemaItemVL.Event.TournamentId);
             //eventSchemaItemVL.Tournament = new TournamentToView().Convert(tournament, _dbContext);
-            if (eventSchemaItemDAL.SchemaGroups != null) 
+            if (doSubConvert && eventSchemaItemDAL.SchemaGroups != null) 
             { 
-                eventSchemaItemVL.Groups = new SchemaGroupToView().ConvertAll(eventSchemaItemDAL.SchemaGroups.ToList());
+                eventSchemaItemVL.Groups = new SchemaGroupToView().ConvertAll(eventSchemaItemDAL.SchemaGroups.ToList(), false);
             }
             //eventSchemaItemVL.Groups = new SchemaGroupToView(_dbContext).ConvertAll(eventSchemaItemDAL.SchemaGroups.ToList());
 
@@ -75,14 +75,14 @@ namespace BaseballUa.DTO
             return eventSchemaItemVL;
         }
 
-        public List<EventSchemaItemViewModel> ConvertAll(List<EventSchemaItem>? eventSchemaItemsDAL)
+        public List<EventSchemaItemViewModel> ConvertAll(List<EventSchemaItem>? eventSchemaItemsDAL, bool doSubConvert = true)
         {
             var eventSchemaItemsVL = new List<EventSchemaItemViewModel>();
             if (eventSchemaItemsDAL != null) 
             {
                 foreach (var item in eventSchemaItemsDAL)
                 {
-                    eventSchemaItemsVL.Add(Convert(item));
+                    eventSchemaItemsVL.Add(Convert(item, doSubConvert));
                 }
             }
             

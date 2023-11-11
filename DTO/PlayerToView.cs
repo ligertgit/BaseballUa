@@ -17,7 +17,7 @@ namespace BaseballUa.DTO
             playerVL.AvatarBig = playerDAL.AvatarBig;
             playerVL.Sex = playerDAL.Sex;
             playerVL.TeamId = playerDAL.TeamId;
-            if (playerDAL.Team != null && doSubConvert) 
+            if (playerDAL.Team != null) 
             { 
                 playerVL.Team = new TeamToView().Convert(playerDAL.Team, false);
             }

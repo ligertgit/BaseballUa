@@ -1,0 +1,73 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.AlbumVM
+
+@{
+    ViewData["Title"] = "Add Album";
+}
+
+<h1>Додати альбом</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddAlbum">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SportType" class="control-label"></label>
+                @Html.DropDownListFor(c => Model.SportType, Enums.SportType.NotDefined.ToSelectList(), optionLabel: "--- оберіть ---")
+                @Html.ValidationMessageFor(c => c.SportType, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsGeneral" /> @Html.DisplayNameFor(model => model.IsGeneral)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublishDate" class="control-label"></label>
+                <input asp-for="PublishDate" class="form-control" />
+                <span asp-validation-for="PublishDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewsId" class="control-label"></label>
+                @Html.DropDownListFor(c => Model.NewsId, new SelectList(ViewBag.NewsSL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.ValidationMessageFor(c => c.NewsId, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                @Html.DropDownListFor(c => Model.CategoryId, new SelectList(ViewBag.CategorySL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.ValidationMessageFor(c => c.CategoryId, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="TeamId" class="control-label"></label>
+                @Html.DropDownListFor(c => Model.TeamId, new SelectList(ViewBag.TeamSL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.ValidationMessageFor(c => c.TeamId, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <label asp-for="GameId" class="control-label"></label>
+                @Html.DropDownListFor(c => Model.GameId, new SelectList(ViewBag.GamesSL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.ValidationMessageFor(c => c.GameId, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Додати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
 {
@@ -25,12 +26,31 @@ namespace BaseballUa.BlData
 
 		public Video Get(int itemId)
 		{
-			return _dbContext.Videos.Where(v => v.Id == itemId).FirstOrDefault();
+			return _dbContext.Videos.Where(v => v.Id == itemId)
+						.Include(v => v.News)
+						.Include(v => v.Category)
+						.Include(v => v.Game)
+							.ThenInclude(g => g.SchemaGroup)
+							.ThenInclude(g => g.EventSchemaItem)
+							.ThenInclude(i => i.Event)
+							.ThenInclude(e => e.Tournament)
+					.FirstOrDefault();
 		}
 
 		public IEnumerable<Video> GetAll()
 		{
-			return _dbContext.Videos;
+			return _dbContext.Videos
+						.Include(v => v.News)
+						.Include(v => v.Category)
+						.Include(v => v.Game)
+							.ThenInclude(g => g.HomeTeam)
+						.Include(v => v.Game)
+							.ThenInclude(g => g.VisitorTeam)
+						.Include(v => v.Game)
+							.ThenInclude(g => g.SchemaGroup)
+							.ThenInclude(g => g.EventSchemaItem)
+							.ThenInclude(i => i.Event)
+							.ThenInclude(equals => equals.Tournament);
 		}
 
 		public void Update(Video item)

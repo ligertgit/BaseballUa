@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
 using static BaseballUa.Data.Enums;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BaseballUa.BlData
 {
@@ -28,8 +29,10 @@ namespace BaseballUa.BlData
             throw new NotImplementedException();
         }
 
-        public Game Get(int itemId)
+        public Game Get(int? itemId)
         {
+            if (itemId == null) return null;
+
             return _dbContext.Games.Where(i => i.Id == itemId)
                                     .Include(g => g.SchemaGroup)
                                     .Include(g => g.HomeTeam)
@@ -146,5 +149,18 @@ namespace BaseballUa.BlData
         //    var gamesForEventSchema = _dbContext.Games.Where(g => g.EventSchemaItemId == eventSchemaId).ToList();
         //    return gamesForEventSchema;
         //}
+
+        public List<SelectListItem> GetSelectItemList()
+        {
+            var gamesSL = _dbContext.Games.Where(g => (g.StartDate > DateTime.Now.AddDays(-Constants.GamesSelectDaysShift) 
+                                                && (g.StartDate < DateTime.Now.AddDays(Constants.GamesSelectDaysShift)))
+                                            ).Select(c => new SelectListItem
+                                                {
+                                                    Text = c.Name,
+                                                    Value = c.Id.ToString()
+                                                }).ToList();
+
+            return gamesSL;
+        }
     }
 }

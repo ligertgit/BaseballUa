@@ -36,7 +36,7 @@ namespace BaseballUa.ViewModels
         public int CountryId { get; set; }
 
         [DisplayName("Країна")]
-        public Country? Country { get; set; }
+        public CountryViewModel? Country { get; set; }
         //public IEnumerable<SelectListItem>? CountriesList { get; set; }
 
         [NotMapped]
