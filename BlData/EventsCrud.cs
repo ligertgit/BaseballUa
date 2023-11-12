@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Drawing;
@@ -74,6 +75,24 @@ namespace BaseballUa.BlData
                                 ).Include(e => e.Tournament).ThenInclude(t => t.Category);
         }
 
-        
+        public List<SelectListItem> GetSelectItemList(int amount = Constants.DefaulSelectListAmount)
+        {
+            if (amount < 1) 
+            { 
+                amount = Constants.DefaulSelectListAmount;
+            }
+
+            var eventSL = new List<SelectListItem>();
+            eventSL = _dbContext.Events.OrderByDescending(e => e.StartDate).Take(amount).Include(e => e.Tournament)
+                                    .Select(e => new SelectListItem
+                                    {
+                                        Text = e.Tournament.Name + " - " + e.Year.ToString(),
+                                        Value = e.Id.ToString()
+                                    }).ToList();
+
+            return eventSL;
+        }
+
+
     }
 }

@@ -26,7 +26,7 @@ namespace BaseballUa.BlData
 			throw new NotImplementedException();
 		}
 
-		public News Get(int? itemId)
+		public News Get(int itemId)
 		{
 			if (itemId == null) return null;
 			

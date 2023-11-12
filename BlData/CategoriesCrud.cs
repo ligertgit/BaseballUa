@@ -25,11 +25,11 @@ namespace BaseballUa.BlData
 			throw new NotImplementedException();
 		}
 
-		public Category Get(int? itemId)
+		public Category Get(int itemId)
 		{
 			if (itemId == null) return null;
-
 			var category = _dbContext.Categories.First(c => c.Id == itemId);
+
 			return category;
 		}
 
@@ -46,8 +46,7 @@ namespace BaseballUa.BlData
 
         public List<SelectListItem> GetSelectItemList()
         {
-            var categoriesSL = new List<SelectListItem>();
-            categoriesSL = _dbContext.Categories.Select(c => new SelectListItem
+            var categoriesSL = _dbContext.Categories.Select(c => new SelectListItem
             {
                 Text = c.Name,
                 Value = c.Id.ToString()
@@ -55,5 +54,6 @@ namespace BaseballUa.BlData
 
             return categoriesSL;
         }
+
     }
 }

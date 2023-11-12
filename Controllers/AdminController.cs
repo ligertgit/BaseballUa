@@ -2,6 +2,7 @@
 using BaseballUa.Data;
 using BaseballUa.DTO;
 using BaseballUa.DTO.Custom;
+using BaseballUa.Migrations;
 using BaseballUa.Models;
 using BaseballUa.Models.Custom;
 using BaseballUa.ViewModels;
@@ -549,12 +550,13 @@ namespace BaseballUa.Controllers
             var albumsDAL = new AlbumsCrud(_db).GetAll(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount).ToList();
             var albumsVL = new AlbumToView().ConvertAll(albumsDAL, false);
 
+
             ViewBag.sportType = sportType;
             ViewBag.isGeneral = isGeneral;
-            ViewBag.news = new NewsToView().Convert(new NewsCrud(_db).Get(newsId));
-            ViewBag.category = new CategoryToView().Convert(new CategoriesCrud(_db).Get(categoryId));
-            ViewBag.team = new TeamToView().Convert(new TeamCrud(_db).Get(teamId));
-            ViewBag.game = new GameToView().Convert(new GamesCrud(_db).Get(gameId));
+            ViewBag.news = newsId == null ? null : new NewsToView().Convert(new NewsCrud(_db).Get((int)newsId));
+            ViewBag.category = categoryId == null ? null : new CategoryToView().Convert(new CategoriesCrud(_db).Get((int)categoryId));
+            ViewBag.team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
+            ViewBag.game = gameId == null ? null : new GameToView().Convert(new GamesCrud(_db).Get((int)gameId));
             ViewBag.lastDate = lastDate;
             ViewBag.lastId = lastId;
 
@@ -641,9 +643,42 @@ namespace BaseballUa.Controllers
             var newsDAL = new NewsCrud(_db).GetAll(sportType, isGeneral, eventId, categoryId, teamId, lastDate, lastId, amount).ToList();
             var newsVL = new NewsToView().ConvertAll(newsDAL);
 
+            ViewBag.sportType = sportType;
+            ViewBag.isGeneral = isGeneral;
+            ViewBag.eventt = eventId == null ? null : new EventToView().Convert(new EventsCrud(_db).Get((int)eventId));
+            ViewBag.category = categoryId == null ? null : new CategoryToView().Convert(new CategoriesCrud(_db).Get((int)categoryId));
+            ViewBag.team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
+            ViewBag.lastDate = lastDate;
+            ViewBag.lastId = lastId;
+            ViewBag.amount = amount; // limit to const.defaout maximum in crud
+
+
             return View(newsVL);
         }
 
+        public IActionResult AddNews()
+        {
+            var newsVL = new NewsToView().CreateEmpty();
+
+            ViewBag.eventsSL = new EventsCrud(_db).GetSelectItemList();
+            ViewBag.categoriesSL = new CategoriesCrud(_db).GetSelectItemList();
+            ViewBag.teamsSL = new TeamCrud(_db).GetSelectItemList();
+
+            return View(newsVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddNews(NewsVM newsVL)
+        {
+            if(ModelState.IsValid)
+            {
+                var newsDAL = new NewsToView().ConvertBack(newsVL);
+                new NewsCrud(_db).Add(newsDAL);
+            }
+
+            return RedirectToAction("ListNews");
+        }
 
 #endregion
 

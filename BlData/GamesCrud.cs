@@ -29,7 +29,7 @@ namespace BaseballUa.BlData
             throw new NotImplementedException();
         }
 
-        public Game Get(int? itemId)
+        public Game Get(int itemId)
         {
             if (itemId == null) return null;
 

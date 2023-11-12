@@ -58,7 +58,8 @@ namespace BaseballUa.BlData
 		{
 			return _dbContext.Albums.Where(a => (sportType == null || a.SportType == sportType)
 											&& (isGeneral == null || a.IsGeneral == isGeneral)
-											&& (categoryId == null || a.CategoryId == categoryId)
+                                            && (newsId == null || a.NewsId == newsId)
+                                            && (categoryId == null || a.CategoryId == categoryId)
 											&& (teamId == null || a.TeamId == teamId)
 											&& (gameId == null || a.GameId == gameId)
 											&& (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))

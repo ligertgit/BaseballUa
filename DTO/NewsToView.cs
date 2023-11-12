@@ -78,5 +78,13 @@ namespace BaseballUa.DTO
 
 			return newsDAL;
 		}
+
+        public NewsVM CreateEmpty()
+        {
+            var newsVL = new NewsVM();
+            newsVL.PublishDate = DateTime.Now;
+
+            return newsVL;
+        }
 	}
 }
