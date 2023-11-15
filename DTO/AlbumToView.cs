@@ -24,22 +24,22 @@ namespace BaseballUa.DTO
 				albumVL.NewsId = albumDAL.NewsId;
 				if (albumDAL.News != null)
 				{
-					albumVL.News = new NewsToView().Convert(albumDAL.News);
+					albumVL.News = new NewsToView().Convert(albumDAL.News, false);
 				}
 				albumVL.CategoryId = albumDAL.CategoryId;
 				if (albumDAL.Category != null) 
 				{ 
-					albumVL.Category = new CategoryToView().Convert(albumDAL.Category);
+					albumVL.Category = new CategoryToView().Convert(albumDAL.Category, false);
 				}
 				albumVL.TeamId = albumDAL.TeamId;
 				if (albumDAL.Team != null)
 				{
-					albumVL.Team = new TeamToView().Convert(albumDAL.Team);
+					albumVL.Team = new TeamToView().Convert(albumDAL.Team, false);
 				}
 				albumVL.GameId = albumDAL.GameId;
 				if (albumDAL.Game != null)
 				{
-					albumVL.Game = new GameToView().Convert(albumDAL.Game);
+					albumVL.Game = new GameToView().Convert(albumDAL.Game, false);
 				}
 				if (doSubConvert && albumDAL.Photos != null)
 				{

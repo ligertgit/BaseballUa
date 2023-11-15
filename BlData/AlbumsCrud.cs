@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using static BaseballUa.Data.Enums;
 
@@ -82,5 +83,41 @@ namespace BaseballUa.BlData
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+		public void Update(int id, 
+							SportType? sportType = null, 
+							bool? isGeneral = null, 
+							string? name = null, 
+							string? description = null, 
+							DateTime? publishDate = null, 
+							int? newsId = null, 
+							int? categoryId = null,
+							int? teamId = null,
+							int? gameId = null)
+		{
+            if (sportType != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.SportType, sportType));
+            if (isGeneral != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.IsGeneral, isGeneral));
+			if (name != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.Name, name));
+			if (description != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.Description, description));
+			if (publishDate != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.PublishDate, publishDate));
+			if (newsId != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.NewsId, newsId));
+			if (categoryId != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.CategoryId, categoryId));
+			if (teamId != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.TeamId, teamId));
+			if (gameId != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.GameId, gameId));
+
+		}
+
+        public List<SelectListItem> GetSelectItemList()
+        {
+            var albumsSL = _dbContext.Albums.OrderByDescending(a => a.Id).Take(Constants.DefaulSelectListAmount)
+                                    .Select(c => new SelectListItem
+                                    {
+                                        Text = c.Name,
+                                        Value = c.Id.ToString()
+                                    }).ToList();
+
+            return albumsSL;
+        }
+
+    }
 }

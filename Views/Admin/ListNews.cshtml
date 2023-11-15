@@ -226,12 +226,15 @@ else
                     </td>
                     <td>
                         <a asp-action="ListAlbums" asp-route-newsId="@item.Id">Подивитися</a>
+                        <a asp-action="AddAlbumToNews" asp-route-newsId="@item.Id">Додати</a>
                     </td>
                     <td>
-                        <a asp-action="ListPhotos" asp-route-newsId="@item.Id">Подивитися</a>
+                        <a asp-action="ListTitlePhotos" asp-route-newsId="@item.Id">Подивитися</a>
+                        <a asp-action="AddPhotosToNews" asp-route-newsId="@item.Id">Додати</a>
                     </td>
                     <td>
                         <a asp-action="ListVideos" asp-route-newsId="@item.Id">Подивитися</a>
+                        <a asp-action="AddVideoToNews" asp-route-newsId="@item.Id">Додати</a>
                     </td>
                 </tr>
             }

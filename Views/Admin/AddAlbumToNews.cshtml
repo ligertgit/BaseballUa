@@ -1,0 +1,89 @@
+﻿@model BaseballUa.ViewModels.AlbumVM
+
+@{
+    ViewData["Title"] = "Add Album";
+}
+
+<h1>Додати альбом до новини:</h1>
+
+<div class="row">
+    <div class="row">
+        <div class="col-3">
+            Заголовок:
+        </div>
+        <div class="col-3">
+            @ViewBag.newsVL.Title
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Дата публікації:
+        </div>
+        <div class="col-3">
+            @ViewBag.newsVL.PublishDate
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Турнір:
+        </div>
+        <div class="col-3">
+            @if (ViewBag.newsVL.Event != null)
+            {
+                <label>@ViewBag.newsVL.Event.Year </label>
+                if (ViewBag.newsVL.Event.Tournament != null)
+                {
+                    <label>@ViewBag.newsVL.Event.Tournament.Name</label>
+                }
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Категорія:
+        </div>
+        <div class="col-3">
+            @if (ViewBag.newsVL.Category != null)
+            {
+                <label>@ViewBag.newsVL.Category.Name</label>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            Команда:
+        </div>
+        <div class="col-3">
+            @if (ViewBag.newsVL.Team != null)
+            {
+                <label>@ViewBag.newsVL.Team.Name</label>
+            }
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddAlbumToNews">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="NewsId" value="@ViewBag.newsVL.Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                @Html.DropDownListFor(c => Model.Id, new SelectList(ViewBag.albumsSL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.ValidationMessageFor(c => c.Id, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Додати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

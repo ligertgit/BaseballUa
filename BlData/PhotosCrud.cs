@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace BaseballUa.BlData
 {
@@ -42,5 +43,17 @@ namespace BaseballUa.BlData
 		{
 			throw new NotImplementedException();
 		}
-	}
+
+        public List<SelectListItem> GetSelectItemList()
+        {
+            var photosSL = _dbContext.Photos.OrderByDescending(a => a.Id).Take(Constants.DefaulSelectListAmount)
+                                    .Select(c => new SelectListItem
+                                    {
+                                        Text = c.Name,
+                                        Value = c.Id.ToString()
+                                    }).ToList();
+
+            return photosSL;
+        }
+    }
 }

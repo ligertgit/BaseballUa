@@ -8,6 +8,7 @@ namespace BaseballUa.Data
         public const int NewsSelectDaysShift = 20;
         public const int DefaulNewsAmount = 10;
         public const int DefaulAlbumsAmount = 10;
+        public const int DefaulVideosAmount = 10;
         public const int DefaulSelectListAmount = 25;
 
 

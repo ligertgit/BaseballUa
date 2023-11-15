@@ -6,9 +6,12 @@ using BaseballUa.Migrations;
 using BaseballUa.Models;
 using BaseballUa.Models.Custom;
 using BaseballUa.ViewModels;
+using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
 using System.Drawing;
 using System.Net;
 using static BaseballUa.Data.Enums;
@@ -502,9 +505,18 @@ namespace BaseballUa.Controllers
 		#endregion
 
 #region News
-        public IActionResult ListVideos()
+        public IActionResult ListVideos(SportType? sportType,
+                                        bool? isGeneral,
+                                        int? newsId,
+                                        int? categoryId,
+                                        int? teamId,
+                                        int? gameId,
+                                        DateTime? lastDate = null,
+                                        int? lastId = null,
+                                        int? amount = null
+                                        )
         {
-            var videosDAL = new VideosCrud(_db).GetAll();
+            var videosDAL = new VideosCrud(_db).GetAll(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount);
             var videosVL = new VideoToView().ConvertAll(videosDAL.ToList());
 
             return View(videosVL);
@@ -597,6 +609,14 @@ namespace BaseballUa.Controllers
             return View(albumVL);
         }
 
+        public IActionResult ListTitlePhotos(int newsId)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            var newsVL = new NewsToView().Convert(newsDAL);
+
+            return View(newsVL);
+        }
+
         public IActionResult AddPhoto(int albumId)
         {
             var albumDAL = new AlbumsCrud(_db).Get(albumId);
@@ -680,7 +700,103 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListNews");
         }
 
-#endregion
+        public IActionResult AddAlbumToNews(int newsId)
+        {
+            var albumVL = new AlbumToView().CreateEmpty();
+            
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            var newsVL = new NewsToView().Convert(newsDAL);
+            
+            var albumsSL = new AlbumsCrud(_db).GetSelectItemList();
 
-	}
+            ViewBag.albumsSL = albumsSL;
+            ViewBag.newsVL = newsVL;
+
+            return View(albumVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddAlbumToNews(int NewsId, int Id)
+        {
+            if (NewsId > 0 && Id >0)
+            {
+                new AlbumsCrud(_db).Update(id: Id, newsId: NewsId);
+            }
+
+            return RedirectToAction("ListNews");
+        }
+
+        public IActionResult AddVideoToNews(int newsId)
+        {
+            var videoVL = new VideoToView().CreateEmpty();
+
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            var newsVL = new NewsToView().Convert(newsDAL);
+
+            var videosSL = new VideosCrud(_db).GetSelectItemList();
+
+            ViewBag.videosSL = videosSL;
+            ViewBag.newsVL = newsVL;
+
+            return View(videoVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddVideoToNews(int NewsId, int Id)
+        {
+            if (NewsId > 0 && Id > 0)
+            {
+                new VideosCrud(_db).Update(id: Id, newsId: NewsId);
+            }
+
+            return RedirectToAction("ListNews");
+        }
+
+        public IActionResult AddPhotosToNews(int newsId)
+        {
+            //var photoVL = new PhotoToView().CreateEmpty();
+
+            //var newsDAL = new NewsCrud(_db).Get(newsId);
+            //var newsVL = new NewsToView().Convert(newsDAL);
+
+            //var photosSL = new VideosCrud(_db).GetSelectItemList();
+
+            //ViewBag.photosSL = photosSL;
+            //ViewBag.newsVL = newsVL;
+
+            //return View(photoVL);
+            
+            var newsWithPhotosVL = new AddPhotosToNews();
+
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            newsWithPhotosVL.News = new NewsToView().Convert(newsDAL);
+            newsWithPhotosVL.PhotosMSL = new MultiSelectList(new PhotosCrud(_db).GetSelectItemList(), "Value", "Text");
+
+            return View(newsWithPhotosVL);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddPhotosToNews(AddPhotosToNews newsWithPhotosVL)
+        {
+            if (newsWithPhotosVL.News.Id > 0 && !newsWithPhotosVL.PhotoIds.IsNullOrEmpty())
+            {
+                foreach (var photoId in newsWithPhotosVL.PhotoIds)
+                {
+                    var newsTitlePhoto = new NewsTitlePhoto();
+                    newsTitlePhoto.NewsId = newsWithPhotosVL.News.Id;
+                    newsTitlePhoto.PhotoId = photoId;
+                    newsTitlePhoto.Name = photoId.ToString();
+                    new NewsTitlePhotosCrud(_db).Add(newsTitlePhoto);
+                }
+            }
+
+            return RedirectToAction("ListNews");
+        }
+
+        #endregion
+
+    }
 }

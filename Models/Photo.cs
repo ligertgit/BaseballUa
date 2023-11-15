@@ -17,7 +17,7 @@ namespace BaseballUa.Models
 		public string FnameBig { get; set; }
         public int AlbumId { get; set; }
         public Album Album { get; set; } = null!;
-        public ICollection<NewsTitlePhoto>? NewsTitlePhotos { get; set; }
+        public List<NewsTitlePhoto>? NewsTitlePhotos { get; set; }
 
 		//+fill as collection in all classes that should contain news.
 		//+Check cruds for that classes.
