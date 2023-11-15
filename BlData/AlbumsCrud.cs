@@ -47,15 +47,16 @@ namespace BaseballUa.BlData
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Album> GetAll(SportType? sportType,
-                                        bool? isGeneral,
-                                        int? newsId,
-                                        int? categoryId,
-                                        int? teamId,
-                                        int? gameId,
+        public IEnumerable<Album> GetAll(SportType? sportType = null,
+                                        bool? isGeneral = null,
+                                        int? newsId = null,
+                                        int? categoryId = null,
+                                        int? teamId = null,
+                                        int? gameId = null,
                                         DateTime? lastDate = null,
                                         int? lastId = null,
-                                        int? amount = null)
+                                        int? amount = null,
+										bool notForTeamOnly = false)
 		{
 			return _dbContext.Albums.Where(a => (sportType == null || a.SportType == sportType)
 											&& (isGeneral == null || a.IsGeneral == isGeneral)
@@ -64,6 +65,7 @@ namespace BaseballUa.BlData
 											&& (teamId == null || a.TeamId == teamId)
 											&& (gameId == null || a.GameId == gameId)
 											&& (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
+											&& (!notForTeamOnly || (a.IsGeneral || a.News.EventId != null || a.CategoryId != null || a.GameId != null))
 											)
 											.OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
 											.Take(amount == null ? Constants.DefaulAlbumsAmount : (int)amount)
@@ -72,10 +74,10 @@ namespace BaseballUa.BlData
 											.Include(a => a.Team)
 											.Include(a => a.Game)
 												.ThenInclude(g => g.SchemaGroup)
-												.ThenInclude(g => g.EventSchemaItem)
-												.ThenInclude(i => i.Event)
-												.ThenInclude(e => e.Tournament)
-												.ThenInclude(t => t.Category)
+													.ThenInclude(g => g.EventSchemaItem)
+														.ThenInclude(i => i.Event)
+															.ThenInclude(e => e.Tournament)
+																.ThenInclude(t => t.Category)
 											.Include(a => a.Photos);
 		}
 

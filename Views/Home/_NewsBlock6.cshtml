@@ -1,0 +1,60 @@
+﻿@using BaseballUa.Data;
+@model List<BaseballUa.ViewModels.NewsVM>
+
+@if (Model != null && Model.Count() > 0)
+{
+	foreach (var news in Model)
+	{
+
+		<div class="row m-1 border border-info rounded">
+			<div class="col-4 ">
+				@{
+					var titlePhotoAlbum = Constants.DefaultAlbum;
+					var titlePhoto = Constants.DefaultAlbumSmallImage;
+				}
+				@if (news.Photos != null && news.Photos.Count() > 0)
+				{
+					titlePhotoAlbum = news.Photos.First().AlbumId.ToString();
+					titlePhoto = news.Photos.First().FnameSmall.ToString();
+				}
+				<a asp-action="ShowNews" asp-route-newsId="@news.Id">
+					<img class="img-thumbnail" src="~/images/photo/small/@titlePhotoAlbum/@titlePhoto" />
+				</a>
+				
+			</div>
+			<div class="col-8">
+				<div class="row">
+					<div class="col-1">
+						<img width="25" height="25" src="~/images/sporttype/small/@(news.SportType).png" />
+					</div>
+					<div class="col-2">
+						@news.PublishDate.ToString("dd/MM/yyyy")
+					</div>
+
+					<div class="col-9">
+						@if (news.Category != null)
+						{
+							<small class="text-muted">@news.Category.Name </small>
+						}
+					</div>
+				</div>
+				<div class="row">
+					@if (news.Event != null && news.Event.Tournament != null)
+					{
+						<small class="text-muted">@news.Event.Tournament.Name @news.Event.Year </small>
+					}
+				</div>
+				<a asp-action="ShowNews" asp-route-newsId="@news.Id" class="text-decoration-none">
+					<div class="row m-0 p-0">
+
+						<h5 class="m-0 p-0"><strong>@news.Title</strong></h5>
+					</div>
+				</a>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<label>Нема новин</label>
+}

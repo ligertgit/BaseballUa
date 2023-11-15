@@ -1,0 +1,3 @@
+Fill images for SportType Enum in images/sporttype: big 50x50, small 25x25. Names should be equal to sporttypes
+Add all categories in DB
+Fill images for all categories with names ACCORDING to its IDs in DB

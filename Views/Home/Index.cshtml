@@ -1,7 +1,31 @@
-﻿@{
+﻿@model BaseballUa.ViewModels.Custom.MainIndexVM
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<h1 class="display-4">UA Baseball Softball page</h1>
+<h1 class="display-4">Бейсбол і Софтбол в Україні</h1>
+
+<div class="row">
+    <div class="col-2">
+        <div class="row">
+            <div class="col border border-info rounded">
+                <h5><strong>Актуальні турніри:</strong></h5>
+                @await Html.PartialAsync("_EventsBlock2", Model.ActiveEvents)
+            </div>
+        </div>
+    </div>
+    <div class="col-8">
+        <h5><strong>Новини:</strong></h5>
+        @await Html.PartialAsync("_NewsBlock6", Model.News)
+    </div>
+    <div class="col-2">
+        <div class="row">
+            <div class="col border border-info rounded">
+                <h5><strong>Останні альбоми:</strong></h5>
+                @await Html.PartialAsync("_AlbumsBlock2", Model.LastAlbums)
+            </div>
+        </div>
+    </div>
+</div>
 
 

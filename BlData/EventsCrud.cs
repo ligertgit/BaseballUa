@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System.Drawing;
 using System.Linq;
+using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.BlData
 {
@@ -39,10 +40,32 @@ namespace BaseballUa.BlData
 
         public IEnumerable<Event> GetAll()
         {
-            return _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category);
-        }
+			throw new NotImplementedException();
+			//return _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category);
+		}
 
-        public IEnumerable<Event> GetForClub(int clubId)
+		public IEnumerable<Event> GetAll(SportType? sportType = null,
+										int? categoryId = null,
+										DateTime? firstDate = null,
+										DateTime? lastDate = null,
+										int? lastId = null,
+										int? amount = null)
+		{
+			return _dbContext.Events.Where(e => ( firstDate == null || lastDate == null 
+                                                    || ( firstDate < e.StartDate && lastDate > e.StartDate )
+                                                    || ( lastDate > e.EndDate && firstDate < e.EndDate )
+                                                    || ( firstDate > e.StartDate && lastDate < e.EndDate )
+                                                ) 
+                                                && ( lastId == null || e.Id < lastId)
+                                                && ( categoryId == null || e.Tournament.CategoryId  == categoryId )
+                                                && ( sportType == null || e.Tournament.Sport == sportType)
+                                          ).OrderByDescending( e => e.StartDate )
+                                          .Take( amount == null ? Constants.DefaulEventAmount : (int)amount )
+                                          .Include( e => e.Tournament )
+                                                .ThenInclude( t => t.Category );
+		}
+
+		public IEnumerable<Event> GetForClub(int clubId)
         {
             var result = (from eventt in _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category)
                          join eventItem in _dbContext.EventSchemaItems on eventt.Id equals eventItem.EventId
