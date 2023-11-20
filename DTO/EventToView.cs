@@ -34,6 +34,12 @@ namespace BaseballUa.DTO
             {
                 eventView.SchemaItems = new EventSchemaItemToView().ConvertAll(eventDAL.SchemaItems.ToList(), false);
             }
+            
+            if (doSubConvert && eventDAL.News != null) 
+            { 
+                eventView.News = new NewsToView().ConvertAll(eventDAL.News.ToList(), false);
+            }
+
 
             return eventView;
         }

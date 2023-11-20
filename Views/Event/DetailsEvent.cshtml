@@ -4,9 +4,14 @@
     ViewData["Title"] = "Detail Tournament";
 }
  @*probably more info here? like news photos....*@
-<div class="row">
+@*<div class="row">
     @await Html.PartialAsync("_EventDetails", Model)
-</div>
+    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event, 
+                                                    Albums = Model.GamesByDay.SelectMany(gbd => gbd.Games).SelectMany(g => g.Albums).ToList(),
+                                                    Videos = Model.GamesByDay.SelectMany(gbd => gbd.Games).SelectMany(g => g.Videos).ToList()
+                                                }
+                            );
+</div>*@
 
 <div class="row">
     @await Html.PartialAsync("_EventMenu", Model.EventViewModelId)

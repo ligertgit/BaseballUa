@@ -33,7 +33,11 @@ namespace BaseballUa.BlData
             //check for null here
             //var eventItem = _dbContext.Events.First(a => a.Id == itemId);
             //_dbContext.ChangeTracker.LazyLoadingEnabled = false;
-            var eventItem = _dbContext.Events.Where(e => e.Id == itemId).Include(e => e.Tournament).ThenInclude(t => t.Category).FirstOrDefault();
+            var eventItem = _dbContext.Events.Where(e => e.Id == itemId)
+                                                .Include(e => e.Tournament)
+                                                    .ThenInclude(t => t.Category)
+                                                .Include(e => e.News)    
+                                                .FirstOrDefault();
             
             return eventItem;
         }
@@ -62,7 +66,8 @@ namespace BaseballUa.BlData
                                           ).OrderByDescending( e => e.StartDate )
                                           .Take( amount == null ? Constants.DefaulEventAmount : (int)amount )
                                           .Include( e => e.Tournament )
-                                                .ThenInclude( t => t.Category );
+                                                .ThenInclude( t => t.Category )
+                                          .Include(e => e.News);
 		}
 
 		public IEnumerable<Event> GetForClub(int clubId)

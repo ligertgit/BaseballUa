@@ -30,8 +30,11 @@ namespace BaseballUa.Models
         [NotMapped]
         public ICollection<Player>? Players { get; set; }
 
+        [NotMapped]
         public ICollection<News>? News { get; set; }
+        [NotMapped]
         public ICollection<Album>? Albums { get; set; }
+        [NotMapped]
         public ICollection<Video>? Videos { get; set; }
     }
 }

@@ -38,6 +38,8 @@ namespace BaseballUa.ViewModels
 
         [NotMapped]
         public List<EventSchemaItemViewModel>? SchemaItems { get; set; }
+
+        public List<NewsVM>? News { get; set;}
     }
 
 

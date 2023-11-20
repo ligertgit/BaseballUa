@@ -43,6 +43,14 @@ namespace BaseballUa.DTO
                 {
                     gameView.VisitorTeam = new TeamToView().Convert(gameDAL.VisitorTeam, false);
                 }
+                if (doSubConvert && gameDAL.Albums != null)
+                {
+                    gameView.Albums = new AlbumToView().ConvertAll(gameDAL.Albums.ToList(), false);
+                }
+                if (doSubConvert && gameDAL.Videos != null)
+                {
+                    gameView.Videos = new VideoToView().ConvertAll(gameDAL.Videos.ToList(), false);
+                }
             }
 
             return gameView;
@@ -70,6 +78,7 @@ namespace BaseballUa.DTO
             gameDAL.HomeTeamId = gameVL.HomeTeamId;
             gameDAL.VisitorTeamId = gameVL.VisitorTeamId;
             //gameDAL.EventId = gameVL.EventId;
+
 
 
             return gameDAL;

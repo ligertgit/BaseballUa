@@ -76,6 +76,10 @@ namespace BaseballUa.ViewModels
         public int? VisitorTeamId { get; set; }
         [DisplayName("Команда гість")]
         public TeamViewModel? VisitorTeam { get; set; }
+        [DisplayName("Альбоми")]
+        public List<AlbumVM>? Albums { get; set; }
+        [DisplayName("Видео")]
+        public List<VideoVM>? Videos { get; set; }
 
     }
 }

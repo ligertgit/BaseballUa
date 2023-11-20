@@ -1,11 +1,18 @@
-﻿@model BaseballUa.ViewModels.Custom.EventGamesByDayVM
+﻿@using BaseballUa.ViewModels.Custom;
+@model BaseballUa.ViewModels.Custom.EventGamesByDayVM
 
 @{
     ViewData["Title"] = "Schedule";
 }
 
 <div class="row">
-    @await Html.PartialAsync("_EventDetails", Model.Event)
+    @*@await Html.PartialAsync("_EventDetails", Model.Event)*@
+    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event, 
+                                                    Albums = Model.GamesByDay.SelectMany(gbd => gbd.Games).SelectMany(g => g.Albums).ToList(),
+                                                    Videos = Model.GamesByDay.SelectMany(gbd => gbd.Games).SelectMany(g => g.Videos).ToList(),
+                                                    News = Model.Event.News
+                                                }
+                            )
 </div>
 
 <div class="row m-1">
@@ -22,95 +29,146 @@
         <div class="card-header">[@game.Tour] @game.Name - @game.StartDate - @game.GameStatus - </div>
         <div class="card-body">
             <div class="row">
-                <div class="row">
-                    <div class="col">
-                        Home Team
+                <div class="col-10">
+                    <div class="row">
+                        <div class="col">
+                            Home Team
+                        </div>
+                        <div class="col">
+                            Visitor Team
+                        </div>
+                        
+
+
                     </div>
-                    <div class="col">
-                        Visitor Team
+                    <div class="row">
+                        <div class="col">
+                            @{
+                                if (game.HomeTeam != null)
+                                {
+                                    @game.HomeTeam.Name
+                                }
+                                else
+                                {
+                                    <label> ??? </label>
+                                }
+                            }
+                        </div>
+                        <div class="col">
+                            @{
+                                if (game.VisitorTeam != null)
+                                {
+                                    @game.VisitorTeam.Name
+                                }
+                                else
+                                {
+                                    <label> ??? </label>
+                                }
+                            }
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        @{
-                            if (game.HomeTeam != null)
-                            {
-                                @game.HomeTeam.Name
-                            }
-                            else
-                            {
-                                <label> ??? </label>
-                            }
-                        }
-                    </div>
-                    <div class="col">
-                        @{
-                            if (game.VisitorTeam != null)
-                            {
-                                @game.VisitorTeam.Name
-                            }
-                            else
-                            {
-                                <label> ??? </label>
-                            }
-                        }
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        @{
-                            if (game.HomeTeam != null)
-                            {
+                    <div class="row">
+                        <div class="col">
+                            @{
+                                if (game.HomeTeam != null)
+                                {
                                     <img src="~/images/team/logoSmall/@game.HomeTeam.FnameLogoSmall" />
+                                }
                             }
-                        }
-                    </div>
-                    <div class="col">
-                        @{
-                            if (game.VisitorTeam != null)
-                            {
-                                <img src="~/images/team/logoSmall/@game.VisitorTeam.FnameLogoSmall" />
+                        </div>
+                        <div class="col">
+                            @{
+                                if (game.VisitorTeam != null)
+                                {
+                                    <img src="~/images/team/logoSmall/@game.VisitorTeam.FnameLogoSmall" />
+                                }
                             }
-                        }
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <h1>
-                            @if (game.RunsHome != null)
+                    <div class="row">
+                        <div class="col">
+                            <h1>
+                                @if (game.RunsHome != null)
+                                {
+                                    @game.RunsHome
+                                }
+                                else
+                                {
+                                    <label> - </label>
+                                }
+                            </h1>
+                        </div>
+                        <div class="col">
+                            <h1>  :  </h1>
+                        </div>
+                        <div class="col">
+                            @if (game.RunsVisitor != null)
                             {
-                                @game.RunsHome
-                            } 
+                                @game.RunsVisitor
+                            }
                             else
                             {
                                 <label> - </label>
                             }
-                        </h1>
+                        </div>
                     </div>
-                    <div class="col">
-                        <h1>  :  </h1>
+                    <div class="row">
+                        <div class="col">
+                            @game.ConditionHome
+                        </div>
+                        <div class="col">
+                            @game.ConditionVisitor
+                        </div>
                     </div>
-                    <div class="col">
-                        @if (game.RunsVisitor != null)
-                        {
-                            @game.RunsVisitor
-                        }
-                        else
-                        {
-                            <label> - </label>
-                        }
+                    <div class="row">
+                        @game.AdditionalInfo
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        @game.ConditionHome
+                <div class="col-2">
+                    <div class="row">
+                        @if (game.Albums != null && game.Albums.Count > 0)
+                        {
+                            <div class="row">
+                                Альбоми:
+                                @foreach (var album in game.Albums)
+                                {
+                                    <div class="col">
+                                        <a asp-controller="Home" asp-action="ShowAlbum" asp-route-id="@album.Id">
+                                            <img src="/images/assets/albumSmall.png" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        @if (game.Videos != null && game.Videos.Count > 0)
+                        {
+                            <div class="row">
+                                Відео:
+                                @foreach (var video in game.Videos)
+                                {
+                                    <div class="col">
+                                        <a href="@video.Fname">
+                                            <img src="/images/assets/videoSmall.png" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        @if (true)
+                        {
+                            <div class="row">
+                                Live:
+                                @foreach (var video in game.Videos)
+                                {
+                                    <div class="col">
+                                        <a href="@video.Fname">
+                                            <img src="/images/assets/videoSmall.png" />
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        }
                     </div>
-                    <div class="col">
-                        @game.ConditionVisitor
-                    </div>
-                </div>
-                <div class="row">
-                    @game.AdditionalInfo
                 </div>
             </div>
         </div>

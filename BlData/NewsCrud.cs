@@ -36,7 +36,11 @@ namespace BaseballUa.BlData
 									.Include(n => n.Videos)
 									.Include(n => n.NewsTitlePhotos)
 										.ThenInclude(ntp => ntp.Photo)
-								.FirstOrDefault();
+                                    .Include(n => n.Event)
+                                        .ThenInclude(e => e.Tournament)
+											.ThenInclude(t => t.Category)
+									.Include(t => t.Category)
+                                .FirstOrDefault();
 		}
 
 		public IEnumerable<News> GetAll()
@@ -66,9 +70,10 @@ namespace BaseballUa.BlData
 										.Take(amount == null ? Constants.DefaulNewsAmount : (int)amount)
 										.Include(n => n.Event)
 											.ThenInclude(e => e.Tournament)
+												.ThenInclude(n => n.Category)
 										.Include(n => n.Category)
 										.Include(n => n.Albums)
-											.ThenInclude(a => a.Photos)
+                                            .ThenInclude(a => a.Photos)
 										.Include(n => n.Videos)
 										.Include(n => n.NewsTitlePhotos)
 											.ThenInclude(ntp => ntp.Photo);

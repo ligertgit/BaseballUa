@@ -118,7 +118,8 @@ namespace BaseballUa.Controllers
             var eventDAL = new EventsCrud(_db).Get(id);
             gamesByDay.Event = new EventToView().Convert(eventDAL);
 
-            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
+            //var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
+            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames_test(id);
             if (schemaItemsFullDAL == null)
             {
                 gamesByDay.GamesByDay = new List<DayGames>

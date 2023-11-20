@@ -34,10 +34,10 @@ namespace BaseballUa.BlData
 										.Include(a => a.Team)
 										.Include(a => a.Game)
 											.ThenInclude(g => g.SchemaGroup)
-											.ThenInclude(g => g.EventSchemaItem)
-											.ThenInclude(i => i.Event)
-											.ThenInclude(e => e.Tournament)
-											.ThenInclude(t => t.Category)
+												.ThenInclude(g => g.EventSchemaItem)
+													.ThenInclude(i => i.Event)
+														.ThenInclude(e => e.Tournament)
+															.ThenInclude(t => t.Category)
 										.Include(a => a.Photos)
 									.FirstOrDefault();
 		}

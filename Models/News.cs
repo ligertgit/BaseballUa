@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Models
@@ -20,8 +21,10 @@ namespace BaseballUa.Models
         public int? TeamId { get; set; }
         public Team Team { get; set; } = null!;
 
+        [NotMapped]
         public ICollection<Album>? Albums { get; set; }
         public ICollection<NewsTitlePhoto>? NewsTitlePhotos { get; set; }
+        [NotMapped]
         public ICollection<Video>? Videos { get; set; }
 
 

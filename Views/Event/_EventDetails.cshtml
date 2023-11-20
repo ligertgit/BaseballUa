@@ -1,55 +1,80 @@
-﻿@model BaseballUa.ViewModels.EventViewModel
+﻿@model BaseballUa.ViewModels.Custom.EventWithNewsAndMedia
 
 <div>
     <div class="row">
         <div class="col-4">
-            <h5>@Html.DisplayFor(model => model.Tournament.Name)</h5>
+            <h5>@Html.DisplayFor(model => model.Event.Tournament.Name)</h5>
         </div>
         <div class="col-1">
-            @Html.DisplayFor(model => model.Year)
+            @Html.DisplayFor(model => model.Event.Year)
         </div>
         <div class="col-1">
-            @Html.DisplayFor(model => model.Tournament.Sport)
+            @Html.DisplayFor(model => model.Event.Tournament.Sport)
         </div>
         <div class="col-1">
-            @Html.DisplayFor(model => model.Tournament.Category.ShortName)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-1">
-            @Html.DisplayNameFor(model => model.Tournament.IsAnual)
-            @Html.DisplayFor(model => model.Tournament.IsAnual)
-        </div>
-        <div class="col-1">
-            @Html.DisplayNameFor(model => model.Tournament.IsInternational)
-            @Html.DisplayFor(model => model.Tournament.IsInternational)
-        </div>
-        <div class="col-1">
-            @Html.DisplayNameFor(model => model.Tournament.IsOfficial)
-            @Html.DisplayFor(model => model.Tournament.IsOfficial)
-        </div>
-        <div class="col-1">
-            @Html.DisplayNameFor(model => model.Tournament.IsFun)
-            @Html.DisplayFor(model => model.Tournament.IsFun)
+            @Html.DisplayFor(model => model.Event.Tournament.Category.ShortName)
         </div>
     </div>
     <div class="row">
         <div class="col-1">
-            @Model.StartDate.Value.ToString("yyyy-MM-dd")
+            @Html.DisplayNameFor(model => model.Event.Tournament.IsAnual)
+            @Html.DisplayFor(model => model.Event.Tournament.IsAnual)
         </div>
         <div class="col-1">
-            @Model.EndDate.Value.ToString("yyyy-MM-dd")
+            @Html.DisplayNameFor(model => model.Event.Tournament.IsInternational)
+            @Html.DisplayFor(model => model.Event.Tournament.IsInternational)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Event.Tournament.IsOfficial)
+            @Html.DisplayFor(model => model.Event.Tournament.IsOfficial)
+        </div>
+        <div class="col-1">
+            @Html.DisplayNameFor(model => model.Event.Tournament.IsFun)
+            @Html.DisplayFor(model => model.Event.Tournament.IsFun)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-1">
+            @Model.Event.StartDate.Value.ToString("yyyy-MM-dd")
+        </div>
+        <div class="col-1">
+            @Model.Event.EndDate.Value.ToString("yyyy-MM-dd")
         </div>
     </div>
     <hr />
     <dl class="row">
         <dt class="col-1">
-            @Html.DisplayNameFor(model => model.Tournament.Description)
+            @Html.DisplayNameFor(model => model.Event.Tournament.Description)
         </dt>
         <dd class="col-11">
-            @Html.DisplayFor(model => model.Tournament.Description)
+            @Html.DisplayFor(model => model.Event.Tournament.Description)
         </dd>
     </dl>
     <hr />
 </div>
-
+<div class="row">
+    @foreach (var news in Model.News)
+    {
+        <div class="col">
+            <a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id">@news.Title</a>
+        </div>
+    }
+</div>
+<div class="row">
+    @foreach (var album in Model.Albums)
+    {
+        <div class="col">
+            <a asp-controller="Home" asp-action="ShowAlbum" asp-route-Id="@album.Id">@album.Name</a>
+        </div>
+    }
+</div>
+<div class="row">
+    @foreach (var video in Model.Videos)
+    {
+        <div class="col">
+            <a href="@video.Fname">
+                <img src="~/images/assets/videoSmall.png" />
+            </a>
+        </div>
+    }
+</div>
