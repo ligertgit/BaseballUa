@@ -23,18 +23,18 @@ namespace BaseballUa.Models
         public int ClubId { get; set; }
         public Club Club { get; set; } = null!;
 
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Game>? HomeGames { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Game>? VisitorGames { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Player>? Players { get; set; }
 
-        [NotMapped]
+        //[NotMapped]
         public ICollection<News>? News { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Album>? Albums { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Video>? Videos { get; set; }
     }
 }

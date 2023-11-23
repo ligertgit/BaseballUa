@@ -1,0 +1,44 @@
+﻿@using BaseballUa.Data;
+@model List<BaseballUa.ViewModels.GameViewModel>
+
+@if (Model != null && Model.Count() > 0)
+{
+	foreach (var game in Model)
+	{
+		<div class="row m-1">
+			<div class="col">
+				<a asp-action="ShowGame" asp-route-Id="@game.GameViewModelId">
+
+					<div class="row">
+						@game.StartDate
+					</div>
+					<div class="row">
+						<div class="col-5">
+							@game.HomeTeam?.Name
+						</div>
+						<div class="col-2">
+						</div>
+						<div class="col-5">
+							@game.VisitorTeam?.Name
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-5">
+							<img width="40" height="30" class="img-thumbnail" src="~/images/team/logoSmall/@if (game.HomeTeam != null) @game.HomeTeam.FnameLogoSmall else @Constants.DefaultTeamSmallImage" />
+						</div>
+						<div class="col-2">
+							:
+						</div>
+						<div class="col-5">
+							<img width="40" height="30" class="img-thumbnail" src="~/images/team/logoSmall/@if (game.VisitorTeam != null) @game.VisitorTeam.FnameLogoSmall else @Constants.DefaultTeamSmallImage" />
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<label>Нема ігр</label>
+}

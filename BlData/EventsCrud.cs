@@ -36,16 +36,20 @@ namespace BaseballUa.BlData
             var eventItem = _dbContext.Events.Where(e => e.Id == itemId)
                                                 .Include(e => e.Tournament)
                                                     .ThenInclude(t => t.Category)
-                                                .Include(e => e.News)    
+                                                .Include(e => e.News) 
+                                                    .ThenInclude(n => n.NewsTitlePhotos)
+                                                        .ThenInclude(t => t.Photo)
                                                 .FirstOrDefault();
             
-            return eventItem;
+            return eventItem ?? new Event();
         }
 
         public IEnumerable<Event> GetAll()
         {
-			throw new NotImplementedException();
-			//return _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category);
+            var eventItem = _dbContext.Events.Where(e => e.Id == 5000);
+            //throw new NotImplementedException();
+            //return _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category);
+            return eventItem;
 		}
 
 		public IEnumerable<Event> GetAll(SportType? sportType = null,

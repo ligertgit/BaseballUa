@@ -1,0 +1,27 @@
+﻿@using BaseballUa.Data;
+@model List<BaseballUa.ViewModels.TeamViewModel>
+
+@if (Model != null && Model.Count() > 0)
+{
+	foreach (var team in Model)
+	{
+		<div class="row mt-1">
+			<div class="col">
+				<a asp-controller="Club" asp-action="DetailsTeam" asp-route-teamId="@team.Id">
+					<div class="row">
+						<div class="col-3 m-0 p-0">
+							<img width="40" height="30" class="img-thumbnail" src="~/images/team/logoSmall/@team.FnameLogoSmall" />
+						</div>
+						<div class="col-9 m-0 p-0">
+							@team.Name
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<label>Нема ігр</label>
+}

@@ -30,14 +30,14 @@ namespace BaseballUa.Models
         public int? HomeTeamId { get; set; }
         public int? VisitorTeamId { get; set; }
 
-        [NotMapped]
+        //[NotMapped]
         public Team? HomeTeam { get; set; } = null!;
-        [NotMapped]
+        //[NotMapped]
         public Team? VisitorTeam { get; set; } = null!;
         public SchemaGroup SchemaGroup { get; set; } = null!;
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Album>? Albums { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Video>? Videos { get; set; }
 
     }

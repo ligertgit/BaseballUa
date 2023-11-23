@@ -45,17 +45,6 @@ namespace BaseballUa.Controllers
             return View(eventsView);
         }
 
-        public IActionResult DetailsEvent(int id, string ShowMenu = "schema", int monthShift = 0)
-        {
-            // probably should use EventIndexViewModel
-            var eventDAL = new EventsCrud(_db).Get(id);
-            //eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
-            var eventView = new EventToView().Convert(eventDAL);
-            
-            ViewData["monthShift"] = monthShift;
-            ViewData["ShowMenu"] = ShowMenu;
-            return View(eventView);
-        }
         
         [HttpPost]
         public IActionResult ApplyFilters(IFormCollection fc) 
@@ -93,21 +82,70 @@ namespace BaseballUa.Controllers
             return RedirectToAction("Index", new { monthShift = monthShift });
         }
 
+        public IActionResult DetailsEvent(int id, string ShowMenu = "schema", int monthShift = 0)
+        {
+            var eventDetailsFull = new EventDetailsFull();
+            var eventDAL = new EventsCrud(_db).Get(id);
+            eventDetailsFull.Event = new EventToView().Convert(eventDAL);
+            eventDetailsFull.News = new NewsToView().ConvertAll(eventDAL.News.ToList());
+            var eventALbumsDAL = new AlbumsCrud(_db).GetAllEventAlbums(id);
+            eventDetailsFull.Albums = new AlbumToView().ConvertAll(eventALbumsDAL.ToList());
+            var eventVideosDAL = new VideosCrud(_db).GetAllEventVideos(id);
+            eventDetailsFull.Videos = new VideoToView().ConvertAll(eventVideosDAL.ToList());
+            var eventTeamsDAL = new TeamCrud(_db).GetEventTeams(id);
+            eventDetailsFull.Teams = new TeamToView().ConvertAll(eventTeamsDAL.ToList());
+            var currentGamesDAL = new GamesCrud(_db).GetEventGames(id);
+            eventDetailsFull.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList());
+
+            //// probably should use EventIndexViewModel
+            //var eventDAL = new EventsCrud(_db).Get(id);
+            ////eventDAL.Tournament.Category = new CategoriesCrud(_db).Get(eventDAL.Tournament.CategoryId);
+            //var eventView = new EventToView().Convert(eventDAL);
+
+            //ViewData["monthShift"] = monthShift;
+            ViewData["ShowMenu"] = ShowMenu;
+            return View(eventDetailsFull);
+        }
+
         public IActionResult Schema(int id)
         {
+            var eventSchemaFullVL = new EventSchemaFull();
+            
             var eventDAL = new EventsCrud(_db).Get(id);
-			var eventVL = new EventToView().Convert(eventDAL, false);
+            eventSchemaFullVL.Event = new EventToView().Convert(eventDAL);
+            eventSchemaFullVL.News = new NewsToView().ConvertAll(eventDAL?.News?.ToList(), false);
 
-			var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
-			eventVL.SchemaItems = new List<EventSchemaItemViewModel>();
-            foreach(var schemaItemDAL in schemaItemsFullDAL.ToList())
+            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames_test(id);
+            eventSchemaFullVL.SchemaItems = new List<EventSchemaItemViewModel>();
+            foreach (var schemaItemDAL in schemaItemsFullDAL)
             {
                 var schemaItemVL = new EventSchemaItemToView().Convert(schemaItemDAL, false);
-                schemaItemVL.Groups = new SchemaGroupToView().ConvertAll(schemaItemDAL.SchemaGroups.ToList(), true);
-                eventVL.SchemaItems.Add(schemaItemVL);
-			}
+                schemaItemVL.Groups = new List<SchemaGroupViewModel>();
+                if (schemaItemDAL.SchemaGroups != null)
+                {
+                    foreach (var groupDAL in schemaItemDAL.SchemaGroups)
+                    {
+                        var groupVL = new SchemaGroupToView().Convert(groupDAL, true);
+                        if (groupDAL.Games != null)
+                        {
+                            groupVL.Games = new GameToView().ConvertAll(groupDAL.Games.ToList(), true);
+                        }
+                        schemaItemVL.Groups.Add(groupVL);
+                    }
+                    eventSchemaFullVL.SchemaItems.Add(schemaItemVL);
+                }
+            }
 
-            return  View(eventVL);
+            eventSchemaFullVL.Albums = new AlbumToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
+                                                                        .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
+                                                                        .SelectMany(g => g.Albums ?? Enumerable.Empty<Album>())
+                                                                        .ToList(), false);
+            eventSchemaFullVL.Videos = new VideoToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
+                                                                        .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
+                                                                        .SelectMany(g => g.Videos ?? Enumerable.Empty<Video>())
+                                                                        .ToList(), false);
+
+            return  View(eventSchemaFullVL);
         }
 
         public IActionResult Schedule(int id, int dateIndex = -1)
@@ -142,20 +180,22 @@ namespace BaseballUa.Controllers
 
         public IActionResult Standing(int id)
         {
-            var EventDAL = new EventsCrud(_db).Get(id);
+            var eventStanding = new EventStandingFull();
+            var eventDAL = new EventsCrud(_db).Get(id);
+            eventStanding.Event = new EventToView().Convert(eventDAL);
+            eventStanding.News = new NewsToView().ConvertAll(eventDAL?.News?.ToList(), false);
+            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames_test(id);
+            eventStanding.EventItemsStanding = new EventSchemaItemToView().ConvertAllToStanding(schemaItemsFullDAL.ToList());
+            eventStanding.Albums = new AlbumToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
+                                                            .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
+                                                            .SelectMany(g => g.Albums ?? Enumerable.Empty<Album>())
+                                                            .ToList(), false);
+            eventStanding.Videos = new VideoToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
+                                                                        .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
+                                                                        .SelectMany(g => g.Videos ?? Enumerable.Empty<Video>())
+                                                                        .ToList(), false);
 
-            var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
-            var standingsByEventItemVM = new EventSchemaItemToView().ConvertAllToStanding(schemaItemsFullDAL.ToList());
-            //var t1 = new GamesCrud(_db).G;
-            //var t1v = new GameToView().CreateEmpty(5);
-            //var x = new TeamStandingVM();
-            //x.TotalGames = 10;
-            //t1v.HomeTeam = x;
-
-            ViewBag.Eventt = new EventToView().Convert(EventDAL);
-
-            //var z = (t1v.HomeTeam as TeamStandingVM).TotalGames;
-            return View(standingsByEventItemVM);
+            return View(eventStanding);
         }
     }
 }

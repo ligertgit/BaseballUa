@@ -53,28 +53,52 @@
     <hr />
 </div>
 <div class="row">
-    @foreach (var news in Model.News)
+    Новини:
+    @if (Model.News != null)
     {
+        @foreach (var news in Model.News)
+        {
+            <div class="col">
+                <a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id">@news.Title</a>
+            </div>
+        }
         <div class="col">
-            <a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id">@news.Title</a>
+            <a asp-controller="Event" asp-action="DetailsEvent" asp-route-Id="@Model.Event.EventViewModelId">Всі новини турніру</a>
         </div>
     }
+
 </div>
 <div class="row">
-    @foreach (var album in Model.Albums)
+    Альбоми:
+    @if (Model.Albums != null)
     {
+        @foreach (var album in Model.Albums)
+        {
+            <div class="col">
+                <a asp-controller="Home" asp-action="ShowAlbum" asp-route-Id="@album.Id">@album.Name</a>
+            </div>
+        }
         <div class="col">
-            <a asp-controller="Home" asp-action="ShowAlbum" asp-route-Id="@album.Id">@album.Name</a>
+            <a asp-controller="Home" asp-action="ShowAlbums" asp-route-eventId="@Model.Event.EventViewModelId">Всі альбоми турніру</a>
         </div>
     }
+
 </div>
 <div class="row">
-    @foreach (var video in Model.Videos)
+    Відео:
+    @if (Model.Videos != null)
     {
+        @foreach (var video in Model.Videos)
+        {
+            <div class="col">
+                <a href="@video.Fname">
+                    <img src="~/images/assets/videoSmall.png" />
+                </a>
+            </div>
+        }
         <div class="col">
-            <a href="@video.Fname">
-                <img src="~/images/assets/videoSmall.png" />
-            </a>
+            <a asp-controller="Home" asp-action="ShowVideos" asp-route-eventId="@Model.Event.EventViewModelId">Всі відео турніру</a>
         </div>
     }
+
 </div>

@@ -54,6 +54,27 @@ namespace BaseballUa.BlData
                                 .ThenInclude(c => c.Country);
         }
 
+        public IEnumerable<Team> GetEventTeams(int? eventId)
+        {
+            var eventTeams = new List<Team>();
+            if (eventId != null)
+            {
+                eventTeams = (
+                              from team in _dbContext.Teams
+                              from game in _dbContext.Games where (game.HomeTeamId == team.Id || game.VisitorTeamId == team.Id)
+                              from eventGroup in _dbContext.SchemaGroups where (game.SchemaGroupId == eventGroup.Id)
+                              from eventItem in _dbContext.EventSchemaItems where (eventGroup.EventSchemaItemId == eventItem.Id)
+                              where (eventItem.EventId == eventId)
+                              select team
+                              )
+                              .Distinct()
+                              .ToList();
+            }
+
+            return eventTeams;
+        }
+
+
         //public IEnumerable<Team> GetAllForClub(int clubId)
         //{
         //    return _dbContext.Teams.Where(t => t.ClubId == clubId)

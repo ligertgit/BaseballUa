@@ -64,7 +64,7 @@ namespace BaseballUa.BlData
 											&& (categoryId == null || n.CategoryId == categoryId)
 											&& (teamId == null || n.TeamId == teamId)
 											&& (lastDate == null || (lastId == null ? n.PublishDate < lastDate : (n.PublishDate <= lastDate && n.Id < lastId)))
-											&& (notForTeamOnly == false || (n.IsGeneral != false || n.EventId != null || n.CategoryId!= null))
+											&& (notForTeamOnly == false || (n.IsGeneral != false || n.EventId != null || n.CategoryId != null))
 										)
 										.OrderByDescending(n => n.PublishDate).ThenByDescending(n => n.Id)
 										.Take(amount == null ? Constants.DefaulNewsAmount : (int)amount)
@@ -73,11 +73,11 @@ namespace BaseballUa.BlData
 												.ThenInclude(n => n.Category)
 										.Include(n => n.Category)
 										.Include(n => n.Albums)
-                                            .ThenInclude(a => a.Photos)
+											.ThenInclude(a => a.Photos)
 										.Include(n => n.Videos)
 										.Include(n => n.NewsTitlePhotos)
 											.ThenInclude(ntp => ntp.Photo);
-										
+
 		}
 
 		public void Update(News item)

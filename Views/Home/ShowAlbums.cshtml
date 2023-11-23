@@ -1,0 +1,40 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.Custom.ShowAlbums
+
+<label>форма для виборки</label>
+<div class="row">
+	<div class="col">
+		@await Html.PartialAsync("_SelectionMenu", Model.Selections )
+	</div>
+</div>
+
+@if (Model != null && Model.Albums != null && Model.Albums.Count > 0)
+{
+	<div class="row">
+		@foreach (var album in Model.Albums)
+		{
+			@if (album.Photos != null && album.Photos.Count > 0)
+			{
+				<div class="col-2">
+					<div class="row">
+						<div class="col">
+							<a asp-controller="Home" asp-action="ShowAlbum" asp-route-id="@album.Id">
+								<img width="120" height="90" class="img-thumbnail" src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />
+							</a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<h5>@if (album.Name != null) @album.Name else @Constants.DefaultAlbumName</h5>
+						</div>
+					</div>
+				</div>
+			}
+		}
+	</div>
+}
+else
+{
+	<label>За вашим запитом жодного альбому не знайдено</label>
+}
+

@@ -11,7 +11,7 @@ namespace BaseballUa.Models
         public int EventSchemaItemId { get; set; }
         public EventSchemaItem EventSchemaItem { get; set; } = null!;
 
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Game>? Games { get; set; }
     }
 }

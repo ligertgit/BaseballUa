@@ -69,6 +69,27 @@ namespace BaseballUa.BlData
                                     .Include(g => g.VisitorTeam);
         }
 
+        public IEnumerable<Game> GetEventGames(int eventId, int amount = Constants.DefaulGameAmount)
+        {
+            var eventGames = new List<Game>();
+            if (eventId > 0 && amount > 0)
+            {
+                var temp = (from game in _dbContext.Games
+                              from eventGroup in _dbContext.SchemaGroups
+                              where game.SchemaGroupId == eventGroup.Id
+                              from eventItem in _dbContext.EventSchemaItems
+                              where eventGroup.EventSchemaItemId == eventItem.Id
+                              where eventItem.EventId == eventId
+                                        && game.StartDate < DateTime.Now.AddDays(Constants.DefaulActiveGamesDaysRange)
+                                        && game.StartDate > DateTime.Now.AddDays(-Constants.DefaulActiveGamesDaysRange)
+                              select game)
+                              .ToList();
+                eventGames = temp.OrderBy(g => g.StartDate.GetValueOrDefault().Subtract(DateTime.Now)).Take(amount).OrderBy(g => g.StartDate).ToList();
+            }
+
+            return eventGames;
+        }
+
         public IEnumerable<GameWithTeams> GetAllForGroupWithTeams(int schemaGroupId = 0)
         {
             if (schemaGroupId != 0) 

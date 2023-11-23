@@ -13,13 +13,13 @@ namespace BaseballUa.Models
 		[StringLength(15)]
 		public string ShortName { get; set; }
 
-		[NotMapped]
+		//[NotMapped]
 		public ICollection<Tournament>? Tournaments { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<News>? News { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Album>? Albums { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Video>? Videos { get; set; }
     }
 }

@@ -92,6 +92,31 @@ namespace BaseballUa.BlData
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Video> GetAllEventVideos(int? eventId,int amount = Constants.DefaulVideosAmount)
+        {
+            var eventVideos = new List<Video>();
+            if (eventId != null && amount >0)
+            {
+                eventVideos = (from videos in _dbContext.Videos
+                               join games in _dbContext.Games on videos.GameId equals games.Id
+                               join eventGroups in _dbContext.SchemaGroups on games.SchemaGroupId equals eventGroups.Id
+                               join eventSchemas in _dbContext.EventSchemaItems on eventGroups.EventSchemaItemId equals eventSchemas.Id
+                               where eventSchemas.EventId == eventId
+                               select videos)
+                                .Union(
+                                from videos in _dbContext.Videos
+                                join news in _dbContext.News on videos.NewsId equals news.Id
+                                where news.EventId == eventId
+                                select videos)
+                                .Take(amount)
+                                .ToList();
+
+            }
+
+            return eventVideos;
+        }
+
+
         public void Update(Video item)
 		{
 			throw new NotImplementedException();

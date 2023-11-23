@@ -5,10 +5,12 @@ using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Drawing;
-
+using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Controllers
 {
@@ -26,7 +28,7 @@ namespace BaseballUa.Controllers
 #region news
 		public IActionResult Index()
 		{
-			var pageDataVM = new MainIndexVM();
+            var pageDataVM = new MainIndexVM();
 			var newsDAL = new NewsCrud(_db).GetAll(notForTeamOnly: true, lastDate: DateTime.Now).ToList();
 			pageDataVM.News = new NewsToView().ConvertAll(newsDAL);
 			var albumsDAL = new AlbumsCrud(_db).GetAll(notForTeamOnly: true, lastDate: DateTime.Now).ToList();
@@ -76,6 +78,53 @@ namespace BaseballUa.Controllers
 
 			return View(albumVL);
 		}
+
+		public IActionResult ShowAlbums(int? eventId = null, int? categoryId = null, int? teamId = null, SportType? sportType = null)
+		{
+			var showAlbumsVM = new ShowAlbums();
+            string yyy = sportType.HasValue ? ((SportType)sportType).ToString() : "dsf";
+
+            showAlbumsVM.Selections.CategorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text");
+			showAlbumsVM.Selections.EvenSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text");
+			showAlbumsVM.Selections.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text");
+			showAlbumsVM.Selections.SportTypeSL = Enums.SportType.NotDefined.ToSelectList();
+
+            string ttt = showAlbumsVM.Selections.SportTypeSL.First().Value;
+
+
+            var albumsDAL = new List<Album>();
+
+            if (eventId != null && eventId > 0)
+			{
+                albumsDAL = new AlbumsCrud(_db).GetAllEventAlbums(eventId, amount: Constants.DefaulListAlbumsAmount).ToList();
+				showAlbumsVM.Selections.EvenSL.First(i => i.Value == eventId.ToString()).Selected = true;
+            }
+			else if (categoryId != null && categoryId > 0)
+			{
+                albumsDAL = new AlbumsCrud(_db).GetAllCategoryAlbums(categoryId, amount: Constants.DefaulListAlbumsAmount).ToList();
+				showAlbumsVM.Selections.CategorySL.First(i => i.Value == categoryId.ToString()).Selected = true;
+			}
+			else if (teamId != null && teamId > 0)
+			{
+                albumsDAL = new AlbumsCrud(_db).GetAllTeamAlbums(teamId, amount: Constants.DefaulListAlbumsAmount).ToList();
+				showAlbumsVM.Selections.TeamSL.First(i => i.Value == teamId.ToString()).Selected = true;
+			}
+			else if (sportType.HasValue)
+			{
+                albumsDAL = new AlbumsCrud(_db).GetAllSportTypeAlbums(sportType, amount: Constants.DefaulListAlbumsAmount).ToList();
+				showAlbumsVM.Selections.SportTypeSL.First(i => i.Text == ((SportType)sportType).ToString()).Selected = true;
+			}
+			else
+			{
+                albumsDAL = new AlbumsCrud(_db).GetAll(amount: Constants.DefaulListAlbumsAmount).ToList();
+            }
+
+			showAlbumsVM.Albums = new AlbumToView().ConvertAll(albumsDAL);
+
+
+			return View(showAlbumsVM);
+
+        }
         #endregion
 
 

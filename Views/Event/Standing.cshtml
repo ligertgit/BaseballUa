@@ -1,17 +1,34 @@
 ﻿@using BaseballUa.ViewModels;
-@model List<BaseballUa.ViewModels.Custom.EventItemStandingVM>
+@using BaseballUa.ViewModels.Custom;
+@model BaseballUa.ViewModels.Custom.EventStandingFull
 
 @{
     ViewData["Title"] = "Standing";
 }
 
 
+@*@{
+    var a = (List<EventSchemaItemViewModel>)ViewBag.Eventt.SchemaItems;
+}*@
+@*<div class="row">
+    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event,
+    Albums = a?.SelectMany(s => s.Groups)?.SelectMany(g => g.Games)?.SelectMany(g => g.Albums)?.ToList(),
+    Videos = a?.SelectMany(s => s.Groups)?.SelectMany(g => g.Games)?.SelectMany(g => g.Videos)?.ToList(),
+    News = ViewBag.Eventt.News
+    }
+    )
+</div>*@
 <div class="row">
-    @await Html.PartialAsync("_EventDetails", (EventViewModel)ViewBag.Eventt)
+    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event,
+                                                                        Albums = Model.Albums,
+                                                                        Videos = Model.Videos,
+                                                                        News = Model.News
+                                                                        }
+    )
 </div>
 
 <div class="row">
-    @await Html.PartialAsync("_EventMenu", (int)ViewBag.Eventt.EventViewModelId)
+    @await Html.PartialAsync("_EventMenu", Model.Event.EventViewModelId)
 </div>
 
 
@@ -19,7 +36,7 @@
 <div class="row mt-3">
 
     @{
-        foreach (var schemaItem in Model)
+        foreach (var schemaItem in Model.EventItemsStanding)
         {
             <div class="row mb-3">
                 <h4>Блок турніру: @schemaItem.EventItem.Order Назва блоку: @schemaItem.EventItem.SchemaItem</h4>

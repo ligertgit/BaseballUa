@@ -20,9 +20,9 @@ namespace BaseballUa.Models
 
         
         public Country Country { get; set; } = null!;
-        [NotMapped]
+        //[NotMapped]
         public IEnumerable<Team>? Teams { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Staff> Staffs { get; set; }
     }
 }

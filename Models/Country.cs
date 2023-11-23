@@ -15,7 +15,7 @@ namespace BaseballUa.Models
         [StringLength(50)]
         public string FnameFlagBig { get; set; }
 
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Club>? Clubs { get; set; }
     }
 }

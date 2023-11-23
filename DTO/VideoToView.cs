@@ -45,7 +45,7 @@ namespace BaseballUa.DTO
 			return videoVL;
 		}
 
-		public List<VideoVM> ConvertAll(List<Video> videosDAL, bool doSubConvert = true)
+		public List<VideoVM> ConvertAll(List<Video>? videosDAL, bool doSubConvert = true)
 		{
 			var videosVL = new List<VideoVM>();
 			foreach (var videoDAL in videosDAL)

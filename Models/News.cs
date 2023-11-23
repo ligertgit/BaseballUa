@@ -21,10 +21,10 @@ namespace BaseballUa.Models
         public int? TeamId { get; set; }
         public Team Team { get; set; } = null!;
 
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Album>? Albums { get; set; }
         public ICollection<NewsTitlePhoto>? NewsTitlePhotos { get; set; }
-        [NotMapped]
+        //[NotMapped]
         public ICollection<Video>? Videos { get; set; }
 
 

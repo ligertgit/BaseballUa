@@ -559,7 +559,7 @@ namespace BaseballUa.Controllers
                                         int? amount = null
                                         )
         {
-            var albumsDAL = new AlbumsCrud(_db).GetAll(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount).ToList();
+            var albumsDAL = new AlbumsCrud(_db).GetAllHard(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount).ToList();
             var albumsVL = new AlbumToView().ConvertAll(albumsDAL, false);
 
 

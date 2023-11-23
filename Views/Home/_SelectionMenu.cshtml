@@ -1,0 +1,66 @@
+﻿@model BaseballUa.ViewModels.Custom.ShowAlbumsSelections
+
+<div class="row">
+    <div class="col-3">
+        <form asp-action="ShowAlbums">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <label asp-for="EventId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.EventId, Model.EvenSL, optionLabel: "--- оберіть ---" )
+                <span asp-validation-for="EventId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Показати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-3">
+        <form asp-action="ShowAlbums">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <label asp-for="CategoryId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.CategoryId, Model.CategorySL, optionLabel: "--- оберіть ---" )
+                <span asp-validation-for="EventId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Показати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-3">
+        <form asp-action="ShowAlbums">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <label asp-for="TeamId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.TeamId, Model.TeamSL, optionLabel: "--- оберіть ---" )
+                <span asp-validation-for="TeamId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Показати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-3">
+        <form asp-action="ShowAlbums">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                <label asp-for="SportType" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.SportType, Model.SportTypeSL, optionLabel: "--- оберіть ---" )
+                <span asp-validation-for="SportType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Показати" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

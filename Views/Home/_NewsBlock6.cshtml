@@ -17,7 +17,7 @@
 					titlePhotoAlbum = news.Photos.First().AlbumId.ToString();
 					titlePhoto = news.Photos.First().FnameSmall.ToString();
 				}
-				<a asp-action="ShowNews" asp-route-newsId="@news.Id">
+				<a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id">
 					<img class="img-thumbnail" src="~/images/photo/small/@titlePhotoAlbum/@titlePhoto" />
 				</a>
 				
@@ -44,7 +44,7 @@
 						<small class="text-muted">@news.Event.Tournament.Name @news.Event.Year </small>
 					}
 				</div>
-				<a asp-action="ShowNews" asp-route-newsId="@news.Id" class="text-decoration-none">
+				<a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id" class="text-decoration-none">
 					<div class="row m-0 p-0">
 
 						<h5 class="m-0 p-0"><strong>@news.Title</strong></h5>

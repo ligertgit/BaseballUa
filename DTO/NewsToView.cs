@@ -20,7 +20,7 @@ namespace BaseballUa.DTO
                 newsVL.EventId = newsDAL.EventId;
                 if (newsDAL.Event != null)
                 {
-                    newsVL.Event = new EventToView().Convert(newsDAL.Event);
+                    newsVL.Event = new EventToView().Convert(newsDAL.Event, false);
                 }
                 newsVL.CategoryId = newsDAL.CategoryId;
                 if (newsDAL.Category != null)
@@ -30,7 +30,7 @@ namespace BaseballUa.DTO
                 newsVL.TeamId = newsDAL.TeamId;
                 if (newsDAL.Team != null)
                 {
-                    newsVL.Team = new TeamToView().Convert(newsDAL.Team);
+                    newsVL.Team = new TeamToView().Convert(newsDAL.Team, false);
                 }
                 if (doSubConvert && newsDAL.Albums != null)
                 {
@@ -52,7 +52,7 @@ namespace BaseballUa.DTO
 			return newsVL;
 		}
 
-		public List<NewsVM> ConvertAll(List<News> newsDAL, bool doSubConvert = true)
+		public List<NewsVM> ConvertAll(List<News>? newsDAL, bool doSubConvert = true)
 		{
 			var newsVL = new List<NewsVM>();
 			foreach (var item in newsDAL) 

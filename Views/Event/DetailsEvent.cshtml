@@ -1,4 +1,5 @@
-﻿@model BaseballUa.ViewModels.EventViewModel
+﻿@using BaseballUa.ViewModels.Custom;
+@model BaseballUa.ViewModels.Custom.EventDetailsFull
 
 @{
     ViewData["Title"] = "Detail Tournament";
@@ -12,14 +13,73 @@
                                                 }
                             );
 </div>*@
-
 <div class="row">
-    @await Html.PartialAsync("_EventMenu", Model.EventViewModelId)
+    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event,
+                                                    Albums = Model.Albums,
+                                                    Videos = Model.Videos,
+                                                    News = Model.News
+                                                }
+                            );
+</div>
+
+@if (Model.Teams != null && Model.Teams.Count() > 0)
+{
+    <div class="row">
+        <div class="col-2">
+            <strong>Фото відео команд: &gt;&gt;</strong>
+        </div>
+        <div class="col-10">
+            @foreach (var team in Model.Teams)
+            {
+                <a asp-controller="Club" asp-action="DetailsTeam" asp-route-teamId="@team.Id">
+                    <img width="40" height="30" src="~/images/team/logoSmall/@team.FnameLogoSmall" />
+                </a>
+            }
+        </div>
+    </div>
+}
+<div class="row">
+    @await Html.PartialAsync("_EventMenu", Model.Event.EventViewModelId)
 </div>
 
 
 
+<div class="row mt-2">
+    <div class="col-2">
+        <div class="row">
+            <div class="col">
+                <h5><strong>Актуальні Ігри:</strong></h5>
+                @await Html.PartialAsync("_GamesBlock2", Model.CurrentGames)
+            </div>
+        </div>
+@*        <div class="row">
+            <div class="col">
+                <h5><strong>Команди:</strong></h5>
+                @await Html.PartialAsync("_TeamsBlock2", Model.Teams)
+            </div>
+        </div>*@
+    </div>
+    <div class="col-8">
+        <h5><strong>Новини:</strong></h5>
+        @await Html.PartialAsync("../Home/_NewsBlock6", Model.News)
+    </div>
+    <div class="col-2">
+        <div class="row">
+            <div class="col">
+                <h5><strong>Останні альбоми:</strong></h5>
+                @await Html.PartialAsync("../Home/_AlbumsBlock2", Model.Albums)
+            </div>
+        </div>
+@*        <div class="row">
+            <div class="col">
+                <h5><strong>Останні відео:</strong></h5>
+                @await Html.PartialAsync("../Home/_VideoBlock2", Model.Albums)
+            </div>
+        </div>*@
+    </div>
+</div>
 
-<div>
+
+@*<div>
     <a asp-action="Index" asp-route-monthShift="@ViewBag.monthShift">Повернутися до списку</a>
-</div>
+</div>*@

@@ -52,7 +52,7 @@ namespace BaseballUa.DTO
 			
 		}
 
-		public List<AlbumVM> ConvertAll(List<Album> albumsDAL, bool doSubConvert = true)
+		public List<AlbumVM> ConvertAll(List<Album>? albumsDAL, bool doSubConvert = true)
 		{
 			var albumsVL = new List<AlbumVM>();
 			foreach (var albumDAL in albumsDAL)

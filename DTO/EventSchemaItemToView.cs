@@ -91,38 +91,6 @@ namespace BaseballUa.DTO
 
         public List<EventItemStandingVM> ConvertAllToStanding(List<EventSchemaItem> schemaItemsFullDAL)
         {
-            //var ttt = schemaItemsFullDAL.Select(li => new EventItemStandingVM
-            //{
-            //    EventItem = new EventSchemaItemToView().Convert(li),
-            //    GroupStandings = li.SchemaGroups.Select(sg => new GroupStandingVM
-            //    {
-            //        SchemaGroup = new SchemaGroupToView().Convert(sg),
-            //        TeamStandings = sg.Games.SelectMany(g => new[]
-            //                                            {
-            //                                                new {
-            //                                                        Team = new TeamToView().Convert(g.HomeTeam),
-            //                                                        RunsHome = g.RunsHome,
-            //                                                        RunsVisitor = g.RunsVisitor
-            //                                                    },
-            //                                                new {
-            //                                                        Team = new TeamToView().Convert(g.VisitorTeam),
-            //                                                        RunsHome = g.RunsVisitor,
-            //                                                        RunsVisitor = g.RunsHome
-            //                                                    }
-            //                                            }).GroupBy(hg => hg.Team,
-            //                                            hg => hg,
-            //                                            (gTeam, groupedGames) => new TeamStandingVM
-            //                                            {
-            //                                                Team = gTeam,
-            //                                                TotalGames = groupedGames.Count(),
-            //                                                WinGames = groupedGames.Select(gg => gg.RunsHome > gg.RunsVisitor).Count(),
-            //                                                LooseGames = groupedGames.Select(gg => gg.RunsVisitor > gg.RunsHome).Count(),
-            //                                                PCT = groupedGames.Any() ? groupedGames.Select(gg => gg.RunsHome > gg.RunsVisitor).Count() / groupedGames.Count() : 0
-            //                                            }
-            //                                           ).ToList()
-            //    }).ToList()
-            //});
-
             var eventItemsStandinfVM = schemaItemsFullDAL.Select(li => new EventItemStandingVM
             {
                 EventItem = new EventSchemaItemToView().Convert(li),
