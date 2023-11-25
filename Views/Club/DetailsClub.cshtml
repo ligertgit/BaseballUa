@@ -1,13 +1,34 @@
-﻿@model BaseballUa.ViewModels.Custom.ClubFullDetailVM
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.Custom.ClubFullDetailVM
 
 <div class="row m-1">
 	<div class="col-1">
 		<img src="~/images/club/logoBig/@Model.Club.FnameLogoBig" />
 	</div>
-	<div class="col-11">
-		<h4>
+	<div class="col">
+		<h3>
 			@Model.Club.Name
-		</h4>
+		</h3>
+	</div>
+	<div class="col">
+		<div class="row">
+			<div class="col">
+				<h6>Більше фото, відео, новин та інформації на сторінці команди:</h6>
+			</div>
+		</div>
+		<div class="row">
+			@if (Model.Club.Teams != null && Model.Club.Teams.Count > 0)
+			{
+				foreach (var team in Model.Club.Teams)
+				{
+					<div class="col">
+						<a asp-controller="Club" asp-action="DetailsTeam" asp-route-teamId="@team.Id">
+							<img src="~/images/team/logoSmall/@team.FnameLogoSmall" />
+						</a>
+					</div>
+				}
+			}
+		</div>
 	</div>
 </div>
 <div class="row m-1">
@@ -20,76 +41,156 @@
 	<hr/>
 	@Model.Club.Invitation
 </div>
-<div class="row m-1">
-	<h4>
-		Актуальні Турніри:
-	</h4>
-	<hr />
-	@foreach (var eventt in Model.Events)
-	{
-		<div class="row m-1">
-			<div class="col-2">
-				<a asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@eventt.EventViewModelId">
-					@eventt.Tournament.Name
+
+@if (Model.Events != null && Model.Events.Count > 0)
+{
+	<div class="row m-1">
+		<h4>
+			Актуальні Турніри:
+		</h4>
+		<hr />
+		@foreach (var eventt in Model.Events)
+		{
+			<div class="row m-1">
+				<div class="col-2">
+					<a asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@eventt.EventViewModelId">
+						@eventt.Tournament.Name
+					</a>
+				</div>
+				<div class="col-2">
+					@eventt.StartDate
+				</div>
+				<div class="col-2">
+					@eventt.Tournament.Category.Name
+				</div>
+				<div class="col-2">
+					@eventt.Tournament.Sport
+				</div>
+			</div>
+		}
+	</div>
+}
+
+
+@if (Model.News != null && Model.News.Count > 0)
+{
+	<div class="row m-1">
+		<h4>
+			Новини:
+		</h4>
+		<hr />
+		@foreach (var news in Model.News)
+		{
+			<div class="row">
+				<a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id">
+					<h4>@news.Title @news.PublishDate.ToString("yyyy-MM-dd")</h4>
 				</a>
 			</div>
-			<div class="col-2">
-				@eventt.StartDate
+			<div class="row">
+				<div class="col-9">
+					<h6>@news.Description</h6>
+				</div>
+				<div class="col-3">
+					@if (news.Photos != null && news.Photos.Count > 0)
+					{
+						<img src="~/images/photo/small/@news.Photos.First().AlbumId/@news.Photos.First().FnameSmall" />
+					}
+					else
+					{
+						<img src="~/images/photo/small/@Constants.DefaultAlbum/@Constants.DefaultAlbumSmallImage" />
+					}
+				</div>
 			</div>
-			<div class="col-2">
-				@eventt.Tournament.Category.Name
-			</div>
-			<div class="col-2">
-				@eventt.Tournament.Sport
-			</div>
+		}
+	</div>
+}
+
+
+@if (Model.Albums != null && Model.Albums.Count > 0)
+{
+	<div class="row m-1">
+		<h4>
+			Найсвіжіші альбоми:
+		</h4>
+		<hr />
+		<div class="row">
+			@foreach (var album in Model.Albums)
+			{
+				if (album.Photos != null && album.Photos.Count > 0)
+				{
+					<div class="col">
+						<div class="row">
+							<div class="col">
+								<a asp-controller="Home" asp-action="ShowAlbum" asp-route-Id="@album.Id">
+									<img src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />
+								</a>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<h6>@album.Name</h6>
+							</div>
+						</div>
+					</div>
+				}
+			}
 		</div>
-	}
-</div>
-<div class="row m-1">
-	<h4>
-		Керівний склад:
-	</h4>
-	<hr />
-	@foreach (var staff in Model.Club.Staffs)
-	{
-		<div class="row m-1">
-			<div class="col-2">
-				<img src="~/images/staff/avatarBig/@staff.AvatarLarge" />
-			</div>
-			<div class="col-2">
-				@staff.FirsName
-			</div>
-			<div class="col-2">
-				@staff.SecondName
-			</div>
-			<div class="col-2">
-				@staff.Role
-			</div>
-			<div class="col-4">
-				@staff.RoleDescription
-			</div>
+	</div>
+}
+
+@if (Model.Videos != null && Model.Videos.Count > 0)
+{
+	<div class="row m-1">
+		<h4>
+			Найсвіжіші відео:
+		</h4>
+		<hr />
+		<div class="col">
+			@foreach (var video in Model.Videos)
+			{
+				<div class="row embed-responsive">
+					<div class="embed-responsive embed-responsive-16by9">
+						<iframe width='480' height='390' class="embed-responsive-item" src="@video.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
+					</div>
+				</div>
+				<div class="row pb-5">
+					<div class="col">
+						<a class="btn btn-danger">Дивитись @video.Name на YouTube</a>
+					</div>
+				</div>
+			}
 		</div>
-	}
-</div>
-<div class="row m-1">
-	<h4>
-		Команди:
-	</h4>
-	<hr />
-	@foreach (var team in Model.Club.Teams)
-	{
-		<div class="row m-1">
-			<div class="col-2">
-				<a asp-action="DetailsTeam" asp-route-teamId="@team.Id">
-					<img src="~/images/team/logoSmall/@team.FnameLogoSmall" />
-				</a>
+		}
+	</div>
+}
+
+
+@if (Model.Club.Staffs != null && Model.Club.Staffs.Count > 0)
+{
+	<div class="row m-1">
+		<h4>
+			Керівний склад:
+		</h4>
+		<hr />
+		@foreach (var staff in Model.Club.Staffs)
+		{
+			<div class="row m-1">
+				<div class="col-2">
+					<img src="~/images/staff/avatarBig/@staff.AvatarLarge" />
+				</div>
+				<div class="col-2">
+					@staff.FirsName
+				</div>
+				<div class="col-2">
+					@staff.SecondName
+				</div>
+				<div class="col-2">
+					@staff.Role
+				</div>
+				<div class="col-4">
+					@staff.RoleDescription
+				</div>
 			</div>
-			<div class="col-2">
-				@team.Name
-			</div>
-			<div class="col-2">
-				@team.SportType
-			</div>
-		</div>
-	}
-</div>
+		}
+	</div>
+}

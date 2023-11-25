@@ -39,60 +39,71 @@ namespace BaseballUa.BlData
 					.FirstOrDefault();
 		}
 
-		public IEnumerable<Video> GetAll(SportType? sportType,
-                                        bool? isGeneral,
-                                        int? newsId,
-                                        int? categoryId,
-                                        int? teamId,
-                                        int? gameId,
+		public IEnumerable<Video> GetAll(SportType? sportType = null,
+                                        bool? isGeneral = null,
+                                        int? newsId = null,
+                                        int? categoryId = null,
+                                        int? teamId	= null,
+                                        int? gameId = null,
                                         DateTime? lastDate = null,
                                         int? lastId = null,
                                         int? amount = null)
 		{
 
-            return _dbContext.Videos.Where(a => (sportType == null || a.SportType == sportType)
-                                            && (isGeneral == null || a.IsGeneral == isGeneral)
-                                            && (newsId == null || a.NewsId == newsId)
-                                            && (categoryId == null || a.CategoryId == categoryId)
-                                            && (teamId == null || a.TeamId == teamId)
-                                            && (gameId == null || a.GameId == gameId)
-                                            && (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
-                                            )
-                                            .OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
-                                            .Take(amount == null ? Constants.DefaulVideosAmount : (int)amount)
-                                            .Include(a => a.News)
-                                            .Include(a => a.Category)
-                                            .Include(a => a.Team)
-                                            .Include(v => v.Game)
-                                                .ThenInclude(g => g.HomeTeam)
-                                            .Include(v => v.Game)
-                                                .ThenInclude(g => g.VisitorTeam)
-                                            .Include(a => a.Game)
-                                                .ThenInclude(g => g.SchemaGroup)
-                                                    .ThenInclude(g => g.EventSchemaItem)
-                                                        .ThenInclude(i => i.Event)
-                                                            .ThenInclude(e => e.Tournament)
-                                                                .ThenInclude(t => t.Category);
-      //      return _dbContext.Videos
-						//.Include(v => v.News)
-						//.Include(v => v.Category)
-						//.Include(v => v.Game)
-						//	.ThenInclude(g => g.HomeTeam)
-						//.Include(v => v.Game)
-						//	.ThenInclude(g => g.VisitorTeam)
-						//.Include(v => v.Game)
-						//	.ThenInclude(g => g.SchemaGroup)
-						//	.ThenInclude(g => g.EventSchemaItem)
-						//	.ThenInclude(i => i.Event)
-						//	.ThenInclude(equals => equals.Tournament);
+			return _dbContext.Videos.Where(a => (sportType == null || a.SportType == sportType)
+											&& (isGeneral == null || a.IsGeneral == isGeneral)
+											&& (newsId == null || a.NewsId == newsId)
+											&& (categoryId == null || a.CategoryId == categoryId)
+											&& (teamId == null || a.TeamId == teamId)
+											&& (gameId == null || a.GameId == gameId)
+											&& (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
+											)
+											.OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
+											.Take(amount == null ? Constants.DefaulVideosAmount : (int)amount);
 		}
 
-        public IEnumerable<Video> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+		public IEnumerable<Video> GetAllHard(SportType? sportType = null,
+										bool? isGeneral = null,
+										int? newsId = null,
+										int? categoryId = null,
+										int? teamId = null,
+										int? gameId = null,
+										DateTime? lastDate = null,
+										int? lastId = null,
+										int? amount = null)
+		{
 
-        public IEnumerable<Video> GetAllEventVideos(int? eventId,int amount = Constants.DefaulVideosAmount)
+			return _dbContext.Videos.Where(a => (sportType == null || a.SportType == sportType)
+											&& (isGeneral == null || a.IsGeneral == isGeneral)
+											&& (newsId == null || a.NewsId == newsId)
+											&& (categoryId == null || a.CategoryId == categoryId)
+											&& (teamId == null || a.TeamId == teamId)
+											&& (gameId == null || a.GameId == gameId)
+											&& (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
+											)
+											.OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
+											.Take(amount == null ? Constants.DefaulVideosAmount : (int)amount)
+											.Include(a => a.News)
+											.Include(a => a.Category)
+											.Include(a => a.Team)
+											.Include(v => v.Game)
+												.ThenInclude(g => g.HomeTeam)
+											.Include(v => v.Game)
+												.ThenInclude(g => g.VisitorTeam)
+											.Include(a => a.Game)
+												.ThenInclude(g => g.SchemaGroup)
+													.ThenInclude(g => g.EventSchemaItem)
+														.ThenInclude(i => i.Event)
+															.ThenInclude(e => e.Tournament)
+																.ThenInclude(t => t.Category);
+		}
+
+		public IEnumerable<Video> GetAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<Video> GetAllEventVideos(int? eventId,int amount = Constants.DefaulVideosAmount)
         {
             var eventVideos = new List<Video>();
             if (eventId != null && amount >0)
@@ -102,22 +113,148 @@ namespace BaseballUa.BlData
                                join eventGroups in _dbContext.SchemaGroups on games.SchemaGroupId equals eventGroups.Id
                                join eventSchemas in _dbContext.EventSchemaItems on eventGroups.EventSchemaItemId equals eventSchemas.Id
                                where eventSchemas.EventId == eventId
-                               select videos)
-                                .Union(
+                               select videos).Take(amount)
+								.Union(
                                 from videos in _dbContext.Videos
                                 join news in _dbContext.News on videos.NewsId equals news.Id
                                 where news.EventId == eventId
-                                select videos)
-                                .Take(amount)
+                                select videos).Take(amount)
+								.Take(amount)
                                 .ToList();
 
             }
-
-            return eventVideos;
+			return eventVideos;
         }
 
+		public IEnumerable<Video> GetAllCategoryVideos(int? categoryId, int amount = Constants.DefaulVideosAmount)
+		{
+			var categoryVideos = new List<Video>();
+			if (categoryId != null && amount > 0)
+			{
+                categoryVideos = (from videos in _dbContext.Videos
+							   join games in _dbContext.Games on videos.GameId equals games.Id
+							   join eventGroups in _dbContext.SchemaGroups on games.SchemaGroupId equals eventGroups.Id
+							   join eventSchemas in _dbContext.EventSchemaItems on eventGroups.EventSchemaItemId equals eventSchemas.Id
+                               join events in _dbContext.Events on eventSchemas.EventId equals events.Id
+                               join tournament in _dbContext.Tournaments on events.TournamentId equals tournament.Id
+							   where tournament.CategoryId == categoryId
+							   select videos).Take(amount)
+								.Union(
+								from videos in _dbContext.Videos
+								join news in _dbContext.News on videos.NewsId equals news.Id
+								where news.CategoryId == categoryId
+								select videos).Take(amount)
+								.Union(
+                                from videos in _dbContext.Videos
+                                join news in _dbContext.News on videos.NewsId equals news.Id
+                                join events in _dbContext.Events on news.EventId equals events.Id
+                                join tournaments in _dbContext.Tournaments on events.TournamentId equals tournaments.Id
+                                where tournaments.CategoryId == categoryId
+                                select videos).Take(amount)
+								.Union(
+								from videos in _dbContext.Videos
+								where videos.CategoryId == categoryId
+								select videos).Take(amount)
+								.Distinct()
+                                .OrderByDescending(v => v.PublishDate)
+								.Take(amount)
+								.ToList();
+			}
+			return categoryVideos;
+		}
 
-        public void Update(Video item)
+		public IEnumerable<Video> GetAllTeamVideos(int? teamId, int amount = Constants.DefaulVideosAmount)
+		{
+			var teamVideos = new List<Video>();
+			if (teamId != null && amount > 0)
+			{
+                teamVideos = (from videos in _dbContext.Videos
+							   join games in _dbContext.Games on videos.GameId equals games.Id
+							   where games.HomeTeamId == teamId || games.VisitorTeamId == teamId
+							   select videos).Take(amount)
+								.Union(
+								from videos in _dbContext.Videos
+								where videos.TeamId == teamId
+								select videos).Take(amount)
+								.Distinct()
+								.OrderByDescending(v => v.PublishDate)
+								.Take(amount)
+								.ToList();
+			}
+			return teamVideos;
+		}
+
+        public IEnumerable<Video> GetAllClubVideos(int? clubId, int amount = Constants.DefaulVideosAmount)
+        {
+            var clubVideos = new List<Video>();
+			
+            if (clubId != null && amount > 0)
+            {
+                var teamIds = new TeamCrud(_dbContext).GetAll((int)clubId).Select(t => t.Id).DefaultIfEmpty().ToList();
+                clubVideos = (from videos in _dbContext.Videos
+                              join games in _dbContext.Games on videos.GameId equals games.Id
+                              where teamIds.Contains(games.HomeTeamId ?? 0) 
+									|| teamIds.Contains(games.VisitorTeamId ?? 0)
+									|| teamIds.Contains(videos.TeamId ?? 0)
+							  select videos).DefaultIfEmpty()
+                                .Distinct()
+                                .OrderByDescending(v => v.PublishDate)
+                                .Take(amount)
+                                .ToList();
+				//clubVideos = (from videos in _dbContext.Videos
+				//			  join games in _dbContext.Games on videos.GameId equals games.Id
+				//			  where teamIds.Any(t => t == games.HomeTeamId)
+				//					|| teamIds.Any(t => t == games.VisitorTeamId)
+				//					|| teamIds.Any(t => t == videos.TeamId)
+				//			  select videos).DefaultIfEmpty()
+				//.Distinct()
+				//.OrderByDescending(v => v.PublishDate)
+				//.Take(amount)
+				//.ToList();
+			}
+            return clubVideos;
+        }
+
+        public IEnumerable<Video> GetAllSportTypeVideos(SportType? sportType, int amount = Constants.DefaulVideosAmount)
+		{
+			var sportTypeVideos = new List<Video>();
+			if (sportType != null && amount > 0)
+			{
+                sportTypeVideos = (from videos in _dbContext.Videos
+							   join games in _dbContext.Games on videos.GameId equals games.Id
+							   join eventGroups in _dbContext.SchemaGroups on games.SchemaGroupId equals eventGroups.Id
+							   join eventSchemas in _dbContext.EventSchemaItems on eventGroups.EventSchemaItemId equals eventSchemas.Id
+							   join events in _dbContext.Events on eventSchemas.EventId equals events.Id
+							   join tournaments in _dbContext.Tournaments on events.TournamentId equals tournaments.Id
+							   where tournaments.Sport == sportType
+							   select videos).Take(amount)
+								.Union(
+								from videos in _dbContext.Videos
+								where videos.SportType == sportType
+								select videos).Take(amount)
+								.Union(
+								from videos in _dbContext.Videos
+								join teams in _dbContext.Teams on videos.TeamId equals teams.Id
+								where teams.SportType == sportType
+								select videos).Take(amount)
+								.Union(
+								from videos in _dbContext.Videos
+								join news in _dbContext.News on videos.NewsId equals news.Id
+								join events in _dbContext.Events on news.EventId equals events.Id
+								join tournaments in _dbContext.Tournaments on events.TournamentId equals tournaments.Id
+								where tournaments.Sport == sportType
+								select videos).Take(amount)
+
+								.Distinct()
+								.OrderByDescending(v => v.PublishDate)
+								.Take(amount)
+								.ToList();
+			}
+			return sportTypeVideos;
+		}
+
+
+		public void Update(Video item)
 		{
 			throw new NotImplementedException();
 		}

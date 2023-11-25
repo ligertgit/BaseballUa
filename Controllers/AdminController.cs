@@ -516,7 +516,7 @@ namespace BaseballUa.Controllers
                                         int? amount = null
                                         )
         {
-            var videosDAL = new VideosCrud(_db).GetAll(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount);
+            var videosDAL = new VideosCrud(_db).GetAllHard(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount);
             var videosVL = new VideoToView().ConvertAll(videosDAL.ToList());
 
             return View(videosVL);

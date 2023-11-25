@@ -1,0 +1,38 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.Custom.ShowVideos
+
+<label>форма для виборки</label>
+<div class="row">
+	<div class="col">
+		@await Html.PartialAsync("_VideoSelectionMenu", Model.Selections )
+	</div>
+</div>
+
+@if (Model != null && Model.Videos != null && Model.Videos.Count > 0)
+{
+	<div class="row">
+		@foreach (var video in Model.Videos)
+		{
+			<div class="col-2">
+				<div class="row">
+					<div class="col">
+						<a href="@video.Fname">
+							<img width="120" height="90" class="img-thumbnail" src="~/images/assets/@Constants.DefaultVideoBigImage" />
+						</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<h6>@if (video.Name != null) @video.Name else @Constants.DefaultVideoName</h6>
+						<h6>@if (video.PublishDate > DateTime.MinValue) @video.PublishDate.ToString("yyyy-MM-dd")</h6>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+}
+else
+{
+	<label>За вашим запитом жодного відео не знайдено</label>
+}
+

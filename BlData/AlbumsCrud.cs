@@ -2,6 +2,7 @@
 using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.BlData
@@ -38,12 +39,12 @@ namespace BaseballUa.BlData
 													.ThenInclude(i => i.Event)
 														.ThenInclude(e => e.Tournament)
 															.ThenInclude(t => t.Category)
-										.Include(a => a.Photos)
+										.Include(a => a.Photos)?
 									.FirstOrDefault();
 		}
 
         public IEnumerable<Album> GetAll()
-		{
+        {
             throw new NotImplementedException();
         }
 
@@ -158,6 +159,38 @@ namespace BaseballUa.BlData
             }
 
             return resultAlbums;
+        }
+
+        public IEnumerable<Album> GetAllClubAlbums(int? clubId, int amount = Constants.DefaulAlbumsAmount)
+        {
+            var albumsForClub = new List<Album>();
+            if (clubId != null && amount > 0)
+            {
+                var teamIds = _dbContext.Teams.Where(t => t.ClubId == clubId).Select(t => t.Id);
+                //var teamIds = new List<int>();
+                //teamIds.Add(1);
+                //teamIds.Add(2);
+                if (teamIds != null && teamIds.Count() > 0)
+                {
+                    albumsForClub = (from albums in _dbContext.Albums
+                                     join games in _dbContext.Games on albums.GameId equals games.Id into gj
+                                     from subGames in gj.DefaultIfEmpty()
+                                     join news in _dbContext.News on albums.NewsId equals news.Id into ggj
+                                     from subNews in ggj.DefaultIfEmpty()
+                                     where teamIds.Contains(subGames.HomeTeamId ?? 0)
+                                           || teamIds.Contains(subGames.VisitorTeamId ?? 0)
+                                           || teamIds.Contains(subNews.TeamId ?? 0)
+                                           || teamIds.Contains(albums.TeamId ?? 0)
+                                     //where subGames.HomeTeamId == 1 || subGames.VisitorTeamId == 1 || subNews.TeamId == 1 || albums.TeamId == 1
+                                     select albums)
+                                       .Distinct()
+                                       .Take(amount)
+                                       .Include(a => a.Photos)
+                                       .ToList();
+                }
+            }
+
+            return albumsForClub;
         }
 
         public IEnumerable<Album> GetAllSportTypeAlbums(SportType? sportType, int amount = Constants.DefaulAlbumsAmount)

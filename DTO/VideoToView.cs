@@ -11,36 +11,40 @@ namespace BaseballUa.DTO
 		public VideoVM Convert(Video videoDAL, bool doSubConvert = true)
 		{
 			var videoVL = new VideoVM();
-			videoVL.Id = videoDAL.Id;
-			videoVL.SportType = videoDAL.SportType;
-			videoVL.IsGeneral = videoDAL.IsGeneral;
-			videoVL.Name = videoDAL.Name;
-			videoVL.Description = videoDAL.Description;
-			videoVL.Fname = videoDAL.Fname;
-			videoVL.NewsId = videoDAL.NewsId;
-			if (videoDAL.News != null) 
-			{ 
-				videoVL.News = new NewsToView().Convert(videoDAL.News, false);
-			}
-			videoVL.CategoryId = videoDAL.CategoryId;
-			if (videoDAL.Category != null)
+			if (videoDAL != null) 
 			{
-				videoVL.Category = new CategoryToView().Convert(videoDAL.Category, false);
+				videoVL.Id = videoDAL.Id;
+				videoVL.SportType = videoDAL.SportType;
+				videoVL.IsGeneral = videoDAL.IsGeneral;
+				videoVL.Name = videoDAL.Name;
+				videoVL.Description = videoDAL.Description;
+				videoVL.Fname = videoDAL.Fname;
+				videoVL.NewsId = videoDAL.NewsId;
+				if (videoDAL.News != null)
+				{
+					videoVL.News = new NewsToView().Convert(videoDAL.News, false);
+				}
+				videoVL.CategoryId = videoDAL.CategoryId;
+				if (videoDAL.Category != null)
+				{
+					videoVL.Category = new CategoryToView().Convert(videoDAL.Category, false);
+				}
+				videoVL.TeamId = videoDAL.TeamId;
+				if (videoDAL.Team != null)
+				{
+					videoVL.Team = new TeamToView().Convert(videoDAL.Team, false);
+				}
+				videoVL.GameId = videoDAL.GameId;
+				if (videoDAL.Game != null)
+				{
+					videoVL.Game = new GameToView().Convert(videoDAL.Game, false);
+					//if (videoDAL.Game?.SchemaGroup?.EventSchemaItem?.Event != null) 
+					//{
+					//	videoVL.GameEvent = new EventToView().Convert(videoDAL.Game.SchemaGroup.EventSchemaItem.Event, false);
+					//}
+				}
 			}
-			videoVL.TeamId = videoDAL.TeamId;
-			if (videoDAL.Team != null)
-			{
-				videoVL.Team = new TeamToView().Convert(videoDAL.Team, false);
-			}
-			videoVL.GameId = videoDAL.GameId;
-			if (videoDAL.Game != null)
-			{
-				videoVL.Game = new GameToView().Convert(videoDAL.Game, false);
-				//if (videoDAL.Game?.SchemaGroup?.EventSchemaItem?.Event != null) 
-				//{
-				//	videoVL.GameEvent = new EventToView().Convert(videoDAL.Game.SchemaGroup.EventSchemaItem.Event, false);
-				//}
-			}
+			
 
 			return videoVL;
 		}
@@ -48,9 +52,16 @@ namespace BaseballUa.DTO
 		public List<VideoVM> ConvertAll(List<Video>? videosDAL, bool doSubConvert = true)
 		{
 			var videosVL = new List<VideoVM>();
-			foreach (var videoDAL in videosDAL)
+			if (videosDAL != null) 
 			{
-				videosVL.Add(Convert(videoDAL, doSubConvert));
+				foreach (var videoDAL in videosDAL)
+				{
+					if (videoDAL != null) 
+					{
+						videosVL.Add(Convert(videoDAL, doSubConvert));
+					}
+					
+				}
 			}
 
 			return videosVL;

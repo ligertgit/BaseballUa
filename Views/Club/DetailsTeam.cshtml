@@ -1,118 +1,262 @@
-﻿@model BaseballUa.ViewModels.TeamViewModel
+﻿@using BaseballUa.Data;
+@using static BaseballUa.Data.Enums;
+@model BaseballUa.ViewModels.Custom.TeamFullDetailVM
 
 @{
     ViewData["Title"] = "DetailsTeam";
 }
-
-<h4>
+@if (Model != null && Model.Team != null)
+{
     <div class="row">
-            <div class="col">
-                <img src="~/images/team/logoBig/@Model.FnameLogoBig" />
+        <div class="col-1 me-2">
+            <img src="~/images/team/logoBig/@Model.Team.FnameLogoBig" />
+        </div>
+        <div class="col-10">
+            <div class="row">
+                <div class="col">
+                    <img src="~/images/sporttype/big/@{@Model.Team.SportType}.png" />
+                </div>
+                <div class="col">
+                    <h2>@Model.Team.Name</h2>
+                </div>
+                @if (Model.Team.Club != null)
+                {
+                    <div class="col-1">
+                        <a asp-controller="Club" asp-action="DetailsClub" asp-route-clubId="@Model.Team.Club.Id">
+                            <img src="~/images/club/logoBig/@Model.Team.Club.FnameLogoBig" />
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a asp-controller="Club" asp-action="DetailsClub" asp-route-clubId="@Model.Team.Club.Id">
+                            <h4>@Model.Team.Club.Name</h4>
+                        </a>
+                    </div>
+                }
             </div>
-            <div class="col">
-                @Model.Name
+            <div class="row">
+                <div class="col-sm-auto m-0 p-1">
+                    <a href="#news" class="badge rounded-pill bg-info">Новини</a>
+                </div>
+                <div class="col-sm-auto m-0 p-1">
+                    <a href="#albums" class="badge rounded-pill bg-info">Альбоми</a>
+                </div>
+                <div class="col-sm-auto m-0 p-1">
+                    <a href="#videos" class="badge rounded-pill bg-info">Відео</a>
+                </div>
+                <div class="col-sm-auto m-0 p-1">
+                    <a href="#players" class="badge rounded-pill bg-info">Гравці</a>
+                </div>
             </div>
-            <div class="col">
-                (@Model.SportType)
+            <div class="row">
+                @if (Model.Team.Club != null && !string.IsNullOrEmpty(Model.Team.Club.Invitation))
+                {
+                    <div class="col-lg-auto">
+                        <h6>Як записатися:</h6>
+                    </div>
+                    <div class="col">
+                        <h6>@Model.Team.Club.Invitation</h6>
+                    </div>
+                }
             </div>
-            <div class="col">
-            </div>
-            <div class="col">
-                <img src="~/images/club/logoSmall/@Model.Club.FnameLogoSmall" />
-            </div>
-            <div class="col">
-                @Model.Club.Name
-            </div>
+        </div>
     </div>
-</h4>
 
-<div class="row">
-    <dt class = "col-sm-2">
-        Додаткова інформація:
-    </dt>
-    <dd class = "col-sm-10">
-        @Html.DisplayFor(model => model.Description)
-    </dd>
-</div>
+    <div class="row mt-4">
+        <div class="col">
+            @Html.DisplayFor(model => model.Team.Description)
+        </div>
+    </div>
+    
 
-<div class="row m-1">
-    Актуальні ігри:
-    <hr />
-    @foreach(var game in Model.Games)
+    @if(Model.Events != null && Model.Events.Count > 0)
     {
-        <div class="row m-1">
-            <div class="col-1">
-                @game.Name
+        <div class="row mt-4">
+            <h4>
+                Турніри:
+            </h4>
+            <hr />
+            <div class="col">
+                @foreach (var eventt in Model.Events)
+                {
+                    <div class="row">
+                        <div class="col-4">
+                            <a asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@eventt.EventViewModelId">
+                                @eventt.Tournament.Name
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            @eventt.Year
+                        </div>
+                        <div class="col-4">
+                            @eventt.Tournament.Category.Name
+                        </div>
+                    </div>
+                }
             </div>
-            <div class="col-2">
-                @game.StartDate
-            </div>
-            <div class="col-1">
-                @game.Tour
-            </div>
-            <div class="col-1">
-                @game.GameStatus
-            </div>
-            <div class="col-7">
+        </div>
+    }
+
+    @if (Model.News != null && Model.News.Count > 0)
+    {
+        <div id="news" class="row m-1">
+            <h4>
+                Новини:
+            </h4>
+            <hr />
+            @foreach (var news in Model.News)
+            {
                 <div class="row">
-                    <div class="col">
-                        @game.HomeTeam.Name
+                    <a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id">
+                        <h4>@news.Title @news.PublishDate.ToString("yyyy-MM-dd")</h4>
+                    </a>
+                </div>
+                <div class="row">
+                    <div class="col-9">
+                        <h6>@news.Description</h6>
                     </div>
-                    <div class="col">
-                        <img src="~/images/team/logoSmall/@game.HomeTeam.FnameLogoSmall" />
-                    </div>
-                    <div class="col">
-                        <h4>@(game.RunsHome == null ? 0 : game.RunsHome) : @(game.RunsVisitor == null ? 0 : game.RunsVisitor)</h4>
-                    </div>
-                    @*<div class="col">
-                        <h4>:</h4>
-                    </div>
-                    <div class="col">
-                        <h4>@(game.RunsVisitor == null ? 0 : game.RunsVisitor)</h4>
-                    </div>*@
-                    <div class="col">
-                        <img src="~/images/team/logoSmall/@game.VisitorTeam.FnameLogoSmall" />
-                    </div>
-                    <div class="col">
-                        @game.VisitorTeam.Name
+                    <div class="col-3">
+                        @if (news.Photos != null && news.Photos.Count > 0)
+                        {
+                            <img src="~/images/photo/small/@news.Photos.First().AlbumId/@news.Photos.First().FnameSmall" />
+                        }
+                        else
+                        {
+                            <img src="~/images/photo/small/@Constants.DefaultAlbum/@Constants.DefaultAlbumSmallImage" />
+                        }
                     </div>
                 </div>
-                @*<div class="row">
-                    <div class="col">
-                        @(game.RunsHome == null ? 0 : game.RunsHome)
-                    </div>
-                    <div class="col">
-                        @(game.RunsVisitor == null ? 0 : game.RunsVisitor)
-                    </div>
-                </div>*@
-            </div>
+            }
         </div>
     }
-</div>
 
-
-<div class="row m-1">
-    Гравці:
-    <hr />
-    @foreach(var player in Model.Players)
+    @if (Model.Albums != null && Model.Albums.Count > 0)
     {
-        <div class="row m-1">
+        <div id="albums" class="row m-1">
+		    <h4>
+			    Найсвіжіші альбоми:
+		    </h4>
+		    <hr />
+		    <div class="row">
+			    @foreach (var album in Model.Albums)
+			    {
+				    if (album.Photos != null && album.Photos.Count > 0)
+				    {
+					    <div class="col">
+						    <div class="row">
+							    <div class="col">
+								    <a asp-controller="Home" asp-action="ShowAlbum" asp-route-Id="@album.Id">
+									    <img src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />
+								    </a>
+							    </div>
+						    </div>
+						    <div class="row">
+							    <div class="col">
+								    <h6>@album.Name</h6>
+							    </div>
+						    </div>
+					    </div>
+				    }
+			    }
+		    </div>
+	    </div>
+    }
+
+    @if (Model.Videos != null && Model.Videos.Count > 0)
+    {
+        <div id="videos" class="row m-1">
+            <h4>
+                Найсвіжіші відео:
+            </h4>
+            <hr />
             <div class="col">
-                <img src="~/images/player/avatarBig/@player.AvatarBig" />
+                @foreach (var video in Model.Videos)
+                {
+                    <div class="row embed-responsive">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width='480' height='390' class="embed-responsive-item" src="@video.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="row pb-5">
+                        <div class="col">
+                            <a class="btn btn-danger">Дивитись @video.Name на YouTube</a>
+                        </div>
+                    </div>
+                }
             </div>
-            <div class="col">
-                @player.FirstName
-            </div>
-            <div class="col">
-                @player.SecondName
-            </div>
-            <div class="col">
-                @player.Sex
-            </div>
-            <div class="col">
-                @player.Birthdate.ToString()
-            </div>
+            }
         </div>
     }
-</div>
+
+    @if (Model.Games != null && Model.Games.Count > 0)
+    {
+        <div id="games" class="row m-1">
+            Актуальні ігри:
+            <hr />
+            @foreach (var game in Model.Games)
+            {
+                <div class="row m-1">
+                    <div class="col-1">
+                        @game.Name
+                    </div>
+                    <div class="col-2">
+                        @game.StartDate
+                    </div>
+                    <div class="col-1">
+                        @game.Tour
+                    </div>
+                    <div class="col-1">
+                        @game.GameStatus
+                    </div>
+                    <div class="col-7">
+                        <div class="row">
+                            <div class="col">
+                                @(game.HomeTeam?.Name ?? "???")
+                            </div>
+                            <div class="col">
+                                <img src="~/images/team/logoSmall/@(game.HomeTeam?.FnameLogoSmall ?? Constants.DefaultTeamSmallImage)" />
+                            </div>
+                            <div class="col">
+                                <h4>@(game.RunsHome == null ? 0 : game.RunsHome) : @(game.RunsVisitor == null ? 0 : game.RunsVisitor)</h4>
+                            </div>
+                            <div class="col">
+                                <img src="~/images/team/logoSmall/@(game.VisitorTeam?.FnameLogoSmall ?? Constants.DefaultTeamSmallImage)" />
+                            </div>
+                            <div class="col">
+                                @(game.VisitorTeam?.Name ?? "???")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    
+
+
+    <div id="players" class="row m-1">
+        Гравці:
+        <hr />
+        @foreach (var player in Model.Players)
+        {
+            <div class="row m-1">
+                <div class="col">
+                    <img src="~/images/player/avatarBig/@player.AvatarBig" />
+                </div>
+                <div class="col">
+                    @player.FirstName
+                </div>
+                <div class="col">
+                    @player.SecondName
+                </div>
+                <div class="col">
+                    @player.Sex
+                </div>
+                <div class="col">
+                    @player.Birthdate.ToString()
+                </div>
+            </div>
+        }
+    </div>
+}
+
 

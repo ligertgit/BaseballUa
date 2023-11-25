@@ -15,7 +15,7 @@ namespace BaseballUa.DTO
         //    _dbContext = dbContext;
         //}
 
-        public TeamViewModel? Convert(Team teamDAL, bool doSubConvert = true)
+        public TeamViewModel Convert(Team teamDAL, bool doSubConvert = true)
         {
             var teamVL = new TeamViewModel();
 

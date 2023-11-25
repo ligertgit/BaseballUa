@@ -30,12 +30,15 @@ namespace BaseballUa.BlData
 
         public Team Get(int itemId)
         {
-            if (itemId == null) return null;
+            if (itemId > 0)
+            {
+                return _dbContext.Teams.Where(t => t.Id == itemId)
+                            .Include(t => t.Club)
+                                .ThenInclude(c => c.Country)
+                            .FirstOrDefault();
+            }
 
-            return _dbContext.Teams.Where(t => t.Id == itemId)
-                                        .Include(t => t.Club)
-                                            .ThenInclude(c => c.Country)
-                                        .FirstOrDefault();
+            return null;
         }
 
         public IEnumerable<Team> GetAll()
@@ -85,7 +88,7 @@ namespace BaseballUa.BlData
         public IEnumerable<Game> GetHomeGames(int teamId)
         {
             return _dbContext.Games.Where(g => g.HomeTeamId == teamId)
-                                   .Where(g => (g.StartDate > DateTime.Now.AddMonths(-1) && g.StartDate < DateTime.Now.AddMonths(1)))
+                                   .Where(g => (g.StartDate > DateTime.Now.AddMonths(-10) && g.StartDate < DateTime.Now.AddMonths(10)))
                                    .Include(g => g.HomeTeam)
                                    .Include(g => g.VisitorTeam);
         }
@@ -93,7 +96,7 @@ namespace BaseballUa.BlData
         public IEnumerable<Game> GetVisitorGames(int teamId)
         {
             return _dbContext.Games.Where(g => g.VisitorTeamId == teamId)
-                                   .Where(g => (g.StartDate > DateTime.Now.AddMonths(-1) && g.StartDate < DateTime.Now.AddMonths(1)))
+                                   .Where(g => (g.StartDate > DateTime.Now.AddMonths(-10) && g.StartDate < DateTime.Now.AddMonths(10)))
                                    .Include(g => g.HomeTeam)
                                    .Include(g => g.VisitorTeam);
         }

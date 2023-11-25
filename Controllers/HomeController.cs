@@ -82,15 +82,11 @@ namespace BaseballUa.Controllers
 		public IActionResult ShowAlbums(int? eventId = null, int? categoryId = null, int? teamId = null, SportType? sportType = null)
 		{
 			var showAlbumsVM = new ShowAlbums();
-            string yyy = sportType.HasValue ? ((SportType)sportType).ToString() : "dsf";
 
             showAlbumsVM.Selections.CategorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text");
 			showAlbumsVM.Selections.EvenSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text");
 			showAlbumsVM.Selections.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text");
 			showAlbumsVM.Selections.SportTypeSL = Enums.SportType.NotDefined.ToSelectList();
-
-            string ttt = showAlbumsVM.Selections.SportTypeSL.First().Value;
-
 
             var albumsDAL = new List<Album>();
 
@@ -125,10 +121,52 @@ namespace BaseballUa.Controllers
 			return View(showAlbumsVM);
 
         }
-        #endregion
+
+		public IActionResult ShowVideos(int? eventId = null, int? categoryId = null, int? teamId = null, SportType? sportType = null)
+		{
+			var showVideosVM = new ShowVideos();
+
+			showVideosVM.Selections.CategorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text");
+			showVideosVM.Selections.EvenSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text");
+			showVideosVM.Selections.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text");
+			showVideosVM.Selections.SportTypeSL = Enums.SportType.NotDefined.ToSelectList();
+
+			var videosDAL = new List<Video>();
+
+			if (eventId != null && eventId > 0)
+			{
+				videosDAL = new VideosCrud(_db).GetAllEventVideos(eventId, amount: Constants.DefaulListVideosAmount).ToList();
+				showVideosVM.Selections.EvenSL.First(i => i.Value == eventId.ToString()).Selected = true;
+			}
+			else if (categoryId != null && categoryId > 0)
+			{
+				videosDAL = new VideosCrud(_db).GetAllCategoryVideos(categoryId, amount: Constants.DefaulListVideosAmount).ToList();
+				showVideosVM.Selections.CategorySL.First(i => i.Value == categoryId.ToString()).Selected = true;
+			}
+			else if (teamId != null && teamId > 0)
+			{
+				videosDAL = new VideosCrud(_db).GetAllTeamVideos(teamId, amount: Constants.DefaulListVideosAmount).ToList();
+				showVideosVM.Selections.TeamSL.First(i => i.Value == teamId.ToString()).Selected = true;
+			}
+			else if (sportType.HasValue)
+			{
+				videosDAL = new VideosCrud(_db).GetAllSportTypeVideos(sportType, amount: Constants.DefaulListVideosAmount).ToList();
+				showVideosVM.Selections.SportTypeSL.First(i => i.Text == ((SportType)sportType).ToString()).Selected = true;
+			}
+			else
+			{
+				videosDAL = new VideosCrud(_db).GetAll(amount: Constants.DefaulListVideosAmount).ToList();
+			}
+
+			showVideosVM.Videos = new VideoToView().ConvertAll(videosDAL);
 
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+			return View(showVideosVM);
+		}
+		#endregion
+
+
+		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

@@ -46,7 +46,7 @@ namespace BaseballUa.BlData
 
         public IEnumerable<Event> GetAll()
         {
-            var eventItem = _dbContext.Events.Where(e => e.Id == 5000);
+            var eventItem = _dbContext.Events;
             //throw new NotImplementedException();
             //return _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category);
             return eventItem;
@@ -74,7 +74,7 @@ namespace BaseballUa.BlData
                                           .Include(e => e.News);
 		}
 
-		public IEnumerable<Event> GetForClub(int clubId)
+		public IEnumerable<Event> GetAllForClub(int clubId)
         {
             var result = (from eventt in _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category)
                          join eventItem in _dbContext.EventSchemaItems on eventt.Id equals eventItem.EventId
@@ -84,6 +84,20 @@ namespace BaseballUa.BlData
                                     (game.HomeTeam.ClubId == clubId || game.VisitorTeam.ClubId == clubId)
                                )
                          select eventt).Distinct();
+
+            return result;
+        }
+
+        public IEnumerable<Event> GetAllForTeam(int teamId)
+        {
+            var result = (from eventt in _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category)
+                          join eventItem in _dbContext.EventSchemaItems on eventt.Id equals eventItem.EventId
+                          join schemaGroup in _dbContext.SchemaGroups on eventItem.Id equals schemaGroup.EventSchemaItemId
+                          join game in _dbContext.Games on schemaGroup.Id equals game.SchemaGroupId
+                          where ((eventt.StartDate > DateTime.Now.AddMonths(-3) && eventt.StartDate < DateTime.Now.AddMonths(1)) &&
+                                     (game.HomeTeamId == teamId || game.VisitorTeamId == teamId)
+                                )
+                          select eventt).Distinct();
 
             return result;
         }

@@ -80,7 +80,47 @@ namespace BaseballUa.BlData
 
 		}
 
-		public void Update(News item)
+		public IEnumerable<News> GetAllClubNews(int? clubId, int amount = Constants.DefaulNewsAmount)
+		{
+			var newsForClub = new List<News>();
+			if (clubId != null && amount > 0)
+			{
+				var teamIds = _dbContext.Teams.Where(t => t.ClubId == clubId).Select(t => t.Id).DefaultIfEmpty();
+				newsForClub = (from news in _dbContext.News
+							   where teamIds.Any(t => t == news.TeamId)
+							   select news).DefaultIfEmpty()
+							   .Distinct()
+							   .OrderBy(n => n.PublishDate)
+							   .Take(amount)
+							   .Include(n => n.NewsTitlePhotos)
+									.ThenInclude(tp => tp.Photo)
+							   .ToList();
+			}
+
+			return newsForClub;
+		}
+
+        public IEnumerable<News> GetAllTeamNews(int? teamId, int amount = Constants.DefaulNewsAmount)
+        {
+            var newsForClub = new List<News>();
+            if (teamId != null && amount > 0)
+            {
+                //var teamIds = _dbContext.Teams.Where(t => t.ClubId == clubId).Select(t => t.Id).DefaultIfEmpty();
+                newsForClub = (from news in _dbContext.News
+                               where news.TeamId == teamId
+                               select news).DefaultIfEmpty()
+                               .Distinct()
+                               .OrderBy(n => n.PublishDate)
+                               .Take(amount)
+                               .Include(n => n.NewsTitlePhotos)
+                                    .ThenInclude(tp => tp.Photo)
+                               .ToList();
+            }
+
+            return newsForClub;
+        }
+
+        public void Update(News item)
 		{
 			throw new NotImplementedException();
 		}
