@@ -3,6 +3,9 @@ using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using NuGet.Packaging.Signing;
 using System.Drawing;
 using System.Linq;
 using static BaseballUa.Data.Enums;
@@ -74,7 +77,43 @@ namespace BaseballUa.BlData
                                           .Include(e => e.News);
 		}
 
-		public IEnumerable<Event> GetAllForClub(int clubId)
+        public IEnumerable<Event> GetAllFilteredActive(SportType sportType = SportType.NotDefined,
+                                        bool includeAllFun = false,
+                                        bool isOfficial = false,
+                                        bool isInternational = false,
+                                        bool isAnnual = false,
+                                        IEnumerable<int>? categoryIds = null,
+                                        DateTime? forDate = null,
+                                        int amount = Constants.DefaulEventAmount)
+        {
+            var fixxedForDate = forDate ?? DateTime.Now.Date;
+
+            var result = (from eventt in _dbContext.Events
+                          join tour in _dbContext.Tournaments on eventt.TournamentId equals tour.Id
+                          join cat in _dbContext.Categories on tour.CategoryId equals cat.Id
+                          where (eventt.StartDate <= fixxedForDate && eventt.EndDate >= fixxedForDate)
+                                && ((includeAllFun && tour.IsFun)
+                                    || ((sportType == SportType.NotDefined
+                                        || tour.Sport == sportType
+                                        || tour.Sport == SportType.NotDefined)
+                                       && (!isOfficial || tour.IsOfficial)
+                                       && (!isInternational || tour.IsInternational)
+                                       && (!isAnnual || tour.IsAnual)
+                                       && (categoryIds.IsNullOrEmpty() || categoryIds.Any(c => c == tour.CategoryId))
+                                       )
+                                   )
+                          select eventt)
+                         .Distinct()
+                         .OrderByDescending(n => n.StartDate)
+                         .Take(amount)
+                         .Include(n => n.Tournament)
+                            .ThenInclude(t => t.Category);
+
+            return result;
+        }
+
+
+        public IEnumerable<Event> GetAllForClub(int clubId)
         {
             var result = (from eventt in _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category)
                          join eventItem in _dbContext.EventSchemaItems on eventt.Id equals eventItem.EventId

@@ -2,6 +2,7 @@
 using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using static BaseballUa.Data.Enums;
 
@@ -79,8 +80,64 @@ namespace BaseballUa.BlData
 											.ThenInclude(ntp => ntp.Photo);
 
 		}
+        public IEnumerable<News> GetAllFiltered(SportType sportType = SportType.NotDefined,
+                                        bool includeAllGeneral = false,
+										bool includeAllFun = false,
+										bool isOfficial = false,
+										bool isInternational = false,
+										bool isAnnual = false,
+                                        int? eventId = null,
+                                        IEnumerable<int>? categoryIds = null,
+                                        int? teamId = null,
+                                        DateTime? newestDate = null,
+                                        int? lastId = null,
+                                        int amount = Constants.DefaulNewsAmount)
+		{
+            var fixxedNewestDate = newestDate ?? DateTime.Now.Date;
+            var fixxedLastId = lastId ?? int.MaxValue;
 
-		public IEnumerable<News> GetAllClubNews(int? clubId, int amount = Constants.DefaulNewsAmount)
+            var result = (from news in _dbContext.News
+						  join eventt in _dbContext.Events on news.EventId equals eventt.Id into gEventt
+						  from subEvent in gEventt.DefaultIfEmpty()
+						  join tour in _dbContext.Tournaments on subEvent.TournamentId equals tour.Id into gTour
+						  from subTour in gTour.DefaultIfEmpty()
+						  join category in _dbContext.Categories on subTour.CategoryId equals category.Id into gCategory
+						  from subCategory in gCategory.DefaultIfEmpty()
+						  where (news.PublishDate < fixxedNewestDate || (news.PublishDate == fixxedNewestDate && news.Id < fixxedLastId))
+                                 && ((includeAllGeneral && news.IsGeneral)
+									  || (includeAllFun && subTour.IsFun)
+									  || ((sportType == SportType.NotDefined
+												|| news.SportType == sportType
+												|| subTour.Sport == sportType
+												//|| (news.SportType == SportType.NotDefined
+												//	&& (news.EventId == null || subTour.Sport == SportType.NotDefined))
+													)
+											&& (!isOfficial || subTour.IsOfficial)
+											&& (!isInternational || subTour.IsInternational)
+											&& (!isAnnual || subTour.IsAnual)
+											&& (eventId == null || news.EventId == eventId)
+											&& (categoryIds.IsNullOrEmpty() || categoryIds.Any(c => c == news.CategoryId)
+																		|| categoryIds.Any(c => c == subTour.CategoryId))
+												&& (teamId == null || news.TeamId == teamId)
+										) 
+									)
+						  select news)
+						 .Distinct()
+						 .OrderByDescending(n => n.PublishDate)
+							.ThenByDescending(n => n.Id)
+						 .Take(amount)
+						 .Include(n => n.Category)
+						 .Include(n => n.Event)
+							.ThenInclude(e => e.Tournament)
+								.ThenInclude(t => t.Category)
+						.Include(n => n.NewsTitlePhotos)
+								.ThenInclude(tf => tf.Photo);	   
+						
+			return result;
+		}
+
+
+        public IEnumerable<News> GetAllClubNews(int? clubId, int amount = Constants.DefaulNewsAmount)
 		{
 			var newsForClub = new List<News>();
 			if (clubId != null && amount > 0)

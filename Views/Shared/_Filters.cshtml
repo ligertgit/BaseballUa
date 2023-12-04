@@ -1,0 +1,154 @@
+﻿@model BaseballUa.Data.ApplyFilters
+
+<form asp-controller="@Model.Controller" asp-action="ApplyFilters">
+    <div class="row mb-5">
+        <input type="hidden" name="redirectAction" value="@Model.RedirectAction" />
+
+        @foreach(var routeItem in Model.RouteItems)
+        {
+            <input type="hidden" name="@routeItem.Name" value="@routeItem.Value" />
+        }
+
+        <div class="col-2 me-0 mw-0">
+            <div class="row">
+                <div class="col-5 m-0 me-1 p-0">
+                    <input type="checkbox" name="chkBaseball" class="btn-check" id="btn-check-bb"
+                    @if (Model.Filters.Baseball)
+                    {
+                        @:checked
+                    }
+                            autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-bb">Baseball</label>
+                </div>
+                <div class="col-5 m-0 p-0">
+                    <input type="checkbox" name="chkSoftball" class="btn-check" id="btn-check-sb"
+                    @if (Model.Filters.Softball)
+                    {
+                        @:checked
+                    }
+                            autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-sb">Softball</label>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="row">
+                <div class="col mw-1 me-1 p-0">
+                    <input type="checkbox" name="chkU10" class="btn-check" id="btn-check-u10"
+                    @if (Model.Filters.U10)
+                    {
+                        @:checked
+                    }
+                            autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-u10">U10</label>
+                </div>
+                <div class="col mw-0 me-1 p-0">
+                    <input type="checkbox" name="chkU12" class="btn-check" id="btn-check-u12"
+                    @if (Model.Filters.U12)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-u12">U12</label>
+                </div>
+                <div class="col mw-0 me-1 p-0">
+                    <input type="checkbox" name="chkU15" class="btn-check" id="btn-check-u15"
+                    @if (Model.Filters.U15)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-u15">U15</label>
+                </div>
+                <div class="col mw-0 me-1 p-0">
+                    <input type="checkbox" name="chkU18" class="btn-check" id="btn-check-u18"
+                    @if (Model.Filters.U18)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-u18">U18</label>
+                </div>
+                <div class="col mw-0 me-1 p-0">
+                    <input type="checkbox" name="chkAdult" class="btn-check" id="btn-check-adult"
+                    @if (Model.Filters.Adult)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-adult">Вишка</label>
+                </div>
+                <div class="col mw-1 me-1 p-0">
+                    <input type="checkbox" name="chkVeteran" class="btn-check" id="btn-check-veteran"
+                    @if (Model.Filters.Veteran)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-veteran">Ветерани</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="row">
+                <div class="col p-0 mw-0 me-1">
+                    <input type="checkbox" name="chkAnnual" class="btn-check" id="btn-check-annual"
+                    @if (Model.Filters.Annual)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-annual">Регулярні</label>
+                </div>
+                <div class="col p-0 mw-0 me-1">
+                    <input type="checkbox" name="chkInternational" class="btn-check" id="btn-check-inational"
+                    @if (Model.Filters.International)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-inational">INational</label>
+                </div>
+                <div class="col p-0 mw-0 me-0">
+                    <input type="checkbox" name="chkOfficial" class="btn-check" id="btn-check-official"
+                    @if (Model.Filters.Official)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-official">Офіційні</label>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row">
+                <div class="col p-0 mw-0 me-1">
+                    <input type="checkbox" name="chkFun" class="btn-check" id="btn-check-fun"
+                    @if (Model.Filters.Fun)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-fun">Фанові</label>
+                </div>
+                <div class="col p-0 mw-0 me-1">
+                    <input type="checkbox" name="chkGeneral" class="btn-check" id="btn-check-general"
+                    @if (Model.Filters.General)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-general">Для всіх</label>
+                </div>
+                <div class="col p-0 mw-0 me-0">
+                    <div class="form-group">
+                        <input type="submit" value="Застосувати фільтри" class="btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+	

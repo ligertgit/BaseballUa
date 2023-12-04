@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using static BaseballUa.Data.Enums;
 
-namespace BaseballUa.ViewModels
+namespace BaseballUa.ViewModels.Custom
 {
-    public class EventIndexViewModel
+    public class EventForIndexVM
     {
         [Key]
         public int EventIndexViewModelId { get; set; }
@@ -31,7 +31,7 @@ namespace BaseballUa.ViewModels
         [Required]
         [DisplayName("Назва змагань")]
         public string Name { get; set; }
-        
+
         [Required]
         [DisplayName("Спорт")]
         public SportType Sport { get; set; }
@@ -39,19 +39,19 @@ namespace BaseballUa.ViewModels
         [StringLength(250)]
         [DisplayName("Опис")]
         public string? Description { get; set; }
-        
+
         [Required]
         [DisplayName("Регулярний")]
         public bool IsAnual { get; set; }
-        
+
         [Required]
         [DisplayName("Міжнародний")]
         public bool IsInternational { get; set; }
-        
+
         [Required]
         [DisplayName("Офіційний")]
         public bool IsOfficial { get; set; }
-        
+
         [Required]
         [DisplayName("Фановий")]
         public bool IsFun { get; set; }
@@ -59,7 +59,7 @@ namespace BaseballUa.ViewModels
         [Required]
         [DisplayName("Вікова категорія ID")]
         public int CategoryId { get; set; }
-        
+
         [DisplayName("Вікова категорія short")]
         public string? CategoryShortName { get; set; }
     }

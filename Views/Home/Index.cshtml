@@ -5,6 +5,8 @@
 
 <h1 class="display-4">Бейсбол і Софтбол в Україні</h1>
 
+@await Html.PartialAsync("_Filters", Model.ApplyFilters);
+
 <div class="row">
     <div class="col-2">
         <div class="row">

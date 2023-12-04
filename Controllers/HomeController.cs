@@ -1,4 +1,5 @@
-﻿using BaseballUa.BlData;
+﻿using Azure.Core;
+using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.DTO;
 using BaseballUa.Models;
@@ -6,6 +7,8 @@ using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -29,16 +32,65 @@ namespace BaseballUa.Controllers
 		public IActionResult Index()
 		{
             var pageDataVM = new MainIndexVM();
-			var newsDAL = new NewsCrud(_db).GetAll(notForTeamOnly: true, lastDate: DateTime.Now).ToList();
+
+            Filters filters = Request.Cookies.GetFilters();
+			pageDataVM.ApplyFilters = new ApplyFilters { Filters = filters, Controller = "Home", RedirectAction = "Index" };
+			var selectedCategories = new CategoriesCrud(_db).GetIds(filters.GetSelectedCategories());
+
+            //var newsDAL = new NewsCrud(_db).GetAll(notForTeamOnly: true, lastDate: DateTime.Now).ToList();
+            var newsDAL = new NewsCrud(_db).GetAllFiltered(sportType: filters.GetSelectedSport(),
+                                                           includeAllFun: filters.Fun,
+														   includeAllGeneral: filters.General,
+														   isOfficial: filters.Official,
+														   isInternational: filters.International,
+														   isAnnual: filters.Annual,
+                                                           categoryIds: selectedCategories, 
+														   newestDate: DateTime.Now).ToList();
 			pageDataVM.News = new NewsToView().ConvertAll(newsDAL);
-			var albumsDAL = new AlbumsCrud(_db).GetAll(notForTeamOnly: true, lastDate: DateTime.Now).ToList();
-			pageDataVM.LastAlbums = new AlbumToView().ConvertAll(albumsDAL);
-			var eventsDAL = new EventsCrud(_db).GetAll( firstDate: DateTime.Now.AddDays( Constants.DefaulActiveEventDaysShift ),
-													    lastDate: DateTime.Now.AddDays( -Constants.DefaulActiveEventDaysShift ))
-														.ToList();
+
+			var albumsDAL = new AlbumsCrud(_db).GetAllFiltered(sportType: filters.GetSelectedSport(),
+                                                           includeAllFun: filters.Fun,
+                                                           includeAllGeneral: filters.General,
+                                                           isOfficial: filters.Official,
+                                                           isInternational: filters.International,
+                                                           isAnnual: filters.Annual,
+                                                           categoryIds: selectedCategories,
+                                                           newestDate: DateTime.Now).ToList();
+            pageDataVM.LastAlbums = new AlbumToView().ConvertAll(albumsDAL);
+
+			var eventsDAL = new EventsCrud(_db).GetAllFilteredActive(sportType: filters.GetSelectedSport(),
+                                                               includeAllFun: filters.Fun,
+															   isOfficial: filters.Official,
+															   isInternational: filters.International,
+															   isAnnual: filters.Annual,
+                                                               categoryIds: selectedCategories,
+                                                               forDate: DateTime.Now.AddDays(Constants.DefaulActiveEventDaysShift)).ToList();
 			pageDataVM.ActiveEvents = new EventToView().ConvertAll(eventsDAL);
+
+			var videosDAL = new VideosCrud(_db).GetAllFiltered(sportType: filters.GetSelectedSport(),
+                                                               includeAllFun: filters.Fun,
+                                                               includeAllGeneral: filters.General,
+															   isOfficial: filters.Official,
+															   isInternational: filters.International,
+															   isAnnual: filters.Annual,
+                                                               categoryIds: selectedCategories,
+                                                               newestDate: DateTime.Now).ToList();
+			pageDataVM.LastVideos = new VideoToView().ConvertAll(videosDAL);
+
             return View(pageDataVM);
         }
+
+        [HttpPost]
+        public IActionResult ApplyFilters(IFormCollection fc)
+        {
+            var filters = fc.GetFilters();
+            CookieOptions option = new CookieOptions();
+            option.Expires = DateTime.Now.AddDays(1);
+            Response.Cookies.AppendFilters(filters, option);
+
+            return RedirectToAction(fc["redirectAction"]);
+        }
+
         public IActionResult ShowNews(int newsId)
         {
             var newsVL = new NewsVM();

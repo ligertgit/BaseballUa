@@ -2,6 +2,7 @@
 using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using static NuGet.Packaging.PackagingConstants;
 
 namespace BaseballUa.BlData
 {
@@ -54,6 +55,13 @@ namespace BaseballUa.BlData
 
             return categoriesSL;
         }
+
+		public IEnumerable<int> GetIds(List<string> shortnames)
+		{
+			//var result = _dbContext.Categories.Where(c => shortnames.Exists(s => s == c.ShortName)).Select(c => c.Id);
+			var result = _dbContext.Categories.Where(c => shortnames.Any(s => s == c.ShortName)).Select(c => c.Id);
+			return result;
+		}
 
     }
 }

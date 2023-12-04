@@ -1,4 +1,6 @@
-﻿namespace BaseballUa.ViewModels.Custom
+﻿using BaseballUa.Data;
+
+namespace BaseballUa.ViewModels.Custom
 {
     public class MainIndexVM
     {
@@ -6,5 +8,6 @@
         public List<EventViewModel> ActiveEvents { get; set; } = new List<EventViewModel>();
         public List<AlbumVM> LastAlbums { get; set; } = new List<AlbumVM>();
         public List<VideoVM> LastVideos { get; set; } = new List<VideoVM>();
+        public ApplyFilters ApplyFilters { get; set; } = new ApplyFilters();
     }
 }

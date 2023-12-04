@@ -1,7 +1,9 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Build.Evaluation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using static BaseballUa.Data.Enums;
 
@@ -262,6 +264,82 @@ namespace BaseballUa.BlData
                                             .OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
                                             .Take(amount == null ? Constants.DefaulAlbumsAmount : (int)amount)
                                             .Include(a => a.Photos);
+        }
+
+        public IEnumerable<Album> GetAllFiltered(SportType sportType = SportType.NotDefined,
+                                        bool includeAllGeneral = false,
+                                        bool includeAllFun = false,
+                                        bool isOfficial = false,
+                                        bool isInternational = false,
+                                        bool isAnnual = false,
+                                        int? eventId = null,
+                                        IEnumerable<int>? categoryIds = null,
+                                        int? teamId = null,
+                                        DateTime? newestDate = null,
+                                        int? lastId = null,
+                                        int amount = Constants.DefaulAlbumsAmount)
+        {
+
+            var fixxedNewestDate = newestDate ?? DateTime.Now.Date;
+            var fixxedLastId = lastId ?? int.MaxValue;
+
+            var result = (  from albums in _dbContext.Albums
+                            join photos in _dbContext.Photos on albums.Id equals photos.Id
+                            join jnews in _dbContext.News on albums.NewsId equals jnews.Id into subnews
+                                from news in subnews.DefaultIfEmpty()
+                                join jevent in _dbContext.Events on news.EventId equals jevent.Id into subevent
+                                    from eventt in subevent.DefaultIfEmpty()
+                                    join jtour in _dbContext.Tournaments on eventt.TournamentId equals jtour.Id into subtour
+                                        from tour in subtour.DefaultIfEmpty()
+                            join jgame in _dbContext.Games on albums.GameId equals jgame.Id into subgame
+                                from game in subgame.DefaultIfEmpty()
+                                join jeventGroup in _dbContext.SchemaGroups on game.SchemaGroupId equals jeventGroup.Id into subgroup
+                                    from eventGroup in subgroup.DefaultIfEmpty()
+                                    join jeventItem in _dbContext.EventSchemaItems on eventGroup.EventSchemaItemId equals jeventItem.Id into subeventItem
+                                        from eventItem in subeventItem.DefaultIfEmpty()
+                                        join jeventG in _dbContext.Events on eventItem.EventId equals jeventG.Id into subeventG
+                                            from eventG in subeventG.DefaultIfEmpty()
+                                            join jtourG in _dbContext.Tournaments on eventG.TournamentId equals jtourG.Id into subtourG
+                                                from tourG in subtourG.DefaultIfEmpty()
+                            where   (albums.PublishDate < fixxedNewestDate || (albums.PublishDate == fixxedNewestDate && albums.Id < fixxedLastId))
+                                    && ((includeAllGeneral && (news.IsGeneral || albums.IsGeneral))
+                                        || (includeAllFun && (tour.IsFun || tourG.IsFun))
+                                        || ((sportType == SportType.NotDefined
+                                                        || albums.SportType == sportType
+                                                        || tour.Sport == sportType
+                                                        || tourG.Sport == sportType
+                                                        || news.SportType == sportType
+                                                        //|| (albums.SportType == SportType.NotDefined
+                                                        //    && (albums.NewsId != null || albums.GameId != null)
+                                                        //    && (albums.NewsId == null
+                                                        //        || (news.SportType == SportType.NotDefined
+                                                        //            && (news.EventId == null || tour.Sport == SportType.NotDefined)))
+                                                        //    && (albums.GameId == null || tourG.Sport == SportType.NotDefined))
+                                                            )
+                                            && (!isOfficial || tour.IsOfficial || tourG.IsOfficial)
+                                            && (!isInternational || tour.IsInternational || tourG.IsInternational)
+                                            && (!isAnnual || tour.IsAnual || tourG.IsAnual)
+                                            && (eventId == null || news.EventId == eventId || eventG.Id == eventId)
+                                            && (categoryIds.IsNullOrEmpty()
+                                                || categoryIds.Any(c => c == albums.CategoryId)
+                                                || categoryIds.Any(c => c == news.CategoryId)
+                                                || categoryIds.Any(c => c == tour.CategoryId)
+                                                || categoryIds.Any(c => c == tourG.CategoryId))
+                                            && (teamId == null
+                                                || albums.TeamId == teamId
+                                                || news.TeamId == teamId
+                                                || game.HomeTeamId == teamId
+                                                || game.VisitorTeamId == teamId)
+                                           )
+                                        )
+                            select albums)
+                            .Distinct()
+                            .OrderByDescending(a => a.PublishDate)
+                                .ThenByDescending(a => a.Id)
+                            .Take(amount)
+                            .Include(a => a.Photos);
+
+            return result;
         }
 
 

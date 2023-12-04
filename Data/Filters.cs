@@ -1,6 +1,6 @@
 ﻿using static BaseballUa.Data.Enums;
 
-namespace BaseballUa.BlData
+namespace BaseballUa.Data
 {
     [Serializable]
     public class Filters
@@ -15,6 +15,10 @@ namespace BaseballUa.BlData
         public bool Adult { get; set; }
         public bool Veteran { get; set; }
         public bool Fun { get; set; }
+        public bool Annual { get; set; }
+        public bool Official { get; set; }
+        public bool International { get; set; }
+        public bool General { get; set; }
 
         public Filters()
         {
@@ -27,7 +31,11 @@ namespace BaseballUa.BlData
             U23 = false;
             Adult = false;
             Veteran = false;
-            Fun = false;
+            Fun = true;
+            General = true;
+            Annual = false;
+            Official = false;
+            International = false;
         }
 
         public Filters FixForSelect(Filters? filters)
@@ -44,6 +52,10 @@ namespace BaseballUa.BlData
                 Adult = true;
                 Veteran = true;
                 Fun = true;
+                General = true;
+                Official = false;
+                International = false;
+                Annual = false;
             }
             else
             {
@@ -57,6 +69,10 @@ namespace BaseballUa.BlData
                 Adult = filters.Adult;
                 Veteran = filters.Veteran;
                 Fun = filters.Fun;
+                General = filters.General;
+                Official = filters.Official;
+                International = filters.International;
+                Annual = filters.Annual;
             }
 
             if (!Baseball && !Softball)
@@ -120,13 +136,43 @@ namespace BaseballUa.BlData
 
         public SportType chkBaseball()
         {
-            
+
             return Baseball ? SportType.Baseball : SportType.NotDefined;
         }
 
         public SportType chkSoftball()
         {
             return Softball ? SportType.Softball : SportType.NotDefined;
+        }
+
+        public SportType GetSelectedSport()
+        { 
+            var sportType = SportType.NotDefined;
+            if (Softball && !Baseball)
+            {
+                sportType = SportType.Softball;
+            }
+            if (!Softball && Baseball)
+            {
+                sportType = SportType.Baseball;
+            }
+
+            return sportType;
+        }
+
+        public List<string> GetSelectedCategories()
+        {
+            var categories = new List<string>();
+            if (U10) categories.Add("U10");
+            if (U12) categories.Add("U12");
+            if (U15) categories.Add("U15");
+            if (U18) categories.Add("U18");
+            if (U23) categories.Add("U23");
+            if (Adult) categories.Add("Вишка");
+            if (Veteran) categories.Add("Ветерани");
+
+            return categories;
+            
         }
     }
 }

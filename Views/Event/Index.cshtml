@@ -1,111 +1,10 @@
-﻿@model IEnumerable<BaseballUa.ViewModels.EventIndexViewModel>
+﻿@model BaseballUa.ViewModels.Custom.EventIndexVM
 
 @{
     ViewData["Title"] = "Tournamets";
 }
 
-@*@{
-    var startDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-    var endDate = startDate.AddMonths(1);
-    var eventsThisMonth = Model.Where(i => 
-                            ((i.StartDate >= startDate && i.StartDate <= endDate)
-                            || (i.EndDate >= startDate && i.EndDate <= endDate))
-                            || (i.StartDate <= startDate && i.EndDate >= endDate)
-                            ).OrderByDescending(i => i.StartDate).ToList();
-}*@
-
-<form asp-action="ApplyFilters">
-    <div class="row mb-5">
-        <input type="hidden" name="monthShift" value="@ViewBag.monthShift" />
-        <div class="col-1">
-            <input type="checkbox" name="chkBaseball" class="btn-check" id="btn-check-bb"
-                @if(ViewBag.filters.Baseball)
-                {
-                    @:checked
-                }
-            autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-bb">Baseball</label>
-        </div>
-        <div class="col-1">
-            <input type="checkbox" name="chkSoftball" class="btn-check" id="btn-check-sb"
-                @if (ViewBag.filters.Softball)
-                {
-                    @:checked
-                }
-            autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-sb">Softball</label>
-        </div>
-        <div class="col-1">
-            <input type="checkbox" name="chkU10" class="btn-check" id="btn-check-u10"
-            @if (ViewBag.filters.U10)
-            {
-                @:checked
-            }
-                   autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-u10">U10</label>
-        </div>
-        <div class="col-1">
-            <input type="checkbox" name="chkU12" class="btn-check" id="btn-check-u12"
-            @if (ViewBag.filters.U12)
-            {
-                @:checked
-            }
-                   autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-u12">U12</label>
-        </div>
-        <div class="col-1">
-            <input type="checkbox" name="chkU15" class="btn-check" id="btn-check-u15"
-            @if (ViewBag.filters.U15)
-            {
-                @:checked
-            }
-                   autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-u15">U15</label>
-        </div>
-        <div class="col-1">
-            <input type="checkbox" name="chkU18" class="btn-check" id="btn-check-u18"
-            @if (ViewBag.filters.U18)
-            {
-                @:checked
-            }
-                   autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-u18">U18</label>
-        </div>
-        <div class="col-1">
-            <input type="checkbox" name="chkAdult" class="btn-check" id="btn-check-adult"
-            @if (ViewBag.filters.Adult)
-            {
-                @:checked
-            }
-                   autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-adult">Вишка</label>
-        </div>
-        <div class="col-1">
-            <input type="checkbox" name="chkVeteran" class="btn-check" id="btn-check-veteran"
-            @if (ViewBag.filters.Veteran)
-            {
-                @:checked
-            }
-                   autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-veteran">Ветерани</label>
-        </div>
-        <div class="col-1">
-            <input type="checkbox" name="chkFun" class="btn-check" id="btn-check-fun"
-            @if (ViewBag.filters.Fun)
-            {
-                @:checked
-            }
-                   autocomplete="off">
-            <label class="btn btn-outline-primary" for="btn-check-fun">Фанові ігри</label>
-        </div>
-        <div class="col-1">
-            <div class="form-group">
-                <input type="submit" value="Застосувати фільтри" class="btn btn-primary" />
-            </div>
-        </div>
-    </div>
-
-</form>
+@await Html.PartialAsync("_Filters", Model.ApplyFilters);
 
 <h1>Турніри за місяць</h1>
 <hr />
@@ -114,91 +13,101 @@
     </div>
     <div class="col-1 bg-primary">
         @*<p class="text-right">Минулий</p>*@
-        <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((ViewBag.monthShift - 1).ToString())" class="text-white">Минулий</a>
+        <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((Model.MonthShift - 1).ToString())" class="text-white">Минулий</a>
         
     </div>
     <div class="col-2 bg-info">
-        <p class="text-center">@DateTime.Now.AddMonths(ViewBag.monthShift).ToString("MMMM")</p>
+        <p class="text-center">@DateTime.Now.AddMonths(Model.MonthShift).ToString("MMMM")</p>
     </div>
     <div class="col-1 bg-primary">
         @*<p class="text-left">Наступний</p>*@
-        <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((ViewBag.monthShift + 1).ToString())" class="text-white">Наступний</a>
+        <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((Model.MonthShift + 1).ToString())" class="text-white">Наступний</a>
     </div>
     <div class="col-4">
     </div>
 
 </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Sport)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryShortName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if(Model.Events != null && Model.Events.Count > 0)
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @{
-                        if (item.EndDate < DateTime.Now)
-                        {
-                            <div class="bg-secondary">finished</div>
-                        }    
-                        else if (item.StartDate > DateTime.Now)
-                        {
-                            <div class="bg-info">upcoming</div>
-                        }
-                        else
-                        {
-                            <div class="bg-warning">runnig</div>
-                        }
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sport)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CategoryShortName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StartDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EndDate)
-                </td>
-                <td>
-                    <a asp-action="DetailsEvent" asp-route-id="@item.EventIndexViewModelId" asp-route-monthshift="@ViewBag.monthShift">Деталі</a>
-                </td>
-            </tr>
-        }
+                <th>
 
-    </tbody>
-</table>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.First().Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.First().Year)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.First().Sport)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.First().CategoryShortName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.First().StartDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Events.First().EndDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Events)
+            {
+                <tr>
+                    <td>
+                        @{
+                            if (item.EndDate < DateTime.Now)
+                            {
+                                <div class="bg-secondary">finished</div>
+                            }
+                            else if (item.StartDate > DateTime.Now)
+                            {
+                                <div class="bg-info">upcoming</div>
+                            }
+                            else
+                            {
+                                <div class="bg-warning">runnig</div>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Year)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Sport)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryShortName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+                    <td>
+                        <a asp-action="DetailsEvent" asp-route-id="@item.EventIndexViewModelId" asp-route-monthshift="@Model.MonthShift">Деталі</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+else
+{
+    <label>
+        На цей місяць з такими фільтрами нема змагань
+    </label>
+}
+
