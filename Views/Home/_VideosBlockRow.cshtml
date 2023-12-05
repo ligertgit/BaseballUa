@@ -1,0 +1,16 @@
+﻿@using BaseballUa.Data;
+@model List<BaseballUa.ViewModels.VideoVM>
+
+@if (Model != null && Model.Count() > 0)
+{
+        @foreach (var video in Model)
+        {
+            <div class="p-1">
+            <a href="@video.Fname" class="btn btn-danger text-truncate m-0 p-1" style="max-width: 30vh" title="@video.Name">@video.Name</a>
+            </div>
+        }
+}
+else
+{
+	<label>Нема Відео</label>
+}

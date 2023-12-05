@@ -2,3 +2,9 @@ Fill images for SportType Enum in images/sporttype: big 50x50, small 25x25. Name
 Add all categories in DB
 Fill images for all categories with names ACCORDING to its IDs in DB
 Default big and small images for team 100x75 60x45
+
+
+
+
+------colors
+1e6194 -- bg img

@@ -1,11 +1,74 @@
 ﻿@model BaseballUa.ViewModels.Custom.MainIndexVM
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<h1 class="display-4">Бейсбол і Софтбол в Україні</h1>
+<div class="container-fluid text-warning homehead">
+    <h1 class="font-weight-bold">Бейсбол і Софтбол в Україні</h1>
+</div>
 
-@await Html.PartialAsync("_Filters", Model.ApplyFilters);
+@*<div class="container-fluid text-primary bg-warning p-1">
+    <div class="row m-0">
+        <div class="col text-nowrap m-0 p-0 d-flex align-items-center">
+            <h5 class="font-weight-bold">Найсвіжіші відео:</h5>
+        </div>
+        @await Html.PartialAsync("_VideosBlockRow", Model.LastVideos)
+    </div>
+</div>*@
+
+<div class="container-fluid text-primary bg-warning p-1 m-0">
+    <div class="d-flex flex-row">
+        <div class="p-1 text-nowrap d-flex align-items-center">
+            <h5 class="font-weight-bold">Найсвіжіші відео:</h5>
+        </div>
+        <div class="p-1">
+            <div class="d-flex flex-row flex-wrap bd-highlight p-1 m-0">
+                @await Html.PartialAsync("_VideosBlockRow", Model.LastVideos)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid text-primary bg-warning p-1 m-0">
+    
+    <div class="accordion width" id="HomeAccordion">
+
+        <div class="d-flex flex-row accblock">
+            <div class="p-1 text-nowrap d-flex align-items-center accblockheader" data-toggle="collapse" data-target="#collapseOne">
+                <h5 class="font-weight-bold">Найсвіжіші відео:</h5>
+            </div>
+            <div id="collapseOne" class="collapse show width" data-parent="#HomeAccordion">
+                <div class="p-1 accblockbody">
+                    <div class="d-flex flex-row flex-wrap bd-highlight p-1 m-0">
+                        @await Html.PartialAsync("_VideosBlockRow", Model.LastVideos)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-row accblock">
+            <div class="p-1 text-nowrap d-flex align-items-center accblockheader" data-toggle="collapse" data-target="#collapseTwo">
+                <h5 class="font-weight-bold">Найсвіжіші відео:</h5>
+            </div>
+            <div id="collapseTwo" class="collapse width" data-parent="#HomeAccordion">
+                <div class="p-1 accblockbody">
+                    <div class="d-flex flex-row flex-wrap bd-highlight p-1 m-0">
+                        @await Html.PartialAsync("_VideosBlockRow", Model.LastVideos)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+@await Html.PartialAsync("_Filters", Model.ApplyFilters)
+
+
 
 <div class="row">
     <div class="col-2">
@@ -19,6 +82,29 @@
     <div class="col-8">
         <h5><strong>Новини:</strong></h5>
         @await Html.PartialAsync("_NewsBlock6", Model.News)
+        <div class="row">
+            <div class="col">
+                @if(Model.skipNewsPrev != -1)
+                {
+                    <a asp-route-skipNews="@Model.skipNewsPrev">Prev</a>
+                }
+                else
+                {
+                    <label>NoPrev</label>
+                }
+            </div>
+            <div class="col">
+                @if (Model.skipNewsNext != -1)
+                {
+                    <a asp-route-skipNews="@Model.skipNewsNext">Next</a>
+                }
+                else
+                {
+                    <label>NoNext</label>
+                }
+            </div>
+        </div>
+        
     </div>
     <div class="col-2">
         <div class="row">

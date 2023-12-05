@@ -29,24 +29,42 @@ namespace BaseballUa.Controllers
 			_db = dbcontext;
 		}
 #region news
-		public IActionResult Index()
+		public IActionResult Index(int skipNews = 0)
 		{
-            var pageDataVM = new MainIndexVM();
+            if(skipNews < 0) skipNews = 0;
+
+			var pageDataVM = new MainIndexVM();
 
             Filters filters = Request.Cookies.GetFilters();
 			pageDataVM.ApplyFilters = new ApplyFilters { Filters = filters, Controller = "Home", RedirectAction = "Index" };
 			var selectedCategories = new CategoriesCrud(_db).GetIds(filters.GetSelectedCategories());
 
+
+			int queryCount;
+			int amount = Constants.DefaulNewsAmount;
             //var newsDAL = new NewsCrud(_db).GetAll(notForTeamOnly: true, lastDate: DateTime.Now).ToList();
-            var newsDAL = new NewsCrud(_db).GetAllFiltered(sportType: filters.GetSelectedSport(),
+            var newsDAL = new NewsCrud(_db).GetAllFiltered(out queryCount,
+														   sportType: filters.GetSelectedSport(),
                                                            includeAllFun: filters.Fun,
 														   includeAllGeneral: filters.General,
 														   isOfficial: filters.Official,
 														   isInternational: filters.International,
 														   isAnnual: filters.Annual,
                                                            categoryIds: selectedCategories, 
-														   newestDate: DateTime.Now).ToList();
+														   newestDate: DateTime.Now,
+														   skip: skipNews,
+                                                           amount: amount
+                                                            ).ToList();
+			if (queryCount > skipNews + amount)
+			{
+				pageDataVM.skipNewsNext = skipNews + amount;
+			}
+			if (skipNews > 0)
+			{
+				pageDataVM.skipNewsPrev = skipNews - amount;
+			}
 			pageDataVM.News = new NewsToView().ConvertAll(newsDAL);
+
 
 			var albumsDAL = new AlbumsCrud(_db).GetAllFiltered(sportType: filters.GetSelectedSport(),
                                                            includeAllFun: filters.Fun,
