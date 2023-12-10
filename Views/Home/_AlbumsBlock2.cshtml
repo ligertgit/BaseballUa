@@ -7,42 +7,19 @@
 	{
 		@if (album.Photos != null && album.Photos.Count() > 0)
 		{
-			<div class="row m-1">
+			@*<div class="row m-1">
 				<div class="col">
 					<a asp-action="ShowAlbum" asp-route-Id="@album.Id">
 						<img class="img-thumbnail" src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />
 					</a>
-				</div>
-				@*<div class="col-8">
-					<div class="row">
-						<div class="col-1">
-							<img width="25" height="25" src="~/images/sporttype/small/@(news.SportType).png" />
-						</div>
-						<div class="col-2">
-							@news.PublishDate.ToString("dd/MM/yyyy")
-						</div>
-
-						<div class="col-9">
-							@if (news.Category != null)
-							{
-								<small class="text-muted">@news.Category.Name </small>
-							}
-						</div>
-					</div>
-					<div class="row">
-						@if (news.Event != null && news.Event.Tournament != null)
-						{
-							<small class="text-muted">@news.Event.Tournament.Name @news.Event.Year </small>
-						}
-					</div>
-					<a asp-action="ShowNews" asp-route-newsId="@news.Id" class="text-decoration-none">
-						<div class="row m-0 p-0">
-
-							<h5 class="m-0 p-0"><strong>@news.Title</strong></h5>
-						</div>
-					</a>
 				</div>*@
-			</div>
+			<div class="p-0 me-1 mb-1">
+				<a asp-action="ShowAlbum" asp-route-Id="@album.Id" class="p-0">
+					<img class="rounded-2 border border-info" style="height:100px;" src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />
+					@*<img class="img-thumbnail" src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />*@
+					</a>
+				</div>
+			@*</div> object-fit: contain;*@
 		}
 	}
 }
@@ -50,3 +27,8 @@ else
 {
 	<label>Нема альбомів</label>
 }
+
+<a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowAlbums">
+	<img class="pe-1" width="25" src="~/images/assets/albumSmall.png" />
+	<span class="text-white">ВСІ</span>
+</a>

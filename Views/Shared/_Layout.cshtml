@@ -10,9 +10,9 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-0">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-warning border-bottom box-shadow mb-0">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BaseballUa</a>
+                <a class="navbar-brand text-primary" asp-area="" asp-controller="Home" asp-action="Index">BaseballUa</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,19 +20,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Головна</a>
+                            <a class="nav-link text-primary" asp-area="" asp-controller="Home" asp-action="Index">Головна</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Event" asp-action="Index">Турніри</a>
+                            <a class="nav-link text-primary" asp-area="" asp-controller="Event" asp-action="Index">Турніри</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Адмінка</a>
+                            <a class="nav-link text-primary" asp-area="" asp-controller="Admin" asp-action="Index">Адмінка</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Club" asp-action="Index">Клуби</a>
+                            <a class="nav-link text-primary" asp-area="" asp-controller="Club" asp-action="Index">Клуби</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="History">Історія</a>
+                            <a class="nav-link text-primary" asp-area="" asp-controller="Home" asp-action="History">Історія</a>
                         </li>
                     </ul>
                 </div>
@@ -41,7 +41,7 @@
     </header>
     
     @*<div class="container-fluid m-0 p-0">*@
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-0">
             @RenderBody()
         </main>
     @*</div>*@
@@ -49,16 +49,17 @@
 
 
     <footer class="border-top footer text-muted">
-        <div class="container">
+        <div class="container-fluid m-0 p-0 bg-warning">
             &copy; 2023 - BaseballUa
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>*@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    @*<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>*@
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -91,7 +91,7 @@ namespace BaseballUa.BlData
             var result = (from eventt in _dbContext.Events
                           join tour in _dbContext.Tournaments on eventt.TournamentId equals tour.Id
                           join cat in _dbContext.Categories on tour.CategoryId equals cat.Id
-                          where (eventt.StartDate <= fixxedForDate && eventt.EndDate >= fixxedForDate)
+                          where (eventt.StartDate >= fixxedForDate.AddDays(-Constants.DefaulActiveEventDaysShift) && eventt.EndDate <= fixxedForDate.AddDays(Constants.DefaulActiveEventDaysShift))
                                 && ((includeAllFun && tour.IsFun)
                                     || ((sportType == SportType.NotDefined
                                         || tour.Sport == sportType

@@ -5,30 +5,38 @@
 {
 	foreach (var eventt in Model)
 	{
-		<a asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@eventt.EventViewModelId">
-			<div class="row mb-1 border border-1">
+		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" style="width: 30vh; height:12vh;">
+			<a class="btn btn-outline-info p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@eventt.EventViewModelId" title="@eventt.Tournament.Name">
 				<div class="row">
+					<div class="col-1 m-1">
+						<img width="25" height="25" src="~/images/assets/tourSmall.png" />
+					</div>
 					<div class="col-1 m-1">
 						<img width="25" height="25" src="~/images/sporttype/small/@(eventt.Tournament.Sport).png" />
 					</div>
 					<div class="col-1 m-1">
 						<img width="25" height="25" src="~/images/category/small/@(eventt.Tournament.CategoryId).png" />
 					</div>
-					<div class="col-8">
-						<h5 class="float-end">@eventt.Year</h5>
+					<div class="col-6 m-1">
+						<h5 class="float-end">@eventt.StartDate?.ToString("dd-MM")</h5>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-12">
-						<h6>@eventt.Tournament.Name</h6>
+					<div class="col m-1">
+						<h6 class="text-truncate">@eventt.Tournament.Name</h6>
 					</div>
 				</div>
-				
-			</div>
-		</a>
+			</a>
+		</div>
+
 	}
 }
 else
 {
 	<label>Нема поточних турнірів</label>
 }
+
+<a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowEvents">
+	<img class="pe-1" width="25" src="~/images/assets/tourSmall.png" />
+	<span class="text-white">ВСІ</span>
+</a>

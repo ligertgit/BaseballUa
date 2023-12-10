@@ -6,50 +6,80 @@
 	foreach (var news in Model)
 	{
 
-		<div class="row m-1 border border-info rounded">
-			<div class="col-4 ">
+		<div class="row m-3 p-4 bg-primary bg-opacity-50 rounded-2 border border-2 border-top-0 border-start-0">
+			<div class="col-4">
 				@{
 					var titlePhotoAlbum = Constants.DefaultAlbum;
-					var titlePhoto = Constants.DefaultAlbumSmallImage;
+					var titlePhoto = Constants.DefaultAlbumBigImage;
 				}
 				@if (news.Photos != null && news.Photos.Count() > 0)
 				{
 					titlePhotoAlbum = news.Photos.First().AlbumId.ToString();
-					titlePhoto = news.Photos.First().FnameSmall.ToString();
+					titlePhoto = news.Photos.First().FnameBig.ToString();
 				}
 				<a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id">
-					<img class="img-thumbnail" src="~/images/photo/small/@titlePhotoAlbum/@titlePhoto" />
+					<img class="img-medium-thumb border-white-50" style="max-height: 300px; object-fit: contain; " src="~/images/photo/big/@titlePhotoAlbum/@titlePhoto" />
 				</a>
 				
 			</div>
-			<div class="col-8">
-				<div class="row">
-					<div class="col-1">
-						<img width="25" height="25" src="~/images/sporttype/small/@(news.SportType).png" />
-					</div>
-					<div class="col-2">
+			<div class="col align-self-stretch mt-2">
+				<div class="d-flex flex-row flex-nowrap mb-1 justify-content-between">
+					<a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id" class="text-decoration-none text-white-50 me-2">
+						<div class="row m-0 p-0">
+							<h2 class="m-0 p-0">@news.Title</h2>
+						</div>
+					</a>
+					<div class="">
 						@news.PublishDate.ToString("dd/MM/yyyy")
 					</div>
+				</div>
+				<div class="d-flex flex-row flex-nowrap">
+					@if (news.Category != null)
+					{
+						@*<small class="text-muted">@news.Category.Name </small>*@
+						<img class="me-1" width="25" height="25" src="~/images/category/small/@(news.CategoryId).png" />
+					}
+					<img class="me-3" width="25" height="25" src="~/images/sporttype/small/@(news.SportType).png" />
+					@if (news.Event != null && news.Event.Tournament != null)
+					{
+						<small class="text-white">@news.Event.Tournament.Name</small>
+					}
+				</div>
+				<hr />
 
-					<div class="col-9">
-						@if (news.Category != null)
+@*				<div class="row">
+					<div class="col-2">
+						@news.PublishDate.ToString("dd/MM/yyyy")
+						
+					</div>
+					<div class="col">
+						@if (news.Event != null && news.Event.Tournament != null)
 						{
-							<small class="text-muted">@news.Category.Name </small>
+							<small class="text-muted">@news.Event.Tournament.Name</small>
+						}
+					</div>
+				</div>*@
+
+				<div class="row mt-3">
+					<div class="col">
+						@if (news.Description != null)
+						{
+							<span class="text-wrap justify-content-between" style="font-family: monospace; font-size:20px">
+								@if (news.Description.Length > Constants.NewsPreviewLength)
+								{
+									@news.Description.Substring(0, Constants.NewsPreviewLength);
+									<a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id" class="text-decoration-none text-decoration-underline text-white-50">
+										...
+									</a>
+								}
+								else
+								{
+									@news.Description;
+								}
+							</span>
 						}
 					</div>
 				</div>
-				<div class="row">
-					@if (news.Event != null && news.Event.Tournament != null)
-					{
-						<small class="text-muted">@news.Event.Tournament.Name @news.Event.Year </small>
-					}
-				</div>
-				<a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id" class="text-decoration-none">
-					<div class="row m-0 p-0">
-
-						<h5 class="m-0 p-0"><strong>@news.Title</strong></h5>
-					</div>
-				</a>
 			</div>
 		</div>
 	}

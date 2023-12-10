@@ -3,14 +3,51 @@
 
 @if (Model != null && Model.Count() > 0)
 {
-        @foreach (var video in Model)
-        {
-            <div class="p-1">
-            <a href="@video.Fname" class="btn btn-danger text-truncate m-0 p-1" style="max-width: 30vh" title="@video.Name">@video.Name</a>
-            </div>
-        }
+    @foreach (var video in Model)
+    {
+@*        <div class="p-0 me-1 mb-1">
+            <a href="@video.Fname" class="btn btn-info text-truncate p-1 bg-gradient" style="max-width: 30vh" title="@video.Name">@video.Name</a>
+        </div>*@
+
+		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" style="width: 30vh; height:12vh;">
+			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@video.Id" title="@video.Name">
+				<div class="row">
+					<div class="col-1 m-1">
+						<img width="25" height="25" src="~/images/assets/videoSmall.png" />
+					</div>
+					<div class="col-1 m-1">
+					@if (video.SportType != Enums.SportType.NotDefined)
+					{
+						
+						<img width="25" height="25" src="~/images/sporttype/small/@(video.SportType).png" />
+					}
+					</div>
+
+					<div class="col-1 m-1">
+					@if (video.Category != null)
+					{
+						<img width="25" height="25" src="~/images/category/small/@(video.CategoryId).png" />
+					}
+					</div>
+
+					<div class="col-6 m-1">
+						<h5 class="float-end">@video.PublishDate.ToString("dd-MM")</h5>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col m-1">
+						<h6 class="text-truncate" title="@video.Name">@video.Name</h6>
+					</div>
+				</div>
+			</a>
+		</div>
+    }
 }
 else
 {
 	<label>Нема Відео</label>
 }
+<a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowVideos">
+	<img class="pe-1" width="25" src="~/images/assets/videoSmall.png" />
+	<span class="text-white">ВСІ</span>
+</a>

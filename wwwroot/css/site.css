@@ -18,34 +18,56 @@ body {
 }
 
 .homehead {
-    background-image: url('/images/bg/homec.jpg');
+    background-image: url('/images/bg/homec2.jpg');
     background-size: cover;
-    height: 25vh;
-    min-height: 100px;
+    /*height: 25vh;*/
+    min-height: 330px;
     margin: 0;
-    padding: 1%;
+    padding-top: 1%;
+    padding-left: 1%;
+    padding-right: 1%
+    padding-bottom: 0;
 }
 
-.accordion.width {
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    display: flex;
+.nav-link.active {
+    background-color: rgba(var(--bs-info-rgb), 0.7) !important;
+    color: var(--bs-white) !important;
 }
 
-/*.accordion.width .accblock .accblockheader:not(.collapsed) {
+.img-thumb {
+    max-width: 15vh;
+    border-radius: 5px;
+    border: solid white 2px;
+}
+
+.img-medium-thumb {
+    width: 95%;
+    border-radius: 5px;
+    border: solid white 2px;
+}
+
+
+
+/*.accordion.width {*/
+    /*border: 1px solid rgba(0, 0, 0, 0.125);*/
+    /*display: flex;
+}
+
+.accordion.width .accblock .accblockheader:not(.collapsed) {
     pointer-events: none;
-}*/
+}
 
 .accordion.width .accblock .accblockheader {
-    cursor: pointer;
+    cursor: pointer;*/
     /*transform: rotate(180deg);
     writing-mode: vertical-rl;*/
-}
+/*}
 
 .collapsing.width {
     transition: width 0.35s ease;
     height: auto;
     width: 0;
-}
+}*/
 
 
 

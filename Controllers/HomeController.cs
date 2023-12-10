@@ -82,7 +82,7 @@ namespace BaseballUa.Controllers
 															   isInternational: filters.International,
 															   isAnnual: filters.Annual,
                                                                categoryIds: selectedCategories,
-                                                               forDate: DateTime.Now.AddDays(Constants.DefaulActiveEventDaysShift)).ToList();
+                                                               forDate: DateTime.Now).ToList();
 			pageDataVM.ActiveEvents = new EventToView().ConvertAll(eventsDAL);
 
 			var videosDAL = new VideosCrud(_db).GetAllFiltered(sportType: filters.GetSelectedSport(),
