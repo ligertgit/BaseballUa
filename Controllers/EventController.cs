@@ -29,11 +29,11 @@ namespace BaseballUa.Controllers
 
             Filters filters = Request.Cookies.GetFilters();
             eventIndexView.ApplyFilters = new ApplyFilters { Filters = filters, Controller = "Event", RedirectAction = "Index" };
-
-            eventIndexView.Events = new EventIndex(_db).GetMonthFilters(monthShift, filters);
-
+            
             var routeItem = new RouteItem { Name = "monthShift", Value = monthShift };
             eventIndexView.ApplyFilters.RouteItems.Add(routeItem);
+
+            eventIndexView.Events = new EventIndex(_db).GetMonthFilters(monthShift, filters);
 
             eventIndexView.MonthShift = monthShift;
 

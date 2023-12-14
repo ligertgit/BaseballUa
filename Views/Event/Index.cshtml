@@ -4,31 +4,166 @@
     ViewData["Title"] = "Tournamets";
 }
 
-@await Html.PartialAsync("_Filters", Model.ApplyFilters);
 
-<h1>Турніри за місяць</h1>
+<div class="container-fluid text-warning eventshead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_Filters", Model.ApplyFilters)
+    </div>
+
+@*    <div class="row mt-5">
+        <div class="col-4">
+        </div>
+        <div class="col-1 bg-primary">
+            <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((Model.MonthShift - 1).ToString())" class="text-white">@DateTime.Now.AddMonths(Model.MonthShift-1).ToString("MMMM")</a>
+        </div>
+        <div class="col-2 bg-info">
+            <p class="text-center">@DateTime.Now.AddMonths(Model.MonthShift).ToString("MMMM")</p>
+        </div>
+        <div class="col-1 bg-primary">
+            <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((Model.MonthShift + 1).ToString())" class="text-white">@DateTime.Now.AddMonths(Model.MonthShift+1).ToString("MMMM")</a>
+        </div>
+        <div class="col-4">
+        </div>
+    </div>*@
+
+    <ul class="pagination custom-blue mt-5">
+        <li class="page-item">
+            <a class="page-link" asp-route-monthShift="@Html.DisplayName((Model.MonthShift - 1).ToString())">&laquo; @DateTime.Now.AddMonths(Model.MonthShift-1).ToString("MMMM")</a>
+        </li>
+        <li class="page-item disabled">
+            <a class="page-link"><strong>@DateTime.Now.AddMonths(Model.MonthShift).ToString("MMMM")</strong></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" asp-route-monthShift="@Html.DisplayName((Model.MonthShift + 1).ToString())">@DateTime.Now.AddMonths(Model.MonthShift+1).ToString("MMMM") &raquo;</a>
+        </li>
+    </ul>
+</div>
+
+
+<div class="container-fluid bg-opacity-0 p-3 m-0">
+    <div class="row justify-content-center pt-0 mt-0">
+        <div class="col justify-content-center pt-0 mt-0">
+            @if (Model.Events != null && Model.Events.Count > 0)
+            {
+                <table class="table text-light" style="font-family: monospace; font-size:18px">
+                    <thead>
+                        <tr>
+                            <th>
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Events.First().Name)
+                            </th>
+                            @*<th>
+                                @Html.DisplayNameFor(model => model.Events.First().Year)
+                            </th>*@
+                            <th>
+                                @*@Html.DisplayNameFor(model => model.Events.First().Sport)*@
+                            @*</th>
+                            <th>*@
+                                @*@Html.DisplayNameFor(model => model.Events.First().CategoryShortName)*@
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Events.First().StartDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Events.First().EndDate)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Events)
+                        {
+                            var stateColor = "";
+                            var stateText = "йде";
+                            if (item.EndDate < DateTime.Now)
+                            {
+                                stateColor = "bg-secondary";
+                                stateText = "був";
+                            }
+                            else if (item.StartDate > DateTime.Now)
+                            {
+                                stateColor = "table-active";
+                                stateText = "буде";
+                            }
+                            <tr class="@stateColor text-light align-baseline">
+                                <th scope="row">@stateText</th>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                @*<td>
+                                    @Html.DisplayFor(modelItem => item.Year)
+                                </td>*@
+                                <td>
+                                    <img width="25" height="25" src="~/images/sporttype/small/@(item.Sport).png" />
+                                    @*@Html.DisplayFor(modelItem => item.Sport)*@
+                               @* </td>
+                                <td>*@
+                                    @if (item.CategoryId > 0)
+                                    {
+                                        <img width="25" height="25" src="~/images/category/small/@(item.CategoryId).png" />
+                                    }
+                                    @*@Html.DisplayFor(modelItem => item.CategoryShortName)*@
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.StartDate)*@
+
+                                    @item.StartDate?.ToString("dd/MM/yy hh:mm")
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.EndDate)*@
+                                    @item.EndDate?.ToString("dd/MM/yy hh:mm")
+                                </td>
+                                <td class="text-end">
+                                    @*<a asp-action="DetailsEvent" asp-route-id="@item.EventIndexViewModelId" asp-route-monthshift="@Model.MonthShift">
+                                        <button type="button" class="btn btn-primary">деталі</button>
+                                    </a>    *@
+                                    <a asp-action="DetailsEvent" 
+                                            asp-route-id="@item.EventIndexViewModelId" 
+                                            asp-route-monthshift="@Model.MonthShift" 
+                                            type="button" 
+                                            class="btn btn-primary"
+                                            style="font-family: monospace; font-size:18px">
+                                        Більше &raquo;
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <label>
+                    На цей місяць з такими фільтрами нема змагань
+                </label>
+            }
+        </div>
+    </div>
+</div>
+@*@await Html.PartialAsync("_Filters", Model.ApplyFilters);*@
+
+@*<h1>Турніри за місяць</h1>
 <hr />
 <div class="row mb-5">
     <div class="col-4">
     </div>
     <div class="col-1 bg-primary">
-        @*<p class="text-right">Минулий</p>*@
         <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((Model.MonthShift - 1).ToString())" class="text-white">Минулий</a>
-        
     </div>
     <div class="col-2 bg-info">
         <p class="text-center">@DateTime.Now.AddMonths(Model.MonthShift).ToString("MMMM")</p>
     </div>
     <div class="col-1 bg-primary">
-        @*<p class="text-left">Наступний</p>*@
         <a asp-action="Index" asp-route-monthShift="@Html.DisplayName((Model.MonthShift + 1).ToString())" class="text-white">Наступний</a>
     </div>
     <div class="col-4">
     </div>
+</div>*@
 
-</div>
-
-@if(Model.Events != null && Model.Events.Count > 0)
+@*@if(Model.Events != null && Model.Events.Count > 0)
 {
     <table class="table">
         <thead>
@@ -109,5 +244,5 @@ else
     <label>
         На цей місяць з такими фільтрами нема змагань
     </label>
-}
+}*@
 

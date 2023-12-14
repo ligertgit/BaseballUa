@@ -1,7 +1,46 @@
 ﻿@using BaseballUa.Data;
+@using static BaseballUa.Data.Enums;
 @model BaseballUa.ViewModels.Custom.ClubFullDetailVM
 
-<div class="row m-1">
+@{
+	ViewData["Title"] = "Club";
+}
+
+<div class="container-fluid text-primary clubhead">
+	@if (Model != null && Model.Club != null)
+	{
+		<div class="row ">
+			<div class="col-2 text-center">
+				<img class="w-75" src="~/images/club/logoBig/@(Model.Club.FnameLogoBig ?? Constants.DefaultClubBigImage)" />
+			</div>
+			<div class="col">
+				<div class="row align-items-center bg-primary bg-opacity-50 text-light rounded-2 me-2">
+					<div class="flex-row p-2">
+						<a asp-action="DetailsClub" asp-route-clubId="@Model.Team.Club.Id">
+							<img class="img-thumb" src="~/images/club/logoSmall/@Model.Team.Club.FnameLogoSmall" />
+						</a>
+						<img class="me-4" src="~/images/sporttype/big/@(Model.Team.SportType).png" />
+						<h1 class="list-inline-item">@Model.Team.Name</h1>
+					</div>
+					<div class="flex-row p-4 pt-1 pb-1">
+						<span class="text-nowrap me-2">Як записатися:</span>
+						@Model.Team.Club.Invitation
+					</div>
+				</div>
+
+				<div class="flex-row mt-2">
+					<a href="#news" class="btn btn-primary" type="button">Новини</a>
+					<a href="#albums" class="btn btn-primary">Альбоми</a>
+					<a href="#videos" class="btn btn-primary">Відео</a>
+					<a href="#players" class="btn btn-primary">Гравці</a>
+				</div>
+			</div>
+		</div>
+	}
+</div>
+
+
+@*<div class="row m-1">
 	<div class="col-1">
 		<img src="~/images/club/logoBig/@Model.Club.FnameLogoBig" />
 	</div>
@@ -194,3 +233,4 @@
 		}
 	</div>
 }
+*@

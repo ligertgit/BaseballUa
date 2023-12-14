@@ -61,22 +61,24 @@ namespace BaseballUa.BlData
 
         public IEnumerable<Club> GetAllWithTeams()
         {
-            var result = (from club in _dbContext.Clubs
-                          join team in _dbContext.Teams on club.Id equals team.ClubId into subTeams
-                          from gTeams in subTeams.DefaultIfEmpty()
-                          group gTeams by club into g
-                          select new Club
-                          {
-                              Id = g.Key.Id,
-                              Name = g.Key.Name,
-                              Description = g.Key.Description,
-                              Invitation = g.Key.Invitation,
-                              FnameLogoSmall = g.Key.FnameLogoSmall,
-                              FnameLogoBig = g.Key.FnameLogoBig,
-                              CountryId = g.Key.CountryId,
-                              Teams = g.ToList()
-                          }
-                          );
+            //var result = (from club in _dbContext.Clubs.Include(c => c.Staffs)
+            //              join team in _dbContext.Teams on club.Id equals team.ClubId into subTeams
+            //              from gTeams in subTeams.DefaultIfEmpty()
+            //              group gTeams by club into g
+            //              select new Club
+            //              {
+            //                  Id = g.Key.Id,
+            //                  Name = g.Key.Name,
+            //                  Description = g.Key.Description,
+            //                  Invitation = g.Key.Invitation,
+            //                  FnameLogoSmall = g.Key.FnameLogoSmall,
+            //                  FnameLogoBig = g.Key.FnameLogoBig,
+            //                  CountryId = g.Key.CountryId,
+            //                  Staffs = g.Key.Staffs.ToList(),
+            //                  Teams = g.ToList()
+            //              }
+            //              );
+            var result = _dbContext.Clubs.Where(c => c.Id != Constants.EuroClubId).Include(c => c.Teams).Include(c => c.Staffs);
 
             return result;
         }

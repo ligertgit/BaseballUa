@@ -22,7 +22,7 @@ namespace BaseballUa.Controllers
             return View(ClubsVL);
         }
 
-        public IActionResult DetailsTeam(int teamId)
+        public IActionResult DetailsTeam(int teamId, int skipNews = 0)
         {
             var teamFullVL = new TeamFullDetailVM();
             
@@ -57,19 +57,21 @@ namespace BaseballUa.Controllers
                     var teamVideosDAL = new VideosCrud(_db).GetAllTeamVideos(teamId).ToList();
                     teamFullVL.Videos = new VideoToView().ConvertAll(teamVideosDAL);
 
-                    var teamNewsDAL = new NewsCrud(_db).GetAllTeamNews(teamId).ToList();
+                    int queryCount;
+                    int amount = Constants.DefaulNewsAmount;
+                    var teamNewsDAL = new NewsCrud(_db).GetAllTeamNews(out queryCount, teamId, skipNews, amount).ToList();
+                    if (queryCount > skipNews + amount)
+                    {
+                        teamFullVL.skipNewsNext = skipNews + amount;
+                    }
+                    if (skipNews > 0)
+                    {
+                        teamFullVL.skipNewsPrev = skipNews - amount;
+                    }
                     teamFullVL.News = new NewsToView().ConvertAll(teamNewsDAL);
+
                 }
             }
-            //var teamDAL = new TeamCrud(_db).Get(teamId);
-            //var teamHomeGamesDAL = new TeamCrud(_db).GetHomeGames(teamId).ToList();
-            //var teamVisitorGamesDAL = new TeamCrud(_db).GetVisitorGames(teamId).ToList();
-            //var teamPlayersDAL = new PlayersCrud(_db).GetAll(teamId).ToList();
-            
-            //var teamVL = new TeamToView().Convert(teamDAL);
-            //teamVL.Games = new GameToView().ConvertAll(teamHomeGamesDAL).ToList();
-            //teamVL.Games.AddRange(new GameToView().ConvertAll(teamVisitorGamesDAL).ToList());
-            //teamVL.Players = new PlayerToView().ConvertAll(teamPlayersDAL).ToList();
 
             return View(teamFullVL);
         }

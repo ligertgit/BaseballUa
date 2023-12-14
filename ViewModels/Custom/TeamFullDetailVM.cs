@@ -9,5 +9,7 @@
         public List<NewsVM> News { get; set; } = new List<NewsVM>();
         public List<AlbumVM> Albums { get; set; } = new List<AlbumVM>();
         public List<PlayerViewModel> Players { get; set; } = new List<PlayerViewModel>();
+        public int skipNewsNext { get; set; } = -1;
+        public int skipNewsPrev { get; set; } = -1;
     }
 }

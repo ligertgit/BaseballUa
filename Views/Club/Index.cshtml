@@ -1,56 +1,108 @@
-﻿@model IEnumerable<BaseballUa.ViewModels.ClubViewModel>
+﻿@using BaseballUa.Data;
+@model IEnumerable<BaseballUa.ViewModels.ClubViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Клуби:</h1>
+<div class="container-fluid text-warning clubshead">
 
-<div class="row">
-    @{
-        foreach (var club in Model)
-        {
-           
-            <div class="card text-white bg-primary mb-3" style="max-width: 50rem;">
-                <div class="card-header">
-                    <a asp-action="DetailsClub" asp-route-clubId="@club.Id">
-                        <img src="~/images/club/logoSmall/@club.FnameLogoSmall" /> @club.Name
-                    </a>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            Команда:
+</div>
+
+
+
+<div class="container-fluid pb-5">
+    @foreach (var club in Model)
+    {
+
+        <div class="row text-white bg-primary m-3 mb-0 rounded-3">
+            <div class="col m-2 mt-4">
+                <div class="row align-items-center">
+                    <div class="col-2 text-center">
+                            <a asp-action="DetailsClub" asp-route-clubId="@club.Id">
+                                <img class="img-medium-thumb" src="~/images/club/logoBig/@club.FnameLogoBig" />
+                            </a>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <a asp-action="DetailsClub" asp-route-clubId="@club.Id" class="text-decoration-none text-white">
+                                    <h2>@club.Name</h2>
+                                </a>
+                            </div>
                         </div>
-                        <div class="col">
-                            Назва:
-                        </div>
-                        <div class="col">
-                            Спорт:
-                        </div>
-                        <div class="col">
+                        <div class="row">
+                            @if(club.Staffs != null && club.Staffs.Count() > 0)
+                            {
+                                foreach (var staff in club.Staffs.Take(Constants.MaxClubStaffShow))
+                                {
+                                    <div class="col-1 p-0 m-0 mb-1">
+                                        <img class="img-medium-thumb" src="~/images/staff/avatarSmall/@(staff.AvatarSmall ?? Constants.DefaultClubSmallImage)" />
+                                    </div>
+                                }
+                            }
                         </div>
                     </div>
-                    <hr>
-                    @foreach (var team in club.Teams)
-                    {
-                        <div class="row m-1">
-                            <div class="col">
-                                <img src="~/images/team/logoSmall/@team.FnameLogoSmall" />
-                            </div>
-                            <div class="col">
-                                @team.Name
-                            </div>
-                            <div class="col">
-                                @team.SportType
-                            </div>
-                            <div class="col">
-                                <a class="text-white" asp-action="DetailsTeam" asp-route-teamId="@team.Id">Детальніше</a>
-                            </div>
-                        </div>
-                    }
+                </div>
+                <div class="row p-0 m-2 mt-5 border border-1 border-light rounded-2">
+                    <div class="col pt-0 mt-0">
+                        @if (club.Teams != null && club.Teams.Count > 0)
+                        {
+                            <table class="table text-light" style="font-family: monospace; font-size:18px">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            
+                                        </th>
+                                        <th>
+                                            Команда:
+                                        </th>
+                                        <th>
+                                            Спорт:
+                                        </th>
+                                        <th>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var team in club.Teams)
+                                    {
+                                        <tr class="align-text-bottom">
+                                            <td class="text-center">
+                                                <img class="border-1 border-light rounded-2" src="~/images/team/logoSmall/@team.FnameLogoSmall" />
+                                            </td>
+                                            <td>
+                                                @team.Name
+                                            </td>
+                                            <td>
+                                                <img width="25" height="25" src="~/images/sporttype/small/@(team.SportType).png" />
+                                            </td>
+                                            <td class="text-end">
+                                                <a asp-action="DetailsTeam"
+                                                        asp-route-teamid="@team.Id"
+                                                        type="button"
+                                                        class="btn btn-info text-light"
+                                                        style="font-family: monospace; font-size:18px">
+                                                    Більше &raquo;
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <label>
+                                Нема команд
+                            </label>
+                        }
+                    </div>
                 </div>
             </div>
-        }
+        </div>
     }
 </div>
+
+   

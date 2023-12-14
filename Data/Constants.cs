@@ -33,10 +33,16 @@ namespace BaseballUa.Data
 
 		public const string DefaultTeamSmallImage = "defaultSmall.png";
 		public const string DefaultTeamBigImage = "defaultBig.png";
+		
+		
+		public const int MaxClubStaffShow = 10;
+        public const string DefaultStaffSmallImage = "defaultSmall.png";
+        public const string DefaultStaffBigImage = "defaultBig.png";
+        public const int EuroClubId = 4;
+        public const string DefaultClubSmallImage = "defaultSmall.png";
+        public const string DefaultClubBigImage = "defaultBig.png";
 
-
-
-
-
-	}
+        public const string DefaultPlayerSmallImage = "defaultSmall.png";
+        public const string DefaultPlayerBigImage = "defaultBig.png";
+    }
 }

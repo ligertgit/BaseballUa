@@ -23,6 +23,6 @@ namespace BaseballUa.Models
         //[NotMapped]
         public IEnumerable<Team>? Teams { get; set; }
         //[NotMapped]
-        public ICollection<Staff> Staffs { get; set; }
+        public ICollection<Staff>? Staffs { get; set; }
     }
 }

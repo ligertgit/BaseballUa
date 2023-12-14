@@ -140,8 +140,6 @@ namespace BaseballUa.BlData
 								.ThenInclude(t => t.Category)
 						.Include(n => n.NewsTitlePhotos)
 								.ThenInclude(tf => tf.Photo);	   
-						
-			//return result;
 		}
 
 
@@ -165,23 +163,29 @@ namespace BaseballUa.BlData
 			return newsForClub;
 		}
 
-        public IEnumerable<News> GetAllTeamNews(int? teamId, int amount = Constants.DefaulNewsAmount)
+        public IEnumerable<News> GetAllTeamNews(out int countt, int? teamId, int skip = 0, int amount = Constants.DefaulNewsAmount )
         {
             var newsForClub = new List<News>();
+            countt = 0;
+
             if (teamId != null && amount > 0)
             {
-                //var teamIds = _dbContext.Teams.Where(t => t.ClubId == clubId).Select(t => t.Id).DefaultIfEmpty();
-                newsForClub = (from news in _dbContext.News
-                               where news.TeamId == teamId
-                               select news).DefaultIfEmpty()
-                               .Distinct()
-                               .OrderBy(n => n.PublishDate)
-                               .Take(amount)
-                               .Include(n => n.NewsTitlePhotos)
-                                    .ThenInclude(tp => tp.Photo)
-                               .ToList();
-            }
+				//var teamIds = _dbContext.Teams.Where(t => t.ClubId == clubId).Select(t => t.Id).DefaultIfEmpty();
+				var result = (from news in _dbContext.News
+							   where news.TeamId == teamId
+							   select news).DefaultIfEmpty()
+							   .Distinct()
+							   .OrderBy(n => n.PublishDate)
+							   .ThenBy(n => n.Id);
 
+				countt = result.Count();
+
+				newsForClub = result.Skip(skip)
+									.Take(amount)
+									.Include(n => n.NewsTitlePhotos)
+										.ThenInclude(tp => tp.Photo)
+									.ToList();
+            }
             return newsForClub;
         }
 

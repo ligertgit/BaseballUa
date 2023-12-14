@@ -243,8 +243,14 @@ namespace BaseballUa.BlData
 			if (teamId != null && amount > 0)
 			{
                 teamVideos = (from videos in _dbContext.Videos
-							   join games in _dbContext.Games on videos.GameId equals games.Id
-							   where games.HomeTeamId == teamId || games.VisitorTeamId == teamId
+							   join gGames in _dbContext.Games on videos.GameId equals gGames.Id into subGames
+							   from games in subGames.DefaultIfEmpty()
+							   join gNews in _dbContext.News on videos.NewsId equals gNews.Id into subNews
+							   from news in subNews.DefaultIfEmpty()
+							   where games.HomeTeamId == teamId 
+									|| games.VisitorTeamId == teamId
+									|| videos.TeamId == teamId
+									|| news.TeamId == teamId
 							   select videos).Take(amount)
 								.Union(
 								from videos in _dbContext.Videos
