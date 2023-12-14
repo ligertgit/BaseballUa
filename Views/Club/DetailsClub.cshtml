@@ -16,15 +16,20 @@
 			<div class="col">
 				<div class="row align-items-center bg-primary bg-opacity-50 text-light rounded-2 me-2">
 					<div class="flex-row p-2">
-						<a asp-action="DetailsClub" asp-route-clubId="@Model.Team.Club.Id">
-							<img class="img-thumb" src="~/images/club/logoSmall/@Model.Team.Club.FnameLogoSmall" />
-						</a>
-						<img class="me-4" src="~/images/sporttype/big/@(Model.Team.SportType).png" />
-						<h1 class="list-inline-item">@Model.Team.Name</h1>
+                        @if(Model.Club.Teams != null)
+                        {
+                            foreach (var team in Model.Club.Teams)
+                            {
+                                <a asp-action="DetailsTeam" asp-route-teamId="@team.Id">
+                                    <img src="~/images/team/logoSmall/@(team.FnameLogoSmall ?? Constants.DefaultTeamSmallImage)" />
+                                </a>
+                            }
+                        }
+                        <h1 class="list-inline-item align-bottom">@Model.Club.Name</h1>
 					</div>
 					<div class="flex-row p-4 pt-1 pb-1">
 						<span class="text-nowrap me-2">Як записатися:</span>
-						@Model.Team.Club.Invitation
+						@Model.Club.Invitation
 					</div>
 				</div>
 
@@ -32,13 +37,289 @@
 					<a href="#news" class="btn btn-primary" type="button">Новини</a>
 					<a href="#albums" class="btn btn-primary">Альбоми</a>
 					<a href="#videos" class="btn btn-primary">Відео</a>
-					<a href="#players" class="btn btn-primary">Гравці</a>
+					<a href="#games" class="btn btn-primary">Ігри</a>
+					<a href="#stuff" class="btn btn-primary">Працівники</a>
 				</div>
 			</div>
 		</div>
 	}
 </div>
 
+@if (Model != null && Model.Club != null)
+{
+    <div class="container-fluid bg-primary pt-3 pb-3 mb-0">
+        <div class="text-white rounded-2 border border-light border-1 m-0 p-2" style="font-family: monospace; font-size:18px">
+            @Html.DisplayFor(model => model.Club.Description)
+        </div>
+    </div>
+
+    @if (Model.Events != null && Model.Events.Count > 0)
+    {
+        <div class="container-fluid bg-primary mt-0 pb-3 pt-3">
+            <div class="row m-5 mt-0 mb-0 pt-2">
+                <div class="col">
+                    <h4 class="text-light">
+                        Актуальні турніри:
+                    </h4>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col">
+                    <table class="table text-light" style="font-family: monospace; font-size:18px">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Events)
+                            {
+                                var stateColor = "";
+                                var stateText = "йде";
+                                if (item.EndDate < DateTime.Now)
+                                {
+                                    stateColor = "bg-secondary";
+                                    stateText = "був";
+                                }
+                                else if (item.StartDate > DateTime.Now)
+                                {
+                                    stateColor = "table-active";
+                                    stateText = "буде";
+                                }
+                                <tr class="@stateColor text-light align-baseline">
+                                    <th scope="row">@stateText</th>
+                                    <td>
+                                        @item?.Tournament?.Name
+                                    </td>
+                                    <td>
+                                        <img width="25" height="25" src="~/images/sporttype/small/@(item?.Tournament?.Sport).png" />
+                                        @if (item?.Tournament?.CategoryId != null && item?.Tournament?.CategoryId > 0)
+                                        {
+                                            <img width="25" height="25" src="~/images/category/small/@(item?.Tournament?.CategoryId).png" />
+                                        }
+                                    </td>
+                                    <td>
+                                        @item?.StartDate?.ToString("dd/MM/yy hh:mm")
+                                    </td>
+                                    <td>
+                                        @item?.EndDate?.ToString("dd/MM/yy hh:mm")
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-action="DetailsEvent"
+                                           asp-route-id="@item.EventViewModelId"
+                                           type="button"
+                                           class="btn btn-primary"
+                                           style="font-family: monospace; font-size:18px">
+                                            Більше &raquo;
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.News != null && Model.News.Count > 0)
+    {
+        <div id="news" class="container-fluid text-white pt-5 pb-5">
+            <div class="row justify-content-center pt-0 mt-0">
+                <div class="col justify-content-center pt-0 mt-0">
+                    @await Html.PartialAsync("_NewsBlock6", Model.News)
+
+                </div>
+            </div>
+            <ul class="pagination pagination-lg m-3">
+                @if (Model.skipNewsPrev != -1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-clubId="@Model.Club.Id" asp-route-skipNews="@Model.skipNewsPrev" asp-fragment="news">&laquo;</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">&laquo;</a>
+                    </li>
+                }
+
+                @if (Model.skipNewsNext != -1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-clubId="@Model.Club.Id" asp-route-skipNews=@(Model.skipNewsNext) asp-fragment="news">&raquo;</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">&raquo;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+
+    @if (Model.Albums != null && Model.Albums.Count > 0)
+    {
+        <div id="albums" class="container-fluid bg-primary pt-3 pb-5">
+            <div class="row m-5 mt-0 mb-0 pt-2">
+                <div class="col">
+                    <h4 class="text-light">
+                        Найсвіжіші альбоми:
+                    </h4>
+                </div>
+            </div>
+            <hr />
+            <div class="d-flex flex-row flex-wrap p-2 m-0">
+                @await Html.PartialAsync("_AlbumsBlock2", Model.Albums)
+            </div>
+        </div>
+    }
+
+    @if (Model.Videos != null && Model.Videos.Count > 0)
+    {
+        <div id="videos" class="container-fluid bg-opacity-0 text-white pt-5 pb-5">
+            <div class="row justify-content-center pt-0 mt-0">
+                <div class="col justify-content-center pt-0 mt-0">
+                    @await Html.PartialAsync("_VideosWide", Model.Videos)
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.Games != null && Model.Games.Count > 0)
+    {
+        <div id="games" class="container-fluid text-white mt-0 pb-3 pt-3">
+            <div class="row m-5 mt-0 mb-0 pt-2">
+                <div class="col">
+                    <h4 class="text-light">
+                        Актуальні ігри:
+                    </h4>
+                </div>
+            </div>
+            <div class="row m-2">
+                <div class="col">
+                    <table class="table text-light" style="font-family: monospace; font-size:18px">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Games)
+                            {
+                                var stateColor = "";
+                                switch (item.GameStatus)
+                                {
+                                    case (GameStatus.Upcoming): stateColor = "table-active"; break;
+                                    case (GameStatus.Runnig): stateColor = ""; break;
+                                    case (GameStatus.Deleyed): stateColor = "table-warning"; break;
+                                    case (GameStatus.Finished): stateColor = "bg-secondary"; break;
+                                    case (GameStatus.Canceled): stateColor = "table-danger"; break;
+                                }
+                                <tr class="@stateColor text-light align-baseline">
+                                    <td>
+                                        @item.Name
+                                    </td>
+                                    <td>
+                                        @(item.StartDate == null || item.StartDate == DateTime.MinValue ? "--" : ((DateTime)item.StartDate).ToString("dd/MM hh:mm"))
+                                    </td>
+                                    <td>
+                                        @item.Tour
+                                    </td>
+                                    <td>
+                                        <img src="~/images/team/logoSmall/@(item.HomeTeam?.FnameLogoSmall ?? Constants.DefaultTeamSmallImage)" />
+                                    </td>
+                                    <td class="text-nowrap">
+                                        @(item.RunsHome ?? 0) : @(item.RunsVisitor ?? 0)
+                                    </td>
+                                    <td>
+                                        <img src="~/images/team/logoSmall/@(item.VisitorTeam?.FnameLogoSmall ?? Constants.DefaultTeamSmallImage)" />
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <ul class="pagination pagination-lg m-3">
+                @if (Model.skipGamesPrev != -1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-clubId="@Model.Club.Id" asp-route-skipGames="@Model.skipGamesPrev" asp-fragment="games">&laquo;</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">&laquo;</a>
+                    </li>
+                }
+
+                @if (Model.skipGamesNext != -1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" asp-route-clubId="@Model.Club.Id" asp-route-skipGames=@(Model.skipGamesNext) asp-fragment="games">&raquo;</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">&raquo;</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+
+    @if (Model.Club.Staffs != null && Model.Club.Staffs.Count > 0)
+    {
+        <div id="stuff" class="container-fluid bg-primary pt-3 pb-5">
+            <div class="row m-5 mt-0 mb-0 pt-2">
+                <div class="col">
+                    <h4 class="text-light">
+                        Працівники клубу:
+                    </h4>
+                </div>
+            </div>
+            <hr />
+            <div class="d-flex flex-row flex-wrap p-2 m-0">
+                @foreach (var stuff in Model.Club.Staffs)
+                {
+                    <div class="bg-warning me-2 mb-2 rounded-2 p-1 text-primary">
+                        <div class="text-center">
+                            <img src="~/images/player/avatarBig/@(stuff.AvatarLarge ?? Constants.DefaultStaffBigImage)" />
+                        </div>
+                        <div class="p-2 pt-0 pb-0">
+                            <strong>@stuff.RoleDescription</strong>
+                        </div>
+                        <div class="p-2 pt-0 pb-0">
+                            <strong>@stuff.FirsName</strong>
+                        </div>
+                        <div class="p-2 pt-0 pb-0">
+                            <strong>@stuff.SecondName</strong>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+}
 
 @*<div class="row m-1">
 	<div class="col-1">

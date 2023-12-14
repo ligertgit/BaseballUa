@@ -143,18 +143,22 @@ namespace BaseballUa.BlData
 		}
 
 
-        public IEnumerable<News> GetAllClubNews(int? clubId, int amount = Constants.DefaulNewsAmount)
+        public IEnumerable<News> GetAllClubNews(out int newsCount,int? clubId, int skip = 0, int amount = Constants.DefaulNewsAmount)
 		{
 			var newsForClub = new List<News>();
-			if (clubId != null && amount > 0)
+			newsCount = 0;
+
+            if (clubId != null && amount > 0)
 			{
 				var teamIds = _dbContext.Teams.Where(t => t.ClubId == clubId).Select(t => t.Id).DefaultIfEmpty();
-				newsForClub = (from news in _dbContext.News
+				var query = (from news in _dbContext.News
 							   where teamIds.Any(t => t == news.TeamId)
 							   select news).DefaultIfEmpty()
 							   .Distinct()
-							   .OrderBy(n => n.PublishDate)
-							   .Take(amount)
+							   .OrderBy(n => n.PublishDate);
+				newsCount = query.Count();
+
+                newsForClub = query.Skip(skip).Take(amount)
 							   .Include(n => n.NewsTitlePhotos)
 									.ThenInclude(tp => tp.Photo)
 							   .ToList();

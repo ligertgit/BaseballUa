@@ -6,6 +6,7 @@ using NuGet.Packaging.Signing;
 using static BaseballUa.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using BaseballUa.Migrations;
 
 namespace BaseballUa.BlData
 {
@@ -69,7 +70,7 @@ namespace BaseballUa.BlData
                                     .Include(g => g.VisitorTeam);
         }
 
-        public IEnumerable<Game> GetEventGames(int eventId, int amount = Constants.DefaulGameAmount)
+        public IEnumerable<Game> GetEventGames(int eventId, int amount = Constants.DefaultGameAmount)
         {
             var eventGames = new List<Game>();
             if (eventId > 0 && amount > 0)
@@ -89,6 +90,51 @@ namespace BaseballUa.BlData
 
             return eventGames;
         }
+
+        public IEnumerable<Game> GetAllForClub(out int gamesCount, int clubId, int skip = 0, int amount = Constants.DefaultGameAmount)
+        { 
+            //var clubGames = new List<Game> ();
+
+            //from game in _dbContext.Games
+            //join subhteam in _dbContext.Teams on game.HomeTeamId equals subhteam.Id into ghteams
+            //from hteam in ghteams.DefaultIfEmpty()
+            //join subvteam in _dbContext.Teams on game.VisitorTeamId equals subvteam.Id into gvteams
+            //from vteam in gvteams.DefaultIfEmpty()
+            //where hteam.ClubId == clubId || vteam.ClubId == clubId
+            var query = (from game in _dbContext.Games
+                         join hteam in _dbContext.Teams on game.HomeTeamId equals hteam.Id
+                         join vteam in _dbContext.Teams on game.VisitorTeamId equals vteam.Id
+                         where hteam.ClubId == clubId || vteam.ClubId == clubId
+                         select new Game
+                         {
+                             Id = game.Id,
+                             Name = game.Name,
+                             StartDate = game.StartDate,
+                             AdditionalInfo = game.AdditionalInfo,
+                             RunsVisitor = game.RunsVisitor,
+                             RunsHome = game.RunsHome,
+                             PlacedAt = game.PlacedAt,
+                             HalfinningsPlayed = game.HalfinningsPlayed,
+                             GameStatus = game.GameStatus,
+                             PointsVisitor = game.PointsVisitor,
+                             PointsHome = game.PointsHome,
+                             Tour = game.Tour,
+                             ConditionVisitor = game.ConditionVisitor,
+                             ConditionHome = game.ConditionHome,
+                             SchemaGroupId = game.SchemaGroupId,
+                             HomeTeamId = game.HomeTeamId,
+                             VisitorTeamId = game.VisitorTeamId,
+                             HomeTeam = hteam,
+                             VisitorTeam = vteam
+                         }
+                        ).Distinct();
+
+            gamesCount = query.Count();
+            var clubGames = query.OrderByDescending(g => g.StartDate).ThenByDescending(g => g.Id).Skip(skip).Take(amount);
+
+            return clubGames;    
+        }
+
 
         public IEnumerable<GameWithTeams> GetAllForGroupWithTeams(int schemaGroupId = 0)
         {

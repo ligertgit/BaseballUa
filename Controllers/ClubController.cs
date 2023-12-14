@@ -1,6 +1,8 @@
 ﻿using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.DTO;
+using BaseballUa.Models;
+using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
 
@@ -76,17 +78,17 @@ namespace BaseballUa.Controllers
             return View(teamFullVL);
         }
 
-        public IActionResult DetailsClub(int clubId)
+        public IActionResult DetailsClub(int clubId, int skipNews = 0, int skipGames = 0)
         {
             var clubFullVL = new ClubFullDetailVM();
 
             var clubDAL = new ClubCrud(_db).Get(clubId);
             clubDAL.Staffs = new StaffsCrud(_db).GetAll(clubId).ToList();
-            clubDAL.Teams = new TeamCrud(_db).GetAll(clubId).ToList();
+            clubDAL.Teams = new TeamCrud(_db).GetAll(clubId)?.ToList();
             clubFullVL.Club = new ClubToView().Convert(clubDAL);
 
-            var EventsDAL = new EventsCrud(_db).GetAllForClub(clubId).ToList();
-            clubFullVL.Events = new EventToView().ConvertAll(EventsDAL).ToList();
+            var EventsDAL = new EventsCrud(_db).GetAllForClub(clubId)?.ToList();
+            clubFullVL.Events = new EventToView().ConvertAll(EventsDAL ?? new List<Event>()).ToList();
 
             var clubVideos = new VideosCrud(_db).GetAllClubVideos(clubId, amount : Constants.DefaulVideosAmount).ToList();
             clubFullVL.Videos = new VideoToView().ConvertAll(clubVideos);
@@ -94,7 +96,29 @@ namespace BaseballUa.Controllers
             var clubAlbums = new AlbumsCrud(_db).GetAllClubAlbums(clubId, amount: Constants.DefaulAlbumsAmount).ToList();
             clubFullVL.Albums = new AlbumToView().ConvertAll(clubAlbums);
 
-            var clubNews = new NewsCrud(_db).GetAllClubNews(clubId, amount: Constants.DefaulNewsAmount).ToList();
+            int queryCount = 0;
+            int amount = Constants.DefaultGameAmount;
+            var clubGames = new GamesCrud(_db).GetAllForClub(out queryCount, clubId, skipGames, amount).ToList();
+            if (queryCount > skipGames + amount)
+            {
+                clubFullVL.skipGamesNext = skipGames + amount;
+            }
+            if (skipGames > 0)
+            {
+                clubFullVL.skipGamesPrev = skipGames - amount;
+            }
+            clubFullVL.Games = new GameToView().ConvertAll(clubGames);
+
+            amount = Constants.DefaulNewsAmount;
+            var clubNews = new NewsCrud(_db).GetAllClubNews(out queryCount, clubId, skipNews, amount).ToList();
+            if (queryCount > skipNews + amount)
+            {
+                clubFullVL.skipNewsNext = skipNews + amount;
+            }
+            if (skipNews > 0)
+            {
+                clubFullVL.skipNewsPrev = skipNews - amount;
+            }
             clubFullVL.News = new NewsToView().ConvertAll(clubNews);
 
             return View(clubFullVL);
