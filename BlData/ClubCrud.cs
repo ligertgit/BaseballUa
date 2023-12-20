@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
@@ -87,6 +88,17 @@ namespace BaseballUa.BlData
         public void Update(Club item)
         {
             throw new NotImplementedException();
+        }
+
+        public List<SelectListItem> GetSelectItemList()
+        {
+            var sList = _dbContext.Clubs.Select(c => new SelectListItem
+            {
+                Text = c.Name,
+                Value = c.Id.ToString()
+            }).ToList();
+
+            return sList;
         }
     }
 }

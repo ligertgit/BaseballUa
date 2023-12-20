@@ -63,7 +63,8 @@ namespace BaseballUa.BlData
 											.Take(amount == null ? Constants.DefaulVideosAmount : (int)amount);
 		}
 
-        public IEnumerable<Video> GetAllFiltered(SportType sportType = SportType.NotDefined,
+        public IEnumerable<Video> GetAllFiltered(out int countt, 
+									   SportType sportType = SportType.NotDefined,
                                        bool includeAllGeneral = false,
                                        bool includeAllFun = false,
                                        bool isOfficial = false,
@@ -71,32 +72,34 @@ namespace BaseballUa.BlData
                                        bool isAnnual = false,
                                        int? eventId = null,
                                        IEnumerable<int>? categoryIds = null,
-                                       int? teamId = null,
+                                       IEnumerable<int>? teamIds = null,
+                                       //int? teamId = null,
                                        DateTime? newestDate = null,
                                        int? lastId = null,
+                                       int skip = 0,
                                        int amount = Constants.DefaulVideosAmount)
         {
             var fixxedNewestDate = newestDate ?? DateTime.Now.Date;
-            var fixxedLastId = lastId ?? int.MaxValue;
+            //var fixxedLastId = lastId ?? int.MaxValue;
 
-            var result = (from videos in _dbContext.Videos
-							  join jnews in _dbContext.News on videos.NewsId equals jnews.Id into subnews
-							  from news in subnews.DefaultIfEmpty()
-								  join jevent in _dbContext.Events on news.EventId equals jevent.Id into subevent
-								  from eventt in subevent.DefaultIfEmpty()
-									  join jtour in _dbContext.Tournaments on eventt.TournamentId equals jtour.Id into subtour
-									  from tour in subtour.DefaultIfEmpty()
-							  join jgame in _dbContext.Games on videos.GameId equals jgame.Id into subgame
-							  from game in subgame.DefaultIfEmpty()
-								  join jeventGroup in _dbContext.SchemaGroups on game.SchemaGroupId equals jeventGroup.Id into subgroup
-								  from eventGroup in subgroup.DefaultIfEmpty()
-									  join jeventItem in _dbContext.EventSchemaItems on eventGroup.EventSchemaItemId equals jeventItem.Id into subeventItem
-									  from eventItem in subeventItem.DefaultIfEmpty()
-										  join jeventG in _dbContext.Events on eventItem.EventId equals jeventG.Id into subeventG
-										  from eventG in subeventG.DefaultIfEmpty()
-											join jtourG in _dbContext.Tournaments on eventG.TournamentId equals jtourG.Id into subtourG
-											from tourG in subtourG.DefaultIfEmpty()
-						  where (videos.PublishDate < fixxedNewestDate || (videos.PublishDate == fixxedNewestDate && videos.Id < fixxedLastId))
+			var result = (from videos in _dbContext.Videos
+						  join jnews in _dbContext.News on videos.NewsId equals jnews.Id into subnews
+						  from news in subnews.DefaultIfEmpty()
+						  join jevent in _dbContext.Events on news.EventId equals jevent.Id into subevent
+						  from eventt in subevent.DefaultIfEmpty()
+						  join jtour in _dbContext.Tournaments on eventt.TournamentId equals jtour.Id into subtour
+						  from tour in subtour.DefaultIfEmpty()
+						  join jgame in _dbContext.Games on videos.GameId equals jgame.Id into subgame
+						  from game in subgame.DefaultIfEmpty()
+						  join jeventGroup in _dbContext.SchemaGroups on game.SchemaGroupId equals jeventGroup.Id into subgroup
+						  from eventGroup in subgroup.DefaultIfEmpty()
+						  join jeventItem in _dbContext.EventSchemaItems on eventGroup.EventSchemaItemId equals jeventItem.Id into subeventItem
+						  from eventItem in subeventItem.DefaultIfEmpty()
+						  join jeventG in _dbContext.Events on eventItem.EventId equals jeventG.Id into subeventG
+						  from eventG in subeventG.DefaultIfEmpty()
+						  join jtourG in _dbContext.Tournaments on eventG.TournamentId equals jtourG.Id into subtourG
+						  from tourG in subtourG.DefaultIfEmpty()
+						  where videos.PublishDate <= fixxedNewestDate
 								 && ((includeAllGeneral && (news.IsGeneral || videos.IsGeneral))
 									  || (includeAllFun && (tour.IsFun || tourG.IsFun))
 									  || ((sportType == SportType.NotDefined
@@ -104,12 +107,12 @@ namespace BaseballUa.BlData
 													  || tour.Sport == sportType
 													  || tourG.Sport == sportType
 													  || news.SportType == sportType
-													  //|| (videos.SportType == SportType.NotDefined
-														 // && (videos.NewsId != null || videos.GameId != null)
-														 // && (videos.NewsId == null
-															//  || (news.SportType == SportType.NotDefined
-															//	  && (news.EventId == null || tour.Sport == SportType.NotDefined)))
-														 // && (videos.GameId == null || tourG.Sport == SportType.NotDefined))
+														  //|| (videos.SportType == SportType.NotDefined
+														  // && (videos.NewsId != null || videos.GameId != null)
+														  // && (videos.NewsId == null
+														  //  || (news.SportType == SportType.NotDefined
+														  //	  && (news.EventId == null || tour.Sport == SportType.NotDefined)))
+														  // && (videos.GameId == null || tourG.Sport == SportType.NotDefined))
 														  )
 										  && (!isOfficial || tour.IsOfficial || tourG.IsOfficial)
 										  && (!isInternational || tour.IsInternational || tourG.IsInternational)
@@ -120,20 +123,26 @@ namespace BaseballUa.BlData
 											  || categoryIds.Any(c => c == news.CategoryId)
 											  || categoryIds.Any(c => c == tour.CategoryId)
 											  || categoryIds.Any(c => c == tourG.CategoryId))
-										  && (teamId == null
-											  || videos.TeamId == teamId
-											  || news.TeamId == teamId
-											  || game.HomeTeamId == teamId
-											  || game.VisitorTeamId == teamId)
+											//&& (teamId == null
+											// || videos.TeamId == teamId
+											// || news.TeamId == teamId
+											// || game.HomeTeamId == teamId
+											// || game.VisitorTeamId == teamId)
+											&& (teamIds.IsNullOrEmpty()
+											|| teamIds.Any(t => t == videos.TeamId)
+											|| teamIds.Any(t => t == news.TeamId)
+											|| teamIds.Any(t => t == game.HomeTeamId)
+											|| teamIds.Any(t => t == game.VisitorTeamId))
 										 )
 									  )
 						  select videos)
-							.Distinct()
-							.OrderByDescending(a => a.PublishDate)
-								.ThenByDescending(a => a.Id)
-							.Take(amount);
+							.Distinct();
+            countt = result.Count();
 
-            return result;
+			return	result.OrderByDescending(a => a.PublishDate)
+								.ThenByDescending(a => a.Id)
+						  .Skip(skip)
+						  .Take(amount);
         }
 
         public IEnumerable<Video> GetAllHard(SportType? sportType = null,

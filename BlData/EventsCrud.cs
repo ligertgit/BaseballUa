@@ -18,7 +18,7 @@ namespace BaseballUa.BlData
 
         public EventsCrud(BaseballUaDbContext dbContext)
         {
-            _dbContext = dbContext;   
+            _dbContext = dbContext;
         }
         public void Add(Event item)
         {
@@ -39,11 +39,11 @@ namespace BaseballUa.BlData
             var eventItem = _dbContext.Events.Where(e => e.Id == itemId)
                                                 .Include(e => e.Tournament)
                                                     .ThenInclude(t => t.Category)
-                                                .Include(e => e.News) 
+                                                .Include(e => e.News)
                                                     .ThenInclude(n => n.NewsTitlePhotos)
                                                         .ThenInclude(t => t.Photo)
                                                 .FirstOrDefault();
-            
+
             return eventItem ?? new Event();
         }
 
@@ -53,29 +53,29 @@ namespace BaseballUa.BlData
             //throw new NotImplementedException();
             //return _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category);
             return eventItem;
-		}
+        }
 
-		public IEnumerable<Event> GetAll(SportType? sportType = null,
-										int? categoryId = null,
-										DateTime? firstDate = null,
-										DateTime? lastDate = null,
-										int? lastId = null,
-										int? amount = null)
-		{
-			return _dbContext.Events.Where(e => ( firstDate == null || lastDate == null 
-                                                    || ( firstDate < e.StartDate && lastDate > e.StartDate )
-                                                    || ( lastDate > e.EndDate && firstDate < e.EndDate )
-                                                    || ( firstDate > e.StartDate && lastDate < e.EndDate )
-                                                ) 
-                                                && ( lastId == null || e.Id < lastId)
-                                                && ( categoryId == null || e.Tournament.CategoryId  == categoryId )
-                                                && ( sportType == null || e.Tournament.Sport == sportType)
-                                          ).OrderByDescending( e => e.StartDate )
-                                          .Take( amount == null ? Constants.DefaulEventAmount : (int)amount )
-                                          .Include( e => e.Tournament )
-                                                .ThenInclude( t => t.Category )
+        public IEnumerable<Event> GetAll(SportType? sportType = null,
+                                        int? categoryId = null,
+                                        DateTime? firstDate = null,
+                                        DateTime? lastDate = null,
+                                        int? lastId = null,
+                                        int? amount = null)
+        {
+            return _dbContext.Events.Where(e => (firstDate == null || lastDate == null
+                                                    || (firstDate < e.StartDate && lastDate > e.StartDate)
+                                                    || (lastDate > e.EndDate && firstDate < e.EndDate)
+                                                    || (firstDate > e.StartDate && lastDate < e.EndDate)
+                                                )
+                                                && (lastId == null || e.Id < lastId)
+                                                && (categoryId == null || e.Tournament.CategoryId == categoryId)
+                                                && (sportType == null || e.Tournament.Sport == sportType)
+                                          ).OrderByDescending(e => e.StartDate)
+                                          .Take(amount == null ? Constants.DefaulEventAmount : (int)amount)
+                                          .Include(e => e.Tournament)
+                                                .ThenInclude(t => t.Category)
                                           .Include(e => e.News);
-		}
+        }
 
         public IEnumerable<Event> GetAllFilteredActive(SportType sportType = SportType.NotDefined,
                                         bool includeAllFun = false,
@@ -110,6 +110,58 @@ namespace BaseballUa.BlData
                             .ThenInclude(t => t.Category);
 
             return result;
+        }
+
+        public IEnumerable<Event> GetAllFiltered(
+                                out int countt,
+                                SportType sportType = SportType.NotDefined,
+                                bool includeAllFun = false,
+                                bool isOfficial = false,
+                                bool isInternational = false,
+                                bool isAnnual = false,
+                                IEnumerable<int>? teamIds = null,
+                                IEnumerable<int>? categoryIds = null,
+                                DateTime? newestDate = null,
+                                DateTime? eldestDate = null,
+                                int skip = 0,
+                                int amount = Constants.DefaulEventAmount)
+        {
+            var fixxedNDate = newestDate ?? DateTime.Now.Date;
+            var fixxedEDate = eldestDate ?? DateTime.MinValue;
+
+            var result = (from eventt in _dbContext.Events
+                          join tour in _dbContext.Tournaments on eventt.TournamentId equals tour.Id
+                          join cat in _dbContext.Categories on tour.CategoryId equals cat.Id
+                          join subEventItem in _dbContext.EventSchemaItems on eventt.Id equals subEventItem.EventId into gEventItems
+                          from eventItem in gEventItems.DefaultIfEmpty()
+                          join subItemGroup in _dbContext.SchemaGroups on eventItem.Id equals subItemGroup.EventSchemaItemId into gItemGroups
+                          from itemGroup in gItemGroups.DefaultIfEmpty()
+                          join subGame in _dbContext.Games on itemGroup.Id equals subGame.SchemaGroupId into gGames
+                          from game in gGames.DefaultIfEmpty()
+                          //where (eventt.StartDate >= fixxedForDate.AddDays(-Constants.DefaulActiveEventDaysShift) && eventt.EndDate <= fixxedForDate.AddDays(Constants.DefaulActiveEventDaysShift))
+                          where (eventt.StartDate <= fixxedNDate && eventt.EndDate >= fixxedEDate)
+                                && ((includeAllFun && tour.IsFun)
+                                    || ((sportType == SportType.NotDefined
+                                        || tour.Sport == sportType
+                                        || tour.Sport == SportType.NotDefined)
+                                       && (!isOfficial || tour.IsOfficial)
+                                       && (!isInternational || tour.IsInternational)
+                                       && (!isAnnual || tour.IsAnual)
+                                       && (categoryIds.IsNullOrEmpty() || categoryIds.Any(c => c == tour.CategoryId))
+                                       )
+                                   )
+                                && (teamIds.IsNullOrEmpty()
+                                    || teamIds.Any(t => t == game.HomeTeamId || t == game.VisitorTeamId)
+                                    )
+                          select eventt)
+                         .Distinct()
+                         .OrderByDescending(n => n.StartDate);
+            countt = result.Count();
+
+            return result.Skip(skip)
+                         .Take(amount)
+                         .Include(n => n.Tournament)
+                            .ThenInclude(t => t.Category);
         }
 
 

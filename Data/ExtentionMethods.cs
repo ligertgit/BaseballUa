@@ -1,6 +1,7 @@
 ﻿using Azure;
 using Azure.Core;
 using BaseballUa.DTO.Custom;
+using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

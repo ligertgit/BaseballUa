@@ -266,7 +266,8 @@ namespace BaseballUa.BlData
                                             .Include(a => a.Photos);
         }
 
-        public IEnumerable<Album> GetAllFiltered(SportType sportType = SportType.NotDefined,
+        public IEnumerable<Album> GetAllFiltered(out int countt, 
+                                        SportType sportType = SportType.NotDefined,
                                         bool includeAllGeneral = false,
                                         bool includeAllFun = false,
                                         bool isOfficial = false,
@@ -274,14 +275,16 @@ namespace BaseballUa.BlData
                                         bool isAnnual = false,
                                         int? eventId = null,
                                         IEnumerable<int>? categoryIds = null,
-                                        int? teamId = null,
+                                        IEnumerable<int>? teamIds = null,
+                                        //int? teamId = null,
                                         DateTime? newestDate = null,
-                                        int? lastId = null,
+                                        //int? lastId = null,
+                                        int skip = 0,
                                         int amount = Constants.DefaulAlbumsAmount)
         {
 
             var fixxedNewestDate = newestDate ?? DateTime.Now.Date;
-            var fixxedLastId = lastId ?? int.MaxValue;
+            //var fixxedLastId = lastId ?? int.MaxValue;
 
             var result = (  from albums in _dbContext.Albums
                             join photos in _dbContext.Photos on albums.Id equals photos.Id
@@ -301,7 +304,7 @@ namespace BaseballUa.BlData
                                             from eventG in subeventG.DefaultIfEmpty()
                                             join jtourG in _dbContext.Tournaments on eventG.TournamentId equals jtourG.Id into subtourG
                                                 from tourG in subtourG.DefaultIfEmpty()
-                            where   (albums.PublishDate < fixxedNewestDate || (albums.PublishDate == fixxedNewestDate && albums.Id < fixxedLastId))
+                            where   albums.PublishDate <= fixxedNewestDate
                                     && ((includeAllGeneral && (news.IsGeneral || albums.IsGeneral))
                                         || (includeAllFun && (tour.IsFun || tourG.IsFun))
                                         || ((sportType == SportType.NotDefined
@@ -325,21 +328,21 @@ namespace BaseballUa.BlData
                                                 || categoryIds.Any(c => c == news.CategoryId)
                                                 || categoryIds.Any(c => c == tour.CategoryId)
                                                 || categoryIds.Any(c => c == tourG.CategoryId))
-                                            && (teamId == null
-                                                || albums.TeamId == teamId
-                                                || news.TeamId == teamId
-                                                || game.HomeTeamId == teamId
-                                                || game.VisitorTeamId == teamId)
+                                            && (teamIds.IsNullOrEmpty()
+                                                || teamIds.Any(t => t == albums.TeamId)
+                                                || teamIds.Any(t => t == news.TeamId)
+                                                || teamIds.Any(t => t == game.HomeTeamId)
+                                                || teamIds.Any(t => t == game.VisitorTeamId))
                                            )
                                         )
                             select albums)
                             .Distinct()
                             .OrderByDescending(a => a.PublishDate)
-                                .ThenByDescending(a => a.Id)
-                            .Take(amount)
-                            .Include(a => a.Photos);
+                                .ThenByDescending(a => a.Id);
+            countt = result.Count();
 
-            return result;
+            return result.Take(amount)
+                            .Include(a => a.Photos);
         }
 
 

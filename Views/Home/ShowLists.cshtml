@@ -1,0 +1,204 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.Custom.HomeShowListVM
+
+<div class="container-fluid text-white bg-primary">
+    <div class="">
+        <form asp-controller="Home" asp-action="SubmitShowList">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="redirectAction" value="@Model.ApplyFilters.RedirectAction" />
+            <input type="hidden" name="listToShow" value="@Model.listToShow" />
+            @foreach (var routeItem in Model.ApplyFilters.RouteItems)
+            {
+                <input type="hidden" name="@routeItem.Name" value="@routeItem.Value" />
+            }
+
+            <div class="d-flex flex-row flex-wrap p-0 m-0 justify-content-between align-items-center">
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkBaseball" class="btn-check" id="btn-check-bb"
+                    @if (Model.ApplyFilters.Filters.Baseball)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-bb">Baseball</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkSoftball" class="btn-check pe-1" id="btn-check-sb"
+                    @if (Model.ApplyFilters.Filters.Softball)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-sb">Softball</label>
+                </div>
+
+                |
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkU10" class="btn-check" id="btn-check-u10"
+                    @if (Model.ApplyFilters.Filters.U10)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-u10">U10</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkU12" class="btn-check" id="btn-check-u12"
+                    @if (Model.ApplyFilters.Filters.U12)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-u12">U12</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkU15" class="btn-check" id="btn-check-u15"
+                    @if (Model.ApplyFilters.Filters.U15)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-u15">U15</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkU18" class="btn-check" id="btn-check-u18"
+                    @if (Model.ApplyFilters.Filters.U18)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-u18">U18</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkAdult" class="btn-check" id="btn-check-adult"
+                    @if (Model.ApplyFilters.Filters.Adult)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-adult">Вишка</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkVeteran" class="btn-check" id="btn-check-veteran"
+                    @if (Model.ApplyFilters.Filters.Veteran)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-veteran">Ветерани</label>
+                </div>
+
+                |
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkAnnual" class="btn-check" id="btn-check-annual"
+                    @if (Model.ApplyFilters.Filters.Annual)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-annual">Регулярні</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkInternational" class="btn-check" id="btn-check-inational"
+                    @if (Model.ApplyFilters.Filters.International)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-inational">INational</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkOfficial" class="btn-check" id="btn-check-official"
+                    @if (Model.ApplyFilters.Filters.Official)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-official">Офіційні</label>
+                </div>
+
+                +
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkFun" class="btn-check" id="btn-check-fun"
+                    @if (Model.ApplyFilters.Filters.Fun)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-fun">Фанові</label>
+                </div>
+
+                <div class="me-1 bg-black bg-opacity-50 rounded-2">
+                    <input type="checkbox" name="chkGeneral" class="btn-check" id="btn-check-general"
+                    @if (Model.ApplyFilters.Filters.General)
+                    {
+                        @:checked
+                    }
+                           autocomplete="off">
+                    <label class="btn btn-outline-warning" for="btn-check-general">Для всіх</label>
+                </div>
+
+
+@*                <div class="pe-0">
+                    <div class="form-group">
+                        <input type="submit" value="Застосувати фільтри" class="btn btn-warning" />
+                    </div>
+                </div>*@
+
+            </div>
+            <div class="row">
+                <div class="col">
+                    @*<label asp-for="teamId" class="control-label"></label>*@
+                    <label class="control-label">Команда: </label>
+                    @Html.DropDownListFor(x => Model.TeamId, Model.TeamSL, optionLabel: "--- оберіть ---" )
+                    @*@Html.DropDownList("ttt", Model.TeamSL, optionLabel: "--- оберіть ---")*@
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label class="control-label">Клуб: </label>
+                    @Html.DropDownListFor(x => Model.ClubId, Model.ClubSL, optionLabel: "--- оберіть ---" )
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="pe-0">
+                        <div class="form-group">
+                            <input type="submit" value="Застосувати фільтри" class="btn btn-warning" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container-fluid text-white bg-primary">
+    @if(Model.listToShow == Enums.ListToShow.News && Model.News != null && Model.News.Count > 0)
+    {
+        foreach(var news in Model.News)
+        {
+            <div>
+                @news.Title
+
+                @news.Description
+            </div>
+            <hl />
+            <br />
+            <br />
+        }
+    }
+</div>
+
+

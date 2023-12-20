@@ -55,11 +55,14 @@ namespace BaseballUa.DTO
 		public List<NewsVM> ConvertAll(List<News>? newsDAL, bool doSubConvert = true)
 		{
 			var newsVL = new List<NewsVM>();
-			foreach (var item in newsDAL) 
-			{ 
-				newsVL.Add(Convert(item, doSubConvert));
-			}
-
+            if (newsDAL != null) 
+            {
+                foreach (var item in newsDAL)
+                {
+                    newsVL.Add(Convert(item, doSubConvert));
+                }
+            }
+			
 			return newsVL;
 		}
 

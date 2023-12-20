@@ -71,5 +71,13 @@ namespace BaseballUa.Data
             Female = 2,
             NotDefined = 3
         }
+
+        public enum ListToShow
+        {
+            News,
+            Videos,
+            Albums,
+            Events
+        }
     }
 }

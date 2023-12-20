@@ -69,6 +69,7 @@ namespace BaseballUa.Controllers
                     if (skipNews > 0)
                     {
                         teamFullVL.skipNewsPrev = skipNews - amount;
+                        teamFullVL.skipNewsPrev = teamFullVL.skipNewsPrev < 0 ? 0 : teamFullVL.skipNewsPrev;
                     }
                     teamFullVL.News = new NewsToView().ConvertAll(teamNewsDAL);
 
@@ -106,6 +107,7 @@ namespace BaseballUa.Controllers
             if (skipGames > 0)
             {
                 clubFullVL.skipGamesPrev = skipGames - amount;
+                clubFullVL.skipNewsPrev = clubFullVL.skipNewsPrev < 0 ? 0 : clubFullVL.skipNewsPrev;
             }
             clubFullVL.Games = new GameToView().ConvertAll(clubGames);
 
@@ -118,6 +120,7 @@ namespace BaseballUa.Controllers
             if (skipNews > 0)
             {
                 clubFullVL.skipNewsPrev = skipNews - amount;
+                clubFullVL.skipNewsPrev = clubFullVL.skipNewsPrev < 0 ? 0 : clubFullVL.skipNewsPrev;
             }
             clubFullVL.News = new NewsToView().ConvertAll(clubNews);
 
