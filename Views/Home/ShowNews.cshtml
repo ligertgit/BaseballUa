@@ -1,148 +1,107 @@
 ﻿@using BaseballUa.Data;
 @model BaseballUa.ViewModels.NewsVM
 
-<div class="row">
-    <div class="col-4">
-        <div class="row">
-            @if (Model.Event != null && Model.EventId > 0)
-            {
-                @if (Model.Event.Tournament != null)
-                {
-                    <div class="col-3">
-                        <h3>Турнір:</h3>
-                    </div>
-                    <div class="col-2">
-                        <img  src="~/images/category/big/@(Model.Event.Tournament.CategoryId).png" />
-                    </div>
-                    <div class="col-2">
-                        <img src="~/images/sporttype/big/@(Model.Event.Tournament.Sport).png" />
-                    </div>
 
-                    <div class="row">
-                        <a class="btn btn-primary" asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@Model.EventId">@Model.Event.Tournament.Name @Model.Event.Year</a>
-                    </div>
+<div class="container-fluid text-white bg-primary pb-3">
+    <div class="row m-3 mt-0">
+        <div class="col">
+            <div class="row p-1 pb-0">
+                <div class="col">
+                    <h2>@Model.Title</h2>
+                </div>
+            </div>
+            <div class="flex-row p-1 pt-0 pe-0 pb-0">
+                @if (Model.Event != null && Model.Event.Tournament != null && Model.EventId > 0)
+                {
+                    @*<div class="col">*@
+                        <img src="~/images/category/big/@(Model.Event.Tournament.CategoryId).png" />
+                    @*</div>*@
+                    @*<div class="col">*@
+                        <img src="~/images/sporttype/big/@(Model.Event.Tournament.Sport).png" />
+                    @*</div>*@
+                    @*<div class="col">*@
+                        <a class="btn btn-warning" asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@Model.EventId">@Model.Event.Tournament.Name @Model.Event.Year</a>
+                    @*</div>*@
                 }
-            }
+            </div>
+            <div class="row bg-info bg-opacity-50 border border-1 rounded-3 mt-4 p-3">
+                <div class="col">
+                    @if (Model.Photos != null && Model.Photos.Count() > 0)
+                    {
+                        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="max-height:300px;">
+                            <div class="carousel-indicators">
+                                @for (var i = 0; i < Model.Photos.Count(); i++)
+                                {
+                                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i" class="@(i == 0 ? "active": "")" aria-current="true" aria-label="Slide 1"></button>
+                                }
+                            </div>
+                            <div class="carousel-inner">
+                                @for (int i = 0; i < Model.Photos.Count(); i++)
+                                {
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <div class=" text-center">
+                                            @*d-block w-100*@
+                                            <img style="object-fit: scale-down; max-height:300px;" src="/images/photo/big/@Model.Photos[i].AlbumId/@Model.Photos[i].FnameBig" class="d-inline rounded-2 border border-1" alt="...">
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    }
+                </div>
+                <div class="col" style="min-width: 400px">
+                    <div class="row pt-3">
+                        <h5>@Model.Description</h5>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row pt-5">
-            @if (Model.Albums != null && Model.Albums.Count() > 0)
-            {
-                <h3>Альбоми новини:</h3>
+    </div>
+    @if (Model.Albums != null && Model.Albums.Count() > 0)
+    {
+        <div class="row m-5 mt-1 mb-1 me-3 p-4 bg-info bg-opacity-50 border border-1 rounded-3">
+            <h4>Вкладені альбоми:</h4>
+            <div class="flex-row">
                 @foreach (var album in Model.Albums)
                 {
                     @if (album.Photos != null && album.Photos.Count() > 0)
                     {
-                        <div class="row">
-                            <a asp-action="ShowAlbum" asp-route-newsId="@album.Id">
-                                <img class="img-thumbnail" src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />
-                                <label>@album.Name</label>
-                            </a>
-                        </div>
+                        <a asp-action="ShowAlbum" asp-route-Id="@album.Id">
+                            <img class="img-thumbmedium rounded-2 border border-1 mb-1" style="height:150px;" src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />
+                        </a>
                     }
                 }
-            }
+            </div>
         </div>
-        <div class="row pt-5">
-            @if (Model.Videos != null && Model.Videos.Count() > 0)
-            {
-                <h3>Відео новини:</h3>
+    }
+
+    @if (Model.Videos != null && Model.Videos.Count() > 0)
+    {
+        <div class="row m-5 mt-3 mb-1 me-3 p-4 pb-0 bg-info bg-opacity-50 border border-1 rounded-3">
+            <div class="col">
+                <h4>Вкладені відео :</h4>
                 @foreach (var video in Model.Videos)
                 {
-                    <div class="row pt-1">
-                        <a class="btn btn-danger" href="@video.Fname">
-                            <label>@video.Name</label>
-                        </a>
+                    <div class="row embed-responsive">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe width='480' height='270' class="embed-responsive-item" src="@video.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
+                        </div>
                     </div>
-                }
-            }
-        </div>
-
-
-    </div>
-    <div class="col-8 bg-info">
-        <div class="row">
-            <div class="col">
-                @if (Model.Photos != null && Model.Photos.Count() > 0)
-                {
-                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="max-height:500px;">
-                        <div class="carousel-indicators">
-                            @for (var i = 0; i < Model.Photos.Count(); i++)
-                            {
-                                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i" class="@(i == 0 ? "active": "")" aria-current="true" aria-label="Slide 1"></button>
-                            }
+                    <div class="row pb-5">
+                        <div class="col">
+                            <a class="btn btn-danger">Дивитись @video.Name на YouTube</a>
                         </div>
-                        <div class="carousel-inner">
-                            @for (int i = 0; i < Model.Photos.Count(); i++)
-                            {
-                                <div class="carousel-item @(i == 0 ? "active" : "")">
-                                    <img style="object-fit: scale-down; max-height:500px;" src="/images/photo/big/@Model.Photos[i].AlbumId/@Model.Photos[i].FnameBig" class="d-block w-100" alt="...">
-                                </div>
-                            }
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
                     </div>
                 }
             </div>
         </div>
-
-        <div class="row">
-            <h2>@Model.Title</h2>
-        </div>
-        <div class="row">
-            <h6>@Model.Description</h6>
-        </div>
-        <div class="row pt-4" id="albums">
-            @if (Model.Albums != null && Model.Albums.Count() > 0)
-            {
-                <h4>Альбоми:</h4>
-                @foreach (var album in Model.Albums)
-                {
-                    @if (album.Photos != null && album.Photos.Count() > 0)
-                    {
-                        <div class="col">
-                            <a asp-action="ShowAlbum" asp-route-newsId="@album.Id">
-                                <div class="row">
-                                    <div class="col">
-                                        <img class="img-thumbnail" src="~/images/photo/small/@album.Id/@album.Photos.First().FnameSmall" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                        <strong>@album.Name</strong>
-                                </div>
-                            </a>
-                        </div>
-                    }
-                }
-            }
-        </div>
-        <div class="row pt-4" id="videos">
-            @if (Model.Videos != null && Model.Videos.Count() > 0)
-            {
-                <div class="col">
-                    <h4>Відео:</h4>
-                    @foreach (var video in Model.Videos)
-                    {
-                        <div class="row embed-responsive">
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe width='480' height='390' class="embed-responsive-item" src="@video.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
-                            </div>
-                        </div>
-                        <div class="row pb-5">
-                            <div class="col">
-                                <a class="btn btn-danger">Дивитись @video.Name на YouTube</a>
-                            </div>
-                        </div>
-                    
-                    }
-                </div>
-            }
-        </div>
-    </div>
+    }
 </div>

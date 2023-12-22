@@ -34,11 +34,40 @@
 				</div>
 
 				<div class="flex-row mt-2">
-					<a href="#news" class="btn btn-primary" type="button">Новини</a>
+					@*<a href="#news" class="btn btn-primary" type="button">Новини</a>
 					<a href="#albums" class="btn btn-primary">Альбоми</a>
-					<a href="#videos" class="btn btn-primary">Відео</a>
-					<a href="#games" class="btn btn-primary">Ігри</a>
-					<a href="#stuff" class="btn btn-primary">Працівники</a>
+					<a href="#videos" class="btn btn-primary">Відео</a>*@
+
+                    <a class="btn btn-warning me-1" asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-ClubId="@Model.Club.Id"
+                       asp-route-listToShow="@ListToShow.Videos"
+                       asp-route-resetFilters="1">
+                        Відео
+                    </a>
+                    <a class="btn btn-warning me-1" asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-ClubId="@Model.Club.Id"
+                       asp-route-listToShow="@ListToShow.Albums"
+                       asp-route-resetFilters="1">
+                        Альбоми
+                    </a>
+                    <a class="btn btn-warning me-1" asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-ClubId="@Model.Club.Id"
+                       asp-route-listToShow="@ListToShow.News"
+                       asp-route-resetFilters="1">
+                        Новини
+                    </a>
+                    <a class="btn btn-warning me-1" asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-ClubId="@Model.Club.Id"
+                       asp-route-listToShow="@ListToShow.Events"
+                       asp-route-resetFilters="1">
+                        Турніри
+                    </a>
+                    <a href="#games" class="btn btn-primary">Ігри</a>
+                    <a href="#stuff" class="btn btn-primary">Працівники</a>
 				</div>
 			</div>
 		</div>
@@ -179,6 +208,11 @@
             <hr />
             <div class="d-flex flex-row flex-wrap p-2 m-0">
                 @await Html.PartialAsync("_AlbumsBlock2", Model.Albums)
+
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.Albums" asp-route-clubId="@Model.Club.Id" asp-route-resetFilters="1">
+                    <img class="pe-1" width="25" src="~/images/assets/albumSmall.png" />
+                    <span class="text-white">ВСІ</span>
+                </a>
             </div>
         </div>
     }
@@ -189,6 +223,8 @@
             <div class="row justify-content-center pt-0 mt-0">
                 <div class="col justify-content-center pt-0 mt-0">
                     @await Html.PartialAsync("_VideosWide", Model.Videos)
+
+                    @*asp-route-clubId="@Model.Club.Id" asp-route-resetFilters="1"*@
                 </div>
             </div>
         </div>

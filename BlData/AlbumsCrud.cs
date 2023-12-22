@@ -276,15 +276,12 @@ namespace BaseballUa.BlData
                                         int? eventId = null,
                                         IEnumerable<int>? categoryIds = null,
                                         IEnumerable<int>? teamIds = null,
-                                        //int? teamId = null,
                                         DateTime? newestDate = null,
-                                        //int? lastId = null,
                                         int skip = 0,
                                         int amount = Constants.DefaulAlbumsAmount)
         {
 
             var fixxedNewestDate = newestDate ?? DateTime.Now.Date;
-            //var fixxedLastId = lastId ?? int.MaxValue;
 
             var result = (  from albums in _dbContext.Albums
                             join photos in _dbContext.Photos on albums.Id equals photos.Id
@@ -312,12 +309,6 @@ namespace BaseballUa.BlData
                                                         || tour.Sport == sportType
                                                         || tourG.Sport == sportType
                                                         || news.SportType == sportType
-                                                        //|| (albums.SportType == SportType.NotDefined
-                                                        //    && (albums.NewsId != null || albums.GameId != null)
-                                                        //    && (albums.NewsId == null
-                                                        //        || (news.SportType == SportType.NotDefined
-                                                        //            && (news.EventId == null || tour.Sport == SportType.NotDefined)))
-                                                        //    && (albums.GameId == null || tourG.Sport == SportType.NotDefined))
                                                             )
                                             && (!isOfficial || tour.IsOfficial || tourG.IsOfficial)
                                             && (!isInternational || tour.IsInternational || tourG.IsInternational)
@@ -329,10 +320,10 @@ namespace BaseballUa.BlData
                                                 || categoryIds.Any(c => c == tour.CategoryId)
                                                 || categoryIds.Any(c => c == tourG.CategoryId))
                                             && (teamIds.IsNullOrEmpty()
-                                                || teamIds.Any(t => t == albums.TeamId)
-                                                || teamIds.Any(t => t == news.TeamId)
-                                                || teamIds.Any(t => t == game.HomeTeamId)
-                                                || teamIds.Any(t => t == game.VisitorTeamId))
+                                                || teamIds.Any(t => t == albums.TeamId.GetValueOrDefault())
+                                                || teamIds.Any(t => t == news.TeamId.GetValueOrDefault())
+                                                || teamIds.Any(t => t == game.HomeTeamId.GetValueOrDefault())
+                                                || teamIds.Any(t => t == game.VisitorTeamId.GetValueOrDefault()))
                                            )
                                         )
                             select albums)

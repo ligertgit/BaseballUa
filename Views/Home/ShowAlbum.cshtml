@@ -1,7 +1,85 @@
 ﻿@using BaseballUa.Data;
 @model BaseballUa.ViewModels.AlbumVM
 
-<div class="row">
+<div class="container-fluid text-white bg-primary pb-3">
+    <div class="row m-3 mt-0">
+        <div class="col">
+            <div class="row p-1 pb-0">
+                <div class="col">
+                    <h2>@Model.Name</h2>
+                </div>
+            </div>
+            <div class="flex-row p-1 pt-0 pe-0 pb-0">
+                <img src="~/images/sporttype/big/@(Model.SportType).png" />
+                @if (Model.CategoryId != null && Model.CategoryId > 0)
+                {
+                    <img src="~/images/category/big/@(Model.CategoryId).png" />
+                }
+                @if (Model.News != null)
+                {
+                    <a class="btn btn-warning" asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@Model.News.Id">
+                        Новина: @Model.News.Title
+                    </a>
+                }
+                @if (Model.Team != null && Model.TeamId > 0)
+                {
+                    <a class="btn btn-warning" asp-controller="Club" asp-action="DetailsTeam" asp-route-teamId="@Model.Team.Id">
+                        Команда: <img width="25px" src="~/images/team/logoSmall/@Model.Team.FnameLogoSmall" /> @Model.Team.Name
+                    </a>
+                }
+                @if (Model.Game != null && Model.GameId > 0 && Model.Game.HomeTeam != null && Model.Game.VisitorTeam != null)
+                {
+                    <a class="btn btn-warning" asp-controller="Event" asp-action="ShowGame" asp-route-id="@Model.Game.GameViewModelId">
+                        Гра: <img width="25px" src="~/images/team/logoSmall/@Model.Game.HomeTeam.FnameLogoSmall" /> : <img width="25px" src="~/images/team/logoSmall/@Model.Game.VisitorTeam.FnameLogoSmall" />
+                    </a>
+                }
+            </div>
+            <div class="row m-1 p-1 text-white border border-1 rounded-3">
+                @Model.Description
+            </div>
+        </div>
+    </div>
+
+    @if (Model.Photos != null && Model.Photos.Count() > 0)
+    {
+        <div class="row m-5 mt-3 mb-1 p-4 bg-info bg-opacity-50 border border-1 rounded-3">
+            <div class="col">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" style="max-height:600px;">
+                    <div class="carousel-indicators">
+                        @for (var i = 0; i < Model.Photos.Count(); i++)
+                        {
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i" class="@(i == 0 ? "active": "")" aria-current="true" aria-label="Slide 1"></button>
+                        }
+                    </div>
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.Photos.Count(); i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img style="object-fit: scale-down; max-height:600px;" src="/images/photo/big/@Model.Photos[i].AlbumId/@Model.Photos[i].FnameBig" class="d-block w-100" alt="...">
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+
+
+
+@*<div class="row">
     <div class="col-3">
         <div class="row pb-4">
             @if (Model.News != null)
@@ -124,4 +202,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@

@@ -140,34 +140,37 @@ namespace BaseballUa.Controllers
 			return View(newsVL);
 		}
 
-		public IActionResult ShowLists(int skip = 0, int teamId = 0, int clubId = 0, int eventId = 0, ListToShow listToShow = ListToShow.News)
+		public IActionResult ShowLists(int skip = 0, int teamId = 0, int clubId = 0, int eventId = 0, ListToShow listToShow = ListToShow.News, int resetFilters = 0)
 		{
+
 			if (skip < 0) skip = 0;
 
 			var pageDataVM = new HomeShowListVM();
 			pageDataVM.listToShow = listToShow;
 
-			Filters filters = Request.Cookies.GetFilters();
-			pageDataVM.ApplyFilters = new ApplyFilters { Filters = filters, Controller = "Home", RedirectAction = "ShowLists" };
-			if (eventId > 0)
+			Filters filters = new Filters();
+            if (resetFilters == 1)
+            {
+                CookieOptions option = new CookieOptions();
+                option.Expires = DateTime.Now.AddDays(1);
+                Response.Cookies.AppendFilters(filters, option);
+            }
+			else
 			{
-				pageDataVM.ApplyFilters.RouteItems.Add(new RouteItem { Name = "eventId", Value = eventId.ToString() });
-			}
+                filters = Request.Cookies.GetFilters();
+            }
+            //pageDataVM.ApplyFilters = new ApplyFilters { Filters = filters, Controller = "Home", RedirectAction = "ShowLists" };
+            //if (eventId > 0)
+            //{
+            //	pageDataVM.ApplyFilters.RouteItems.Add(new RouteItem { Name = "eventId", Value = eventId.ToString() });
+            //}
+            pageDataVM.Filters = filters;
 
 
-			pageDataVM.TeamId = teamId;
-			pageDataVM.ClubId = clubId;
-			pageDataVM.EventId = eventId;
-			pageDataVM.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text");
-			if (pageDataVM.TeamSL.FirstOrDefault(i => i.Value == pageDataVM.TeamId.ToString()) != null)
-			{
-				pageDataVM.TeamSL.First(i => i.Value == pageDataVM.TeamId.ToString()).Selected = true;
-			}
-			pageDataVM.ClubSL = new SelectList(new ClubCrud(_db).GetSelectItemList(), "Value", "Text");
-			if (pageDataVM.ClubSL.FirstOrDefault(i => i.Value == pageDataVM.ClubId.ToString()) != null)
-			{
-				pageDataVM.ClubSL.First(i => i.Value == pageDataVM.ClubId.ToString()).Selected = true;
-			}
+
+			
+
+			//pageDataVM.EventSL = new SelectList
 
 			var selectedCategories = new CategoriesCrud(_db).GetIds(filters.GetSelectedCategories());
 			int queryCount;
@@ -203,7 +206,8 @@ namespace BaseballUa.Controllers
 															   isOfficial: filters.Official,
 															   isInternational: filters.International,
 															   isAnnual: filters.Annual,
-															   teamIds: teamIds,
+                                                               eventId: eventId <= 0 ? null : eventId,
+                                                               teamIds: teamIds,
 															   categoryIds: selectedCategories,
 															   skip: skip,
 															   newestDate: DateTime.Now,
@@ -220,7 +224,8 @@ namespace BaseballUa.Controllers
 															   isOfficial: filters.Official,
 															   isInternational: filters.International,
 															   isAnnual: filters.Annual,
-															   teamIds: teamIds,
+                                                               eventId: eventId <= 0 ? null : eventId,
+                                                               teamIds: teamIds,
 															   categoryIds: selectedCategories,
 															   skip: skip,
 															   newestDate: DateTime.Now,
@@ -254,11 +259,48 @@ namespace BaseballUa.Controllers
 				pageDataVM.skipPrev = pageDataVM.skipPrev < 0 ? 0 : pageDataVM.skipPrev;
 			}
 
+			pageDataVM.TeamId = teamId;
+			pageDataVM.ClubId = clubId;
+			pageDataVM.EventId = eventId;
+			pageDataVM.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text");
+			if (pageDataVM.TeamSL.FirstOrDefault(i => i.Value == pageDataVM.TeamId.ToString()) != null)
+			{
+				pageDataVM.TeamSL.First(i => i.Value == pageDataVM.TeamId.ToString()).Selected = true;
+			}
+			pageDataVM.ClubSL = new SelectList(new ClubCrud(_db).GetSelectItemList(), "Value", "Text");
+			if (pageDataVM.ClubSL.FirstOrDefault(i => i.Value == pageDataVM.ClubId.ToString()) != null)
+			{
+				pageDataVM.ClubSL.First(i => i.Value == pageDataVM.ClubId.ToString()).Selected = true;
+			}
+
+			amount = Constants.DefaulSelectListAmount;
+			var eventsSL = new EventsCrud(_db).GetAllFiltered(out queryCount,
+												   sportType: filters.GetSelectedSport(),
+												   includeAllFun: filters.Fun,
+												   isOfficial: filters.Official,
+												   isInternational: filters.International,
+												   isAnnual: filters.Annual,
+												   teamIds: teamIds,
+												   categoryIds: selectedCategories,
+												   skip: skip,
+												   newestDate: DateTime.Now.AddDays(Constants.DefaulActiveEventDaysShift),
+												   amount: amount).Select(e => new SelectListItem { Text = e.Tournament.Name, Value = e.Id.ToString()}).ToList();
+
+			pageDataVM.EventSL = new SelectList(eventsSL, "Value", "Text");
+			if (pageDataVM.EventSL.FirstOrDefault(i => i.Value == pageDataVM.EventId.ToString()) != null)
+			{
+				pageDataVM.EventSL.First(i => i.Value == pageDataVM.EventId.ToString()).Selected = true;
+				//pageDataVM.EventSL.First(i => i.Value == pageDataVM.EventId.ToString()).Selected = true;
+			}
+
+
+
+
 			return View(pageDataVM);
 		}
 
 		[HttpPost]
-		public IActionResult SubmitShowList(IFormCollection fc)
+		public IActionResult SubmitShowLists(IFormCollection fc)
 		{
             var filters = fc.GetFilters();
             CookieOptions option = new CookieOptions();
@@ -288,10 +330,10 @@ namespace BaseballUa.Controllers
 			ListToShow fixxedListToShow = ListToShow.News;
 			if (fc.ContainsKey("listToShow"))
 			{
-				Enum.TryParse(fc["EventId"], out fixxedListToShow);
+				Enum.TryParse(fc["listToShow"], out fixxedListToShow);
             }
             //int skip = 0, int teamId = 0, int clubId = 0, int eventId = 0, ListToShow listToShow = ListToShow.News
-            return RedirectToAction(fc["redirectAction"], new { skip = fixxedSkip, teamId = fixxedTeamId, clubId = fixxedClubId, eventId = fixxedEventId, listToShow = fixxedListToShow });
+            return RedirectToAction("ShowLists", new { skip = fixxedSkip, teamId = fixxedTeamId, clubId = fixxedClubId, eventId = fixxedEventId, listToShow = fixxedListToShow });
 		}
 
 		public IActionResult ShowAlbum(int Id)
@@ -317,7 +359,30 @@ namespace BaseballUa.Controllers
 			return View(albumVL);
 		}
 
-		public IActionResult ShowAlbums(int? eventId = null, int? categoryId = null, int? teamId = null, SportType? sportType = null)
+        public IActionResult ShowVideo(int Id)
+        {
+            Video? videoDAL = null;
+            VideoVM videoVL = new VideoVM();
+            if (Id > 0)
+            {
+                videoDAL = new VideosCrud(_db).Get(Id);
+            }
+            if (videoDAL != null)
+            {
+                videoVL = new VideoToView().Convert(videoDAL);
+                if (videoDAL.Game != null && videoDAL.Game.HomeTeamId != null && videoDAL.Game.VisitorTeamId != null)
+                {
+                    var homeTeamDAL = new TeamCrud(_db).Get((int)videoDAL.Game.HomeTeamId);
+                    var visitorTeamDAL = new TeamCrud(_db).Get((int)videoDAL.Game.VisitorTeamId);
+                    videoVL.Game.HomeTeam = new TeamToView().Convert(homeTeamDAL, false);
+                    videoVL.Game.VisitorTeam = new TeamToView().Convert(visitorTeamDAL, false);
+                }
+            }
+
+            return View(videoVL);
+        }
+
+        public IActionResult ShowAlbums(int? eventId = null, int? categoryId = null, int? teamId = null, SportType? sportType = null)
 		{
 			var showAlbumsVM = new ShowAlbums();
 

@@ -1,4 +1,5 @@
 ﻿@using BaseballUa.Data;
+@using static BaseballUa.Data.Enums;
 @model IEnumerable<BaseballUa.ViewModels.ClubViewModel>
 
 @{
@@ -24,11 +25,40 @@
                             </a>
                     </div>
                     <div class="col">
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col">
                                 <a asp-action="DetailsClub" asp-route-clubId="@club.Id" class="text-decoration-none text-white">
                                     <h2>@club.Name</h2>
                                 </a>
+                                <a class="btn btn-warning me-1" asp-controller="Home" 
+                                                            asp-action="ShowLists" 
+                                                            asp-route-ClubId="@club.Id"
+                                                            asp-route-listToShow="@ListToShow.Videos"
+                                                            asp-route-resetFilters="1">
+                                    Відео
+                                </a>
+                                <a class="btn btn-warning me-1" asp-controller="Home" 
+                                                            asp-action="ShowLists" 
+                                                            asp-route-ClubId="@club.Id"
+                                                            asp-route-listToShow="@ListToShow.Albums"
+                                                            asp-route-resetFilters="1">
+                                    Альбоми
+                                </a>
+                                <a class="btn btn-warning me-1" asp-controller="Home" 
+                                                            asp-action="ShowLists" 
+                                                            asp-route-ClubId="@club.Id"
+                                                            asp-route-listToShow="@ListToShow.News"
+                                                            asp-route-resetFilters="1">
+                                    Новини
+                                </a>
+                                <a class="btn btn-warning me-1" asp-controller="Home" 
+                                                            asp-action="ShowLists" 
+                                                            asp-route-ClubId="@club.Id"
+                                                            asp-route-listToShow="@ListToShow.Events"
+                                                            asp-route-resetFilters="1">
+                                    Турніри
+                                </a>
+
                             </div>
                         </div>
                         <div class="row">

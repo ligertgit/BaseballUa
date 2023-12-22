@@ -1,0 +1,68 @@
+﻿@using BaseballUa.Data;
+@model List<BaseballUa.ViewModels.VideoVM>
+
+@if (Model != null && Model.Count() > 0)
+{
+	foreach (var video in Model)
+	{
+
+		<div class="row m-3 mb-1 p-4 pb-4 bg-primary bg-opacity-50 rounded-2 border border-2 border-top-0 border-start-0">
+			<div class="col-3 mt-2">
+				<div class="row m-1">
+					<div class="col">
+						<a class="btn btn-warning" asp-controller="Home" asp-action="ShowVideo" asp-route-videoId="@video.Id">
+							Детальніше
+						</a>
+					</div>
+				</div>
+				<div class="row m-1">
+					<div class="col">
+						<a href="@video.Fname" class="btn btn-danger">Дивитись на YouTube</a>
+					</div>
+				</div>
+			</div>
+			<div class="col align-self-stretch mt-2">
+				<div class="d-flex flex-row flex-nowrap mb-1 justify-content-between">
+					<a asp-controller="Home" asp-action="ShowVideo" asp-route-videoId="@video.Id" class="text-decoration-none text-white-50 me-2">
+						<div class="row m-0 p-0">
+							<h2 class="m-0 p-0">@video.Name</h2>
+						</div>
+					</a>
+					<div class="">
+						@video.PublishDate.ToString("dd/MM/yyyy")
+					</div>
+				</div>
+				<div class="d-flex flex-row flex-nowrap">
+					@if (video.Category != null)
+					{
+						<img class="me-1" width="25" height="25" src="~/images/category/small/@(video.CategoryId).png" />
+					}
+					<img class="me-3" width="25" height="25" src="~/images/sporttype/small/@(video.SportType).png" />
+					<small class="text-white">@video.News?.Event?.Tournament?.Name</small>
+				</div>
+				<hr />
+
+				<div class="row mt-3">
+					<div class="col">
+						@if (video.Description != null)
+						{
+							<span class="text-wrap justify-content-between" style="font-family: monospace; font-size:20px">
+								@if (video.Description.Length > Constants.VideoPreviewLength)
+								{
+									@video.Description.Substring(0, Constants.VideoPreviewLength);
+									<a asp-controller="Home" asp-action="ShowVideo" asp-route-videoId="@video.Id" class="text-decoration-none text-decoration-underline text-white-50">
+										...
+									</a>
+								}
+								else
+								{
+									@video.Description;
+								}
+							</span>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}

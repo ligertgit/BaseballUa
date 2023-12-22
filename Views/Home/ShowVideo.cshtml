@@ -1,0 +1,57 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.VideoVM
+
+<div class="container-fluid text-white bg-primary pb-3">
+    <div class="row m-3 mt-0">
+        <div class="col">
+            <div class="row p-1 pb-0">
+                <div class="col">
+                    <h2>@Model.Name</h2>
+                </div>
+            </div>
+            <div class="flex-row p-1 pt-0 pe-0 pb-0">
+                <img src="~/images/sporttype/big/@(Model.SportType).png" />
+                @if (Model.CategoryId != null && Model.CategoryId > 0)
+                {
+                    <img src="~/images/category/big/@(Model.CategoryId).png" />
+                }
+                @if (Model.News != null)
+                {
+                    <a class="btn btn-warning" asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@Model.News.Id">
+                        Новина: @Model.News.Title
+                    </a>
+                }
+                @if (Model.Team != null && Model.TeamId > 0)
+                {
+                    <a class="btn btn-warning" asp-controller="Club" asp-action="DetailsTeam" asp-route-teamId="@Model.Team.Id">
+                        Команда: <img width="25px" src="~/images/team/logoSmall/@Model.Team.FnameLogoSmall" /> @Model.Team.Name
+                    </a>
+                }
+                @if (Model.Game != null && Model.GameId > 0 && Model.Game.HomeTeam != null && Model.Game.VisitorTeam != null)
+                {
+                    <a class="btn btn-warning" asp-controller="Event" asp-action="ShowGame" asp-route-id="@Model.Game.GameViewModelId">
+                        Гра: <img width="25px" src="~/images/team/logoSmall/@Model.Game.HomeTeam.FnameLogoSmall" /> : <img width="25px" src="~/images/team/logoSmall/@Model.Game.VisitorTeam.FnameLogoSmall" />
+                    </a>
+                }
+            </div>
+            <div class="row m-1 p-1 text-white border border-1 rounded-3">
+                @Model.Description
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-5 mt-3 mb-1 p-4 pb-0 bg-info bg-opacity-50 border border-1 rounded-3">
+        <div class="col text-center w-100">
+            <div class="d-flex justify-content-center">
+                <div class="w-75 ratio ratio-16x9">
+                    <iframe src=" @Model.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
+                </div>
+            </div>
+            <div class="row pb-5 pt-2">
+                <div class="col">
+                    <a class="btn btn-danger">Дивитись @Model.Name на YouTube</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

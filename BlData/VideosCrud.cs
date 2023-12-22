@@ -129,12 +129,12 @@ namespace BaseballUa.BlData
 											// || game.HomeTeamId == teamId
 											// || game.VisitorTeamId == teamId)
 											&& (teamIds.IsNullOrEmpty()
-											|| teamIds.Any(t => t == videos.TeamId)
-											|| teamIds.Any(t => t == news.TeamId)
-											|| teamIds.Any(t => t == game.HomeTeamId)
-											|| teamIds.Any(t => t == game.VisitorTeamId))
-										 )
-									  )
+											|| teamIds.Any(t => t == videos.TeamId.GetValueOrDefault())
+											|| teamIds.Any(t => t == news.TeamId.GetValueOrDefault())
+											|| teamIds.Any(t => t == game.HomeTeamId.GetValueOrDefault())
+											|| teamIds.Any(t => t == game.VisitorTeamId.GetValueOrDefault()))
+										)
+									)
 						  select videos)
 							.Distinct();
             countt = result.Count();

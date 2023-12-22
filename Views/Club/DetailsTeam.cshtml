@@ -29,10 +29,39 @@
                 </div>
                 
                 <div class="flex-row mt-2">
-                            <a href="#news" class="btn btn-primary" type="button">Новини</a>
+                            @*<a href="#news" class="btn btn-primary" type="button">Новини</a>
                             <a href="#albums" class="btn btn-primary">Альбоми</a>
-                            <a href="#videos" class="btn btn-primary">Відео</a>
-                            <a href="#players" class="btn btn-primary">Гравці</a>
+                            <a href="#videos" class="btn btn-primary">Відео</a>*@
+                    <a class="btn btn-warning me-1" asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-teamId="@Model.Team.Id"
+                       asp-route-listToShow="@ListToShow.Videos"
+                       asp-route-resetFilters="1">
+                        Відео
+                    </a>
+                    <a class="btn btn-warning me-1" asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-teamId="@Model.Team.Id"
+                       asp-route-listToShow="@ListToShow.Albums"
+                       asp-route-resetFilters="1">
+                        Альбоми
+                    </a>
+                    <a class="btn btn-warning me-1" asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-teamId="@Model.Team.Id"
+                       asp-route-listToShow="@ListToShow.News"
+                       asp-route-resetFilters="1">
+                        Новини
+                    </a>
+                    <a class="btn btn-warning me-1" asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-teamId="@Model.Team.Id"
+                       asp-route-listToShow="@ListToShow.Events"
+                       asp-route-resetFilters="1">
+                        Турніри
+                    </a>
+
+                    <a href="#players" class="btn btn-primary">Гравці</a>
                 </div>
             </div>
         </div>
@@ -105,7 +134,7 @@
                                         @item?.EndDate?.ToString("dd/MM/yy hh:mm")
                                     </td>
                                     <td class="text-end">
-                                        <a asp-action="DetailsEvent"
+                                        <a asp-controller="Event" asp-action="DetailsEvent"
                                         asp-route-id="@item.EventViewModelId"
                                         type="button"
                                         class="btn btn-primary"
@@ -201,6 +230,10 @@
             <hr />
             <div class="d-flex flex-row flex-wrap p-2 m-0">
                 @await Html.PartialAsync("_AlbumsBlock2", Model.Albums)
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.Albums" asp-route-teamId="@Model.Team.Id" asp-route-resetFilters="1">
+                    <img class="pe-1" width="25" src="~/images/assets/albumSmall.png" />
+                    <span class="text-white">ВСІ</span>
+                </a>
             </div>
         </div>
     }

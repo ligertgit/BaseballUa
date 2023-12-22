@@ -1,4 +1,5 @@
-﻿@model BaseballUa.ViewModels.Custom.MainIndexVM
+﻿@using static BaseballUa.Data.Enums;
+@model BaseballUa.ViewModels.Custom.MainIndexVM
 @{
     ViewData["Title"] = "Home";
 }
@@ -30,18 +31,30 @@
         <div class="tab-pane fade" id="tabvideos" role="tabpanel">
             <div class="d-flex flex-row flex-wrap p-3 m-0">
                 @await Html.PartialAsync("_VideosBlockRow", Model.LastVideos)
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.Videos">
+                    <img class="pe-1" width="25" src="~/images/assets/videoSmall.png" />
+                    <span class="text-white">ВСІ</span>
+                </a>
             </div>
         </div>
 
         <div class="tab-pane fade active show" id="tabevents" role="tabpanel">
             <div class="d-flex flex-row flex-wrap p-3 m-0">
                 @await Html.PartialAsync("_EventsBlock2", Model.ActiveEvents)
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.Events">
+                    <img class="pe-1" width="25" src="~/images/assets/tourSmall.png" />
+                    <span class="text-white">ВСІ</span>
+                </a>
             </div>
         </div>
 
         <div class="tab-pane fade" id="tabalbums" role="tabpanel">
             <div class="d-flex flex-row flex-wrap p-2 m-0">
                 @await Html.PartialAsync("_AlbumsBlock2", Model.LastAlbums)
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.Albums">
+                    <img class="pe-1" width="25" src="~/images/assets/albumSmall.png" />
+                    <span class="text-white">ВСІ</span>
+                </a>
             </div>
         </div>
     </div>
@@ -82,30 +95,6 @@
                     </li>
                 }
             </ul>
-            
-           @* <div class="row">
-                <div class="col">
-                    @if (Model.skipNewsPrev != -1)
-                    {
-                        <a asp-route-skipNews="@Model.skipNewsPrev">Prev</a>
-                    }
-                    else
-                    {
-                        <label>NoPrev</label>
-                    }
-                </div>
-                <div class="col">
-                    @if(Model.skipNewsNext != -1)
-                    {
-                        <a asp-route-skipNews=@(Model.skipNewsNext)>Next</a>
-                    }
-                    else
-                    {
-                        <label>NoNext</label>
-                    }
-                </div>
-            </div>*@
-
         </div>
     </div>
 </div>

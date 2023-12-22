@@ -1,4 +1,5 @@
 ﻿@using BaseballUa.Data;
+@using static BaseballUa.Data.Enums;
 @model List<BaseballUa.ViewModels.VideoVM>
 
 @if (Model != null && Model.Count() > 0)
@@ -10,7 +11,7 @@
         </div>*@
 
 		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" style="width: 30vh; height:12vh;">
-			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@video.Id" title="@video.Name">
+			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Home" asp-action="ShowVideo" asp-route-id="@video.Id" title="@video.Name">
 				<div class="row">
 					<div class="col-1 m-1">
 						<img width="25" height="25" src="~/images/assets/videoSmall.png" />
@@ -47,7 +48,8 @@ else
 {
 	<label>Нема Відео</label>
 }
-<a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowVideos">
+@*<a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowVideos">*@
+@*<a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.Videos">
 	<img class="pe-1" width="25" src="~/images/assets/videoSmall.png" />
 	<span class="text-white">ВСІ</span>
-</a>
+</a>*@

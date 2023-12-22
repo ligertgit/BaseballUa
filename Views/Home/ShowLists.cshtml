@@ -1,21 +1,21 @@
 ﻿@using BaseballUa.Data;
+@using static BaseballUa.Data.Enums;
 @model BaseballUa.ViewModels.Custom.HomeShowListVM
 
-<div class="container-fluid text-white bg-primary">
-    <div class="">
-        <form asp-controller="Home" asp-action="SubmitShowList">
+<div class="container-fluid text-white bg-primary pt-3 pb-3">
+    <div class="border border-1 rounded-3 p-2 mb-1">
+        <form asp-controller="Home" asp-action="SubmitShowLists">
             @Html.AntiForgeryToken()
-            <input type="hidden" name="redirectAction" value="@Model.ApplyFilters.RedirectAction" />
+            @*<input type="hidden" name="redirectAction" value="@Model.ApplyFilters.RedirectAction" />*@
             <input type="hidden" name="listToShow" value="@Model.listToShow" />
-            @foreach (var routeItem in Model.ApplyFilters.RouteItems)
-            {
-                <input type="hidden" name="@routeItem.Name" value="@routeItem.Value" />
-            }
+            <input type="hidden" name="eventId" value="0" />
+            @*<input type="hidden" name="eventId" value="@Model.EventId" />*@
 
-            <div class="d-flex flex-row flex-wrap p-0 m-0 justify-content-between align-items-center">
+
+            <div class="d-flex flex-row flex-wrap p-0 mb-2 justify-content-between align-items-center">
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkBaseball" class="btn-check" id="btn-check-bb"
-                    @if (Model.ApplyFilters.Filters.Baseball)
+                    @if (Model.Filters.Baseball)
                     {
                         @:checked
                     }
@@ -25,7 +25,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkSoftball" class="btn-check pe-1" id="btn-check-sb"
-                    @if (Model.ApplyFilters.Filters.Softball)
+                    @if (Model.Filters.Softball)
                     {
                         @:checked
                     }
@@ -37,7 +37,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkU10" class="btn-check" id="btn-check-u10"
-                    @if (Model.ApplyFilters.Filters.U10)
+                    @if (Model.Filters.U10)
                     {
                         @:checked
                     }
@@ -47,7 +47,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkU12" class="btn-check" id="btn-check-u12"
-                    @if (Model.ApplyFilters.Filters.U12)
+                    @if (Model.Filters.U12)
                     {
                         @:checked
                     }
@@ -57,7 +57,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkU15" class="btn-check" id="btn-check-u15"
-                    @if (Model.ApplyFilters.Filters.U15)
+                    @if (Model.Filters.U15)
                     {
                         @:checked
                     }
@@ -67,7 +67,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkU18" class="btn-check" id="btn-check-u18"
-                    @if (Model.ApplyFilters.Filters.U18)
+                    @if (Model.Filters.U18)
                     {
                         @:checked
                     }
@@ -77,7 +77,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkAdult" class="btn-check" id="btn-check-adult"
-                    @if (Model.ApplyFilters.Filters.Adult)
+                    @if (Model.Filters.Adult)
                     {
                         @:checked
                     }
@@ -87,7 +87,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkVeteran" class="btn-check" id="btn-check-veteran"
-                    @if (Model.ApplyFilters.Filters.Veteran)
+                    @if (Model.Filters.Veteran)
                     {
                         @:checked
                     }
@@ -99,7 +99,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkAnnual" class="btn-check" id="btn-check-annual"
-                    @if (Model.ApplyFilters.Filters.Annual)
+                    @if (Model.Filters.Annual)
                     {
                         @:checked
                     }
@@ -109,7 +109,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkInternational" class="btn-check" id="btn-check-inational"
-                    @if (Model.ApplyFilters.Filters.International)
+                    @if (Model.Filters.International)
                     {
                         @:checked
                     }
@@ -119,7 +119,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkOfficial" class="btn-check" id="btn-check-official"
-                    @if (Model.ApplyFilters.Filters.Official)
+                    @if (Model.Filters.Official)
                     {
                         @:checked
                     }
@@ -131,7 +131,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkFun" class="btn-check" id="btn-check-fun"
-                    @if (Model.ApplyFilters.Filters.Fun)
+                    @if (Model.Filters.Fun)
                     {
                         @:checked
                     }
@@ -141,7 +141,7 @@
 
                 <div class="me-1 bg-black bg-opacity-50 rounded-2">
                     <input type="checkbox" name="chkGeneral" class="btn-check" id="btn-check-general"
-                    @if (Model.ApplyFilters.Filters.General)
+                    @if (Model.Filters.General)
                     {
                         @:checked
                     }
@@ -157,48 +157,200 @@
                 </div>*@
 
             </div>
-            <div class="row">
-                <div class="col">
-                    @*<label asp-for="teamId" class="control-label"></label>*@
-                    <label class="control-label">Команда: </label>
-                    @Html.DropDownListFor(x => Model.TeamId, Model.TeamSL, optionLabel: "--- оберіть ---" )
-                    @*@Html.DropDownList("ttt", Model.TeamSL, optionLabel: "--- оберіть ---")*@
-                </div>
+            
+            <div class="d-flex flex-row flex-wrap p-0 m-0 justify-content-between align-items-center">
+                @Html.DropDownListFor(x => Model.TeamId, Model.TeamSL, optionLabel: "-не фільтрувати по команді-" )
+                @Html.DropDownListFor(x => Model.ClubId, Model.ClubSL, optionLabel: "-не фільтрувати по клубу-" )
+                <input type="submit" value="Застосувати фільтри" class="btn btn-warning" />
             </div>
-            <div class="row">
-                <div class="col">
-                    <label class="control-label">Клуб: </label>
-                    @Html.DropDownListFor(x => Model.ClubId, Model.ClubSL, optionLabel: "--- оберіть ---" )
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="pe-0">
-                        <div class="form-group">
-                            <input type="submit" value="Застосувати фільтри" class="btn btn-warning" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </form>
+    </div>
+    <div class="border border-1 rounded-3 p-2 mb-3">
+        <div class="d-flex flex-row flex-wrap p-0 m-0 align-items-center">
+            <a class="btn btn-warning me-1 @(Model.listToShow == ListToShow.Videos ? "disabled" : "")"
+               asp-controller="Home"
+               asp-action="ShowLists"
+               asp-route-listToShow="@ListToShow.Videos"
+               asp-route-teamId="@Model.TeamId"
+               asp-route-clubId="@Model.ClubId"
+               asp-route-eventId="@Model.EventId"
+               asp-route-skip="0">
+                Відео
+            </a>
+            <a class="btn btn-warning me-1 @(Model.listToShow == ListToShow.Events ? "disabled" : "")"
+               asp-controller="Home"
+               asp-action="ShowLists"
+               asp-route-listToShow="@ListToShow.Events"
+               asp-route-teamId="@Model.TeamId"
+               asp-route-clubId="@Model.ClubId"
+               asp-route-eventId="0"
+               asp-route-skip="0">
+                Турніри
+            </a>
+            <a class="btn btn-warning me-1 @(Model.listToShow == ListToShow.Albums ? "disabled" : "")"
+               asp-controller="Home"
+               asp-action="ShowLists"
+               asp-route-listToShow="@ListToShow.Albums"
+               asp-route-teamId="@Model.TeamId"
+               asp-route-clubId="@Model.ClubId"
+               asp-route-eventId="@Model.EventId"
+               asp-route-skip="0">
+                Альбоми
+            </a>
+            <a class="btn btn-warning me-1 @(Model.listToShow == ListToShow.News ? "disabled" : "")"
+               asp-controller="Home"
+               asp-action="ShowLists"
+               asp-route-listToShow="@ListToShow.News"
+               asp-route-teamId="@Model.TeamId"
+               asp-route-clubId="@Model.ClubId"
+               asp-route-eventId="@Model.EventId"
+               asp-route-skip="0">
+                Новини
+            </a>
+        </div>
+
+    </div>
+    <div class="border border-1 rounded-3 p-2">
+        @if (Model.listToShow != Enums.ListToShow.Events)
+        {
+            if (Model.EventId > 0)
+            {
+                if (Model.EventSL != null)
+                {
+                    <label>Відфільтровано для @Model.EventSL.FirstOrDefault(e => e.Selected = true)?.Text</label>
+                    <a class="btn btn-warning mb-1"
+                       asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-listToShow="@Model.listToShow"
+                       asp-route-teamId="@Model.TeamId"
+                       asp-route-clubId="@Model.ClubId"
+                       asp-route-eventId="0"
+                       asp-route-skip="0">
+                        Відмінити
+                    </a>
+                }
+
+            }
+            else
+            {
+                <form asp-controller="Home" asp-action="ShowLists">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="listToShow" value="@Model.listToShow" />
+                    <input type="hidden" name="teamId" value="@Model.TeamId" />
+                    <input type="hidden" name="clubId" value="@Model.ClubId" />
+                    <input type="hidden" name="skip" value="0" />
+
+                    @*<label>Залишити лише @(Model.listToShow), що стосуються змагання:</label>*@
+                    @Html.DropDownListFor(x => Model.EventId, Model.EventSL, optionLabel: "-всі змагання, що підпадають фільтрам-" )
+
+                    <input type="submit" value="Додатково застосувати" class="btn btn-warning" />
+                </form>
+
+                @if (Model.EventSL != null && Model.EventSL.Count() == Constants.DefaulSelectListAmount)
+                {
+                    <label>*Якщо турнір не вмістився у список, почніть пошук з </label>
+                    <a class="btn btn-info mb-1"
+                       asp-controller="Home"
+                       asp-action="ShowLists"
+                       asp-route-listToShow="@ListToShow.Events"
+                       asp-route-teamId="@Model.TeamId"
+                       asp-route-clubId="@Model.ClubId"
+                       asp-route-eventId="0"
+                       asp-route-skip="0">
+                        Турніру
+                    </a>
+                }
+            }
+        }
     </div>
 </div>
 
-<div class="container-fluid text-white bg-primary">
-    @if(Model.listToShow == Enums.ListToShow.News && Model.News != null && Model.News.Count > 0)
+<div class="container-fluid bg-opacity-0 text-white p-0 m-0 pe-3 pt-0 pb-2">
+    
+    @if (Model.listToShow == Enums.ListToShow.News && Model.News != null && Model.News.Count > 0)
     {
-        foreach(var news in Model.News)
-        {
-            <div>
-                @news.Title
+        <div id="news" class="container-fluid text-white pt-5 pb-5">
+            <div class="row justify-content-center pt-0 mt-0">
+                <div class="col justify-content-center pt-0 mt-0">
+                    @await Html.PartialAsync("_NewsBlock6", Model.News)
 
-                @news.Description
+                </div>
             </div>
-            <hl />
-            <br />
-            <br />
-        }
+
+        </div>
     }
+    else if (Model.listToShow == Enums.ListToShow.Albums && Model.Albums != null && Model.Albums.Count > 0)
+    {
+        <div id="news" class="container-fluid text-white pt-5 pb-5">
+            <div class="row justify-content-center pt-0 mt-0">
+                <div class="col justify-content-center pt-0 mt-0">
+                    @await Html.PartialAsync("_AlbumsBlock6", Model.Albums)
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.listToShow == Enums.ListToShow.Videos && Model.Videos != null && Model.Videos.Count > 0)
+    {
+        <div id="news" class="container-fluid text-white pt-5 pb-5">
+            <div class="row justify-content-center pt-0 mt-0">
+                <div class="col justify-content-center pt-0 mt-0">
+                    @await Html.PartialAsync("_VideosBlock6", Model.Videos)
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.listToShow == Enums.ListToShow.Events && Model.Events != null && Model.Events.Count > 0)
+    {
+        <div id="news" class="container-fluid text-white pt-5 pb-5">
+            <div class="row justify-content-center pt-0 mt-0">
+                <div class="col justify-content-center pt-0 mt-0">
+                    @await Html.PartialAsync("_EventsBlock6", Model.Events)
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        @:По вашему запиту нічого нема
+    }
+
+    <ul class="pagination pagination-lg m-5 mt-0 mb-0 me-0">
+        @if (Model.skipPrev != -1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-listToShow="@Model.listToShow"
+                   asp-route-teamId="@Model.TeamId"
+                   asp-route-clubId="@Model.ClubId"
+                   asp-route-eventId="@Model.EventId"
+                   asp-route-skip="@Model.skipPrev">&laquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&laquo;</a>
+            </li>
+        }
+
+        @if (Model.skipNext != -1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-listToShow="@Model.listToShow"
+                   asp-route-teamId="@Model.TeamId"
+                   asp-route-clubId="@Model.ClubId"
+                   asp-route-eventId="@Model.EventId"
+                   asp-route-skip="@Model.skipNext">&raquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&raquo;</a>
+            </li>
+        }
+    </ul>
+
 </div>
 
 

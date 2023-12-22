@@ -148,11 +148,14 @@ namespace BaseballUa.BlData
                                        && (!isInternational || tour.IsInternational)
                                        && (!isAnnual || tour.IsAnual)
                                        && (categoryIds.IsNullOrEmpty() || categoryIds.Any(c => c == tour.CategoryId))
+                                       && (teamIds.IsNullOrEmpty()
+                                            || teamIds.Any(t => t == game.HomeTeamId.GetValueOrDefault())
+                                            || teamIds.Any(t => t == game.VisitorTeamId.GetValueOrDefault())
+
+                                           )
                                        )
                                    )
-                                && (teamIds.IsNullOrEmpty()
-                                    || teamIds.Any(t => t == game.HomeTeamId || t == game.VisitorTeamId)
-                                    )
+                                
                           select eventt)
                          .Distinct()
                          .OrderByDescending(n => n.StartDate);

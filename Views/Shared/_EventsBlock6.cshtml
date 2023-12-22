@@ -1,0 +1,62 @@
+﻿@using BaseballUa.Data;
+@model List<BaseballUa.ViewModels.EventViewModel>
+
+@if (Model != null && Model.Count() > 0)
+{
+	foreach (var eventt in Model)
+	{
+
+		<div class="row m-3 mb-1 p-4 pb-4 bg-primary bg-opacity-50 rounded-2 border border-2 border-top-0 border-start-0">
+			<div class="col-2 mt-2">
+				<a class="btn btn-warning" asp-controller="Event" asp-action="DetailsEvent" asp-route-Id="@eventt.EventViewModelId">
+					Детальніше
+				</a>
+			</div>
+			<div class="col align-self-stretch mt-2">
+				<div class="d-flex flex-row flex-nowrap mb-1 justify-content-between">
+					<a asp-controller="Event" asp-action="DetailsEvent" asp-route-Id="@eventt.EventViewModelId" class="text-decoration-none text-white-50 me-2">
+						<div class="row m-0 p-0">
+							<h2 class="m-0 p-0">@eventt.Tournament?.Name</h2>
+						</div>
+					</a>
+					<div class="">
+						@eventt.StartDate?.ToString("dd/MM/yyyy") - @eventt.EndDate?.ToString("dd/MM/yyyy")
+					</div>
+				</div>
+				<div class="d-flex flex-row flex-nowrap">
+					@if (eventt.Tournament?.Category != null)
+					{
+						<img class="me-1" width="25" height="25" src="~/images/category/small/@(eventt.Tournament?.Category?.Id).png" />
+					}
+					@if (eventt.Tournament != null)
+					{
+						<img class="me-3" width="25" height="25" src="~/images/sporttype/small/@(eventt.Tournament.Sport).png" />
+					}
+				</div>
+				<hr />
+
+				<div class="row mt-3">
+					<div class="col">
+						@if (eventt.Tournament?.Description != null)
+						{
+							<span class="text-wrap justify-content-between" style="font-family: monospace; font-size:20px">
+								@if (eventt.Tournament.Description.Length > Constants.EventPreviewLength)
+								{
+									@eventt.Tournament.Description.Substring(0, Constants.VideoPreviewLength)
+									;
+									<a asp-controller="Event" asp-action="DetailsEvent" asp-route-Id="@eventt.EventViewModelId" class="text-decoration-none text-decoration-underline text-white-50">
+										...
+									</a>
+								}
+								else
+								{
+									@eventt.Tournament.Description;
+								}
+							</span>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}

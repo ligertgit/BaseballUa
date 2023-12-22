@@ -16,9 +16,13 @@ namespace BaseballUa.Data
 		public const string DefaultVideoSmallImage = "videoSmall.png";
 		public const string DefaultVideoBigImage = "videoBig.png";
 		public const string DefaultVideoName = "no name";
+		public const int VideoPreviewLength = 400;
+
 
 		public const int DefaulEventAmount = 10;
 		public const int DefaulActiveEventDaysShift = 100;
+		public const int EventPreviewLength = 400;
+
 
 		public const int DefaultGameAmount = 5;
         public const int DefaulActiveGamesDaysRange = 1;
@@ -30,8 +34,11 @@ namespace BaseballUa.Data
         public const string DefaultAlbumBigImage = "big.png";
 		public const int DefaulAlbumsAmount = 10;
 		public const int DefaulListAlbumsAmount = 100;
+		public const int AlbumPreviewLength = 400;
+		public const int MaxThumbMediumAlbumName = 28;
+        
 
-		public const string DefaultTeamSmallImage = "defaultSmall.png";
+        public const string DefaultTeamSmallImage = "defaultSmall.png";
 		public const string DefaultTeamBigImage = "defaultBig.png";
 		
 		
