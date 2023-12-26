@@ -1,0 +1,46 @@
+﻿@using BaseballUa.Data;
+@using static BaseballUa.Data.Enums;
+@model List<BaseballUa.ViewModels.NewsVM>
+
+@if (Model != null && Model.Count() > 0)
+{
+    @foreach (var news in Model)
+    {
+		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" style="width: 30vh; height:12vh;">
+			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id" title="@news.Title">
+				<div class="row">
+					<div class="col-1 m-1">
+						<img width="25" height="25" src="~/images/assets/newsSmall.png" />
+					</div>
+					<div class="col-1 m-1">
+					@if (news.SportType != Enums.SportType.NotDefined)
+					{
+						
+						<img width="25" height="25" src="~/images/sporttype/small/@(news.SportType).png" />
+					}
+					</div>
+
+					<div class="col-1 m-1">
+					@if (news.Category != null)
+					{
+						<img width="25" height="25" src="~/images/category/small/@(news.CategoryId).png" />
+					}
+					</div>
+
+					<div class="col-6 m-1">
+						<h5 class="float-end">@news.PublishDate.ToString("dd-MM")</h5>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col m-1">
+						<h6 class="text-truncate" title="@news.Title">@news.Title</h6>
+					</div>
+				</div>
+			</a>
+		</div>
+    }
+}
+else
+{
+	<label>Нема Новин</label>
+}

@@ -3,17 +3,62 @@
 @model BaseballUa.ViewModels.Custom.EventSchemaFull;
 
 @{
-    ViewData["Title"] = "Detail Tournament";
+    ViewData["Title"] = "Detail Schema";
 }
 
 
-<div class="row">
-  @*  @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model, 
-                                                    Albums = Model.SchemaItems.SelectMany(s => s.Groups).SelectMany(g => g.Games).SelectMany(g => g.Albums).ToList(),
-                                                    Videos = Model.SchemaItems.SelectMany(s => s.Groups).SelectMany(g => g.Games).SelectMany(g => g.Videos).ToList(),
-                                                    News = Model.News
-                                                }
-                            )*@
+<div class="container-fluid text-white eventhead">
+    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event,
+    Albums = Model.Albums,
+    Videos = Model.Videos,
+    Games = Model.CurrentGames,
+    News = Model.News })
+</div>
+
+
+@if (Model != null && Model.SchemaItems != null && Model.SchemaItems.Count > 0)
+{
+    <div class="container-fluid text-white m-0 p-3">
+        @foreach(var sItem in Model.SchemaItems)
+        {
+           <div class="row bg-primary border border-1 border-white rounded-2 m-0 p-2 mb-2">
+                <h5>Етап: @sItem.SchemaItem</h5>
+                @if (sItem.Groups != null && sItem.Groups.Count > 0)
+                {
+                    @foreach(var group in sItem.Groups)
+                    {
+                        <h6>Група: @group.GroupName</h6>
+                        @if(group.VirtualTeams != null)
+                        {
+                            <div class="flex-row mb-2">
+                                @foreach(var team in group.VirtualTeams)
+                                {
+                                    <img class="me-1 mb-1" src="~/images/team/logoSmall/@(team.FnameLogoSmall ?? "defaultSmall")" />
+                                }
+                            </div>
+                        }
+                    }
+                    
+                }
+
+           </div>
+            @if (Model.SchemaItems.IndexOf(sItem) != Model.SchemaItems.Count - 1)
+            {
+                <div class="row text-center mb-2">
+                    <div class="col">
+                        <img width="40" src="~/images/assets/arrowDown.png" />
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+
+@*<div class="row bg-primary border border-1 border-white rounded-2 m-0 p-2">
+    @Model.Event.Tournament.Description
+</div>*@
+
+@*<div class="row">
     @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event,
     Albums = Model.Albums,
     Videos = Model.Videos,
@@ -25,10 +70,12 @@
 
 <div class="row">
     @await Html.PartialAsync("_EventMenu", Model.Event?.EventViewModelId)
-</div>
+</div>*@
 
 
-<div class="row mt-3">
+
+
+@*<div class="row mt-3">
 
     @{
         foreach (var schemaItem in Model.SchemaItems)
@@ -60,4 +107,4 @@
 
 <div>
     <a asp-action="Index" asp-route-monthShift="@ViewBag.monthShift">Повернутися до списку</a>
-</div>
+</div>*@

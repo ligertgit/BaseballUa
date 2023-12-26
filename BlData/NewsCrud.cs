@@ -319,5 +319,21 @@ namespace BaseballUa.BlData
 
             return newsSL;
         }
+
+        public IEnumerable<News> GetAllEventNews(int? eventId, int amount = Constants.DefaulNewsAmount)
+        {
+            var eventNews = new List<News>();
+            if (eventId != null && amount > 0)
+            {
+				eventNews = _dbContext.News.Where(n => n.EventId == eventId)
+											.OrderByDescending(n => n.PublishDate)
+											.Take(amount)
+											.Include(n => n.NewsTitlePhotos)
+											.ThenInclude(tp => tp.Photo)
+											.ToList();
+            }
+
+            return eventNews;
+        }
     }
 }

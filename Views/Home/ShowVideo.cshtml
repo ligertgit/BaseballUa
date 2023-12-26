@@ -29,7 +29,7 @@
                 }
                 @if (Model.Game != null && Model.GameId > 0 && Model.Game.HomeTeam != null && Model.Game.VisitorTeam != null)
                 {
-                    <a class="btn btn-warning" asp-controller="Event" asp-action="ShowGame" asp-route-id="@Model.Game.GameViewModelId">
+                    <a class="btn btn-warning" asp-controller="Event" asp-action="ShowGame" asp-route-gameId="@Model.Game.GameViewModelId">
                         Гра: <img width="25px" src="~/images/team/logoSmall/@Model.Game.HomeTeam.FnameLogoSmall" /> : <img width="25px" src="~/images/team/logoSmall/@Model.Game.VisitorTeam.FnameLogoSmall" />
                     </a>
                 }

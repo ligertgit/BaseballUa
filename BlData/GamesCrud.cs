@@ -41,6 +41,18 @@ namespace BaseballUa.BlData
                                     .FirstOrDefault();
         }
 
+        public Game GetWithTeamsAndMedia(int itemId)
+        {
+            if (itemId < 1) return null;
+
+            return _dbContext.Games.Where(i => i.Id == itemId)
+                                    .Include(g => g.HomeTeam)
+                                    .Include(g => g.VisitorTeam)
+                                    .Include(g => g.Albums)
+                                    .Include(g => g.Videos)
+                                    .FirstOrDefault();
+        }
+
         public IEnumerable<Game> GetAll() 
         {
             return _dbContext.Games.Include(g => g.SchemaGroup)
@@ -81,11 +93,17 @@ namespace BaseballUa.BlData
                               from eventItem in _dbContext.EventSchemaItems
                               where eventGroup.EventSchemaItemId == eventItem.Id
                               where eventItem.EventId == eventId
-                                        && game.StartDate < DateTime.Now.AddDays(Constants.DefaulActiveGamesDaysRange)
-                                        && game.StartDate > DateTime.Now.AddDays(-Constants.DefaulActiveGamesDaysRange)
+                                        //&& game.StartDate < DateTime.Now.AddDays(Constants.DefaulActiveGamesDaysRange)
+                                        //&& game.StartDate > DateTime.Now.AddDays(-Constants.DefaulActiveGamesDaysRange)
                               select game)
+                              .Include(g => g.HomeTeam)
+                              .Include(g => g.VisitorTeam)
                               .ToList();
-                eventGames = temp.OrderBy(g => g.StartDate.GetValueOrDefault().Subtract(DateTime.Now)).Take(amount).OrderBy(g => g.StartDate).ToList();
+                eventGames = temp.OrderBy(g => g.StartDate.GetValueOrDefault().Subtract(DateTime.Now))
+                                 .Take(amount)
+                                 .OrderBy(g => g.StartDate)
+                                 
+                                 .ToList();
             }
 
             return eventGames;

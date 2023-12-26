@@ -59,7 +59,8 @@ namespace BaseballUa.Controllers
             var eventDetailsFull = new EventDetailsFull();
             var eventDAL = new EventsCrud(_db).Get(id);
             eventDetailsFull.Event = new EventToView().Convert(eventDAL);
-            eventDetailsFull.News = new NewsToView().ConvertAll(eventDAL.News.ToList());
+            var eventNewsDAL = new NewsCrud(_db).GetAllEventNews(id);
+            eventDetailsFull.News = new NewsToView().ConvertAll(eventNewsDAL.ToList());
             var eventALbumsDAL = new AlbumsCrud(_db).GetAllEventAlbums(id);
             eventDetailsFull.Albums = new AlbumToView().ConvertAll(eventALbumsDAL.ToList());
             var eventVideosDAL = new VideosCrud(_db).GetAllEventVideos(id);
@@ -67,7 +68,7 @@ namespace BaseballUa.Controllers
             var eventTeamsDAL = new TeamCrud(_db).GetEventTeams(id);
             eventDetailsFull.Teams = new TeamToView().ConvertAll(eventTeamsDAL.ToList());
             var currentGamesDAL = new GamesCrud(_db).GetEventGames(id);
-            eventDetailsFull.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList());
+            eventDetailsFull.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList(), false);
 
             //// probably should use EventIndexViewModel
             //var eventDAL = new EventsCrud(_db).Get(id);
@@ -85,7 +86,13 @@ namespace BaseballUa.Controllers
             
             var eventDAL = new EventsCrud(_db).Get(id);
             eventSchemaFullVL.Event = new EventToView().Convert(eventDAL);
-            eventSchemaFullVL.News = new NewsToView().ConvertAll(eventDAL?.News?.ToList(), false);
+            var eventNewsDAL = new NewsCrud(_db).GetAllEventNews(id);
+            eventSchemaFullVL.News = new NewsToView().ConvertAll(eventNewsDAL.ToList(), false);
+            var eventALbumsDAL = new AlbumsCrud(_db).GetAllEventAlbums(id);
+            eventSchemaFullVL.Albums = new AlbumToView().ConvertAll(eventALbumsDAL.ToList());
+            var eventVideosDAL = new VideosCrud(_db).GetAllEventVideos(id);
+            eventSchemaFullVL.Videos = new VideoToView().ConvertAll(eventVideosDAL.ToList());
+            
 
             var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames_test(id);
             eventSchemaFullVL.SchemaItems = new List<EventSchemaItemViewModel>();
@@ -108,14 +115,17 @@ namespace BaseballUa.Controllers
                 }
             }
 
-            eventSchemaFullVL.Albums = new AlbumToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
-                                                                        .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
-                                                                        .SelectMany(g => g.Albums ?? Enumerable.Empty<Album>())
-                                                                        .ToList(), false);
-            eventSchemaFullVL.Videos = new VideoToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
-                                                                        .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
-                                                                        .SelectMany(g => g.Videos ?? Enumerable.Empty<Video>())
-                                                                        .ToList(), false);
+            var currentGamesDAL = new GamesCrud(_db).GetEventGames(id);
+            eventSchemaFullVL.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList(), false);
+            //eventSchemaFullVL.Albums = new AlbumToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
+            //                                                            .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
+            //                                                            .SelectMany(g => g.Albums ?? Enumerable.Empty<Album>())
+            //                                                            .ToList(), false);
+            //eventSchemaFullVL.Videos = new VideoToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
+            //                                                            .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
+            //                                                            .SelectMany(g => g.Videos ?? Enumerable.Empty<Video>())
+            //                                                            .ToList(), false);
+
 
             return  View(eventSchemaFullVL);
         }
@@ -127,8 +137,14 @@ namespace BaseballUa.Controllers
             
             var eventDAL = new EventsCrud(_db).Get(id);
             gamesByDay.Event = new EventToView().Convert(eventDAL);
+            var eventNewsDAL = new NewsCrud(_db).GetAllEventNews(id);
+            gamesByDay.News = new NewsToView().ConvertAll(eventNewsDAL.ToList(), false);
+            var eventALbumsDAL = new AlbumsCrud(_db).GetAllEventAlbums(id);
+            gamesByDay.Albums = new AlbumToView().ConvertAll(eventALbumsDAL.ToList());
+            var eventVideosDAL = new VideosCrud(_db).GetAllEventVideos(id);
+            gamesByDay.Videos = new VideoToView().ConvertAll(eventVideosDAL.ToList());
 
-            //var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames(id);
+
             var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames_test(id);
             if (schemaItemsFullDAL == null)
             {
@@ -142,10 +158,13 @@ namespace BaseballUa.Controllers
             {
                 gamesByDay.GamesByDay = new EventSchemaItemToView().ConvertAllToGamesByDay(schemaItemsFullDAL.ToList()).OrderBy(gd => gd.GamesDate).ToList();
                 showIndex = (dateIndex >= 0) && (dateIndex < gamesByDay.GamesByDay.Count) ? dateIndex : gamesByDay.GamesByDay.GetShowIndex();
-                    //showIndex = gamesByDay.GamesByDay.GetShowIndex();
             }
-            
-            ViewBag.ShowIndex = showIndex;
+
+            var currentGamesDAL = new GamesCrud(_db).GetEventGames(id);
+            gamesByDay.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList(), false);
+
+            gamesByDay.ShowIndex = showIndex;
+            //ViewBag.ShowIndex = showIndex;
 
             return View(gamesByDay);
         }
@@ -155,19 +174,55 @@ namespace BaseballUa.Controllers
             var eventStanding = new EventStandingFull();
             var eventDAL = new EventsCrud(_db).Get(id);
             eventStanding.Event = new EventToView().Convert(eventDAL);
-            eventStanding.News = new NewsToView().ConvertAll(eventDAL?.News?.ToList(), false);
+            var eventNewsDAL = new NewsCrud(_db).GetAllEventNews(id);
+            eventStanding.News = new NewsToView().ConvertAll(eventNewsDAL.ToList(), false);
+            var eventALbumsDAL = new AlbumsCrud(_db).GetAllEventAlbums(id);
+            eventStanding.Albums = new AlbumToView().ConvertAll(eventALbumsDAL.ToList());
+            var eventVideosDAL = new VideosCrud(_db).GetAllEventVideos(id);
+            eventStanding.Videos = new VideoToView().ConvertAll(eventVideosDAL.ToList());
+
+
             var schemaItemsFullDAL = new EventSchemaItemsCrud(_db).GetAllWithGames_test(id);
             eventStanding.EventItemsStanding = new EventSchemaItemToView().ConvertAllToStanding(schemaItemsFullDAL.ToList());
-            eventStanding.Albums = new AlbumToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
-                                                            .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
-                                                            .SelectMany(g => g.Albums ?? Enumerable.Empty<Album>())
-                                                            .ToList(), false);
-            eventStanding.Videos = new VideoToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
-                                                                        .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
-                                                                        .SelectMany(g => g.Videos ?? Enumerable.Empty<Video>())
-                                                                        .ToList(), false);
+
+            var currentGamesDAL = new GamesCrud(_db).GetEventGames(id);
+            eventStanding.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList(), false);
+            //eventStanding.News = new NewsToView().ConvertAll(eventDAL?.News?.ToList(), false);
+            //eventStanding.Albums = new AlbumToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
+            //                                                .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
+            //                                                .SelectMany(g => g.Albums ?? Enumerable.Empty<Album>())
+            //                                                .ToList(), false);
+            //eventStanding.Videos = new VideoToView().ConvertAll(schemaItemsFullDAL?.SelectMany(i => i.SchemaGroups ?? Enumerable.Empty<SchemaGroup>())
+            //                                                            .SelectMany(g => g.Games ?? Enumerable.Empty<Game>())
+            //                                                            .SelectMany(g => g.Videos ?? Enumerable.Empty<Video>())
+            //                                                            .ToList(), false);
+
 
             return View(eventStanding);
+        }
+
+        public IActionResult ShowGame(int gameId = -1)
+        {
+            var gameInfo = new GameInfo();
+            if(gameId > 0) 
+            {
+                var gameFullDAL = new GamesCrud(_db).GetWithTeamsAndMedia(gameId);
+                gameInfo.Game = new GameToView().Convert(gameFullDAL);
+
+                var eventId = new EventsCrud(_db).GetIdForGame(gameId);
+                var eventDAL = new EventsCrud(_db).Get(eventId);
+                gameInfo.Event = new EventToView().Convert(eventDAL);
+                var eventNewsDAL = new NewsCrud(_db).GetAllEventNews(eventId);
+                gameInfo.News = new NewsToView().ConvertAll(eventNewsDAL.ToList(), false);
+                var eventALbumsDAL = new AlbumsCrud(_db).GetAllEventAlbums(eventId);
+                gameInfo.Albums = new AlbumToView().ConvertAll(eventALbumsDAL.ToList());
+                var eventVideosDAL = new VideosCrud(_db).GetAllEventVideos(eventId);
+                gameInfo.Videos = new VideoToView().ConvertAll(eventVideosDAL.ToList());
+                var currentGamesDAL = new GamesCrud(_db).GetEventGames(eventId);
+                gameInfo.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList(), false);
+            }
+
+            return View(gameInfo);
         }
     }
 }

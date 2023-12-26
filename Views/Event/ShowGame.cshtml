@@ -1,0 +1,23 @@
+﻿@using BaseballUa.ViewModels;
+@using BaseballUa.ViewModels.Custom;
+@model BaseballUa.ViewModels.Custom.GameInfo
+
+@{
+    ViewData["Title"] = "Turnament standing";
+}
+
+<div class="container-fluid text-white eventhead">
+    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event,
+    Albums = Model.Albums,
+    Videos = Model.Videos,
+    Games = Model.CurrentGames,
+    News = Model.News })
+</div>
+
+
+@if (Model?.Game != null)
+{
+    <div class="container-fluid text-white m-0 p-3">
+        @await Html.PartialAsync("_GameWide", Model?.Game)
+    </div>
+}

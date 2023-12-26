@@ -1,0 +1,35 @@
+﻿@using BaseballUa.Data;
+@using static BaseballUa.Data.Enums;
+@model List<BaseballUa.ViewModels.GameViewModel>
+
+@if (Model != null && Model.Count() > 0)
+{
+    @foreach (var game in Model)
+    {
+		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" style="width: 30vh; height:12vh;">
+			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Event" asp-action="ShowGame" asp-route-gameId="@game.GameViewModelId">
+				<div class="row">
+					<div class="col-1 m-1">
+						<img width="25" height="25" src="~/images/assets/tourSmall.png" />
+					</div>
+					<div class="col m-1">
+						<h5 class="float-end">@(game.StartDate?.ToString("dd-MM hh:mm") ?? "???")</h5>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col m-1">
+						<img height="25" src="~/images/team/logoSmall/@(game.VisitorTeam != null ? game.VisitorTeam.FnameLogoSmall : Constants.DefaultTeamSmallImage)" />
+						@(game.RunsVisitor != null ? game.RunsVisitor : "?")
+						:
+						@(game.RunsHome != null ? game.RunsHome : "?")
+						<img height="25" src="~/images/team/logoSmall/@(game.HomeTeam != null ? game.HomeTeam.FnameLogoSmall : Constants.DefaultTeamSmallImage)" />
+					</div>
+				</div>
+			</a>
+		</div>
+    }
+}
+else
+{
+	<label>Нема Ігр</label>
+}

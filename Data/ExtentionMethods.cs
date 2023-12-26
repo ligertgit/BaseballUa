@@ -106,8 +106,10 @@ namespace BaseballUa.Data
     {
         public static int GetShowIndex(this List<DayGames> schedule)
         {
-            var curDate = DateTime.Now.Date.AddMonths(-1);
-            var showDayGames = schedule.Where(dg => dg.GamesDate == curDate).FirstOrDefault();
+            if (schedule == null || schedule.Count == 0) return 0;
+
+            var curDate = DateTime.Now.Date;
+            var showDayGames = schedule.FirstOrDefault(dg => dg.GamesDate == curDate);
             if (showDayGames == null)
             {
                 if (schedule.Min(gd => gd.GamesDate) > curDate)

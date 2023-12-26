@@ -4,16 +4,52 @@
 @{
     ViewData["Title"] = "Detail Tournament";
 }
- @*probably more info here? like news photos....*@
+
+<div class="container-fluid text-white eventhead">
+    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event,
+                                                                        Albums = Model.Albums,
+                                                                        Videos = Model.Videos,
+                                                                        Games = Model.CurrentGames,
+                                                                        News = Model.News })
+</div>
+
+<div class="container-fluid text-white m-0 p-3">
+    @if (Model?.Event?.Tournament?.Description != null && Model.Event.Tournament.Description.Length > 0)
+    {
+        <div class="row bg-primary border border-1 border-white rounded-2 m-0 p-2">
+            @Model.Event.Tournament.Description
+        </div>
+    }
+
+    @if (Model?.Teams != null && Model.Teams.Count() > 0)
+    {
+        <div class="flex-row bg-primary border border-1 border-white rounded-2 m-0 mt-1 p-2">
+            @foreach (var team in Model.Teams)
+            {
+                <a asp-controller="Club" asp-action="DetailsTeam" asp-route-teamId="@team.Id">
+                    <img width="40" height="30" src="~/images/team/logoSmall/@team.FnameLogoSmall" />
+                </a>
+            }
+        </div>
+    }
+
+    @if(Model?.News != null && Model.News.Count() > 0)
+    {
+        <div class="flex-row bg-primary border border-1 border-white rounded-2 m-0 mt-1 p-2">
+            @await Html.PartialAsync("_NewsBlock6", Model.News)
+        </div>
+    }
+
+
+
+</div>
+
+
+
+
+
+
 @*<div class="row">
-    @await Html.PartialAsync("_EventDetails", Model)
-    @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event, 
-                                                    Albums = Model.GamesByDay.SelectMany(gbd => gbd.Games).SelectMany(g => g.Albums).ToList(),
-                                                    Videos = Model.GamesByDay.SelectMany(gbd => gbd.Games).SelectMany(g => g.Videos).ToList()
-                                                }
-                            );
-</div>*@
-<div class="row">
     @await Html.PartialAsync("_EventDetails", new EventWithNewsAndMedia{ Event = Model.Event,
                                                     Albums = Model.Albums,
                                                     Videos = Model.Videos,
@@ -52,34 +88,17 @@
                 @await Html.PartialAsync("_GamesBlock2", Model.CurrentGames)
             </div>
         </div>
-@*        <div class="row">
-            <div class="col">
-                <h5><strong>Команди:</strong></h5>
-                @await Html.PartialAsync("_TeamsBlock2", Model.Teams)
-            </div>
-        </div>*@
     </div>
     <div class="col-8">
         <h5><strong>Новини:</strong></h5>
-        @await Html.PartialAsync("../Home/_NewsBlock6", Model.News)
+        @await Html.PartialAsync("_NewsBlock6", Model.News)
     </div>
     <div class="col-2">
         <div class="row">
             <div class="col">
                 <h5><strong>Останні альбоми:</strong></h5>
-                @await Html.PartialAsync("../Home/_AlbumsBlock2", Model.Albums)
+                @await Html.PartialAsync("_AlbumsBlock2", Model.Albums)
             </div>
         </div>
-@*        <div class="row">
-            <div class="col">
-                <h5><strong>Останні відео:</strong></h5>
-                @await Html.PartialAsync("../Home/_VideoBlock2", Model.Albums)
-            </div>
-        </div>*@
     </div>
-</div>
-
-
-@*<div>
-    <a asp-action="Index" asp-route-monthShift="@ViewBag.monthShift">Повернутися до списку</a>
 </div>*@

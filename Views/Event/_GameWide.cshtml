@@ -1,0 +1,101 @@
+﻿@using System.Web;
+@model BaseballUa.ViewModels.GameViewModel;
+
+@if(Model != null)
+{
+    var game = Model;
+    <div class="row bg-primary border border-1 border-white rounded-2 m-0 p-2 mt-3">
+        <div class="flex-row h5 border-bottom m-0 pb-1">
+            <label>[ Тур: @(game.Tour?.ToString() ?? "-") ]</label>
+            <label>[ Гра: @(game.Name ?? "-") ]</label>
+            <label>[ Дата: @(game.StartDate?.ToString("dd-MM hh:mm") ?? "Не призначено") ]</label>
+            <label>[ Статус: @(game.GameStatus) ]</label>
+        </div>
+        @if (@game.AdditionalInfo != null)
+        {
+            <div class="flex-row m-0">
+
+                <label>
+                    Інформація: @(@game.AdditionalInfo)
+                </label>
+            </div>
+        }
+        @if (game.Albums != null && game.Albums.Count > 0)
+        {
+            <div class="flex-row m-0">
+                <label>Альбоми:</label>
+                @foreach (var album in game.Albums)
+                {
+                    <a class="m-0 me-1 mb-1 badge bg-warning p-2 pt-0 pb-0" asp-controller="Home" asp-action="ShowAlbum" asp-route-id="@album.Id">
+                        <img height="20" src="/images/assets/albumSmall.png" />
+                    </a>
+                }
+            </div>
+        }
+        @if (game.Videos != null && game.Videos.Count > 0)
+        {
+            <div class="flex-row m-0">
+                <label>Відео:</label>
+                @foreach (var video in game.Videos)
+                {
+                    <a class="badge bg-danger m-0 me-1 mb-1 p-2 pt-0 pb-0" asp-controller="Home" asp-action="ShowVideo" asp-route-id="@video.Id">
+                        <img class="m-0 p-0" height="20" src="/images/assets/videoSmall.png" />
+                    </a>
+                }
+            </div>
+        }
+
+        <div class="row text-center p-1">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <label>@(game.VisitorTeam?.Name ?? "???")</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <img src="~/images/team/logoSmall/@(game.VisitorTeam?.FnameLogoSmall ?? "defaultSmall.png")" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col h1">
+                        <label>@(game.RunsVisitor?.ToString() ?? "-")</label>
+                    </div>
+                </div>
+                @if (game.ConditionVisitor != null)
+                {
+                    <div class="row mt-2">
+                        <div class="col">
+                            <label>@(@game.ConditionVisitor)</label>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <label>@(game.HomeTeam?.Name ?? "???")</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <img src="~/images/team/logoSmall/@(game.HomeTeam?.FnameLogoSmall ?? "defaultSmall.png")" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col h1">
+                        <label>@(game.RunsHome?.ToString() ?? "-")</label>
+                    </div>
+                </div>
+                @if (game.ConditionHome != null)
+                {
+                    <div class="row mt-2">
+                        <div class="col">
+                            <label>@(@game.ConditionHome)</label>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

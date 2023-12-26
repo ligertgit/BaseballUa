@@ -5,7 +5,15 @@
 {
 	foreach (var game in Model)
 	{
-		<div class="row m-1">
+		<a class="btn bg-info bg-opacity-50 m-1 text-white" asp-controller="Event" asp-action="ShowGame" asp-route-gameId="@game.GameViewModelId">
+			@game.StartDate?.ToString("dd-MM hh:mm")
+			<img height="25" src="~/images/team/logoSmall/@(game.VisitorTeam != null ? game.VisitorTeam.FnameLogoSmall : Constants.DefaultTeamSmallImage)" />
+			@(game.RunsVisitor != null ? game.RunsVisitor : "?")
+			:
+			@(game.RunsHome != null ? game.RunsHome : "?")
+			<img height="25" src="~/images/team/logoSmall/@(game.HomeTeam != null ? game.HomeTeam.FnameLogoSmall : Constants.DefaultTeamSmallImage)" />
+		</a> 
+		@*<div class="row m-1">
 			<div class="col">
 				<a asp-action="ShowGame" asp-route-Id="@game.GameViewModelId">
 
@@ -35,7 +43,7 @@
 					</div>
 				</a>
 			</div>
-		</div>
+		</div>*@
 	}
 }
 else

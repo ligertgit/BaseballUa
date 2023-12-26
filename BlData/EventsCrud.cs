@@ -33,15 +33,12 @@ namespace BaseballUa.BlData
 
         public Event Get(int itemId)
         {
-            //check for null here
-            //var eventItem = _dbContext.Events.First(a => a.Id == itemId);
-            //_dbContext.ChangeTracker.LazyLoadingEnabled = false;
             var eventItem = _dbContext.Events.Where(e => e.Id == itemId)
                                                 .Include(e => e.Tournament)
                                                     .ThenInclude(t => t.Category)
-                                                .Include(e => e.News)
-                                                    .ThenInclude(n => n.NewsTitlePhotos)
-                                                        .ThenInclude(t => t.Photo)
+                                                //.Include(e => e.News)
+                                                //    .ThenInclude(n => n.NewsTitlePhotos)
+                                                //        .ThenInclude(t => t.Photo)
                                                 .FirstOrDefault();
 
             return eventItem ?? new Event();
@@ -192,6 +189,19 @@ namespace BaseballUa.BlData
                                      (game.HomeTeamId == teamId || game.VisitorTeamId == teamId)
                                 )
                           select eventt).Distinct();
+
+            return result;
+        }
+
+        public int GetIdForGame(int gameId)
+        {
+            if (gameId < 1) return -1;
+            var result = (from eventt in _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category)
+                          join eventItem in _dbContext.EventSchemaItems on eventt.Id equals eventItem.EventId
+                          join schemaGroup in _dbContext.SchemaGroups on eventItem.Id equals schemaGroup.EventSchemaItemId
+                          join game in _dbContext.Games on schemaGroup.Id equals game.SchemaGroupId
+                          where game.Id == gameId
+                          select eventt.Id).FirstOrDefault();
 
             return result;
         }

@@ -24,7 +24,7 @@ namespace BaseballUa.Data
 		public const int EventPreviewLength = 400;
 
 
-		public const int DefaultGameAmount = 5;
+		public const int DefaultGameAmount = 6;
         public const int DefaulActiveGamesDaysRange = 1;
 		public const int GamesSelectDaysShift = 20;
 

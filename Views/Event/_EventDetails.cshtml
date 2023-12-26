@@ -1,104 +1,95 @@
-﻿@model BaseballUa.ViewModels.Custom.EventWithNewsAndMedia
+﻿@using static BaseballUa.Data.Enums;
+@model BaseballUa.ViewModels.Custom.EventWithNewsAndMedia
 
-<div>
-    <div class="row">
-        <div class="col-4">
-            <h5>@Html.DisplayFor(model => model.Event.Tournament.Name)</h5>
+@if(Model != null && Model.Event != null && Model.Event.Tournament != null)
+{
+    <div class="bg-primary bg-opacity-25 rounded-2 p-3 pt-2">
+        <div class="flex-row" style="align-items: center">
+            <img src="~/images/sporttype/big/@(Model.Event.Tournament.Sport).png" />
+            <img class="me-1" src="~/images/category/big/@(Model.Event.Tournament.CategoryId).png" />
+            <h2 class="list-inline-item align-bottom">@Html.DisplayFor(model => model.Event.Tournament.Name) - @Html.DisplayFor(model => model.Event.Year)</h2>
         </div>
-        <div class="col-1">
-            @Html.DisplayFor(model => model.Event.Year)
+
+        <div class="flex-row">
+            <span class="badge @(Model.Event.Tournament.IsAnual ? "bg-primary" : "bg-secondary")">щорічний</span>
+            <span class="badge @(Model.Event.Tournament.IsInternational ? "bg-primary" : "bg-secondary")">міжнародній</span>
+            <span class="badge @(Model.Event.Tournament.IsOfficial ? "bg-primary" : "bg-secondary")">офіційний</span>
+            <span class="badge @(Model.Event.Tournament.IsFun ? "bg-primary" : "bg-secondary")">фановий</span>
+            <h5 class="list-inline-item">
+                @Model.Event.StartDate?.ToString("yyyy-MM-dd") - @Model.Event.EndDate?.ToString("yyyy-MM-dd")
+            </h5>
         </div>
-        <div class="col-1">
-            @Html.DisplayFor(model => model.Event.Tournament.Sport)
-        </div>
-        <div class="col-1">
-            @Html.DisplayFor(model => model.Event.Tournament.Category.ShortName)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-1">
-            @Html.DisplayNameFor(model => model.Event.Tournament.IsAnual)
-            @Html.DisplayFor(model => model.Event.Tournament.IsAnual)
-        </div>
-        <div class="col-1">
-            @Html.DisplayNameFor(model => model.Event.Tournament.IsInternational)
-            @Html.DisplayFor(model => model.Event.Tournament.IsInternational)
-        </div>
-        <div class="col-1">
-            @Html.DisplayNameFor(model => model.Event.Tournament.IsOfficial)
-            @Html.DisplayFor(model => model.Event.Tournament.IsOfficial)
-        </div>
-        <div class="col-1">
-            @Html.DisplayNameFor(model => model.Event.Tournament.IsFun)
-            @Html.DisplayFor(model => model.Event.Tournament.IsFun)
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-1">
-            @Model.Event.StartDate.Value.ToString("yyyy-MM-dd")
-        </div>
-        <div class="col-1">
-            @Model.Event.EndDate.Value.ToString("yyyy-MM-dd")
-        </div>
-    </div>
-    <hr />
-    <dl class="row">
-        <dt class="col-1">
-            @Html.DisplayNameFor(model => model.Event.Tournament.Description)
-        </dt>
-        <dd class="col-11">
-            @Html.DisplayFor(model => model.Event.Tournament.Description)
-        </dd>
-    </dl>
-    <hr />
-</div>
-<div class="row">
-    Новини:
-    @if (Model.News != null)
-    {
-        @foreach (var news in Model.News)
-        {
-            <div class="col">
-                <a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id">@news.Title</a>
+        <div class="flex-row">
+            <div class="text-white d-inline">
+                @await Html.PartialAsync("_EventMenu", Model.Event.EventViewModelId)
             </div>
-        }
-        <div class="col">
-            <a asp-controller="Event" asp-action="DetailsEvent" asp-route-Id="@Model.Event.EventViewModelId">Всі новини турніру</a>
         </div>
-    }
+    </div>
 
-</div>
-<div class="row">
-    Альбоми:
-    @if (Model.Albums != null)
-    {
-        @foreach (var album in Model.Albums)
-        {
-            <div class="col">
-                <a asp-controller="Home" asp-action="ShowAlbum" asp-route-Id="@album.Id">@album.Name</a>
-            </div>
-        }
-        <div class="col">
-            <a asp-controller="Home" asp-action="ShowAlbums" asp-route-eventId="@Model.Event.EventViewModelId">Всі альбоми турніру</a>
-        </div>
-    }
+    <ul class="nav nav-tabs mt-3" role="tablist">
 
-</div>
-<div class="row">
-    Відео:
-    @if (Model.Videos != null)
-    {
-        @foreach (var video in Model.Videos)
-        {
-            <div class="col">
-                <a href="@video.Fname">
-                    <img src="~/images/assets/videoSmall.png" />
+        <li class="nav-item bg-primary bg-opacity-75" role="presentation">
+            <a class="nav-link active border-white link-light bg-gradient" data-bs-toggle="tab" href="#tabgames" aria-selected="true" role="tab">
+                <img class="pe-2" width="25" src="~/images/assets/tourSmall.png" />Ігри
+            </a>
+        </li>
+        <li class="nav-item bg-primary bg-opacity-75" role="presentation">
+            <a class="nav-link border-white link-light bg-gradient" data-bs-toggle="tab" href="#tabvideos" aria-selected="false" role="tab">
+                <img class="pe-2" width="25" src="~/images/assets/videoSmall.png" />Відео
+            </a>
+        </li>
+        <li class="nav-item bg-primary bg-opacity-75" role="presentation">
+            <a class="nav-link border-white link-light bg-gradient" data-bs-toggle="tab" href="#tabnews" aria-selected="false" role="tab">
+                <img class="pe-2" width="25" src="~/images/assets/newsSmall.png" />Новини
+            </a>
+        </li>
+        <li class="nav-item bg-primary bg-opacity-75" role="presentation">
+            <a class="nav-link border-white link-light bg-gradient" data-bs-toggle="tab" href="#tabalbums" aria-selected="false" role="tab">
+                <img class="pe-2" width="25" src="~/images/assets/albumSmall.png" />Альбоми
+            </a>
+        </li>
+    </ul>
+    
+    <div id="myTabContent" class="tab-content mt-1 bg-primary bg-opacity-50 rounded-2">
+
+        <div class="tab-pane fade active show" id="tabgames" role="tabpanel">
+            <div class="d-flex flex-row flex-wrap p-3 m-0">
+                @await Html.PartialAsync("_GamesBlockRow", Model.Games)
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Event" asp-action="Schedule" asp-route-Id="@Model.Event.EventViewModelId">
+                    <img class="pe-1" width="25" src="~/images/assets/tourSmall.png" />
+                    <span class="text-white">ВСІ</span>
                 </a>
             </div>
-        }
-        <div class="col">
-            <a asp-controller="Home" asp-action="ShowVideos" asp-route-eventId="@Model.Event.EventViewModelId">Всі відео турніру</a>
         </div>
-    }
 
-</div>
+        <div class="tab-pane fade" id="tabvideos" role="tabpanel">
+            <div class="d-flex flex-row flex-wrap p-3 m-0">
+                @await Html.PartialAsync("_VideosBlockRow", Model.Videos)
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.Videos" asp-route-eventId="@Model.Event.EventViewModelId">
+                    <img class="pe-1" width="25" src="~/images/assets/videoSmall.png" />
+                    <span class="text-white">ВСІ</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tabnews" role="tabpanel">
+            <div class="d-flex flex-row flex-wrap p-3 m-0">
+                @await Html.PartialAsync("_NewsBlockRow", Model.News)
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.News" asp-route-eventId="@Model.Event.EventViewModelId">
+                    <img class="pe-1" width="25" src="~/images/assets/newsSmall.png" />
+                    <span class="text-white">ВСІ</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="tabalbums" role="tabpanel">
+            <div class="d-flex flex-row flex-wrap p-2 m-0">
+                @await Html.PartialAsync("_AlbumsBlock2", Model.Albums)
+                <a class="btn btn-info mb-1 d-inline-flex align-items-center" asp-controller="Home" asp-action="ShowLists" asp-route-listToShow="@ListToShow.Albums" asp-route-eventId="@Model.Event.EventViewModelId">
+                    <img class="pe-1" width="25" src="~/images/assets/albumSmall.png" />
+                    <span class="text-white">ВСІ</span>
+                </a>
+            </div>
+        </div>
+    </div>
+}
