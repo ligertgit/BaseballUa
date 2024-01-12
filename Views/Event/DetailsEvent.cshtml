@@ -35,9 +35,9 @@
 
     @if(Model?.News != null && Model.News.Count() > 0)
     {
-        <div class="flex-row bg-primary border border-1 border-white rounded-2 m-0 mt-1 p-2">
+        @*<div class="flex-row bg-primary border border-1 border-white rounded-2 m-0 mt-3 p-2 pe-0">*@
             @await Html.PartialAsync("_NewsBlock6", Model.News)
-        </div>
+        @*</div>*@
     }
 
 

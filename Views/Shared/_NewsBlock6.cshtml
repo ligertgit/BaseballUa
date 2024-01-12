@@ -6,7 +6,7 @@
 	foreach (var news in Model)
 	{
 
-		<div class="row m-3 p-4 bg-primary bg-opacity-50 rounded-2 border border-2 border-top-0 border-start-0">
+		<div class="row m-1 p-0 pt-3 pb-3 mt-4 bg-primary bg-opacity-50 rounded-2 border border-2 border-top-0 border-start-0">
 			<div class="col-4">
 				@{
 					var titlePhotoAlbum = Constants.DefaultAlbum;
@@ -64,7 +64,7 @@
 					<div class="col">
 						@if (news.Description != null)
 						{
-							<span class="text-wrap justify-content-between" style="font-family: monospace; font-size:20px">
+							<span class="text-wrap justify-content-between" style="font-size:18px">
 								@if (news.Description.Length > Constants.NewsPreviewLength)
 								{
 									@news.Description.Substring(0, Constants.NewsPreviewLength);

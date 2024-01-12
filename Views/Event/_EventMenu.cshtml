@@ -6,13 +6,13 @@
     Інфо
 </a>
 <a class="btn btn-warning me-1 @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Schema" ? "border border-2" : "")" asp-controller="Event" asp-action="Schema" asp-route-id="@Model">
-    Схема змагань
+    Схема
 </a>
 <a class="btn btn-warning me-1 @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Schedule" ? "border border-2" : "")" asp-controller="Event" asp-action="Schedule" asp-route-id="@Model">
-    Розклад ігр
+    Розклад
 </a>
 <a class="btn btn-warning me-3 @(ViewContext?.RouteData?.Values["Action"]?.ToString() == "Standing" ? "border border-2" : "")" asp-controller="Event" asp-action="Standing" asp-route-id="@Model">
-    Турнірна таблиця
+    Результати
 </a>
 
 @*@{

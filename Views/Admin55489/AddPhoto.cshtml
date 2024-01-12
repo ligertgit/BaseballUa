@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddPhoto">
+        @*<form asp-action="AddPhoto">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
@@ -32,13 +32,17 @@
             <div class="form-group">
                 <input type="submit" value="Додати" class="btn btn-primary" />
             </div>
+        </form>*@
+
+        <form asp-action="AddPhoto">
+            <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
+            <div class="form-group">
+                <label>Список імен фоток:</label>
+                <textarea class="form-control" name="fnames" cols="1" rows="20"></textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Додати" class="btn btn-primary" />
+            </div>
         </form>
     </div>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
-

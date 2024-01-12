@@ -1,6 +1,7 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace BaseballUa.BlData
 {
@@ -44,9 +45,9 @@ namespace BaseballUa.BlData
 			throw new NotImplementedException();
 		}
 
-        public List<SelectListItem> GetSelectItemList()
+        public List<SelectListItem> GetSelectItemList(int amount = Constants.DefaulSelectListAmount)
         {
-            var photosSL = _dbContext.Photos.OrderByDescending(a => a.Id).Take(Constants.DefaulSelectListAmount)
+            var photosSL = _dbContext.Photos.Where(p => p.AlbumId == Constants.TitleAlbumsId).OrderByDescending(a => a.Id).Take(amount)
                                     .Select(c => new SelectListItem
                                     {
                                         Text = c.Name,

@@ -14,7 +14,10 @@
 
 				<div class="row embed-responsive">
 					<div class="embed-responsive embed-responsive-16by9  ">
-						<iframe width='320' height='240' class="embed-responsive-item border border-2 rounded-2" src="@video.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
+						@if (video.Fname != null && video.Fname.IndexOf("youtub") != -1)
+						{
+							<iframe width='320' height='240' class="embed-responsive-item border border-2 rounded-2" src="@video.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
+						}
 					</div>
 				</div>
 			</div>

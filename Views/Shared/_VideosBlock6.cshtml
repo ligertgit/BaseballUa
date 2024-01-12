@@ -10,7 +10,7 @@
 			<div class="col-3 mt-2">
 				<div class="row m-1">
 					<div class="col">
-						<a class="btn btn-warning" asp-controller="Home" asp-action="ShowVideo" asp-route-videoId="@video.Id">
+						<a class="btn btn-warning" asp-controller="Home" asp-action="ShowVideo" asp-route-Id="@video.Id">
 							Детальніше
 						</a>
 					</div>
@@ -23,7 +23,7 @@
 			</div>
 			<div class="col align-self-stretch mt-2">
 				<div class="d-flex flex-row flex-nowrap mb-1 justify-content-between">
-					<a asp-controller="Home" asp-action="ShowVideo" asp-route-videoId="@video.Id" class="text-decoration-none text-white-50 me-2">
+					<a asp-controller="Home" asp-action="ShowVideo" asp-route-Id="@video.Id" class="text-decoration-none text-white-50 me-2">
 						<div class="row m-0 p-0">
 							<h2 class="m-0 p-0">@video.Name</h2>
 						</div>
@@ -50,7 +50,7 @@
 								@if (video.Description.Length > Constants.VideoPreviewLength)
 								{
 									@video.Description.Substring(0, Constants.VideoPreviewLength);
-									<a asp-controller="Home" asp-action="ShowVideo" asp-route-videoId="@video.Id" class="text-decoration-none text-decoration-underline text-white-50">
+									<a asp-controller="Home" asp-action="ShowVideo" asp-route-Id="@video.Id" class="text-decoration-none text-decoration-underline text-white-50">
 										...
 									</a>
 								}

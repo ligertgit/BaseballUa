@@ -92,12 +92,16 @@
                 {
                     <div class="row embed-responsive">
                         <div class="embed-responsive embed-responsive-16by9">
-                            <iframe width='480' height='270' class="embed-responsive-item" src="@video.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
+                            @if (video.Fname != null && video.Fname.IndexOf("youtub") != -1)
+                            {
+                                <iframe width='480' height='270' class="embed-responsive-item" src="@video.Fname.GetYouTubeEmbeded()" allowfullscreen></iframe>
+                            }
+                            
                         </div>
                     </div>
                     <div class="row pb-5">
                         <div class="col">
-                            <a class="btn btn-danger">Дивитись @video.Name на YouTube</a>
+                            <a href="@video.Fname" class="btn btn-danger">Дивитись @video.Name на YouTube</a>
                         </div>
                     </div>
                 }

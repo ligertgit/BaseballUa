@@ -5,13 +5,15 @@ namespace BaseballUa.Data
     public static class Constants
     {
 		public const int DefaulSelectListAmount = 25;
+		public const int MenuTitleLength = 22;
 
-		public const int DefaulNewsAmount = 3;
+		public const int DefaulNewsAmount = 10;
 		public const int NewsSelectDaysShift = 20;
 		public const int NewsPreviewLength = 400;
-		
+		public const int TitleAlbumsId = 10;
 
-		public const int DefaulVideosAmount = 10;
+
+        public const int DefaulVideosAmount = 6;
         public const int DefaulListVideosAmount = 100;
 		public const string DefaultVideoSmallImage = "videoSmall.png";
 		public const string DefaultVideoBigImage = "videoBig.png";
@@ -19,7 +21,7 @@ namespace BaseballUa.Data
 		public const int VideoPreviewLength = 400;
 
 
-		public const int DefaulEventAmount = 10;
+		public const int DefaulEventAmount = 6;
 		public const int DefaulActiveEventDaysShift = 100;
 		public const int EventPreviewLength = 400;
 

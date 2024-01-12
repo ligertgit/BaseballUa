@@ -10,8 +10,8 @@
             <a href="@video.Fname" class="btn btn-info text-truncate p-1 bg-gradient" style="max-width: 30vh" title="@video.Name">@video.Name</a>
         </div>*@
 
-		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" style="width: 30vh; height:12vh;">
-			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Home" asp-action="ShowVideo" asp-route-id="@video.Id" title="@video.Name">
+		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" >
+			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 200px; height:80px;" asp-controller="Home" asp-action="ShowVideo" asp-route-id="@video.Id" title="@video.Name">
 				<div class="row">
 					<div class="col-1 m-1">
 						<img width="25" height="25" src="~/images/assets/videoSmall.png" />
@@ -32,12 +32,12 @@
 					</div>
 
 					<div class="col-6 m-1">
-						<h5 class="float-end">@video.PublishDate.ToString("dd-MM")</h5>
+						<span class="float-end">@video.PublishDate.ToString("dd-MM")</span>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col m-1">
-						<h6 class="text-truncate" title="@video.Name">@video.Name</h6>
+						<span class="text-truncate" title="@video.Name">@video.Name.Substring(0, Math.Min(video.Name.Length, Constants.MenuTitleLength))</span>
 					</div>
 				</div>
 			</a>

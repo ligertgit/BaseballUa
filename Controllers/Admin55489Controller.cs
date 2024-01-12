@@ -12,17 +12,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Packaging.Signing;
 using System.Drawing;
+using System.Linq;
 using System.Net;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Controllers
 {
-    public class AdminController : Controller
+    public class Admin55489Controller : Controller
     {
         private readonly BaseballUaDbContext _db;
 
-        public AdminController(BaseballUaDbContext dbcontext)
+        public Admin55489Controller(BaseballUaDbContext dbcontext)
         {
             _db = dbcontext;
         }
@@ -310,6 +312,7 @@ namespace BaseballUa.Controllers
 
             return View(gameView);
         }
+       
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -324,6 +327,67 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListGames", new { schemaGroupId = gameVL.SchemaGroupId});
         }
 
+        public IActionResult EditGame(int gameId)
+        {
+            var editGameVL = new EditGameVM();
+            if (gameId > 0)
+            {
+                var gameDAL = new GamesCrud(_db).Get(gameId);
+                if (gameDAL != null)
+                {
+                    editGameVL.Game = new GameToView().Convert(gameDAL);
+
+                    var teamsWithClubCountry = new TeamCrud(_db).GetAll().ToList();
+                    editGameVL.HomeTeamSL = new SelectList(new TeamToView().GetFullSelestList(teamsWithClubCountry), "Value", "Text");
+                    if (editGameVL.HomeTeamSL != null && editGameVL.HomeTeamSL.FirstOrDefault(i => i.Value == editGameVL.Game.HomeTeamId.ToString()) != null)
+                    {
+                        editGameVL.HomeTeamSL.First(i => i.Value == editGameVL.Game.HomeTeamId.ToString()).Selected = true;
+                    }
+
+                    editGameVL.VisitorTeamSL = new SelectList(new TeamToView().GetFullSelestList(teamsWithClubCountry), "Value", "Text");
+                    if (editGameVL.VisitorTeamSL.FirstOrDefault(i => i.Value == editGameVL.Game.VisitorTeamId.ToString()) != null)
+                    {
+                        editGameVL.VisitorTeamSL.First(i => i.Value == editGameVL.Game.VisitorTeamId.ToString()).Selected = true;
+                    }
+
+                    editGameVL.TourSL = Enums.TourNumber.Tour1.ToSelectList();
+                    if (editGameVL.TourSL != null && editGameVL.TourSL.FirstOrDefault(i => i.Text == editGameVL.Game.Tour.ToString()) != null)
+                    {
+                        editGameVL.TourSL.First(i => i.Text == editGameVL.Game.Tour.ToString()).Selected = true;
+                    }
+
+                    editGameVL.StatusSL = Enums.GameStatus.Canceled.ToSelectList();
+                    //var ttt = editGameVL.StatusSL.FirstOrDefault().Text;
+                    //var ttt2 = editGameVL.Game.GameStatus.ToString();
+                    if (editGameVL.StatusSL != null && editGameVL.StatusSL.FirstOrDefault(i => i.Text == editGameVL.Game.GameStatus.ToString()) != null)
+                    {
+                        editGameVL.StatusSL.First(i => i.Text == editGameVL.Game.GameStatus.ToString()).Selected = true;
+                        var ttt2 = editGameVL.StatusSL.First(i => i.Text == editGameVL.Game.GameStatus.ToString());
+                        var ttt = editGameVL.StatusSL;
+                    }
+                }
+            }
+
+            ViewBag.homeTeamsList = editGameVL.HomeTeamSL;
+            ViewBag.visitorTeamsList = editGameVL.VisitorTeamSL;
+            ViewBag.StatusList = editGameVL.StatusSL;
+            ViewBag.TourList = editGameVL.TourSL;
+
+            return View(editGameVL.Game);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateGame(GameViewModel gameVL)
+        {
+            if (ModelState.IsValid)
+            {
+                var gameDAL = new GameToView().ConvertBack(gameVL);
+                new GamesCrud(_db).Update(gameDAL);
+            }
+
+            return RedirectToAction("ListGames", new { schemaGroupId = gameVL.SchemaGroupId });
+        }
 
         #endregion
 
@@ -546,7 +610,44 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListVideos");
         }
 
+        public IActionResult EditVideo(int videoId)
+        {
+            var editVideo = new EditVideoVM();
+            var videoDAL = new Video();
+            //var videoVL = new VideoVM();
+            if (videoId > 0)
+            {
+                videoDAL = new VideosCrud(_db).Get(videoId);
+                if (videoDAL != null)
+                {
+                    editVideo.Video = new VideoToView().Convert(videoDAL, false);
 
+                    if(editVideo.SportTypeSL != null && editVideo.SportTypeSL.FirstOrDefault(s => s.Text == editVideo.Video.SportType.ToString()) != null)
+                    {
+                        editVideo.SportTypeSL.FirstOrDefault(s => s.Text == editVideo.Video.SportType.ToString()).Selected = true;
+                    }
+
+                    editVideo.CategorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text", editVideo.Video.CategoryId.ToString());
+                    editVideo.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text", editVideo.Video.TeamId.ToString());
+                    editVideo.GameSl = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text", editVideo.Video.GameId.ToString());
+                    editVideo.NewsSL = new SelectList(new NewsCrud(_db).GetSelectItemList(), "Value", "Text", editVideo.Video.NewsId.ToString());
+                }
+            }
+
+            return View(editVideo);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateVideo(EditVideoVM editVideoVM)
+        {
+            if(ModelState.IsValid && editVideoVM?.Video != null)
+            {
+                var videoDAL = new VideoToView().ConvertBack(editVideoVM.Video);
+                new VideosCrud(_db).Update(videoDAL);
+            }
+
+            return RedirectToAction("ListVideos");
+        }
 
         public IActionResult ListAlbums(SportType? sportType,
                                         bool? isGeneral,
@@ -635,18 +736,70 @@ namespace BaseballUa.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddPhoto(PhotoVM photoVM)
+        public IActionResult AddPhoto(IFormCollection fc)
         {
-            photoVM.FnameBig = photoVM.FnameOrig;
-            photoVM.FnameSmall = photoVM.FnameOrig;
-            if (ModelState.IsValid) 
+
+            if(!fc.Keys.Contains("fnames") || !fc.Keys.Contains("albumId"))
             {
-                var photoDAL = new PhotoToView().ConvertBack(photoVM);
-                new PhotosCrud(_db).Add(photoDAL);
+                return RedirectToAction("ListAlbums");
+            }
+            int albumId;
+            if(!Int32.TryParse(fc["albumId"].FirstOrDefault(), out albumId))
+            {
+                return RedirectToAction("ListAlbums");
+            }
+            if(albumId <=0)
+            {
+                return RedirectToAction("ListAlbums");
+            }
+            if (fc["fnames"].IsNullOrEmpty())
+            {
+                return RedirectToAction("ListAlbums");
+            }
+            var fileList = (fc["fnames"].FirstOrDefault()).Split("\r\n").ToList();
+            if(fileList.Count <= 0)
+            {
+                return RedirectToAction("ListAlbums");
             }
 
-            return RedirectToAction("ListPhotos", new { albumId = photoVM.AlbumId });
+            foreach(var fileName in fileList)
+            {
+                if(!fileName.IsNullOrEmpty())
+                {
+                    var photoDAL = new Photo();
+                    photoDAL.AlbumId = albumId;
+                    photoDAL.Name = albumId + "_" + fileName;
+                    photoDAL.Description = fileName;
+                    photoDAL.FnameOrig = fileName;
+                    photoDAL.FnameBig = fileName;
+                    photoDAL.FnameSmall = fileName;
+                    new PhotosCrud(_db).Add(photoDAL);
+                }
+            }
+
+            //photoVM.FnameBig = photoVM.FnameOrig;
+            //photoVM.FnameSmall = photoVM.FnameOrig;
+            //if (ModelState.IsValid) 
+            //{
+            //    var photoDAL = new PhotoToView().ConvertBack(photoVM);
+            //    new PhotosCrud(_db).Add(photoDAL);
+            //}
+
+            //return RedirectToAction("ListPhotos", new { albumId = photoVM.AlbumId });
+            return RedirectToAction("ListAlbums");
         }
+        //public IActionResult AddPhoto(PhotoVM photoVM)
+        //{
+        //    photoVM.FnameBig = photoVM.FnameOrig;
+        //    photoVM.FnameSmall = photoVM.FnameOrig;
+        //    if (ModelState.IsValid)
+        //    {
+        //        var photoDAL = new PhotoToView().ConvertBack(photoVM);
+        //        new PhotosCrud(_db).Add(photoDAL);
+        //    }
+
+        //    return RedirectToAction("ListPhotos", new { albumId = photoVM.AlbumId });
+        //}
 
 
 
@@ -772,7 +925,7 @@ namespace BaseballUa.Controllers
 
             var newsDAL = new NewsCrud(_db).Get(newsId);
             newsWithPhotosVL.News = new NewsToView().Convert(newsDAL);
-            newsWithPhotosVL.PhotosMSL = new MultiSelectList(new PhotosCrud(_db).GetSelectItemList(), "Value", "Text");
+            newsWithPhotosVL.PhotosMSL = new MultiSelectList(new PhotosCrud(_db).GetSelectItemList(100), "Value", "Text");
 
             return View(newsWithPhotosVL);
         }

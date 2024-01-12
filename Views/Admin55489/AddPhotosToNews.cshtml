@@ -72,7 +72,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="PhotoIds" class="control-label"></label>
-                @Html.ListBoxFor(c => Model.PhotoIds, Model.PhotosMSL);
+                @Html.ListBoxFor(c => Model.PhotoIds, Model.PhotosMSL, new {size = 50});
             </div>
             <div class="form-group">
                 <input type="submit" value="Додати" class="btn btn-primary" />

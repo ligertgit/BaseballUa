@@ -59,7 +59,7 @@ namespace BaseballUa.DTO
         public Game ConvertBack(GameViewModel gameVL)
         {
             var gameDAL = new Game();
-            //gameView.GameViewModelId = gameDAL.Id;
+            gameDAL.Id = gameVL.GameViewModelId;
             gameDAL.Name = gameVL.Name;
             gameDAL.StartDate = gameVL.StartDate;
             gameDAL.AdditionalInfo = gameVL.AdditionalInfo;

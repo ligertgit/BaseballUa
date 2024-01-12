@@ -345,7 +345,11 @@ namespace BaseballUa.BlData
 
 		public void Update(Video item)
 		{
-			throw new NotImplementedException();
+			if(item != null)
+			{
+				_dbContext.Videos.Update(item);
+                _dbContext.SaveChanges();
+            }
 		}
 
         public void Update(int id,

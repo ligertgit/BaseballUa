@@ -6,8 +6,8 @@
 {
     @foreach (var news in Model)
     {
-		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" style="width: 30vh; height:12vh;">
-			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id" title="@news.Title">
+		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2">
+			<a class="btn btn-outline-info bg-opacity-25 p-1 text-white" style="width: 200px; height:80px;" asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id" title="@news.Title">
 				<div class="row">
 					<div class="col-1 m-1">
 						<img width="25" height="25" src="~/images/assets/newsSmall.png" />
@@ -27,13 +27,13 @@
 					}
 					</div>
 
-					<div class="col-6 m-1">
-						<h5 class="float-end">@news.PublishDate.ToString("dd-MM")</h5>
+					<div class="col m-1">
+						<span class="float-end">@news.PublishDate.ToString("dd-MM")</span>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col m-1">
-						<h6 class="text-truncate" title="@news.Title">@news.Title</h6>
+						<h6 class="text-truncate" title="@news.Title">@news.Title.Substring(0,Math.Min(news.Title.Length, Constants.MenuTitleLength))</h6>
 					</div>
 				</div>
 			</a>

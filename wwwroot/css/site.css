@@ -1,5 +1,6 @@
 html {
   font-size: 14px;
+  
 }
 
 @media (min-width: 768px) {
@@ -9,12 +10,14 @@ html {
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
+/*    min-width: 800px;*/
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+/*    min-width: 800px;*/
 }
 
 .homehead {

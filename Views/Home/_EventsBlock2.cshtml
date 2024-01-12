@@ -6,8 +6,8 @@
 {
 	foreach (var eventt in Model)
 	{
-		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2" style="width: 30vh; height:12vh;">
-			<a class="btn btn-outline-info p-1 text-white" style="width: 30vh; height:12vh;" asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@eventt.EventViewModelId" title="@eventt.Tournament.Name">
+		<div class="bg-info bg-opacity-50 me-1 mb-1 rounded-2">
+			<a class="btn btn-outline-info p-1 text-white" style="width: 200px; height:80px;" asp-controller="Event" asp-action="DetailsEvent" asp-route-id="@eventt.EventViewModelId" title="@eventt.Tournament.Name">
 				<div class="row">
 					<div class="col-1 m-1">
 						<img width="25" height="25" src="~/images/assets/tourSmall.png" />
@@ -19,12 +19,12 @@
 						<img width="25" height="25" src="~/images/category/small/@(eventt.Tournament.CategoryId).png" />
 					</div>
 					<div class="col-6 m-1">
-						<h5 class="float-end">@eventt.StartDate?.ToString("dd-MM")</h5>
+						<span class="float-end">@eventt.StartDate?.ToString("dd-MM")</span>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col m-1">
-						<h6 class="text-truncate">@eventt.Tournament.Name</h6>
+						<span class="text-truncate">@eventt.Tournament.Name.Substring(0, Math.Min(eventt.Tournament.Name.Length, Constants.MenuTitleLength))</span>
 					</div>
 				</div>
 			</a>

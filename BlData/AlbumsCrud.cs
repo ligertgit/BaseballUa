@@ -284,7 +284,7 @@ namespace BaseballUa.BlData
             var fixxedNewestDate = newestDate ?? DateTime.Now.Date;
 
             var result = (  from albums in _dbContext.Albums
-                            join photos in _dbContext.Photos on albums.Id equals photos.Id
+                            join photos in _dbContext.Photos on albums.Id equals photos.AlbumId
                             join jnews in _dbContext.News on albums.NewsId equals jnews.Id into subnews
                                 from news in subnews.DefaultIfEmpty()
                                 join jevent in _dbContext.Events on news.EventId equals jevent.Id into subevent
@@ -330,6 +330,8 @@ namespace BaseballUa.BlData
                             .Distinct()
                             .OrderByDescending(a => a.PublishDate)
                                 .ThenByDescending(a => a.Id);
+
+
             countt = result.Count();
 
             return result.Take(amount)
