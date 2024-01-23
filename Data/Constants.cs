@@ -53,5 +53,16 @@ namespace BaseballUa.Data
 
         public const string DefaultPlayerSmallImage = "defaultSmall.png";
         public const string DefaultPlayerBigImage = "defaultBig.png";
+
+		public const long MinImageSize = 3000;
+		public const long MaxImageSize = 6097152;
+		public const double MaxImageRatio = 1.9;
+		public const int BigImageHeight = 769;
+		public const int SmallImageHeight = 188;
+		public const string ImageBaseDir = "wwwroot\\images\\photo\\";
+		public const string BigImageSubDir = "big";
+		public const string SmallImageSubDir = "small";
+
+
     }
 }

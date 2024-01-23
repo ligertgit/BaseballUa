@@ -23,10 +23,12 @@ namespace BaseballUa.Controllers
     public class Admin55489Controller : Controller
     {
         private readonly BaseballUaDbContext _db;
+        private readonly string _rootPath;
 
-        public Admin55489Controller(BaseballUaDbContext dbcontext)
+        public Admin55489Controller(BaseballUaDbContext dbcontext, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
             _db = dbcontext;
+            _rootPath = env.WebRootPath;
         }
 
         public IActionResult Index()
@@ -735,6 +737,44 @@ namespace BaseballUa.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> UploadPhoto(IFormCollection fc)
+        {
+            int albumId;
+            int successfulySaves = 0;
+
+            if (fc != null 
+               && fc.ContainsKey("AlbumId") 
+               && Int32.TryParse(fc["AlbumId"], out albumId) 
+               && fc.Files != null 
+               && fc.Files.Count > 0)
+            {
+                var album = new AlbumsCrud(_db).Get(albumId);
+                if (album != null)
+                {
+                    var checkedFiles = FileTools.GetValidated(fc.Files.ToList());
+                    foreach (var file in checkedFiles)
+                    {
+                        var newfileName = Path.ChangeExtension(Path.GetRandomFileName(), ".jpg");
+                        if (await FileTools.ResizeAndSave(file, albumId, _rootPath, newfileName))
+                        {
+                            var photoDAL = new Photo();
+                            photoDAL.AlbumId = albumId;
+                            photoDAL.Name = "Noname";
+                            photoDAL.FnameOrig = newfileName;
+                            photoDAL.FnameBig = newfileName;
+                            photoDAL.FnameSmall = newfileName;
+                            new PhotosCrud(_db).Add(photoDAL);
+                            successfulySaves++;
+                        }
+                    }
+                }
+            }
+
+            return Ok(new { count = successfulySaves });
+        }
+
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult AddPhoto(IFormCollection fc)
         {
@@ -777,28 +817,53 @@ namespace BaseballUa.Controllers
                 }
             }
 
-            //photoVM.FnameBig = photoVM.FnameOrig;
-            //photoVM.FnameSmall = photoVM.FnameOrig;
-            //if (ModelState.IsValid) 
-            //{
-            //    var photoDAL = new PhotoToView().ConvertBack(photoVM);
-            //    new PhotosCrud(_db).Add(photoDAL);
-            //}
-
-            //return RedirectToAction("ListPhotos", new { albumId = photoVM.AlbumId });
             return RedirectToAction("ListAlbums");
         }
-        //public IActionResult AddPhoto(PhotoVM photoVM)
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddPhotoOrig(IFormCollection fc)
         //{
-        //    photoVM.FnameBig = photoVM.FnameOrig;
-        //    photoVM.FnameSmall = photoVM.FnameOrig;
-        //    if (ModelState.IsValid)
+
+        //    if (!fc.Keys.Contains("fnames") || !fc.Keys.Contains("albumId"))
         //    {
-        //        var photoDAL = new PhotoToView().ConvertBack(photoVM);
-        //        new PhotosCrud(_db).Add(photoDAL);
+        //        return RedirectToAction("ListAlbums");
+        //    }
+        //    int albumId;
+        //    if (!Int32.TryParse(fc["albumId"].FirstOrDefault(), out albumId))
+        //    {
+        //        return RedirectToAction("ListAlbums");
+        //    }
+        //    if (albumId <= 0)
+        //    {
+        //        return RedirectToAction("ListAlbums");
+        //    }
+        //    if (fc["fnames"].IsNullOrEmpty())
+        //    {
+        //        return RedirectToAction("ListAlbums");
+        //    }
+        //    var fileList = (fc["fnames"].FirstOrDefault()).Split("\r\n").ToList();
+        //    if (fileList.Count <= 0)
+        //    {
+        //        return RedirectToAction("ListAlbums");
         //    }
 
-        //    return RedirectToAction("ListPhotos", new { albumId = photoVM.AlbumId });
+        //    foreach (var fileName in fileList)
+        //    {
+        //        if (!fileName.IsNullOrEmpty())
+        //        {
+        //            var photoDAL = new Photo();
+        //            photoDAL.AlbumId = albumId;
+        //            photoDAL.Name = albumId + "_" + fileName;
+        //            photoDAL.Description = fileName;
+        //            photoDAL.FnameOrig = fileName;
+        //            photoDAL.FnameBig = fileName;
+        //            photoDAL.FnameSmall = fileName;
+        //            new PhotosCrud(_db).Add(photoDAL);
+        //        }
+        //    }
+
+        //    return RedirectToAction("ListAlbums");
         //}
 
 

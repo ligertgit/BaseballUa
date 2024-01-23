@@ -5,36 +5,18 @@
     ViewData["Title"] = "Add Photo";
 }
 
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
 <h1>Додати фото до альбому (@ViewBag.album.Name | @ViewBag.album.PublishDate )</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
-        @*<form asp-action="AddPhoto">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FnameOrig" class="control-label"></label>
-                <input asp-for="FnameOrig" class="form-control" />
-                <span asp-validation-for="FnameOrig" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Додати" class="btn btn-primary" />
-            </div>
-        </form>*@
-
-        <form asp-action="AddPhoto">
+@*        <form asp-action="AddPhoto">
             <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
             <div class="form-group">
                 <label>Список імен фоток:</label>
@@ -43,6 +25,64 @@
             <div class="form-group">
                 <input type="submit" value="Додати" class="btn btn-primary" />
             </div>
+        </form>*@
+
+        <form action="UploadPhoto"
+              enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
+              method="post">
+            <dl>
+                <dt>
+                    <label for="FileUpload_FormFile">File</label>
+                </dt>
+                <dd>
+                    <input type="hidden" name="AlbumId" value="@Model.AlbumId" />
+                    <input type="file"
+                           name="formFiles" multiple />
+                </dd>
+            </dl>
+
+            <input class="btn" type="submit" value="Upload" />
+
+            <div style="margin-top:15px">
+                <output name="result"></output>
+            </div>
+        </form>
+
+        <form asp-action="AddPhoto">
+            <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
+            <div class="form-group">
+                <input type="submit" value="Додати фото і опублікувати альбом" class="btn btn-primary" />
+            </div>
         </form>
     </div>
 </div>
+
+<script>
+    async function AJAXSubmit(oFormElement) {
+        var resultElement = oFormElement.elements.namedItem("result");
+        const formData = new FormData(oFormElement);
+
+        try {
+            const response = await fetch(oFormElement.action, {
+                method: 'POST',
+                body: formData
+            });
+
+            //if (response.ok) {
+            //    window.location.href = '/';
+            //}
+            if (response.ok)
+            {
+                resultElement.value = "Success";
+            }
+            else 
+            {
+                resultElement.value = "Something went wrong";
+            }
+            //resultElement.value = 'Result: ' + response.status + ' ' +
+            //    response.statusText;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>
