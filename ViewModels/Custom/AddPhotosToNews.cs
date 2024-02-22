@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 
+
+// delete
 namespace BaseballUa.ViewModels.Custom
 {
     public class AddPhotosToNews

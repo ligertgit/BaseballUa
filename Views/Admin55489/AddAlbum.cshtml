@@ -3,6 +3,11 @@
 
 @{
     ViewData["Title"] = "Add Album";
+    SelectList categorySL = ViewBag.CategorySL;
+    SelectList newsSL = ViewBag.NewsSL;
+    SelectList teamSL = ViewBag.TeamSL;
+    SelectList gameSL = ViewBag.GameSL;
+    SelectList sportSL = ViewBag.SportSL;
 }
 
 <div class="container-fluid text-warning adminhead">
@@ -21,7 +26,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="SportType" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.SportType, Enums.SportType.NotDefined.ToSelectList(), optionLabel: "--- оберіть ---")
+                @Html.DropDownListFor(c => Model.SportType, sportSL, optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(c => c.SportType, "", new { @class = "text-danger" })
             </div>
             <div class="form-group form-check">
@@ -46,22 +51,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="NewsId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.NewsId, new SelectList(ViewBag.NewsSL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.DropDownListFor(c => Model.NewsId, newsSL, optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(c => c.NewsId, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.CategoryId, new SelectList(ViewBag.CategorySL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.DropDownListFor(c => Model.CategoryId, categorySL, optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(c => c.CategoryId, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 <label asp-for="TeamId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.TeamId, new SelectList(ViewBag.TeamSL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.DropDownListFor(c => Model.TeamId, teamSL, optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(c => c.TeamId, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
                 <label asp-for="GameId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.GameId, new SelectList(ViewBag.GamesSL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.DropDownListFor(c => Model.GameId, gameSL, optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(c => c.GameId, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">

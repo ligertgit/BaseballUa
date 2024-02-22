@@ -5,6 +5,12 @@
     ViewData["Title"] = "AddPlayer";
 }
 
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
 <h1>AddPlayer</h1>
 
 <h4>For team ID: @Model.TeamId</h4>

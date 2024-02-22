@@ -214,15 +214,14 @@ namespace BaseballUa.BlData
         //    return new TeamFullDetail();
         //}
 
-        public List<SelectListItem> GetSelectItemList()
+        public List<SelectListItem> GetSelectItemList(bool uaOnly = false)
         {
             var teamsSL = new List<SelectListItem>();
-            teamsSL = _dbContext.Teams.Select(c => new SelectListItem
+            teamsSL = _dbContext.Teams.Where(t => !uaOnly || Constants.UaClubIdList.Contains(t.ClubId)).OrderBy(t => t.ClubId).ThenBy(t => t.SportType).ThenBy(t => t.Name).Select(c => new SelectListItem
                                     {
-                                        Text = c.Name,
+                                        Text = ((Enums.SportType)c.SportType).ToString() + " - " + c.Name,
                                         Value = c.Id.ToString()
                                     }).ToList();
-
             return teamsSL;
         }
 

@@ -22,6 +22,7 @@ namespace BaseballUa.BlData
 		{
 			_dbContext.Albums.Add(item);
 			_dbContext.SaveChanges();
+            var a = item.Id;
 		}
 
 		public void Delete(Album item)
@@ -360,7 +361,7 @@ namespace BaseballUa.BlData
 											&& (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
 											&& (!notForTeamOnly || (a.IsGeneral || a.News.EventId != null || a.CategoryId != null || a.GameId != null))
 											)
-											.OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
+											.OrderByDescending(a => a.Id)
 											.Take(amount == null ? Constants.DefaulAlbumsAmount : (int)amount)
 											.Include(a => a.News)
 											.Include(a => a.Category)

@@ -4,6 +4,12 @@
     ViewData["Title"] = "List Schema Groups";
 }
 
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
 @ViewBag.EventSchemaItem.Event.Tournament.Name
 @ViewBag.EventSchemaItem.Event.Year
 

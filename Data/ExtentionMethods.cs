@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 using static NuGet.Packaging.PackagingConstants;
@@ -84,7 +85,13 @@ namespace BaseballUa.Data
             cookies.Append("filterInternational", filters.International.ToString(), option);
         }
 
-        
+        public static void SetSelected(this SelectList selectList, string value)
+        {
+            if (!value.IsNullOrEmpty() && selectList != null && selectList.Any() && selectList.FirstOrDefault(i => i.Value == value) != null)
+            {
+                selectList.FirstOrDefault(i => i.Value == value).Selected = true;
+            }
+        }
     }
 
     public static class TempDataExtensions

@@ -678,14 +678,30 @@ namespace BaseballUa.Controllers
             return View(albumsVL);
         }
 
-        public IActionResult AddAlbum()
+        public IActionResult AddAlbum(int categoryId = 0, int newsId = 0, int teamId = 0, int gameId =0, SportType sportType = SportType.NotDefined)
         {
             var albumVL = new AlbumToView().CreateEmpty();
 
-            ViewBag.CategorySL = new CategoriesCrud(_db).GetSelectItemList();
-            ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
-            ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList();
-            ViewBag.GamesSL = new GamesCrud(_db).GetSelectItemList();
+            var categorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text");
+            categorySL.SetSelected(categoryId.ToString());
+            var newsSL = new SelectList(new NewsCrud(_db).GetSelectItemList(), "Value", "Text");
+            newsSL.SetSelected(newsId.ToString());
+            var teamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly: true), "Value", "Text");
+            teamSL.SetSelected(teamId.ToString());
+            var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text");
+            gameSL.SetSelected(gameId.ToString());
+            var sportSL = Enums.SportType.NotDefined.ToSelectList();
+            var t1 = sportType;
+            var t2 = (int)sportType;
+            var t3 = Convert.ToInt32(sportType);
+
+            sportSL.SetSelected(Convert.ToInt32(sportType).ToString());
+
+            ViewBag.CategorySL = categorySL;
+            ViewBag.NewsSL = newsSL;
+            ViewBag.TeamSL = teamSL;
+            ViewBag.GameSL = gameSL;
+            ViewBag.SportSL = sportSL;
 
             return View(albumVL);
         }
@@ -696,7 +712,9 @@ namespace BaseballUa.Controllers
         {
             if (ModelState.IsValid)
             {
-                new AlbumsCrud(_db).Add(new AlbumToView().ConvertBack(albumVL));
+                var albumDL = new AlbumToView().ConvertBack(albumVL);
+                new AlbumsCrud(_db).Add(albumDL);
+                return RedirectToAction("AddPhoto", new { albumId = albumDL.Id});
             }
 
             return RedirectToAction("ListAlbums");
@@ -820,78 +838,112 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListAlbums");
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult AddPhotoOrig(IFormCollection fc)
-        //{
 
-        //    if (!fc.Keys.Contains("fnames") || !fc.Keys.Contains("albumId"))
-        //    {
-        //        return RedirectToAction("ListAlbums");
-        //    }
-        //    int albumId;
-        //    if (!Int32.TryParse(fc["albumId"].FirstOrDefault(), out albumId))
-        //    {
-        //        return RedirectToAction("ListAlbums");
-        //    }
-        //    if (albumId <= 0)
-        //    {
-        //        return RedirectToAction("ListAlbums");
-        //    }
-        //    if (fc["fnames"].IsNullOrEmpty())
-        //    {
-        //        return RedirectToAction("ListAlbums");
-        //    }
-        //    var fileList = (fc["fnames"].FirstOrDefault()).Split("\r\n").ToList();
-        //    if (fileList.Count <= 0)
-        //    {
-        //        return RedirectToAction("ListAlbums");
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ListNews(IFormCollection fc)
+        {
+            if(ModelState.IsValid && fc != null && fc.Keys.Contains("eventId"))
+            {
+                int eventId;
+                if (Int32.TryParse(fc["eventId"].FirstOrDefault(), out eventId) && eventId > 0)
+                {
+                    return RedirectToAction("ListNews", new { eventId = eventId });
+                }
+            }
 
-        //    foreach (var fileName in fileList)
-        //    {
-        //        if (!fileName.IsNullOrEmpty())
-        //        {
-        //            var photoDAL = new Photo();
-        //            photoDAL.AlbumId = albumId;
-        //            photoDAL.Name = albumId + "_" + fileName;
-        //            photoDAL.Description = fileName;
-        //            photoDAL.FnameOrig = fileName;
-        //            photoDAL.FnameBig = fileName;
-        //            photoDAL.FnameSmall = fileName;
-        //            new PhotosCrud(_db).Add(photoDAL);
-        //        }
-        //    }
-
-        //    return RedirectToAction("ListAlbums");
-        //}
+            return RedirectToAction("ListNews");
+        }
 
 
-
-        public IActionResult ListNews(SportType? sportType = null,
-                                        bool? isGeneral = null,
+        public IActionResult ListNews(SportType sportType = SportType.NotDefined,
+                                        bool isGeneral = false,
+                                        bool isFun = false,
+                                        bool isOfficial = false,
+                                        bool isInternational = false,
+                                        bool isAnnual = false,
                                         int? eventId = null,
                                         int? categoryId = null,
                                         int? teamId = null,
                                         DateTime? lastDate = null,
-                                        int? lastId = null,
-                                        int? amount = null)
+                                        int skip = 0,
+                                        int? newsId = null)
         {
+            var pageDataVM = new ListNewsVM();
+            // if (newsId != null ) {get news, return view}
 
-            var newsDAL = new NewsCrud(_db).GetAll(sportType, isGeneral, eventId, categoryId, teamId, lastDate, lastId, amount).ToList();
-            var newsVL = new NewsToView().ConvertAll(newsDAL);
+            var countt = 0;
+            if(skip < 0)
+            {
+                skip = 0;
+            }
+            List<int>? categoryIds = null;
+            if(categoryId != null)
+            {
+                categoryIds = new List<int>() { (int)categoryId };
+            }
+            List<int>? teamIds = null;
+            if(teamId != null)
+            {
+                teamIds = new List<int>() { (int)teamId };
+            }
 
-            ViewBag.sportType = sportType;
-            ViewBag.isGeneral = isGeneral;
-            ViewBag.eventt = eventId == null ? null : new EventToView().Convert(new EventsCrud(_db).Get((int)eventId));
-            ViewBag.category = categoryId == null ? null : new CategoryToView().Convert(new CategoriesCrud(_db).Get((int)categoryId));
-            ViewBag.team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
-            ViewBag.lastDate = lastDate;
-            ViewBag.lastId = lastId;
-            ViewBag.amount = amount; // limit to const.defaout maximum in crud
+            //var newsDAL = new NewsCrud(_db).GetAll(sportType, isGeneral, eventId, categoryId, teamId, lastDate, lastId, amount).ToList();
+            var newsDAL = new NewsCrud(_db).GetAllFiltered(out countt, 
+                                                           sportType: sportType, 
+                                                           includeAllGeneral: isGeneral,
+                                                           includeAllFun: isFun,
+                                                           isOfficial: isOfficial,
+                                                           isInternational: isInternational,
+                                                           isAnnual: isAnnual,
+                                                           eventId: eventId,
+                                                           categoryIds: categoryIds,
+                                                           teamIds: teamIds,
+                                                           newestDate: lastDate,
+                                                           skip: skip).ToList();
+            pageDataVM.News = new NewsToView().ConvertAll(newsDAL);
+            if(countt > Constants.DefaulNewsAmount)
+            {
+                pageDataVM.SkipNext = skip + Constants.DefaulNewsAmount;
+            }
+            if(skip > 0)
+            {
+                pageDataVM.SkipPrev = skip - Constants.DefaulNewsAmount <= 0 ? 0 : skip - Constants.DefaulNewsAmount;
+            }
+            pageDataVM.SportType = sportType;
+            pageDataVM.isGeneral = isGeneral;
+            pageDataVM.isOfficial = isOfficial;
+            pageDataVM.isAnnual = isAnnual;
+            pageDataVM.isFun = isFun;
+            pageDataVM.Event = eventId == null ? null : new EventToView().Convert(new EventsCrud(_db).Get((int)eventId));
+            pageDataVM.Category = categoryId == null ? null : new CategoryToView().Convert(new CategoriesCrud(_db).Get((int)categoryId));
+            pageDataVM.Team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
+            pageDataVM.LastDate = lastDate;
 
 
-            return View(newsVL);
+            // at the moment we let only event selection
+            //pageDataVM.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text");
+            //if(pageDataVM.Team != null && pageDataVM.TeamSL.First(i => i.Value == pageDataVM.Team.Id.ToString()) != null)
+            //{
+            //    pageDataVM.TeamSL.First(i => i.Value == pageDataVM.Team.Id.ToString()).Selected = true;
+            //}
+            pageDataVM.EventSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text");
+            if (pageDataVM.Event != null && pageDataVM.EventSL.First(i => i.Value == pageDataVM.Event.EventViewModelId.ToString()) != null)
+            {
+                pageDataVM.EventSL.First(i => i.Value == pageDataVM.Event.EventViewModelId.ToString()).Selected = true;
+            }
+
+            //ViewBag.sportType = sportType;
+            //ViewBag.isGeneral = isGeneral;
+            //ViewBag.eventt = eventId == null ? null : new EventToView().Convert(new EventsCrud(_db).Get((int)eventId));
+            //ViewBag.category = categoryId == null ? null : new CategoryToView().Convert(new CategoriesCrud(_db).Get((int)categoryId));
+            //ViewBag.team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
+            //ViewBag.lastDate = lastDate;
+            //ViewBag.lastId = lastId;
+            //ViewBag.amount = amount; // limit to const.defaout maximum in crud
+
+
+            return View(pageDataVM);
         }
 
         public IActionResult AddNews()

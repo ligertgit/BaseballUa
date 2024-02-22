@@ -1,9 +1,10 @@
-﻿using System.Security.Policy;
+﻿using System.Collections.Immutable;
+using System.Security.Policy;
 
 namespace BaseballUa.Data
 {
-    public static class Constants
-    {
+	public static class Constants
+	{
 		public const int DefaulSelectListAmount = 25;
 		public const int MenuTitleLength = 22;
 
@@ -13,8 +14,8 @@ namespace BaseballUa.Data
 		public const int TitleAlbumsId = 10;
 
 
-        public const int DefaulVideosAmount = 6;
-        public const int DefaulListVideosAmount = 100;
+		public const int DefaulVideosAmount = 6;
+		public const int DefaulListVideosAmount = 100;
 		public const string DefaultVideoSmallImage = "videoSmall.png";
 		public const string DefaultVideoBigImage = "videoBig.png";
 		public const string DefaultVideoName = "no name";
@@ -27,29 +28,30 @@ namespace BaseballUa.Data
 
 
 		public const int DefaultGameAmount = 6;
-        public const int DefaulActiveGamesDaysRange = 1;
-		public const int GamesSelectDaysShift = 20;
+		public const int DefaulActiveGamesDaysRange = 1;
+		public const int GamesSelectDaysShift = 10;
 
-        public const string DefaultAlbum = "default";
-        public const string DefaultAlbumName = "no name";
-        public const string DefaultAlbumSmallImage = "small.png";
-        public const string DefaultAlbumBigImage = "big.png";
-		public const int DefaulAlbumsAmount = 10;
+		public const string DefaultAlbum = "default";
+		public const string DefaultAlbumName = "no name";
+		public const string DefaultAlbumSmallImage = "small.png";
+		public const string DefaultAlbumBigImage = "big.png";
+		public const int DefaulAlbumsAmount = 30;
 		public const int DefaulListAlbumsAmount = 100;
 		public const int AlbumPreviewLength = 400;
 		public const int MaxThumbMediumAlbumName = 28;
-        
 
-        public const string DefaultTeamSmallImage = "defaultSmall.png";
+
+		public const string DefaultTeamSmallImage = "defaultSmall.png";
 		public const string DefaultTeamBigImage = "defaultBig.png";
-		
-		
+
+
 		public const int MaxClubStaffShow = 10;
-        public const string DefaultStaffSmallImage = "defaultSmall.png";
-        public const string DefaultStaffBigImage = "defaultBig.png";
-        public const int EuroClubId = 4;
-        public const string DefaultClubSmallImage = "defaultSmall.png";
-        public const string DefaultClubBigImage = "defaultBig.png";
+		public const string DefaultStaffSmallImage = "defaultSmall.png";
+		public const string DefaultStaffBigImage = "defaultBig.png";
+		public const int EuroClubId = 4;
+		public const string DefaultClubSmallImage = "defaultSmall.png";
+		public const string DefaultClubBigImage = "defaultBig.png";
+        public static readonly ImmutableList<int> UaClubIdList = new List<int>() {1, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 }.ToImmutableList<int>();
 
         public const string DefaultPlayerSmallImage = "defaultSmall.png";
         public const string DefaultPlayerBigImage = "defaultBig.png";

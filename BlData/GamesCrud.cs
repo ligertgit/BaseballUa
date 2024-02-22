@@ -237,13 +237,20 @@ namespace BaseballUa.BlData
 
         public List<SelectListItem> GetSelectItemList()
         {
-            var gamesSL = _dbContext.Games.Where(g => (g.StartDate > DateTime.Now.AddDays(-Constants.GamesSelectDaysShift) 
+            //var gamesSL = _dbContext.Games.Where(g => (g.StartDate > DateTime.Now.AddDays(-Constants.GamesSelectDaysShift) 
+            //                                    && (g.StartDate < DateTime.Now.AddDays(Constants.GamesSelectDaysShift)))
+            //                                ).Select(c => new SelectListItem
+            //                                    {
+            //                                        Text = c.Name,
+            //                                        Value = c.Id.ToString()
+            //                                    }).ToList();
+            var gamesSL = _dbContext.Games.Include(g => g.HomeTeam).Include(g => g.VisitorTeam).Where(g => (g.StartDate > DateTime.Now.AddDays(-Constants.GamesSelectDaysShift)
                                                 && (g.StartDate < DateTime.Now.AddDays(Constants.GamesSelectDaysShift)))
                                             ).Select(c => new SelectListItem
-                                                {
-                                                    Text = c.Name,
-                                                    Value = c.Id.ToString()
-                                                }).ToList();
+                                            {
+                                                Text = c.StartDate == null ? "--.--" : ((DateTime)c.StartDate).ToString("MM.dd") + " " + c.Name + " " + (c.VisitorTeam == null ? " - " : c.VisitorTeam.Name) + " - " + (c.HomeTeam == null ? " - " : c.HomeTeam.Name),
+                                                Value = c.Id.ToString()
+                                            }).ToList();
 
             return gamesSL;
         }

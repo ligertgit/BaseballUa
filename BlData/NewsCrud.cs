@@ -61,7 +61,7 @@ namespace BaseballUa.BlData
 										int? amount = null,
 										bool? notForTeamOnly = false)
 		{
-			return _dbContext.News.Where(n => (sportType == null || n.SportType == sportType)
+			var result = _dbContext.News.Where(n => (sportType == null || n.SportType == sportType)
 											&& (isGeneral == null || n.IsGeneral == isGeneral)
 											&& (eventId == null || n.EventId == eventId)
 											&& (categoryId == null || n.CategoryId == categoryId)
@@ -81,112 +81,106 @@ namespace BaseballUa.BlData
 										.Include(n => n.NewsTitlePhotos)
 											.ThenInclude(ntp => ntp.Photo);
 
+			return result;
 		}
 
 
-        public IEnumerable<News> TESTGetAllFiltered(out int countt,
-                                        SportType sportType = SportType.NotDefined,
-                                        bool includeAllGeneral = false,
-                                        bool includeAllFun = false,
-                                        bool isOfficial = false,
-                                        bool isInternational = false,
-                                        bool isAnnual = false,
-                                        int? eventId = null,
-                                        IEnumerable<int>? categoryIds = null,
-                                        IEnumerable<int>? teamIds = null,
-                                        DateTime? newestDate = null,
-                                        int skip = 0,
-                                        int amount = Constants.DefaulNewsAmount
-                                        )
-        {
-            var fixxedNewestDate = newestDate ?? DateTime.Now.Date;
+  //      public IEnumerable<News> TESTGetAllFiltered(out int countt,
+  //                                      SportType sportType = SportType.NotDefined,
+  //                                      bool includeAllGeneral = false,
+  //                                      bool includeAllFun = false,
+  //                                      bool isOfficial = false,
+  //                                      bool isInternational = false,
+  //                                      bool isAnnual = false,
+  //                                      int? eventId = null,
+  //                                      IEnumerable<int>? categoryIds = null,
+  //                                      IEnumerable<int>? teamIds = null,
+  //                                      DateTime? newestDate = null,
+  //                                      int skip = 0,
+  //                                      int amount = Constants.DefaulNewsAmount
+  //                                      )
+  //      {
+  //          var fixxedNewestDate = newestDate ?? DateTime.Now.Date;
 
-            var result = (from news in _dbContext.News.Include(n => n.NewsTitlePhotos).ThenInclude(tf => tf.Photo)
-                          join eventt in _dbContext.Events on news.EventId equals eventt.Id into gEventt
-                          from subEvent in gEventt.DefaultIfEmpty()
-							  join tour in _dbContext.Tournaments on subEvent.TournamentId equals tour.Id into gTour
-							  from subTour in gTour.DefaultIfEmpty()
-								  join category in _dbContext.Categories on subTour.CategoryId equals category.Id into gCategory
-								  from subCategory in gCategory.DefaultIfEmpty()
-                          join ncategory in _dbContext.Categories on news.CategoryId equals ncategory.Id into gncategory
-						  from subncategory in gncategory.DefaultIfEmpty()
-                          join team in _dbContext.Teams on news.TeamId equals team.Id into gteam
-						  from subteam in gteam.DefaultIfEmpty()
-                          join titlephoto in _dbContext.NewsTitlePhotos on news.Id equals titlephoto.NewsId into gtp
-						  from subtitlephoto in gtp.DefaultIfEmpty()
-							//join photo in _dbContext.Photos on subtitlephoto.PhotoId equals photo.Id into gp
-							//from subphoto in gtp.DefaultIfEmpty()
+  //          var result = (from news in _dbContext.News.Include(n => n.NewsTitlePhotos).ThenInclude(tf => tf.Photo)
+  //                        join eventt in _dbContext.Events on news.EventId equals eventt.Id into gEventt
+  //                        from subEvent in gEventt.DefaultIfEmpty()
+		//					  join tour in _dbContext.Tournaments on subEvent.TournamentId equals tour.Id into gTour
+		//					  from subTour in gTour.DefaultIfEmpty()
+		//						  join category in _dbContext.Categories on subTour.CategoryId equals category.Id into gCategory
+		//						  from subCategory in gCategory.DefaultIfEmpty()
+  //                        join ncategory in _dbContext.Categories on news.CategoryId equals ncategory.Id into gncategory
+		//				  from subncategory in gncategory.DefaultIfEmpty()
+  //                        join team in _dbContext.Teams on news.TeamId equals team.Id into gteam
+		//				  from subteam in gteam.DefaultIfEmpty()
+  //                        join titlephoto in _dbContext.NewsTitlePhotos on news.Id equals titlephoto.NewsId into gtp
+		//				  from subtitlephoto in gtp.DefaultIfEmpty()
+  //                        where (news.PublishDate <= fixxedNewestDate)
+  //                               && ((includeAllGeneral && news.IsGeneral)
+  //                                    || (includeAllFun && subTour.IsFun)
+  //                                    || ((sportType == SportType.NotDefined
+  //                                              || news.SportType == sportType
+  //                                              || subTour.Sport == sportType
+  //                                        )
+  //                                          && (!isOfficial || subTour.IsOfficial)
+  //                                          && (!isInternational || subTour.IsInternational)
+  //                                          && (!isAnnual || subTour.IsAnual)
+  //                                          && (eventId == null || news.EventId == eventId)
+  //                                          && (categoryIds.IsNullOrEmpty()
+  //                                              || categoryIds.Any(c => c == news.CategoryId)
+  //                                              || categoryIds.Any(c => c == subTour.CategoryId))
+  //                                          && (teamIds.IsNullOrEmpty() || teamIds.Any(t => t == news.TeamId))
+  //                                      )
+  //                                  )
+  //                        select new News 
+		//				  { 
+		//					Id = news.Id,
+  //                          SportType = news.SportType,
+  //                          IsGeneral = news.IsGeneral,
+  //                          PublishDate = news.PublishDate,
+		//					Title = news.Title,
+		//					Description = news.Description,
+		//					EventId  = news.EventId,
+		//					CategoryId = news.CategoryId,
+		//					TeamId = news.TeamId,
+		//					Event = new Event
+		//								{
+		//									Id = subEvent.Id,
+		//									Year = subEvent.Year,
+		//									StartDate = subEvent.StartDate,
+		//									EndDate = subEvent.EndDate,
+		//									TournamentId = subEvent.TournamentId,
+		//									Tournament = new Tournament
+		//													{ 
+		//														Id = subTour.Id,
+		//														Name = subTour.Name,
+		//														Sport = subTour.Sport,
+		//														Description = subTour.Description,
+  //                                                              IsAnual = subTour.IsAnual,
+		//														IsInternational = subTour.IsInternational,
+		//														IsOfficial = subTour.IsOfficial,
+		//														IsFun = subTour.IsFun,
+		//														CategoryId = subTour.CategoryId,
+		//														Category = new Category
+		//																	{
+		//																		Id = subCategory.Id,
+		//																		Name = subCategory.Name,
+		//																		ShortName = subCategory.ShortName,
+		//																	}
+		//													}
+		//								},
+		//					Category = subncategory,
+		//					Team = subteam,
+  //                        }
+		//				 ).Distinct()
+  //                        .OrderByDescending(n => n.PublishDate)
+  //                        .ThenByDescending(n => n.Id);
 
-                          where (news.PublishDate <= fixxedNewestDate)
-                                 && ((includeAllGeneral && news.IsGeneral)
-                                      || (includeAllFun && subTour.IsFun)
-                                      || ((sportType == SportType.NotDefined
-                                                || news.SportType == sportType
-                                                || subTour.Sport == sportType
-                                          )
-                                            && (!isOfficial || subTour.IsOfficial)
-                                            && (!isInternational || subTour.IsInternational)
-                                            && (!isAnnual || subTour.IsAnual)
-                                            && (eventId == null || news.EventId == eventId)
-                                            && (categoryIds.IsNullOrEmpty()
-                                                || categoryIds.Any(c => c == news.CategoryId)
-                                                || categoryIds.Any(c => c == subTour.CategoryId))
-                                            && (teamIds.IsNullOrEmpty() || teamIds.Any(t => t == news.TeamId))
-                                        )
-                                    )
-                          select new News 
-						  { 
-							Id = news.Id,
-                            SportType = news.SportType,
-                            IsGeneral = news.IsGeneral,
-                            PublishDate = news.PublishDate,
-							Title = news.Title,
-							Description = news.Description,
-							EventId  = news.EventId,
-							CategoryId = news.CategoryId,
-							TeamId = news.TeamId,
-							Event = new Event
-										{
-											Id = subEvent.Id,
-											Year = subEvent.Year,
-											StartDate = subEvent.StartDate,
-											EndDate = subEvent.EndDate,
-											TournamentId = subEvent.TournamentId,
-											Tournament = new Tournament
-															{ 
-																Id = subTour.Id,
-																Name = subTour.Name,
-																Sport = subTour.Sport,
-																Description = subTour.Description,
-                                                                IsAnual = subTour.IsAnual,
-																IsInternational = subTour.IsInternational,
-																IsOfficial = subTour.IsOfficial,
-																IsFun = subTour.IsFun,
-																CategoryId = subTour.CategoryId,
-																Category = new Category
-																			{
-																				Id = subCategory.Id,
-																				Name = subCategory.Name,
-																				ShortName = subCategory.ShortName,
-																			}
-															}
-										},
-							Category = subncategory,
-							Team = subteam,
-                            //NewsTitlePhotos = (ICollection<NewsTitlePhoto>)gtp
-                          }
-						 ).Distinct()
-                          .OrderByDescending(n => n.PublishDate)
-                          .ThenByDescending(n => n.Id);
+  //          countt = 0;
 
-            //countt = result.Count();
-            countt = 0;
-
-			return result.Skip(skip)
-						 .Take(amount);
-        //                 .Include(n => n.NewsTitlePhotos)
-								//.ThenInclude(tf => tf.Photo);
-		}
+		//	return result.Skip(skip)
+		//				 .Take(amount);
+		//}
 
 
 
@@ -310,7 +304,8 @@ namespace BaseballUa.BlData
         public List<SelectListItem> GetSelectItemList()
         {
             //var newsSL = new List<SelectListItem>();
-            var newsSL = _dbContext.News.Where(n => n.PublishDate > DateTime.Now.AddDays(-1 * Constants.NewsSelectDaysShift))
+            //var newsSL = _dbContext.News.Where(n => n.PublishDate > DateTime.Now.AddDays(-1 * Constants.NewsSelectDaysShift))
+            var newsSL = _dbContext.News.OrderByDescending(n => n.Id).Take(Constants.DefaulSelectListAmount)
 									.Select(c => new SelectListItem
 										{
 											Text = c.Title,

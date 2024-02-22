@@ -1,11 +1,56 @@
 ﻿@using BaseballUa.ViewModels;
-@model List<BaseballUa.ViewModels.NewsVM>
+@model BaseballUa.ViewModels.Custom.ListNewsVM
 
 @{
     ViewData["Title"] = "Videos news";
 }
 
-<h1>Новини, що підходять ВСІМ умовам:</h1>
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
+
+<div class="container-fluid pb-5">
+    @if(Model != null && Model.EventSL != null)
+    {
+        <form asp-action="ListNews">
+            @Html.AntiForgeryToken()
+            <label>Показати новини для турніру:</label>
+            <select name="eventId" class="dropdownlist" id="myid">
+                <option>--- оберіть ---</option>
+                @foreach (SelectListItem item in Model.EventSL)
+                {
+                    if (Model.EventSL.SelectedValue != null && item.Value == Model.EventSL.SelectedValue.ToString())
+                    {
+                        <option value="@(item.Value)" selected="selected">@item.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@(item.Value)">@item.Text</option>
+                    }
+                }
+            </select>
+            <input type="submit" value="Шукати" class="btn btn-primary" />
+        </form>
+    }
+</div>
+
+
+<div class="container-fluid pb-5">
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+@*<h1>Новини, що підходять ВСІМ умовам:</h1>
 <div class="row">
     <div class="row">
         <div class="col-2">
@@ -115,24 +160,13 @@
             }
         </div>
     </div>
-</div>
+</div>*@
 
 <p>
-@*    <a asp-action="AddNews" asp-route-sportType="@ViewBag.sportType"
-                            asp-route-isGeneral="@ViewBag.isGeneral"
-                            asp-route-eventId=@ViewBag.eventt?.Id
-                            asp-route-categoryId=@ViewBag.category?.Id
-                            asp-route-teamId=@ViewBag.team?.Id
-                            asp-route-lastDate=@ViewBag.lastDate
-                            asp-route-lastId=@ViewBag.lastId
-                            asp-route-amount=@ViewBag.amount>
-        Додати новину
-    </a>*@
-    <a asp-action="AddNews"t>Додати новину</a>
-
+    <a asp-action="AddNews">Додати новину</a>
 </p>
 
-@if (Model == null || Model.Count == 0)
+@if (Model == null || Model.News == null || Model.News.Count == 0)
 {
     <div class="row m-1">
         <h4>
@@ -146,19 +180,19 @@ else
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().Title)
+                    @Html.DisplayNameFor(model => model.News.First().Title)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().Description)
+                    @Html.DisplayNameFor(model => model.News.First().Description)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().SportType)
+                    @Html.DisplayNameFor(model => model.News.First().SportType)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().IsGeneral)
+                    @Html.DisplayNameFor(model => model.News.First().IsGeneral)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.First().PublishDate)
+                    @Html.DisplayNameFor(model => model.News.First().PublishDate)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => new EventViewModel().Year)
@@ -184,7 +218,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.News)
             {
                 <tr>
                     <td>
@@ -240,5 +274,33 @@ else
             }
         </tbody>
     </table>
+
+    <ul class="pagination pagination-lg m-3">
+        @if (Model.SkipPrev != -1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-skip="@Model.SkipPrev" asp-route-eventId="@Model.EventSL?.SelectedValue.ToString()">&laquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&laquo;</a>
+            </li>
+        }
+
+        @if (Model.SkipNext != -1)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-skip=@(Model.SkipNext) asp-route-eventId="@Model.EventSL?.SelectedValue.ToString()">&raquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&raquo;</a>
+            </li>
+        }
+    </ul>
 }
 
