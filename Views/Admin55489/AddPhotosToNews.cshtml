@@ -1,4 +1,4 @@
-﻿@model BaseballUa.ViewModels.Custom.AddPhotosToNews
+﻿@model BaseballUa.ViewModels.NewsVM;
 
 @{
     ViewData["Title"] = "Add Photos to News";
@@ -18,7 +18,7 @@
             Заголовок:
         </div>
         <div class="col-3">
-            @Model.News.Title
+            @Model.Title
         </div>
     </div>
     <div class="row">
@@ -26,7 +26,7 @@
             Дата публікації:
         </div>
         <div class="col-3">
-            @Model.News.PublishDate
+            @Model.PublishDate
         </div>
     </div>
     <div class="row">
@@ -34,12 +34,12 @@
             Турнір:
         </div>
         <div class="col-3">
-            @if (Model.News.Event != null)
+            @if (Model.Event != null)
             {
-                <label>@Model.News.Event.Year </label>
-                if (Model.News.Event.Tournament != null)
+                <label>@Model.Event.Year </label>
+                if (Model.Event.Tournament != null)
                 {
-                    <label>@Model.News.Event.Tournament.Name</label>
+                    <label>@Model.Event.Tournament.Name</label>
                 }
             }
         </div>
@@ -49,9 +49,9 @@
             Категорія:
         </div>
         <div class="col-3">
-            @if (Model.News.Category != null)
+            @if (Model.Category != null)
             {
-                <label>@Model.News.Category.Name</label>
+                <label>@Model.Category.Name</label>
             }
         </div>
     </div>
@@ -60,9 +60,9 @@
             Команда:
         </div>
         <div class="col-3">
-            @if (Model.News.Team != null)
+            @if (Model.Team != null)
             {
-                <label>@Model.News.Team.Name</label>
+                <label>@Model.Team.Name</label>
             }
         </div>
     </div>
@@ -70,7 +70,58 @@
 
 <hr />
 
-<div class="row">
+<form action="AddPhotosToNews"
+      enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
+      method="post">
+    <dl>
+        <dt>
+            <label for="FileUpload_FormFile">File</label>
+        </dt>
+        <dd>
+            <input type="hidden" name="NewsId" value="@Model.Id" />
+            <input type="file"
+                   name="formFiles" multiple />
+        </dd>
+    </dl>
+
+    <input class="btn" type="submit" value="Upload" />
+
+    <div style="margin-top:15px">
+        <output name="result"></output>
+    </div>
+
+
+</form>
+
+<form asp-action="ListAlbums">
+    <div class="form-group">
+        <input type="submit" value="Додати фото до новини" class="btn btn-primary" />
+    </div>
+</form>
+
+<script>
+    async function AJAXSubmit(oFormElement) {
+        var resultElement = oFormElement.elements.namedItem("result");
+        const formData = new FormData(oFormElement);
+
+        try {
+            const response = await fetch(oFormElement.action, {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                resultElement.value = "Success";
+            }
+            else {
+                resultElement.value = "Something went wrong";
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+</script>
+
+@*<div class="row">
     <div class="col-md-4">
         <form asp-action="AddPhotosToNews">
             @Html.AntiForgeryToken()
@@ -91,4 +142,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
+}*@

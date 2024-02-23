@@ -22,7 +22,6 @@ namespace BaseballUa.BlData
 		{
 			_dbContext.Albums.Add(item);
 			_dbContext.SaveChanges();
-            var a = item.Id;
 		}
 
 		public void Delete(Album item)

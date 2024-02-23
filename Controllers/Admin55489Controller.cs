@@ -1026,44 +1026,75 @@ namespace BaseballUa.Controllers
 
         public IActionResult AddPhotosToNews(int newsId)
         {
-            //var photoVL = new PhotoToView().CreateEmpty();
+
+            //var newsWithPhotosVL = new AddPhotosToNews();
 
             //var newsDAL = new NewsCrud(_db).Get(newsId);
-            //var newsVL = new NewsToView().Convert(newsDAL);
+            //newsWithPhotosVL.News = new NewsToView().Convert(newsDAL);
+            //newsWithPhotosVL.PhotosMSL = new MultiSelectList(new PhotosCrud(_db).GetSelectItemList(100), "Value", "Text");
 
-            //var photosSL = new VideosCrud(_db).GetSelectItemList();
-
-            //ViewBag.photosSL = photosSL;
-            //ViewBag.newsVL = newsVL;
-
-            //return View(photoVL);
-            
-            var newsWithPhotosVL = new AddPhotosToNews();
-
+            //return View(newsWithPhotosVL);
             var newsDAL = new NewsCrud(_db).Get(newsId);
-            newsWithPhotosVL.News = new NewsToView().Convert(newsDAL);
-            newsWithPhotosVL.PhotosMSL = new MultiSelectList(new PhotosCrud(_db).GetSelectItemList(100), "Value", "Text");
+            var newsVL = new NewsToView().Convert(newsDAL);
 
-            return View(newsWithPhotosVL);
+            return View(newsVL);
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddPhotosToNews(AddPhotosToNews newsWithPhotosVL)
+        //{
+        //    if (newsWithPhotosVL.News.Id > 0 && !newsWithPhotosVL.PhotoIds.IsNullOrEmpty())
+        //    {
+        //        foreach (var photoId in newsWithPhotosVL.PhotoIds)
+        //        {
+        //            var newsTitlePhoto = new NewsTitlePhoto();
+        //            newsTitlePhoto.NewsId = newsWithPhotosVL.News.Id;
+        //            newsTitlePhoto.PhotoId = photoId;
+        //            newsTitlePhoto.Name = photoId.ToString();
+        //            new NewsTitlePhotosCrud(_db).Add(newsTitlePhoto);
+        //        }
+        //    }
+
+        //    return RedirectToAction("ListNews");
+        //}
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult AddPhotosToNews(AddPhotosToNews newsWithPhotosVL)
+        public async Task<IActionResult> AddPhotosToNews(IFormCollection fc)
         {
-            if (newsWithPhotosVL.News.Id > 0 && !newsWithPhotosVL.PhotoIds.IsNullOrEmpty())
+            int newsId;
+            if (fc != null
+               && fc.ContainsKey("NewsId")
+               && Int32.TryParse(fc["NewsId"], out newsId)
+               && fc.Files != null
+               && fc.Files.Count > 0
+               && new NewsCrud(_db).Get(newsId) != null)
             {
-                foreach (var photoId in newsWithPhotosVL.PhotoIds)
+                var checkedFiles = FileTools.GetValidated(fc.Files.ToList());
+                foreach (var file in checkedFiles)
                 {
-                    var newsTitlePhoto = new NewsTitlePhoto();
-                    newsTitlePhoto.NewsId = newsWithPhotosVL.News.Id;
-                    newsTitlePhoto.PhotoId = photoId;
-                    newsTitlePhoto.Name = photoId.ToString();
-                    new NewsTitlePhotosCrud(_db).Add(newsTitlePhoto);
+                    var newfileName = Path.ChangeExtension(Path.GetRandomFileName(), ".jpg");
+                    if (await FileTools.ResizeAndSave(file, Constants.TitleAlbumsId, _rootPath, newfileName))
+                    {
+                        var photoDAL = new Photo();
+                        photoDAL.AlbumId = Constants.TitleAlbumsId;
+                        photoDAL.Name = "Noname";
+                        photoDAL.FnameOrig = newfileName;
+                        photoDAL.FnameBig = newfileName;
+                        photoDAL.FnameSmall = newfileName;
+                        new PhotosCrud(_db).Add(photoDAL);
+
+                        var newsTitlePhotoDAL = new NewsTitlePhoto();
+                        newsTitlePhotoDAL.NewsId = newsId;
+                        newsTitlePhotoDAL.PhotoId = photoDAL.Id;
+                        newsTitlePhotoDAL.Name = "Title photo";
+
+                        new NewsTitlePhotosCrud(_db).Add(newsTitlePhotoDAL);
+                    }
                 }
             }
 
-            return RedirectToAction("ListNews");
+            return Ok(new { count = 1 });
         }
 
         #endregion
