@@ -26,7 +26,12 @@ namespace BaseballUa.BlData
 
 		public void Delete(Album item)
 		{
-			throw new NotImplementedException();
+			if(item != null)
+            {
+                _dbContext.Albums.Remove(item);
+                _dbContext.SaveChanges();
+            }
+            
 		}
 
 		public Album Get(int itemId)
@@ -376,7 +381,11 @@ namespace BaseballUa.BlData
 
 		public void Update(Album item)
 		{
-			throw new NotImplementedException();
+			if(item != null)
+            {
+                _dbContext.Albums.Update(item);
+                _dbContext.SaveChanges();
+            }
 		}
 
 		public void Update(int id, 

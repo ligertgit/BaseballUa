@@ -20,6 +20,7 @@ namespace BaseballUa.DTO
 				videoVL.Description = videoDAL.Description;
 				videoVL.Fname = videoDAL.Fname;
 				videoVL.NewsId = videoDAL.NewsId;
+				videoVL.PublishDate = videoDAL.PublishDate;
 				if (videoDAL.News != null)
 				{
 					videoVL.News = new NewsToView().Convert(videoDAL.News, false);
@@ -80,6 +81,7 @@ namespace BaseballUa.DTO
 			videoDAL.CategoryId = videoVL.CategoryId;
 			videoDAL.TeamId = videoVL.TeamId;
 			videoDAL.GameId = videoVL.GameId;
+			videoDAL.PublishDate = videoVL.PublishDate;
 
 			return videoDAL;
 		}

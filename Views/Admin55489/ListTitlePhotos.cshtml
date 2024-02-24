@@ -101,10 +101,8 @@ else
                         @Html.DisplayNameFor(model => model.Photos.First().FnameOrig)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Photos.First().FnameSmall)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Photos.First().FnameBig)
                     </th>
                 </tr>
             </thead>
@@ -122,11 +120,10 @@ else
                             @Html.DisplayFor(modelItem => photo.FnameOrig)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => photo.FnameSmall)
-                            <img src="~/images/photo/big/@photo.AlbumId/@photo.FnameSmall" />
+                            <img src="~/images/photo/small/@photo.AlbumId/@photo.FnameSmall" />
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => photo.FnameBig)
+                            <a class="btn btn-danger" asp-action="DeleteTPAlbum" asp-route-newsId="@Model.Id" asp-route-tPId="@photo.Id">Видалити з новини</a>
                         </td>
                     </tr>
                 }

@@ -59,6 +59,9 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.First().Game)
                 </th>
+                <th>
+
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -116,6 +119,9 @@ else
                             }
 
                         }
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-action="DeleteNewsVideo" asp-route-newsId="@item.NewsId" asp-route-videoId="@item.Id">Видалити з новини</a>
                     </td>
                 </tr>
             }

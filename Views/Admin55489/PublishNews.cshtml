@@ -1,0 +1,25 @@
+﻿@model int;
+
+@{
+    ViewData["Title"] = "Publish for custom date";
+}
+
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
+<form asp-action="PublishNews">
+    <input type="hidden" name="newsId" value="@Model" />
+    <div class="form-group">
+        <label>Новини у стрічці сортуються по датам. Можна указати дату у минулому. Якщо дата буде у майбутньому -- вона з'явиться у стрічках коли настане цей час'</label>
+        @{ 
+            var curDate = DateTime.Now;
+        }
+        <div>
+            <input class="w-25 form-control" name="publishDate" type="date" value="@curDate" />
+        </div>
+    </div>
+    <input type="submit" value="Опублікувати" class="btn btn-primary" />
+</form>

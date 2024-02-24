@@ -588,12 +588,23 @@ namespace BaseballUa.Controllers
             return View(videosVL);
         }
 
-        public IActionResult AddVideo()
+        public IActionResult AddVideo(int? newsId)
         {
             var VideoVL = new VideoToView().CreateEmpty();
+            if(newsId != null)
+            {
+                var newsDAL = new NewsCrud(_db).Get((int)newsId);
+                if(newsDAL != null && newsDAL.Id == newsId)
+                {
+                    ViewBag.News = new NewsToView().Convert(newsDAL);
+                }
+                else
+                {
+                    ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
+                }
+            }
 
             ViewBag.CategorySL = new CategoriesCrud(_db).GetSelectItemList();
-            ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
             ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList();
             ViewBag.GamesSL = new GamesCrud(_db).GetSelectItemList();
 
@@ -651,6 +662,18 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListVideos");
         }
 
+        public IActionResult DeleteNewsVideo(int newsId, int videoId)
+        {
+            var videoDAL = new VideosCrud(_db).Get(videoId);
+            if(videoDAL != null && videoDAL.NewsId == newsId)
+            {
+                videoDAL.NewsId = null;
+                new VideosCrud(_db).Update(videoDAL);
+            }
+
+            return RedirectToAction("ListVideos", new { newsId = newsId });
+        }
+
         public IActionResult ListAlbums(SportType? sportType,
                                         bool? isGeneral,
                                         int? newsId,
@@ -676,6 +699,19 @@ namespace BaseballUa.Controllers
             ViewBag.lastId = lastId;
 
             return View(albumsVL);
+        }
+
+        public IActionResult DeleteNewsAlbum(int albumId, int newsId)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            var albumDAL = new AlbumsCrud(_db).Get(albumId);
+            if(newsDAL != null && albumDAL.NewsId != null && albumDAL.NewsId == newsId)
+            {
+                albumDAL.NewsId = null;
+                new AlbumsCrud(_db).Update(albumDAL);
+            }
+
+            return RedirectToAction("ListAlbums", new { newsId = newsId });
         }
 
         public IActionResult AddAlbum(int categoryId = 0, int newsId = 0, int teamId = 0, int gameId =0, SportType sportType = SportType.NotDefined)
@@ -736,6 +772,21 @@ namespace BaseballUa.Controllers
             var newsVL = new NewsToView().Convert(newsDAL);
 
             return View(newsVL);
+        }
+
+        public IActionResult DeleteTPAlbum(int newsId, int tPId)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            if (newsDAL != null && newsDAL.NewsTitlePhotos != null)
+            {
+                var newsTitlePhoto = newsDAL.NewsTitlePhotos.FirstOrDefault(i => i.PhotoId == tPId);
+                if(newsTitlePhoto != null && newsTitlePhoto.PhotoId == tPId)
+                {
+                    new NewsTitlePhotosCrud(_db).Delete(newsTitlePhoto);
+                }
+            }
+
+            return RedirectToAction("ListTitlePhotos", new { newsId = newsId });
         }
 
         public IActionResult AddPhoto(int albumId)
@@ -870,6 +921,7 @@ namespace BaseballUa.Controllers
                                         int? newsId = null)
         {
             var pageDataVM = new ListNewsVM();
+            var newestDate = lastDate ?? DateTime.MaxValue;
             // if (newsId != null ) {get news, return view}
 
             var countt = 0;
@@ -899,7 +951,7 @@ namespace BaseballUa.Controllers
                                                            eventId: eventId,
                                                            categoryIds: categoryIds,
                                                            teamIds: teamIds,
-                                                           newestDate: lastDate,
+                                                           newestDate: newestDate,
                                                            skip: skip).ToList();
             pageDataVM.News = new NewsToView().ConvertAll(newsDAL);
             if(countt > Constants.DefaulNewsAmount)
@@ -965,6 +1017,37 @@ namespace BaseballUa.Controllers
             {
                 var newsDAL = new NewsToView().ConvertBack(newsVL);
                 new NewsCrud(_db).Add(newsDAL);
+            }
+
+            return RedirectToAction("ListNews");
+        }
+
+        public IActionResult PublishNews(int newsId, int? fordate)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            if (newsDAL != null)
+            {
+                newsDAL.PublishDate = DateTime.Now;
+                if (fordate == 1)
+                {
+                    return View(newsId);
+                }
+                else
+                {
+                    new NewsCrud(_db).Update(newsDAL);
+                }
+            }
+            return RedirectToAction("ListNews");
+        }
+
+        [HttpPost]
+        public IActionResult PublishNews(int newsId, DateTime publishDate)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            if(newsDAL != null)
+            {
+                newsDAL.PublishDate = publishDate;
+                new NewsCrud(_db).Update(newsDAL);
             }
 
             return RedirectToAction("ListNews");

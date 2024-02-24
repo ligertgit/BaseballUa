@@ -20,7 +20,11 @@ namespace BaseballUa.BlData
 
 		public void Delete(NewsTitlePhoto item)
 		{
-			throw new NotImplementedException();
+			if(item != null) 
+			{ 
+				_dbContext.NewsTitlePhotos.Remove(item);
+				_dbContext.SaveChanges();
+			}
 		}
 
 		public NewsTitlePhoto Get(int itemId)

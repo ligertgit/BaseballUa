@@ -298,7 +298,8 @@ namespace BaseballUa.BlData
 
         public void Update(News item)
 		{
-			throw new NotImplementedException();
+			_dbContext.News.Update(item);
+			_dbContext.SaveChanges();
 		}
 
         public List<SelectListItem> GetSelectItemList()

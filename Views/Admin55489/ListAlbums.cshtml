@@ -242,6 +242,7 @@ else
                     <td>
                         <a asp-action="AddPhoto" asp-route-albumId="@item.Id">Додати фото</a>
                         <a asp-action="ListPhotos" asp-route-albumId="@item.Id">Список фоток</a>
+                        <a class="btn btn-danger" asp-action="DeleteNewsAlbum" asp-route-albumId="@item.Id" asp-route-newsId="@ViewBag.news.Id">Видалити з новини</a>
                     </td>
                 </tr>
             }

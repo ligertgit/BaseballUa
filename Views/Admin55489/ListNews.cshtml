@@ -215,6 +215,9 @@ else
                 <th>
                     Відео
                 </th>
+                <th>
+                    Опубликувати
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -269,6 +272,10 @@ else
                     <td>
                         <a asp-action="ListVideos" asp-route-newsId="@item.Id">Подивитися</a>
                         <a asp-action="AddVideoToNews" asp-route-newsId="@item.Id">Додати</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary m-1" asp-action="PublishNews" asp-route-newsId="@item.Id">Зараз</a>
+                        <a class="btn btn-primary m-1" asp-action="PublishNews" asp-route-newsId="@item.Id" asp-route-fordate="1">На дату</a>
                     </td>
                 </tr>
             }
