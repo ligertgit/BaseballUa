@@ -1,5 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
 {
@@ -27,7 +28,14 @@ namespace BaseballUa.BlData
 			}
 		}
 
-		public NewsTitlePhoto Get(int itemId)
+		public void UnlinkFromNews(int newsId)
+		{
+			_dbContext.NewsTitlePhotos.RemoveRange(_dbContext.NewsTitlePhotos.Where(t => t.NewsId == newsId));
+			_dbContext.SaveChanges();
+		}
+
+
+        public NewsTitlePhoto Get(int itemId)
 		{
 			return _dbContext.NewsTitlePhotos.Where(ntp => ntp.Id == itemId).FirstOrDefault();
 		}

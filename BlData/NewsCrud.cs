@@ -26,7 +26,8 @@ namespace BaseballUa.BlData
 
 		public void Delete(News item)
 		{
-			throw new NotImplementedException();
+			_dbContext.News.Remove(item);
+			_dbContext.SaveChanges();
 		}
 
 		public News Get(int itemId)

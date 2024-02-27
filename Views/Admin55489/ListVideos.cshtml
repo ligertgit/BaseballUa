@@ -13,7 +13,7 @@
 <h1>Відео:</h1>
 
 <p>
-    <a asp-action="AddVideo">Додати відео</a>
+    <a class="btn btn-primary" asp-action="AddVideo">Додати відео З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
 </p>
 
 @if (Model == null || Model.Count == 0)
@@ -121,11 +121,61 @@ else
                         }
                     </td>
                     <td>
-                        <a class="btn btn-danger" asp-action="DeleteNewsVideo" asp-route-newsId="@item.NewsId" asp-route-videoId="@item.Id">Видалити з новини</a>
+                        @if (item.NewsId != null)
+                        {
+                            <a class="btn btn-danger" asp-action="DeleteNewsVideo" asp-route-newsId="@item.NewsId" asp-route-videoId="@item.Id">Видалити з новини</a>   
+                        }
+                        else
+                        {
+                            <a class="btn btn-danger disabled" href="#">Видалити з новини</a>
+                        }
+                        
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <ul class="pagination pagination-lg m-3">
+        @if (ViewBag.SkipPrev != null)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-skip="@ViewBag.SkipPrev"
+                   asp-route-isGeneral="@ViewBag.isGeneral"
+                   asp-route-newsId="@ViewBag.news?.Id"
+                   asp-route-categoryId="@ViewBag.category?.Id"
+                   asp-route-teamId="@ViewBag.team?.Id"
+                   asp-route-gameId="@ViewBag.game?.GameViewModelId"
+                   asp-route-lastDate="@ViewBag.lastDate"
+                   asp-route-lastId="@ViewBag.lastId">&laquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&laquo;</a>
+            </li>
+        }
+
+        @if (ViewBag.SkipNext != null)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-skip="@ViewBag.SkipNext"
+                   asp-route-isGeneral="@ViewBag.isGeneral"
+                   asp-route-newsId="@ViewBag.news?.Id"
+                   asp-route-categoryId="@ViewBag.category?.Id"
+                   asp-route-teamId="@ViewBag.team?.Id"
+                   asp-route-gameId="@ViewBag.game?.GameViewModelId"
+                   asp-route-lastDate="@ViewBag.lastDate"
+                   asp-route-lastId="@ViewBag.lastId">&raquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&raquo;</a>
+            </li>
+        }
+    </ul>
 }
 

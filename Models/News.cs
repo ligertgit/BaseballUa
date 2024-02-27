@@ -12,7 +12,7 @@ namespace BaseballUa.Models
         public DateTime PublishDate { get; set; }
         [StringLength(50)]
         public string Title { get; set; }
-        [StringLength(500)]
+        [StringLength(2500)]
         public string Description { get; set; }
 		public int? EventId { get; set; }
         public Event Event { get; set; } = null!;

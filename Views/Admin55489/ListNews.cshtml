@@ -163,7 +163,7 @@
 </div>*@
 
 <p>
-    <a asp-action="AddNews">Додати новину</a>
+    <a class="btn btn-primary" asp-action="AddNews">Додати новину</a>
 </p>
 
 @if (Model == null || Model.News == null || Model.News.Count == 0)
@@ -276,6 +276,7 @@ else
                     <td>
                         <a class="btn btn-primary m-1" asp-action="PublishNews" asp-route-newsId="@item.Id">Зараз</a>
                         <a class="btn btn-primary m-1" asp-action="PublishNews" asp-route-newsId="@item.Id" asp-route-fordate="1">На дату</a>
+                        <a class="btn btn-danger m-1" asp-action="DeleteNews" asp-route-newsId="@item.Id">Видалити</a>
                     </td>
                 </tr>
             }
@@ -286,7 +287,8 @@ else
         @if (Model.SkipPrev != -1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-skip="@Model.SkipPrev" asp-route-eventId="@Model.EventSL?.SelectedValue.ToString()">&laquo;</a>
+                <a class="page-link" asp-route-skip="@Model.SkipPrev" asp-route-eventId="@Model.Event?.EventViewModelId">&laquo;</a>
+                @*<a class="page-link" asp-route-skip="@Model.SkipPrev" asp-route-eventId="@Model.EventSL?.SelectedValue.ToString()">&laquo;</a>*@
             </li>
         }
         else
@@ -299,7 +301,8 @@ else
         @if (Model.SkipNext != -1)
         {
             <li class="page-item">
-                <a class="page-link" asp-route-skip=@(Model.SkipNext) asp-route-eventId="@Model.EventSL?.SelectedValue.ToString()">&raquo;</a>
+                <a class="page-link" asp-route-skip=@(Model.SkipNext) asp-route-eventId="@Model.Event?.EventViewModelId">&raquo;</a>
+                @*<a class="page-link" asp-route-skip=@(Model.SkipNext) asp-route-eventId="@Model.EventSL?.SelectedValue.ToString()">&raquo;</a>*@
             </li>
         }
         else

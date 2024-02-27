@@ -27,7 +27,15 @@ namespace BaseballUa.BlData
 			throw new NotImplementedException();
 		}
 
-		public Video Get(int itemId)
+		public void UnlinkFromNews(int newsId)
+		{
+			var videos = _dbContext.Videos.Where(v => v.NewsId == newsId).ToList();
+			videos.ForEach(v => v.NewsId = null);
+
+			_dbContext.SaveChanges();
+		}
+
+        public Video Get(int itemId)
 		{
 			return _dbContext.Videos.Where(v => v.Id == itemId)
 						.Include(v => v.News)
@@ -145,40 +153,43 @@ namespace BaseballUa.BlData
 						  .Take(amount);
         }
 
-        public IEnumerable<Video> GetAllHard(SportType? sportType = null,
+        public IEnumerable<Video> GetAllHard(out int countt,
+										SportType? sportType = null,
 										bool? isGeneral = null,
 										int? newsId = null,
 										int? categoryId = null,
 										int? teamId = null,
 										int? gameId = null,
 										DateTime? lastDate = null,
-										int? lastId = null,
-										int? amount = null)
+										int skip = 0,
+										int amount = Constants.DefaulVideosAmount)
 		{
-
-			return _dbContext.Videos.Where(a => (sportType == null || a.SportType == sportType)
+            var lastDateFixxed = lastDate == null ? DateTime.MaxValue : lastDate;
+			var result = _dbContext.Videos.Where(a => (sportType == null || a.SportType == sportType)
 											&& (isGeneral == null || a.IsGeneral == isGeneral)
 											&& (newsId == null || a.NewsId == newsId)
 											&& (categoryId == null || a.CategoryId == categoryId)
 											&& (teamId == null || a.TeamId == teamId)
 											&& (gameId == null || a.GameId == gameId)
-											&& (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
+											&& (a.PublishDate <= lastDateFixxed)
 											)
-											.OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
-											.Take(amount == null ? Constants.DefaulVideosAmount : (int)amount)
-											.Include(a => a.News)
-											.Include(a => a.Category)
-											.Include(a => a.Team)
-											.Include(v => v.Game)
-												.ThenInclude(g => g.HomeTeam)
-											.Include(v => v.Game)
-												.ThenInclude(g => g.VisitorTeam)
-											.Include(a => a.Game)
-												.ThenInclude(g => g.SchemaGroup)
-													.ThenInclude(g => g.EventSchemaItem)
-														.ThenInclude(i => i.Event)
-															.ThenInclude(e => e.Tournament)
-																.ThenInclude(t => t.Category);
+											.OrderByDescending(a => a.Id);
+			countt = result.Count();
+			return result.Skip(skip)
+						.Take(amount)
+						.Include(a => a.News)
+						.Include(a => a.Category)
+						.Include(a => a.Team)
+						.Include(v => v.Game)
+							.ThenInclude(g => g.HomeTeam)
+						.Include(v => v.Game)
+							.ThenInclude(g => g.VisitorTeam)
+						.Include(a => a.Game)
+							.ThenInclude(g => g.SchemaGroup)
+								.ThenInclude(g => g.EventSchemaItem)
+									.ThenInclude(i => i.Event)
+										.ThenInclude(e => e.Tournament)
+											.ThenInclude(t => t.Category);
 		}
 
 		public IEnumerable<Video> GetAll()
@@ -377,9 +388,9 @@ namespace BaseballUa.BlData
 
         }
 
-        public List<SelectListItem> GetSelectItemList()
+        public List<SelectListItem> GetSelectItemList(bool isEmptyNews = false)
         {
-            var videosSL = _dbContext.Videos.OrderByDescending(a => a.Id).Take(Constants.DefaulSelectListAmount)
+            var videosSL = _dbContext.Videos.Where(v => !isEmptyNews || v.NewsId == null).OrderByDescending(a => a.Id).Take(Constants.DefaulSelectListAmount)
                                     .Select(c => new SelectListItem
                                     {
                                         Text = c.Name,

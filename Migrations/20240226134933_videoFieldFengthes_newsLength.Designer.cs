@@ -4,6 +4,7 @@ using BaseballUa.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseballUa.Migrations
 {
     [DbContext(typeof(BaseballUaDbContext))]
-    partial class BaseballUaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240226134933_videoFieldFengthes_newsLength")]
+    partial class videoFieldFengthes_newsLength
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -781,13 +784,13 @@ namespace BaseballUa.Migrations
                     b.HasOne("BaseballUa.Models.News", "News")
                         .WithMany("NewsTitlePhotos")
                         .HasForeignKey("NewsId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BaseballUa.Models.Photo", "Photo")
                         .WithMany("NewsTitlePhotos")
                         .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("News");

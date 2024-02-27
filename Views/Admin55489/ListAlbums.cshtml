@@ -10,7 +10,8 @@
     </div>
 </div>
 
-<h1>Альбоми, що підходять ВСІМ умовам:</h1>
+<h1>Альбоми:</h1>
+@*<h1>Альбоми, що підходять ВСІМ умовам:</h1>
 <div class="row">
     <div class="row">
         <div class="col-2">
@@ -98,20 +99,19 @@
             }
             else
             {
-                <label>
                     @if (ViewBag.game.SchemaGroup != null && ViewBag.game.SchemaGroup.EventSchemaItem != null && ViewBag.game.SchemaGroup.EventSchemaItem.Event != null && ViewBag.game.SchemaGroup.EventSchemaItem.Event.Tournament != null)
                     {
-                            <div>@ViewBag.game.SchemaGroup.EventSchemaItem.Event.Tournament.Name | </div>
+                        <label>
+                            @ViewBag.game.SchemaGroup.EventSchemaItem.Event.Tournament.Name |
+                        </label>
                     }
+                <label>
                     @ViewBag.game.Name
                 </label>
             }
         </div>
     </div>
     <div class="row">
-        <div class="col-2">
-            Педжинейшн:
-        </div>
         <div class="col-2">
             @if (ViewBag.lastDate == null)
             {
@@ -138,9 +138,9 @@
         </div>
     </div>
 </div>
-
+*@
 <p>
-    <a asp-action="AddAlbum">Додати альбом</a>
+    <a class="btn btn-primary" asp-action="AddAlbum">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
 </p>
 
 @if (Model == null || Model.Count == 0)
@@ -242,11 +242,60 @@ else
                     <td>
                         <a asp-action="AddPhoto" asp-route-albumId="@item.Id">Додати фото</a>
                         <a asp-action="ListPhotos" asp-route-albumId="@item.Id">Список фоток</a>
-                        <a class="btn btn-danger" asp-action="DeleteNewsAlbum" asp-route-albumId="@item.Id" asp-route-newsId="@ViewBag.news.Id">Видалити з новини</a>
+                        @if(item.NewsId != null)
+                        {
+                            <a class="btn btn-danger" asp-action="DeleteNewsAlbum" asp-route-albumId="@item.Id" asp-route-newsId="@item.NewsId">Видалити з новини</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-danger disabled" href="#">Видалити з новини</a>
+                        }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <ul class="pagination pagination-lg m-3">
+        @if (ViewBag.SkipPrev != null)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-skip="@ViewBag.SkipPrev"
+                                   asp-route-isGeneral="@ViewBag.isGeneral"
+                                   asp-route-newsId="@ViewBag.news?.Id"
+                                   asp-route-categoryId="@ViewBag.category?.Id"
+                                   asp-route-teamId="@ViewBag.team?.Id"
+                                   asp-route-gameId="@ViewBag.game?.GameViewModelId"
+                                   asp-route-lastDate="@ViewBag.lastDate"
+                                   asp-route-lastId="@ViewBag.lastId">&laquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&laquo;</a>
+            </li>
+        }
+
+        @if (ViewBag.SkipNext != null)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-skip="@ViewBag.SkipNext"
+                                   asp-route-isGeneral="@ViewBag.isGeneral"
+                                   asp-route-newsId="@ViewBag.news?.Id"
+                                   asp-route-categoryId="@ViewBag.category?.Id"
+                                   asp-route-teamId="@ViewBag.team?.Id"
+                                   asp-route-gameId="@ViewBag.game?.GameViewModelId"
+                                   asp-route-lastDate="@ViewBag.lastDate"
+                                   asp-route-lastId="@ViewBag.lastId">&raquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&raquo;</a>
+            </li>
+        }
+    </ul>
 }
 

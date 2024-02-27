@@ -1,6 +1,7 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
 namespace BaseballUa.BlData
@@ -28,7 +29,8 @@ namespace BaseballUa.BlData
 		public Photo Get(int itemId)
 		{
 			return _dbContext.Photos.Where(p => p.Id == itemId).FirstOrDefault();
-		}
+
+        }
 
 		public IEnumerable<Photo> GetAll()
 		{

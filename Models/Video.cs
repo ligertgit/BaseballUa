@@ -8,11 +8,11 @@ namespace BaseballUa.Models
         public int Id { get; set; }
         public SportType SportType { get; set; }
         public bool IsGeneral { get; set; }
-		[StringLength(50)]
+		[StringLength(100)]
 		public string Name { get; set; }
-		[StringLength(200)]
+		[StringLength(500)]
 		public string? Description { get; set; }
-		[StringLength(50)]
+		[StringLength(350)]
 		public string Fname { get; set; }
 		public DateTime PublishDate { get; set; }
 		public int? NewsId { get; set; }

@@ -101,6 +101,9 @@ else
                     <th>
                         @Html.DisplayNameFor(model => model.Photos.First().FnameBig)
                     </th>
+                    <th>    
+
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -122,6 +125,9 @@ else
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => photo.FnameBig)
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" asp-action="RemoveAlbumPhoto" asp-route-id="@photo.Id">Видалити</a>
                         </td>
                     </tr>
                 }

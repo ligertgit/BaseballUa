@@ -579,11 +579,38 @@ namespace BaseballUa.Controllers
                                         int? gameId,
                                         DateTime? lastDate = null,
                                         int? lastId = null,
-                                        int? amount = null
+                                        int? skip = null
                                         )
         {
-            var videosDAL = new VideosCrud(_db).GetAllHard(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount);
+
+            var count = 0;
+            var skipFixxed = 0;
+            var amount = Constants.DefaulVideosAmount;
+            if (skip != null && skip > 0)
+            {
+                skipFixxed = (int)skip;
+            }
+
+            var videosDAL = new VideosCrud(_db).GetAllHard(out count, sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, skipFixxed, amount);
             var videosVL = new VideoToView().ConvertAll(videosDAL.ToList());
+
+            if (count > skipFixxed + amount)
+            {
+                ViewBag.SkipNext = skipFixxed + amount;
+            }
+            if (skipFixxed > 0)
+            {
+                ViewBag.SkipPrev = skip - amount <= 0 ? 0 : skip - amount;
+            }
+
+            ViewBag.sportType = sportType;
+            ViewBag.isGeneral = isGeneral;
+            ViewBag.news = newsId == null ? null : new NewsToView().Convert(new NewsCrud(_db).Get((int)newsId));
+            ViewBag.category = categoryId == null ? null : new CategoryToView().Convert(new CategoriesCrud(_db).Get((int)categoryId));
+            ViewBag.team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
+            ViewBag.game = gameId == null ? null : new GameToView().Convert(new GamesCrud(_db).Get((int)gameId));
+            ViewBag.lastDate = lastDate;
+            ViewBag.lastId = lastId;
 
             return View(videosVL);
         }
@@ -682,11 +709,28 @@ namespace BaseballUa.Controllers
                                         int? gameId,
                                         DateTime? lastDate = null,
                                         int? lastId = null,
-                                        int? amount = null
+                                        int? skip = null
                                         )
         {
-            var albumsDAL = new AlbumsCrud(_db).GetAllHard(sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, lastId, amount).ToList();
+            var count = 0;
+            var skipFixxed = 0;
+            var amount = Constants.DefaulAlbumsAmount;
+            if (skip != null && skip > 0)
+            {
+                skipFixxed = (int)skip;
+            }
+
+            var albumsDAL = new AlbumsCrud(_db).GetAllHard(out count, sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, skipFixxed, amount).ToList();
             var albumsVL = new AlbumToView().ConvertAll(albumsDAL, false);
+
+            if(count > skipFixxed + amount)
+            {
+                ViewBag.SkipNext = skipFixxed + amount;
+            }
+            if(skipFixxed > 0)
+            {
+                ViewBag.SkipPrev = skip - amount <= 0 ? 0 : skip - amount;
+            }
 
 
             ViewBag.sportType = sportType;
@@ -954,7 +998,7 @@ namespace BaseballUa.Controllers
                                                            newestDate: newestDate,
                                                            skip: skip).ToList();
             pageDataVM.News = new NewsToView().ConvertAll(newsDAL);
-            if(countt > Constants.DefaulNewsAmount)
+            if(countt > skip + Constants.DefaulNewsAmount)
             {
                 pageDataVM.SkipNext = skip + Constants.DefaulNewsAmount;
             }
@@ -1053,6 +1097,21 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListNews");
         }
 
+        public IActionResult DeleteNews(int newsId)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            if(newsDAL != null && newsDAL.Id == newsId)
+            {
+                new AlbumsCrud(_db).UnlinkFromNews(newsId);
+                new NewsTitlePhotosCrud(_db).UnlinkFromNews(newsId);
+                new VideosCrud(_db).UnlinkFromNews(newsId);
+
+                new NewsCrud(_db).Delete(newsDAL);
+            }
+
+            return RedirectToAction("ListNews");
+        }
+
         public IActionResult AddAlbumToNews(int newsId)
         {
             var albumVL = new AlbumToView().CreateEmpty();
@@ -1060,7 +1119,7 @@ namespace BaseballUa.Controllers
             var newsDAL = new NewsCrud(_db).Get(newsId);
             var newsVL = new NewsToView().Convert(newsDAL);
             
-            var albumsSL = new AlbumsCrud(_db).GetSelectItemList();
+            var albumsSL = new AlbumsCrud(_db).GetSelectItemList(isNewsEmpty: true);
 
             ViewBag.albumsSL = albumsSL;
             ViewBag.newsVL = newsVL;
@@ -1074,7 +1133,12 @@ namespace BaseballUa.Controllers
         {
             if (NewsId > 0 && Id >0)
             {
-                new AlbumsCrud(_db).Update(id: Id, newsId: NewsId);
+                var albumDAL = new AlbumsCrud(_db).Get(Id);
+                if(albumDAL != null && albumDAL.NewsId == null)
+                {
+                    new AlbumsCrud(_db).Update(id: Id, newsId: NewsId);
+                }
+                
             }
 
             return RedirectToAction("ListNews");
@@ -1087,7 +1151,7 @@ namespace BaseballUa.Controllers
             var newsDAL = new NewsCrud(_db).Get(newsId);
             var newsVL = new NewsToView().Convert(newsDAL);
 
-            var videosSL = new VideosCrud(_db).GetSelectItemList();
+            var videosSL = new VideosCrud(_db).GetSelectItemList(isEmptyNews: true);
 
             ViewBag.videosSL = videosSL;
             ViewBag.newsVL = newsVL;
@@ -1101,7 +1165,11 @@ namespace BaseballUa.Controllers
         {
             if (NewsId > 0 && Id > 0)
             {
-                new VideosCrud(_db).Update(id: Id, newsId: NewsId);
+                var videoDAL = new VideosCrud(_db).Get(Id);
+                if (videoDAL != null && videoDAL.NewsId == null)
+                {
+                    new VideosCrud(_db).Update(id: Id, newsId: NewsId);
+                }
             }
 
             return RedirectToAction("ListNews");

@@ -52,6 +52,19 @@ namespace BaseballUa.Data
                 .Property(b => b.Sport)
                 .HasDefaultValue(SportType.NotDefined);
 
+
+            modelBuilder.Entity<NewsTitlePhoto>()
+                .HasOne(t => t.News)
+                .WithMany(n => n.NewsTitlePhotos)
+                .HasForeignKey(t => t.NewsId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<NewsTitlePhoto>()
+                .HasOne(t => t.Photo)
+                .WithMany(n => n.NewsTitlePhotos)
+                .HasForeignKey(t => t.PhotoId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             //modelBuilder.Entity<Game>()
             //    .HasOne(b => b.EventSchemaItem)
             //    .WithMany()

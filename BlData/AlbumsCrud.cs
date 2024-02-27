@@ -55,6 +55,31 @@ namespace BaseballUa.BlData
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Album> GetAll(SportType? sportType = null,
+                                bool? isGeneral = null,
+                                int? newsId = null,
+                                int? categoryId = null,
+                                int? teamId = null,
+                                int? gameId = null,
+                                DateTime? lastDate = null,
+                                int? lastId = null,
+                                int? amount = null,
+                                bool notForTeamOnly = false)
+        {
+            return _dbContext.Albums.Where(a => (sportType == null || a.SportType == sportType)
+                                            && (isGeneral == null || a.IsGeneral == isGeneral)
+                                            && (newsId == null || a.NewsId == newsId)
+                                            && (categoryId == null || a.CategoryId == categoryId)
+                                            && (teamId == null || a.TeamId == teamId)
+                                            && (gameId == null || a.GameId == gameId)
+                                            && (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
+                                            && (!notForTeamOnly || (a.IsGeneral || a.News.EventId != null || a.CategoryId != null || a.GameId != null))
+                                            )
+                                            .OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
+                                            .Take(amount == null ? Constants.DefaulAlbumsAmount : (int)amount)
+                                            .Include(a => a.Photos);
+        }
+
         public IEnumerable<Album> GetAllEventAlbums(int? eventId, int amount = Constants.DefaulAlbumsAmount)
 		{
 			var eventAlbums = new List<Album>();
@@ -246,30 +271,7 @@ namespace BaseballUa.BlData
             return resultAlbums;
         }
 
-        public IEnumerable<Album> GetAll(SportType? sportType = null,
-                                        bool? isGeneral = null,
-                                        int? newsId = null,
-                                        int? categoryId = null,
-                                        int? teamId = null,
-                                        int? gameId = null,
-                                        DateTime? lastDate = null,
-                                        int? lastId = null,
-                                        int? amount = null,
-                                        bool notForTeamOnly = false)
-        {
-            return _dbContext.Albums.Where(a => (sportType == null || a.SportType == sportType)
-                                            && (isGeneral == null || a.IsGeneral == isGeneral)
-                                            && (newsId == null || a.NewsId == newsId)
-                                            && (categoryId == null || a.CategoryId == categoryId)
-                                            && (teamId == null || a.TeamId == teamId)
-                                            && (gameId == null || a.GameId == gameId)
-                                            && (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
-                                            && (!notForTeamOnly || (a.IsGeneral || a.News.EventId != null || a.CategoryId != null || a.GameId != null))
-                                            )
-                                            .OrderByDescending(a => a.PublishDate).ThenByDescending(a => a.Id)
-                                            .Take(amount == null ? Constants.DefaulAlbumsAmount : (int)amount)
-                                            .Include(a => a.Photos);
-        }
+
 
         public IEnumerable<Album> GetAllFiltered(out int countt, 
                                         SportType sportType = SportType.NotDefined,
@@ -345,38 +347,43 @@ namespace BaseballUa.BlData
 
 
 
-        public IEnumerable<Album> GetAllHard(SportType? sportType = null,
+        public IEnumerable<Album> GetAllHard(out int countt,
+                                        SportType? sportType = null,
                                         bool? isGeneral = null,
                                         int? newsId = null,
                                         int? categoryId = null,
                                         int? teamId = null,
                                         int? gameId = null,
                                         DateTime? lastDate = null,
-                                        int? lastId = null,
-                                        int? amount = null,
+                                        int skip = 0,
+                                        int amount = Constants.DefaulAlbumsAmount,
 										bool notForTeamOnly = false)
 		{
-			return _dbContext.Albums.Where(a => (sportType == null || a.SportType == sportType)
-											&& (isGeneral == null || a.IsGeneral == isGeneral)
+            var lastDateFixxed = lastDate == null ? DateTime.MaxValue : lastDate;
+            var result = _dbContext.Albums.Where(a => (sportType == null || a.SportType == sportType)
+                                            && (isGeneral == null || a.IsGeneral == isGeneral)
                                             && (newsId == null || a.NewsId == newsId)
                                             && (categoryId == null || a.CategoryId == categoryId)
-											&& (teamId == null || a.TeamId == teamId)
-											&& (gameId == null || a.GameId == gameId)
-											&& (lastDate == null || (lastId == null ? a.PublishDate < lastDate : a.PublishDate <= lastDate && a.Id < lastId))
-											&& (!notForTeamOnly || (a.IsGeneral || a.News.EventId != null || a.CategoryId != null || a.GameId != null))
-											)
-											.OrderByDescending(a => a.Id)
-											.Take(amount == null ? Constants.DefaulAlbumsAmount : (int)amount)
-											.Include(a => a.News)
-											.Include(a => a.Category)
-											.Include(a => a.Team)
-											.Include(a => a.Game)
-												.ThenInclude(g => g.SchemaGroup)
-													.ThenInclude(g => g.EventSchemaItem)
-														.ThenInclude(i => i.Event)
-															.ThenInclude(e => e.Tournament)
-																.ThenInclude(t => t.Category)
-											.Include(a => a.Photos);
+                                            && (teamId == null || a.TeamId == teamId)
+                                            && (gameId == null || a.GameId == gameId)
+                                            && (a.PublishDate <= lastDateFixxed)
+                                            && (!notForTeamOnly || (a.IsGeneral || a.News.EventId != null || a.CategoryId != null || a.GameId != null))
+                                            )
+                                            .OrderByDescending(a => a.Id);
+            countt = result.Count();
+
+            return result.Skip(skip)
+                        .Take(amount)
+						.Include(a => a.News)
+						.Include(a => a.Category)
+						.Include(a => a.Team)
+						.Include(a => a.Game)
+							.ThenInclude(g => g.SchemaGroup)
+								.ThenInclude(g => g.EventSchemaItem)
+									.ThenInclude(i => i.Event)
+										.ThenInclude(e => e.Tournament)
+											.ThenInclude(t => t.Category)
+						.Include(a => a.Photos);
 		}
 
 		public void Update(Album item)
@@ -399,21 +406,21 @@ namespace BaseballUa.BlData
 							int? teamId = null,
 							int? gameId = null)
 		{
-            if (sportType != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.SportType, sportType));
-            if (isGeneral != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.IsGeneral, isGeneral));
-			if (name != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.Name, name));
-			if (description != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.Description, description));
-			if (publishDate != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.PublishDate, publishDate));
-			if (newsId != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.NewsId, newsId));
-			if (categoryId != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.CategoryId, categoryId));
-			if (teamId != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.TeamId, teamId));
-			if (gameId != null) _dbContext.Albums.Where(a => a.Id == id).ExecuteUpdate(a => a.SetProperty(i => i.GameId, gameId));
+            if (sportType != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.SportType, sportType));
+            if (isGeneral != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.IsGeneral, isGeneral));
+			if (name != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.Name, name));
+			if (description != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.Description, description));
+			if (publishDate != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.PublishDate, publishDate));
+			if (newsId != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.NewsId, newsId));
+			if (categoryId != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.CategoryId, categoryId));
+			if (teamId != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.TeamId, teamId));
+			if (gameId != null) _dbContext.Albums.Where(a => a.Id == id)?.ExecuteUpdate(a => a.SetProperty(i => i.GameId, gameId));
 
 		}
 
-        public List<SelectListItem> GetSelectItemList()
+        public List<SelectListItem> GetSelectItemList(bool isNewsEmpty = false)
         {
-            var albumsSL = _dbContext.Albums.OrderByDescending(a => a.Id).Take(Constants.DefaulSelectListAmount)
+            var albumsSL = _dbContext.Albums.Where(a => !isNewsEmpty || a.NewsId == null).OrderByDescending(a => a.Id).Take(Constants.DefaulSelectListAmount)
                                     .Select(c => new SelectListItem
                                     {
                                         Text = c.Name,
@@ -421,6 +428,13 @@ namespace BaseballUa.BlData
                                     }).ToList();
 
             return albumsSL;
+        }
+
+        public void UnlinkFromNews(int newsId)
+        {
+            var albumsDAL = _dbContext.Albums.Where(a => a.NewsId == newsId).ToList();
+            albumsDAL.ForEach(a => a.NewsId = null);
+            _dbContext.SaveChanges();
         }
 
     }
