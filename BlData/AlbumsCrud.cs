@@ -46,9 +46,18 @@ namespace BaseballUa.BlData
 													.ThenInclude(i => i.Event)
 														.ThenInclude(e => e.Tournament)
 															.ThenInclude(t => t.Category)
-										.Include(a => a.Photos)?
-									.FirstOrDefault();
+                                        .Include(a => a.Photos.OrderByDescending(p => p.Id).Take(Constants.DefaultPhotoAmount))?
+                                    .FirstOrDefault();
 		}
+
+        public Album? GetWithTitlePhotos(int itemId)
+        {
+            return _dbContext.Albums.Where(a => a.Id == itemId)
+                                    .Include(a => a.Photos)
+                                        .ThenInclude(p => p.NewsTitlePhotos)
+                                    .FirstOrDefault();
+        }
+
 
         public IEnumerable<Album> GetAll()
         {

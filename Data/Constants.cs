@@ -8,13 +8,15 @@ namespace BaseballUa.Data
 		public const int DefaulSelectListAmount = 25;
 		public const int MenuTitleLength = 22;
 
+		public const int DefaultPhotoAmount = 100;
+
 		public const int DefaulNewsAmount = 25;
 		public const int NewsSelectDaysShift = 20;
 		public const int NewsPreviewLength = 400;
 		public const int TitleAlbumsId = 10;
 
 
-		public const int DefaulVideosAmount = 2;
+		public const int DefaulVideosAmount = 25;
 		public const int DefaulListVideosAmount = 100;
 		public const string DefaultVideoSmallImage = "videoSmall.png";
 		public const string DefaultVideoBigImage = "videoBig.png";

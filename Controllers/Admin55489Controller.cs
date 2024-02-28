@@ -650,6 +650,18 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListVideos");
         }
 
+
+        public IActionResult DeleteVideo(int videoId)
+        {
+            var videoDAL = new VideosCrud(_db).Get(videoId);
+            if(videoDAL != null)
+            {
+                new VideosCrud(_db).Delete(videoDAL);
+            }
+
+            return RedirectToAction("ListVideos");
+        }
+
         public IActionResult EditVideo(int videoId)
         {
             var editVideo = new EditVideoVM();
@@ -800,7 +812,27 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListAlbums");
         }
 
+        public IActionResult DeleteAlbum(int albumId)
+        {
+            var albumDAL = new AlbumsCrud(_db).GetWithTitlePhotos(albumId);
+            var ttt = albumDAL.Photos.Any(p => !p.NewsTitlePhotos.IsNullOrEmpty());
+            var ttt2 = albumDAL.Photos.First().NewsTitlePhotos;
+            var ttt3 = albumDAL.Photos.Where(p => !p.NewsTitlePhotos.IsNullOrEmpty());
+            if (albumDAL != null && (albumDAL.Photos == null || !albumDAL.Photos.Any(p => !p.NewsTitlePhotos.IsNullOrEmpty())))
+            {
+                if(albumDAL.Photos != null)
+                {
+                    foreach(var photo in albumDAL.Photos)
+                    {
+                        FileTools.RemoveAlbumPhoto(photo);
+                        //new PhotosCrud(_db).Delete(photo);
+                    }
+                }
+                new AlbumsCrud(_db).Delete(albumDAL);
+            }
 
+            return RedirectToAction("ListAlbums");
+        }
 
         public IActionResult ListPhotos(int albumId)
         {
@@ -808,6 +840,17 @@ namespace BaseballUa.Controllers
             var albumVL = new AlbumToView().Convert(albumDAL);
 
             return View(albumVL);
+        }
+
+        public IActionResult RemoveAlbumPhoto(int albumId, int id)
+        {
+            var photoDAL = new PhotosCrud(_db).Get(id);
+            if(photoDAL != null && photoDAL.NewsTitlePhotos != null && photoDAL.NewsTitlePhotos.Count == 0 && photoDAL.AlbumId == albumId)
+            {
+                FileTools.RemoveAlbumPhoto(photoDAL);
+                new PhotosCrud(_db).Delete(photoDAL);
+            }
+            return RedirectToAction("ListPhotos", new { albumId = albumId });
         }
 
         public IActionResult ListTitlePhotos(int newsId)

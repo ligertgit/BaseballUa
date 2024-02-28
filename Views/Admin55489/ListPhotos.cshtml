@@ -1,4 +1,5 @@
-﻿@model BaseballUa.ViewModels.AlbumVM
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.AlbumVM
 
 @{
     ViewData["Title"] = "Album photos list";
@@ -127,7 +128,14 @@ else
                             @Html.DisplayFor(modelItem => photo.FnameBig)
                         </td>
                         <td>
-                            <a class="btn btn-danger" asp-action="RemoveAlbumPhoto" asp-route-id="@photo.Id">Видалити</a>
+                            @if(photo.AlbumId != Constants.TitleAlbumsId)
+                            {
+                                <a class="btn btn-danger" asp-action="RemoveAlbumPhoto" asp-route-albumId="@photo.AlbumId" asp-route-id="@photo.Id">Видалити</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" asp-action="#">Видалити</a>
+                            }
                         </td>
                     </tr>
                 }

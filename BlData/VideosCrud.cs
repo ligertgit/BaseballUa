@@ -24,7 +24,8 @@ namespace BaseballUa.BlData
 
 		public void Delete(Video item)
 		{
-			throw new NotImplementedException();
+			_dbContext.Videos.Remove(item);
+			_dbContext.SaveChanges();
 		}
 
 		public void UnlinkFromNews(int newsId)

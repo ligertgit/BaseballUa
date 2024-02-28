@@ -23,12 +23,13 @@ namespace BaseballUa.BlData
 
 		public void Delete(Photo item)
 		{
-			throw new NotImplementedException();
+            _dbContext.Photos.Remove(item);
+            _dbContext.SaveChanges();
 		}
 
-		public Photo Get(int itemId)
+		public Photo? Get(int itemId)
 		{
-			return _dbContext.Photos.Where(p => p.Id == itemId).FirstOrDefault();
+			return _dbContext.Photos.Where(p => p.Id == itemId).Include(p => p.NewsTitlePhotos).FirstOrDefault();
 
         }
 

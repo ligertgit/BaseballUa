@@ -4,6 +4,7 @@ using System.Drawing;
 using static System.Net.Mime.MediaTypeNames;
 using System.Drawing.Imaging;
 using System.IO;
+using BaseballUa.Models;
 
 namespace BaseballUa.Data
 {
@@ -241,6 +242,21 @@ namespace BaseballUa.Data
             }
 
             return destImage;
+        }
+
+        public static void RemoveAlbumPhoto(Photo photo)
+        {
+            var bigImageDirPath = Path.Combine(Constants.ImageBaseDir, Constants.BigImageSubDir, photo.AlbumId.ToString(), photo.FnameBig);
+            var smallImageDirPath = Path.Combine(Constants.ImageBaseDir, Constants.SmallImageSubDir, photo.AlbumId.ToString(), photo.FnameSmall);
+
+            if (File.Exists(bigImageDirPath))
+            {
+                File.Delete(bigImageDirPath);
+            }
+            if (File.Exists(smallImageDirPath))
+            {
+                File.Delete(smallImageDirPath);
+            }
         }
     }
 
