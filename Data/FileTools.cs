@@ -5,6 +5,7 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Drawing.Imaging;
 using System.IO;
 using BaseballUa.Models;
+using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Data
 {
@@ -100,14 +101,14 @@ namespace BaseballUa.Data
             };
 
 
-        public static List<IFormFile> GetValidated(List<IFormFile> files)
+        public static List<IFormFile> GetValidated(List<IFormFile> files, bool isIcon = false)
         {
             List<IFormFile> result = new List<IFormFile>();
             if (files != null && files.Count > 0)
             {
                 foreach (IFormFile file in files)
                 {
-                    if (CheckExt(file) && CheckSig(file) && CheckSize(file))
+                    if (CheckExt(file) && CheckSig(file) && CheckSize(file, isIcon))
                     {
                         result.Add(file);
                     }
@@ -143,9 +144,10 @@ namespace BaseballUa.Data
             return false;
         }
 
-        private static bool CheckSize(IFormFile file)
+        private static bool CheckSize(IFormFile file, bool isIcon = false)
         {
-            if (file.Length >= Constants.MinImageSize && file.Length <= Constants.MaxImageSize)
+            if (!isIcon && file.Length >= Constants.MinImageSize && file.Length <= Constants.MaxImageSize
+                || isIcon && file.Length >= Constants.MinIconSize && file.Length <= Constants.MaxIconSize)
             {
                 return true;
             }
@@ -153,15 +155,42 @@ namespace BaseballUa.Data
             return false;
         }
 
-        public async static Task<bool> ResizeAndSave(IFormFile file, int albumId, string rootPath, string fileName)
+        public async static Task<bool> ResizeAndSave(IFormFile file, int albumId, string rootPath, string fileName, ImageType imageType)
         {
+            double maxImageRatio;
+            int bigImageHeight;
+            int smallImageHeight;
+            string imageBaseDir;
+            string bigImageSubDir;
+            string smallImageSubDir;
+            switch (imageType)
+            { 
+
+                case ImageType.Flag:
+                    maxImageRatio = Constants.MaxIconRatio;
+                    bigImageHeight = Constants.BigIconHeight;
+                    smallImageHeight = Constants.SmallIconHeight;
+                    imageBaseDir = Constants.FlagBaseDir;
+                    bigImageSubDir = Constants.BigFlagSubDir;
+                    smallImageSubDir = Constants.SmallFlagSubDir;
+                    break;
+                default:
+                    maxImageRatio = Constants.MaxImageRatio;
+                    bigImageHeight = Constants.BigImageHeight;
+                    smallImageHeight = Constants.SmallImageHeight;
+                    imageBaseDir = Constants.ImageBaseDir;
+                    bigImageSubDir = Constants.BigImageSubDir;
+                    smallImageSubDir = Constants.SmallImageSubDir;
+                    break;
+            }
+
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
                 using (var image = System.Drawing.Image.FromStream(memoryStream))
                 {
-                    if ((image.Width / image.Height) > Constants.MaxImageRatio 
-                        || (image.Height / image.Width) > Constants.MaxImageRatio
+                    if ((image.Width / image.Height) > maxImageRatio 
+                        || (image.Height / image.Width) > maxImageRatio
                         || image.Width == 0
                         || image.Height == 0
                        )
@@ -174,7 +203,12 @@ namespace BaseballUa.Data
                         System.Drawing.Image smallImage;
                         try
                         {
-                            bigImage = ResizeImage(image, Constants.BigImageHeight);
+                            var imageHeight = bigImageHeight;
+                            if (imageType != ImageType.Photo && image.Width > image.Height)
+                            {
+                                imageHeight = image.Height * bigImageHeight / image.Width;
+                            }
+                            bigImage = ResizeImage(image, imageHeight);
                         }
                         catch (Exception ex) 
                         {
@@ -183,7 +217,12 @@ namespace BaseballUa.Data
                         
                         try
                         {
-                            smallImage = ResizeImage(image, Constants.SmallImageHeight);
+                            var imageHeight = smallImageHeight;
+                            if (imageType != ImageType.Photo && image.Width > image.Height)
+                            {
+                                imageHeight = image.Height * smallImageHeight / image.Width;
+                            }
+                            smallImage = ResizeImage(image, imageHeight);
                         }
                         catch (Exception ex)
                         {
@@ -191,12 +230,12 @@ namespace BaseballUa.Data
                         }
 
                         //var fileName = Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(file.FileName));
-                        var bigImageDirPath = Path.Combine(Constants.ImageBaseDir, Constants.BigImageSubDir, albumId.ToString());
+                        var bigImageDirPath = Path.Combine(imageBaseDir, bigImageSubDir, albumId == 0 ? "" : albumId.ToString());
                         var bigImageFullPath = Path.Combine(bigImageDirPath, fileName);
-                        var smallImageDirPath = Path.Combine(Constants.ImageBaseDir, Constants.SmallImageSubDir, albumId.ToString());
+                        var smallImageDirPath = Path.Combine(imageBaseDir, smallImageSubDir, albumId == 0 ? "" : albumId.ToString());
                         var smallImageFullPath = Path.Combine(smallImageDirPath, fileName);
 
-                        Encoder myEncoder = Encoder.Quality; ;
+                        Encoder myEncoder = Encoder.Quality;
                         EncoderParameter myEncoderParameter = new EncoderParameter(myEncoder, 90L);
                         EncoderParameters myEncoderParameters = new EncoderParameters(1);
                         myEncoderParameters.Param[0] = myEncoderParameter;
@@ -216,7 +255,6 @@ namespace BaseballUa.Data
                     }
                 }
             }
-
             return true;
         }
 

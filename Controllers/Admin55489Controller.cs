@@ -9,13 +9,16 @@ using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Packaging.Signing;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Controllers
@@ -423,9 +426,84 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListCountries");
         }
 
-#endregion
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddUpdateCountry(IFormCollection fc)
+        {
+            var country = new Country();
+            var countryToUpdate = new Country();
 
-#region Club
+            if (fc != null
+                && fc.ContainsKey("Name")
+                && fc["Name"].ToString().Length > 0
+                && fc["Name"].ToString().Length <= typeof(Country).GetProperty("Name").GetCustomAttribute<StringLengthAttribute>().MaximumLength
+                && fc.ContainsKey("ShortName")
+                && fc["ShortName"].ToString().Length > 0
+                && fc["ShortName"].ToString().Length <= typeof(Country).GetProperty("ShortName").GetCustomAttribute<StringLengthAttribute>().MaximumLength)
+            {
+                int formCountryId;
+                string newFileName;
+
+                if (fc.ContainsKey("Id") && fc["id"].ToString() != null && Int32.TryParse(fc["id"],out formCountryId))
+                {
+                    countryToUpdate = new CountryCrud(_db).Get(formCountryId);
+                }
+                if(countryToUpdate != null)
+                {
+                    country = countryToUpdate;
+                    newFileName = country.FnameFlagBig == Constants.DefaultCountryBigImage ? Path.ChangeExtension(Path.GetRandomFileName(), ".jpg") : country.FnameFlagBig;
+                }
+                else
+                {
+                    country.FnameFlagSmall = Constants.DefaultCountrySmallImage;
+                    country.FnameFlagBig = Constants.DefaultCountryBigImage;
+                    newFileName = Path.ChangeExtension(Path.GetRandomFileName(), ".jpg");
+                }
+
+
+                
+                if(fc.Files != null && fc.Files.Count == 1)
+                {
+                    // загрузить фотки, сресайзить, засунуть в папку, получить имя файла
+                    var checkedFile = FileTools.GetValidated(fc.Files.ToList(), isIcon: true).FirstOrDefault();
+
+                    if (checkedFile != null && await FileTools.ResizeAndSave(checkedFile, 0, _rootPath, newFileName, ImageType.Flag))
+                    {
+                        country.FnameFlagBig = newFileName;
+                        country.FnameFlagSmall = newFileName;
+                    }
+                }
+                country.Name = fc["Name"].ToString();
+                country.ShortName = fc["ShortName"].ToString();
+                if(country.Id > 0)
+                {
+                    new CountryCrud(_db).Update(country);
+                }
+                else 
+                {
+                    new CountryCrud(_db).Add(country);
+                }
+            }
+
+            return RedirectToAction("ListCountries");
+        }
+
+        public IActionResult EditCountry(int countryId)
+        {
+            var countryDAL = new CountryCrud(_db).Get(countryId);
+            var countryVL = new CountryViewModel();
+            if (countryDAL != null)
+            {
+                countryVL = new CountryToView().Convert(countryDAL, false);
+            }
+
+            return View(countryVL);
+
+        }
+
+        #endregion
+
+        #region Club
         public IActionResult ListClubs()
         {
             var clubsDAL = new ClubCrud(_db).GetAll().ToList();
@@ -911,7 +989,7 @@ namespace BaseballUa.Controllers
                     foreach (var file in checkedFiles)
                     {
                         var newfileName = Path.ChangeExtension(Path.GetRandomFileName(), ".jpg");
-                        if (await FileTools.ResizeAndSave(file, albumId, _rootPath, newfileName))
+                        if (await FileTools.ResizeAndSave(file, albumId, _rootPath, newfileName, ImageType.Photo))
                         {
                             var photoDAL = new Photo();
                             photoDAL.AlbumId = albumId;
@@ -1268,7 +1346,7 @@ namespace BaseballUa.Controllers
                 foreach (var file in checkedFiles)
                 {
                     var newfileName = Path.ChangeExtension(Path.GetRandomFileName(), ".jpg");
-                    if (await FileTools.ResizeAndSave(file, Constants.TitleAlbumsId, _rootPath, newfileName))
+                    if (await FileTools.ResizeAndSave(file, Constants.TitleAlbumsId, _rootPath, newfileName, ImageType.Photo))
                     {
                         var photoDAL = new Photo();
                         photoDAL.AlbumId = Constants.TitleAlbumsId;

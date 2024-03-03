@@ -79,5 +79,11 @@ namespace BaseballUa.Data
             Albums,
             Events
         }
+
+        public enum ImageType
+        {
+            Photo,
+            Flag
+        }
     }
 }

@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<h1>Додати нову країну</h1>
+<h1>Редагування країни</h1>
 
 <hr />
 <div class="row">
@@ -42,15 +42,15 @@
                 <input asp-for="FnameFlagBig" class="form-control" />
                 <span asp-validation-for="FnameFlagBig" class="text-danger"></span>
             </div>*@
-            <input type="hidden" asp-for="FnameFlagSmall" class="form-control" value="@Constants.DefaultCountrySmallImage" />
-            <input type="hidden" asp-for="FnameFlagBig" class="form-control" value="@Constants.DefaultCountryBigImage" />
+            @*<input type="hidden" asp-for="FnameFlagSmall" class="form-control" value="@Constants.DefaultCountrySmallImage" />
+            <input type="hidden" asp-for="FnameFlagBig" class="form-control" value="@Constants.DefaultCountryBigImage" />*@
             <div class="form-group">
                 <label class="control-label">Прапор: </label>
                 <input type="file" name="formFiles" />
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Додати" class="btn btn-primary" />
+                <input type="submit" value="Обновити" class="btn btn-primary" />
             </div>
         </form>
     </div>

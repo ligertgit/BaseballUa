@@ -46,8 +46,10 @@ namespace BaseballUa.Data
 		public const string DefaultTeamSmallImage = "defaultSmall.png";
 		public const string DefaultTeamBigImage = "defaultBig.png";
 
+        public const string DefaultCountrySmallImage = "default.png";
+        public const string DefaultCountryBigImage = "default.png";
 
-		public const int MaxClubStaffShow = 10;
+        public const int MaxClubStaffShow = 10;
 		public const string DefaultStaffSmallImage = "defaultSmall.png";
 		public const string DefaultStaffBigImage = "defaultBig.png";
 		public const int EuroClubId = 4;
@@ -60,13 +62,26 @@ namespace BaseballUa.Data
 
 		public const long MinImageSize = 3000;
 		public const long MaxImageSize = 6097152;
-		public const double MaxImageRatio = 1.9;
+        public const double MaxImageRatio = 1.9;
 		public const int BigImageHeight = 769;
 		public const int SmallImageHeight = 188;
 		public const string ImageBaseDir = "wwwroot\\images\\photo\\";
 		public const string BigImageSubDir = "big";
 		public const string SmallImageSubDir = "small";
 
-
+        public const long MinIconSize = 300;
+        public const long MaxIconSize = 500000;
+        public const double MaxIconRatio = 2.5;
+        public const int BigIconHeight = 100;
+        public const int SmallIconHeight = 60;
+        public const string FlagBaseDir = "wwwroot\\images\\country\\";
+        public const string ClubBaseDir = "wwwroot\\images\\club\\";
+        public const string TeamBaseDir = "wwwroot\\images\\team\\";
+        public const string BigFlagSubDir = "flagBig";
+        public const string BigClubSubDir = "logoBig";
+        public const string BigTeamSubDir = "logoBig";
+        public const string SmallFlagSubDir = "flagSmall";
+        public const string SmallClubSubDir = "logoSmall";
+        public const string SmallTeamSubDir = "logoSmall";
     }
 }

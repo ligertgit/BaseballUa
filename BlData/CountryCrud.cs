@@ -25,9 +25,9 @@ namespace BaseballUa.BlData
             throw new NotImplementedException();
         }
 
-        public Country Get(int itemId)
+        public Country? Get(int itemId)
         {
-            return _dbContext.Countries.First(c => c.Id == itemId);
+            return _dbContext.Countries.FirstOrDefault(c => c.Id == itemId);
         }
 
         public IEnumerable<Country> GetAll()
@@ -37,7 +37,8 @@ namespace BaseballUa.BlData
 
         public void Update(Country item)
         {
-            throw new NotImplementedException();
+            _dbContext.Countries.Update(item);
+            _dbContext.SaveChanges();
         }
 
 
