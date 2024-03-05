@@ -87,7 +87,8 @@ namespace BaseballUa.BlData
 
         public void Update(Club item)
         {
-            throw new NotImplementedException();
+            _dbContext.Clubs.Update(item);
+            _dbContext.SaveChanges();
         }
 
         public List<SelectListItem> GetSelectItemList()

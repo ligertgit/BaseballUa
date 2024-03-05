@@ -70,18 +70,21 @@ namespace BaseballUa.Data
 		public const string SmallImageSubDir = "small";
 
         public const long MinIconSize = 300;
-        public const long MaxIconSize = 500000;
+        public const long MaxIconSize = 3000000;
         public const double MaxIconRatio = 2.5;
         public const int BigIconHeight = 100;
         public const int SmallIconHeight = 60;
         public const string FlagBaseDir = "wwwroot\\images\\country\\";
         public const string ClubBaseDir = "wwwroot\\images\\club\\";
         public const string TeamBaseDir = "wwwroot\\images\\team\\";
+        public const string StaffBaseDir = "wwwroot\\images\\staff\\";
         public const string BigFlagSubDir = "flagBig";
         public const string BigClubSubDir = "logoBig";
         public const string BigTeamSubDir = "logoBig";
+        public const string BigStaffSubDir = "avatarBig";
         public const string SmallFlagSubDir = "flagSmall";
         public const string SmallClubSubDir = "logoSmall";
         public const string SmallTeamSubDir = "logoSmall";
+        public const string SmallStaffSubDir = "avatarSmall";
     }
 }

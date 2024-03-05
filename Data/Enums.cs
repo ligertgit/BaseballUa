@@ -83,7 +83,9 @@ namespace BaseballUa.Data
         public enum ImageType
         {
             Photo,
-            Flag
+            Flag,
+            Club,
+            Staff
         }
     }
 }

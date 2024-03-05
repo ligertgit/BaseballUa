@@ -67,6 +67,8 @@
                 @Html.DisplayFor(modelItem => item.ClubId)
             </td>
             <td>
+                    <a class="btn btn-warning" asp-action="UpdateStaffAvatar" asp-route-staffId="@item.Id">Новий аватар</a>
+                    <a class="btn btn-danger" asp-action="DeleteStaff" asp-route-staffId="@item.Id">Видалити</a>
             </td>
         </tr>
 }

@@ -56,14 +56,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FnameLogoBig)
                 <img src="~/images/club/logoBig/@item.FnameLogoBig" />
+                <a class="btn btn-warning m-1" asp-action="UpdateClubLogo" asp-route-clubId="@item.Id">Завантажити</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Country.Id)
                 <img src="~/images/country/flagBig/@item.Country.FnameFlagBig" />
             </td>
             <td>
-                    <a asp-action="ListTeams" asp-route-clubId="@item.Id">Список команд</a> | 
-                    <a asp-action="ListStaffs" asp-route-clubId="@item.Id">Працівники</a>
+                    <a class="btn btn-primary m-1" asp-action="ListTeams" asp-route-clubId="@item.Id">Список команд</a> |
+                    <a class="btn btn-primary m-1" asp-action="ListStaffs" asp-route-clubId="@item.Id">Працівники</a>
+                    <a class="btn btn-warning m-1" asp-action="EditClub" asp-route-clubId="@item.Id">Редагувати</a>
             </td>
         </tr>
 }

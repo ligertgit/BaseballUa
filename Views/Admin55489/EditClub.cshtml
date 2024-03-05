@@ -2,7 +2,7 @@
 @model BaseballUa.ViewModels.ClubViewModel
 
 @{
-    ViewData["Title"] = "Add Club";
+    ViewData["Title"] = "Edit Club";
 }
 
 <div class="container-fluid text-warning adminhead">
@@ -11,14 +11,14 @@
     </div>
 </div>
 
-<h1>Додати клуб</h1>
+<h1>Редагувати клуб</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="AddClub">
             @Html.AntiForgeryToken()
-            @*@Html.HiddenFor(c => Model.Id)*@
+            @Html.HiddenFor(c => Model.Id)
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -35,10 +35,9 @@
                 <input asp-for="Invitation" class="form-control" />
                 <span asp-validation-for="Invitation" class="text-danger"></span>
             </div>
-
             <input type="hidden" asp-for="FnameLogoBig" class="form-control" value="@Constants.DefaultClubBigImage" />
             <input type="hidden" asp-for="FnameLogoSmall" class="form-control" value="@Constants.DefaultClubSmallImage" />
-            @*<div class="form-group">
+@*            <div class="form-group">
                 <label asp-for="FnameLogoSmall" class="control-label"></label>
                 <input asp-for="FnameLogoSmall" class="form-control" />
                 <span asp-validation-for="FnameLogoSmall" class="text-danger"></span>
@@ -51,11 +50,15 @@
             
             <div class="form-group">
                 <label asp-for="CountryId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.CountryId, new SelectList(ViewBag.CountriesSL, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @{
+                    SelectList countrySL = ViewBag.CountriesSL;
+                }
+                @Html.DropDownListFor(c => Model.CountryId, countrySL, optionLabel: "--- оберіть ---")
+                @*@Html.DropDownListFor(c => Model.CountryId, new SelectList(ViewBag.CountriesSL, "Value", "Text"), optionLabel: "--- оберіть ---")*@
                 @Html.ValidationMessageFor(c => c.CountryId, "", new { @class = "text-danger" })
             </div>
             <div class="form-group">
-                <input type="submit" value="Додати" class="btn btn-primary" />
+                <input type="submit" value="Прийняти" class="btn btn-primary" />
             </div>
         </form>
     </div>

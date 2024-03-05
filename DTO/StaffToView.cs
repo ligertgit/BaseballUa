@@ -56,8 +56,8 @@ namespace BaseballUa.DTO
             staffDAL.SecondName = staffVL.SecondName;
             staffDAL.Role = staffVL.Role;
             staffDAL.RoleDescription = staffVL.RoleDescription;
-            staffDAL.AvatarSmall = staffVL.AvatarSmall;
-            staffDAL.AvatarLarge = staffVL.AvatarLarge;
+            staffDAL.AvatarSmall = staffVL.AvatarSmall == null ? Constants.DefaultStaffSmallImage : staffVL.AvatarSmall;
+            staffDAL.AvatarLarge = staffVL.AvatarLarge == null ? Constants.DefaultStaffBigImage : staffVL.AvatarLarge; ;
             staffDAL.ClubId = staffVL.ClubId;
 
             return staffDAL;

@@ -35,7 +35,9 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            @Html.HiddenFor(c => Model.FnameLogoSmall)
+            @Html.HiddenFor(c => Model.FnameLogoBig)
+@*            <div class="form-group">
                 <label asp-for="FnameLogoSmall" class="control-label"></label>
                 <input asp-for="FnameLogoSmall" class="form-control" />
                 <span asp-validation-for="FnameLogoSmall" class="text-danger"></span>
@@ -44,7 +46,7 @@
                 <label asp-for="FnameLogoBig" class="control-label"></label>
                 <input asp-for="FnameLogoBig" class="form-control" />
                 <span asp-validation-for="FnameLogoBig" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="IsTemp" /> @Html.DisplayNameFor(model => model.IsTemp)

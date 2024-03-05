@@ -1,0 +1,52 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.StaffViewModel
+
+@{
+    ViewData["Title"] = "Update Staff avatar";
+}
+
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
+<h1>Новий аватар працівника</h1>
+
+<hr />
+<div class="row">
+    @if(Model != null && Model.Id > 0)
+    {
+        <div class="col-md-4">
+            <div>
+                <label asp-for="FirsName" class="control-label">@Model.FirsName</label>
+            </div>
+            <div>
+                <label asp-for="SecondName" class="control-label">@Model.SecondName</label>
+            </div>
+            <div>
+                <label asp-for="Role" class="control-label">@Model.Role</label>
+            </div>
+            <div>
+                <img src="~/images/staff/avatarBig/@Model.AvatarLarge" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <form asp-action="UpdateStaffAvatar" enctype="multipart/form-data" method="post">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(c => Model.Id)
+                <div class="form-group">
+                    <label class="control-label">Новий аватар: </label>
+                    <input type="file" name="formFiles" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Поновити" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -20,7 +20,8 @@ namespace BaseballUa.BlData
 
         public void Delete(Staff item)
         {
-            throw new NotImplementedException();
+            _dbContext.Staffs.Remove(item);
+            _dbContext.SaveChanges();
         }
 
         public Staff Get(int itemId)

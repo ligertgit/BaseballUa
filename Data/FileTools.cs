@@ -174,6 +174,22 @@ namespace BaseballUa.Data
                     bigImageSubDir = Constants.BigFlagSubDir;
                     smallImageSubDir = Constants.SmallFlagSubDir;
                     break;
+                case ImageType.Club:
+                    maxImageRatio = Constants.MaxIconRatio;
+                    bigImageHeight = Constants.BigIconHeight;
+                    smallImageHeight = Constants.SmallIconHeight;
+                    imageBaseDir = Constants.ClubBaseDir;
+                    bigImageSubDir = Constants.BigClubSubDir;
+                    smallImageSubDir = Constants.SmallClubSubDir;
+                    break;
+                case ImageType.Staff:
+                    maxImageRatio = Constants.MaxIconRatio;
+                    bigImageHeight = Constants.BigIconHeight;
+                    smallImageHeight = Constants.SmallIconHeight;
+                    imageBaseDir = Constants.StaffBaseDir;
+                    bigImageSubDir = Constants.BigStaffSubDir;
+                    smallImageSubDir = Constants.SmallStaffSubDir;
+                    break;
                 default:
                     maxImageRatio = Constants.MaxImageRatio;
                     bigImageHeight = Constants.BigImageHeight;
@@ -295,6 +311,28 @@ namespace BaseballUa.Data
             {
                 File.Delete(smallImageDirPath);
             }
+        }
+
+        public static void RemoveStaffAvatar(Staff staff)
+        {
+            if(staff != null 
+                && staff.AvatarLarge != null 
+                && staff.AvatarSmall != null 
+                && staff.AvatarLarge != Constants.DefaultStaffBigImage
+                && staff.AvatarSmall != Constants.DefaultStaffSmallImage) 
+            {
+                var bigImageDirPath = Path.Combine(Constants.StaffBaseDir, Constants.BigStaffSubDir, staff.AvatarLarge);
+                var smallImageDirPath = Path.Combine(Constants.StaffBaseDir, Constants.SmallStaffSubDir, staff.AvatarSmall);
+                if(File.Exists(bigImageDirPath)) 
+                {
+                    File.Delete(bigImageDirPath);
+                }
+                if(File.Exists(smallImageDirPath))
+                {
+                    File.Delete(smallImageDirPath);
+                }
+            }
+
         }
     }
 
