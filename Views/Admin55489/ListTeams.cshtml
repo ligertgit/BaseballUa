@@ -58,6 +58,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FnameLogoSmall)
                 <img src="~/images/team/logoSmall/@item.FnameLogoSmall" />
+                <a class="btn btn-warning" asp-action="UpdateTeamLogo" asp-route-teamId="@item.Id">Нове лого</a>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FnameLogoBig)
@@ -67,7 +68,9 @@
                 @Html.DisplayFor(modelItem => item.IsTemp)
             </td>
             <td>
-                <a asp-action="ListPlayers" asp-route-teamId="@item.Id">Подивитися гравців команди</a>
+                <a class="btn btn-primary" asp-action="ListPlayers" asp-route-teamId="@item.Id">Подивитися гравців команди</a>
+                <a class="btn btn-warning" asp-action="EditTeam" asp-route-teamId="@item.Id">Редагувати</a>
+                <a class="btn btn-danger" asp-action="DeleteTeam" asp-route-teamId="@item.Id" title="Якщо нема ігор, альбомів, новин, відео, гравців">Видалити</a>
             </td>
         </tr>
 }

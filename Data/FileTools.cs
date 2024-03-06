@@ -183,12 +183,20 @@ namespace BaseballUa.Data
                     smallImageSubDir = Constants.SmallClubSubDir;
                     break;
                 case ImageType.Staff:
-                    maxImageRatio = Constants.MaxIconRatio;
-                    bigImageHeight = Constants.BigIconHeight;
-                    smallImageHeight = Constants.SmallIconHeight;
+                    maxImageRatio = Constants.MaxAvatarRatio;
+                    bigImageHeight = Constants.BigAvatarHeight;
+                    smallImageHeight = Constants.SmallAvatarHeight;
                     imageBaseDir = Constants.StaffBaseDir;
                     bigImageSubDir = Constants.BigStaffSubDir;
                     smallImageSubDir = Constants.SmallStaffSubDir;
+                    break;
+                case ImageType.Team:
+                    maxImageRatio = Constants.MaxIconRatio;
+                    bigImageHeight = Constants.BigIconHeight;
+                    smallImageHeight = Constants.SmallIconHeight;
+                    imageBaseDir = Constants.TeamBaseDir;
+                    bigImageSubDir = Constants.BigTeamSubDir;
+                    smallImageSubDir = Constants.SmallTeamSubDir;
                     break;
                 default:
                     maxImageRatio = Constants.MaxImageRatio;
@@ -333,6 +341,28 @@ namespace BaseballUa.Data
                 }
             }
 
+        }
+
+        public static void RemoveTeamLogo(Team team)
+        {
+            if (team != null
+                && team.FnameLogoBig != null
+                && team.FnameLogoSmall != null
+                && team.FnameLogoSmall != Constants.DefaultTeamSmallImage
+                && team.FnameLogoBig != Constants.DefaultTeamBigImage)
+            {
+                var bigLogo = Path.Combine(Constants.TeamBaseDir, Constants.BigTeamSubDir, team.FnameLogoBig);
+                var smallLogo = Path.Combine(Constants.TeamBaseDir, Constants.SmallTeamSubDir, team.FnameLogoSmall);
+
+                if (File.Exists(bigLogo))
+                {
+                    File.Delete(bigLogo);
+                }
+                if (File.Exists(smallLogo))
+                {
+                    File.Delete(smallLogo);
+                }
+            }
         }
     }
 

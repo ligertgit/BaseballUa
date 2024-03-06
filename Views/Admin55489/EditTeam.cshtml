@@ -1,0 +1,64 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.TeamViewModel
+
+@{
+    ViewData["Title"] = "Edit Team";
+}
+
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
+<h1>Редагувати команду клубу</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditTeam">
+            @{
+                SelectList sportTypeSL = ViewBag.SportTypeSL;
+                SelectList clubSL = ViewBag.ClubSL;
+            }
+            @Html.HiddenFor(c => Model.Id)
+            @*@Html.HiddenFor(c => Model.ClubId)*@
+            @Html.DropDownListFor(t => Model.ClubId, clubSL, optionLabel: "--- оберіть ---");
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SportType" class="control-label"></label>
+                @Html.DropDownListFor(t => Model.SportType, sportTypeSL, optionLabel: "--- оберіть ---"))
+                <span asp-validation-for="SportType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            @Html.HiddenFor(c => Model.FnameLogoSmall)
+            @Html.HiddenFor(c => Model.FnameLogoBig)
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsTemp" /> @Html.DisplayNameFor(model => model.IsTemp)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Поновити" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ListTeams" asp-route-clubId="@Model.ClubId">Повернутися до списку команд клубу</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

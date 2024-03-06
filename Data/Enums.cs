@@ -85,7 +85,8 @@ namespace BaseballUa.Data
             Photo,
             Flag,
             Club,
-            Staff
+            Staff,
+            Team
         }
     }
 }

@@ -645,11 +645,105 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListTeams", new { clubId = teamVL.ClubId });
         }
 
+        public IActionResult UpdateTeamLogo(int teamId)
+        {
+            var teamDAL = new TeamCrud(_db).Get(teamId);
+            if(teamDAL != null)
+            {
+                return View(new TeamToView().Convert(teamDAL));
+            }
 
+            return RedirectToAction("ListClubs");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateTeamLogo(IFormCollection fc)
+        {
+            var teamDAL = new Team();
+            int teamId;
+            string newFileName;
+            if(fc != null
+                && fc.ContainsKey("Id")
+                && Int32.TryParse(fc["Id"], out teamId)
+                && fc.Files != null
+                && fc.Files.Count() == 1)
+            {
+                teamDAL = new TeamCrud(_db).Get(teamId);
+                if(teamDAL != null)
+                {
+                    newFileName = teamDAL.FnameLogoBig == Constants.DefaultTeamBigImage
+                                ? newFileName = Path.ChangeExtension(Path.GetRandomFileName(), ".jpg")
+                                : teamDAL.FnameLogoBig;
+
+                    var checkedFile = FileTools.GetValidated(fc.Files.ToList(), isIcon: true).FirstOrDefault();
+                    if (checkedFile != null
+                        && await FileTools.ResizeAndSave(checkedFile, 0, _rootPath, newFileName, ImageType.Team)
+                        && teamDAL.FnameLogoBig == Constants.DefaultTeamBigImage)
+                    {
+                        teamDAL.FnameLogoBig = newFileName;
+                        teamDAL.FnameLogoSmall = newFileName;
+                        new TeamCrud(_db).Update(teamDAL);
+                    }
+                    return RedirectToAction("ListTeams", new { clubId = teamDAL.ClubId });
+                }
+            }
+            return RedirectToAction("ListClubs");
+        }
+
+        public IActionResult EditTeam(int teamId)
+        {
+            var teamDAL = new TeamCrud(_db).Get(teamId);
+            if(teamDAL != null)
+            {
+                var sportTypeSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text", teamDAL.SportType);
+                var clubSL = new SelectList(new ClubCrud(_db).GetSelectItemList(), "Value", "Text", teamDAL.ClubId);
+                ViewBag.SportTypeSL = sportTypeSL;
+                ViewBag.ClubSL = clubSL;
+                return View(new TeamToView().Convert(teamDAL, doSubConvert : false));
+            }
+
+            return RedirectToAction("ListClubs");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditTeam(TeamViewModel teamVL)
+        {
+            Team teamDAL;
+            if(teamVL != null)
+            {
+                teamDAL = new TeamToView().ConvertBack(teamVL);
+                new TeamCrud(_db).Update(teamDAL);
+                return RedirectToAction("ListTeams", new { clubId = teamVL.ClubId});
+            }
+
+            return RedirectToAction("ListClubs");
+        }
+
+        public IActionResult DeleteTeam(int teamId)
+        {
+            var teamDAL = new TeamCrud(_db).Get(teamId);
+
+            if (teamDAL != null
+                && !new TeamCrud(_db).GetHomeGames(teamId).Any()
+                && !new TeamCrud(_db).GetVisitorGames(teamId).Any()
+                && !new TeamCrud(_db).GetVideos(teamId).Any()
+                && !new TeamCrud(_db).GetAlbums(teamId).Any()
+                && !new TeamCrud(_db).GetNews(teamId).Any()
+                && !new TeamCrud(_db).GetPlayers(teamId).Any()) 
+            {
+                FileTools.RemoveTeamLogo(teamDAL);
+                new TeamCrud(_db).Delete(teamDAL);
+                return RedirectToAction("ListTeams", new { clubId = teamDAL.ClubId });
+            }
+            return RedirectToAction("ListClubs");
+        }
+       
 
         #endregion
 
-#region Staff
+        #region Staff
 
         public IActionResult ListStaffs(int clubId) 
         {
@@ -833,12 +927,9 @@ namespace BaseballUa.Controllers
                 {
                     ViewBag.News = new NewsToView().Convert(newsDAL);
                 }
-                else
-                {
-                    ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
-                }
             }
 
+            ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
             ViewBag.CategorySL = new CategoriesCrud(_db).GetSelectItemList();
             ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList();
             ViewBag.GamesSL = new GamesCrud(_db).GetSelectItemList();

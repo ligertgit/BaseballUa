@@ -25,7 +25,8 @@ namespace BaseballUa.BlData
 
         public void Delete(Team item)
         {
-            throw new NotImplementedException();
+            _dbContext.Teams.Remove(item);
+            _dbContext.SaveChanges();
         }
 
         public Team Get(int itemId)
@@ -105,6 +106,26 @@ namespace BaseballUa.BlData
                                    .Where(g => (g.StartDate > DateTime.Now.AddMonths(-10) && g.StartDate < DateTime.Now.AddMonths(10)))
                                    .Include(g => g.HomeTeam)
                                    .Include(g => g.VisitorTeam);
+        }
+
+        public IEnumerable<Video> GetVideos(int teamId)
+        {
+            return _dbContext.Videos.Where(v => v.TeamId == teamId);
+        }
+
+        public IEnumerable<News> GetNews(int teamId) 
+        { 
+            return _dbContext.News.Where(n => n.TeamId == teamId);
+        }
+
+        public IEnumerable<Album> GetAlbums(int teamId) 
+        { 
+            return _dbContext.Albums.Where(a => a.TeamId == teamId);
+        }
+
+        public IEnumerable<Player> GetPlayers(int teamId) 
+        {
+            return _dbContext.Players.Where(p => p.TeamId == teamId);
         }
 
         //public TeamFullDetail GetFullDetails(int teamId)
@@ -227,7 +248,8 @@ namespace BaseballUa.BlData
 
         public void Update(Team item)
         {
-            throw new NotImplementedException();
+            _dbContext.Teams.Update(item);
+            _dbContext.SaveChanges();
         }
 
         //public IEnumerable<TeamWithClubCountry> GetAllWithClubCountry()
