@@ -20,7 +20,8 @@ namespace BaseballUa.BlData
 
         public void Delete(Player item)
         {
-            throw new NotImplementedException();
+            _dbContext.Players.Remove(item);
+            _dbContext.SaveChanges();
         }
 
         public Player Get(int itemId)
@@ -40,7 +41,8 @@ namespace BaseballUa.BlData
 
         public void Update(Player item)
         {
-            throw new NotImplementedException();
+            _dbContext.Players.Update(item);
+            _dbContext.SaveChanges();
         }
     }
 }

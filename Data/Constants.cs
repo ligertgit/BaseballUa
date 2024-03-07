@@ -90,7 +90,10 @@ namespace BaseballUa.Data
         public const int BigAvatarHeight = 200;
         public const int SmallAvatarHeight = 80;
         public const string StaffBaseDir = "wwwroot\\images\\staff\\";
+        public const string PlayerBaseDir = "wwwroot\\images\\player\\";
         public const string BigStaffSubDir = "avatarBig";
+        public const string BigPlayerSubDir = "avatarBig";
         public const string SmallStaffSubDir = "avatarSmall";
+        public const string SmallPlayerSubDir = "avatarSmall";
     }
 }

@@ -198,6 +198,14 @@ namespace BaseballUa.Data
                     bigImageSubDir = Constants.BigTeamSubDir;
                     smallImageSubDir = Constants.SmallTeamSubDir;
                     break;
+                case ImageType.Player:
+                    maxImageRatio = Constants.MaxIconRatio;
+                    bigImageHeight = Constants.BigIconHeight;
+                    smallImageHeight = Constants.SmallIconHeight;
+                    imageBaseDir = Constants.PlayerBaseDir;
+                    bigImageSubDir = Constants.BigPlayerSubDir;
+                    smallImageSubDir = Constants.SmallPlayerSubDir;
+                    break;
                 default:
                     maxImageRatio = Constants.MaxImageRatio;
                     bigImageHeight = Constants.BigImageHeight;
@@ -353,6 +361,28 @@ namespace BaseballUa.Data
             {
                 var bigLogo = Path.Combine(Constants.TeamBaseDir, Constants.BigTeamSubDir, team.FnameLogoBig);
                 var smallLogo = Path.Combine(Constants.TeamBaseDir, Constants.SmallTeamSubDir, team.FnameLogoSmall);
+
+                if (File.Exists(bigLogo))
+                {
+                    File.Delete(bigLogo);
+                }
+                if (File.Exists(smallLogo))
+                {
+                    File.Delete(smallLogo);
+                }
+            }
+        }
+
+        public static void RemovePlayerAvatar(Player player)
+        {
+            if (player != null
+                && player.AvatarBig != null
+                && player.AvatarSmall != null
+                && player.AvatarSmall != Constants.DefaultPlayerSmallImage
+                && player.AvatarBig != Constants.DefaultTeamSmallImage)
+            {
+                var bigLogo = Path.Combine(Constants.PlayerBaseDir, Constants.BigPlayerSubDir, player.AvatarBig);
+                var smallLogo = Path.Combine(Constants.PlayerBaseDir, Constants.SmallPlayerSubDir, player.AvatarSmall);
 
                 if (File.Exists(bigLogo))
                 {

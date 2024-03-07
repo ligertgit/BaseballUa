@@ -1,0 +1,49 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.PlayerViewModel
+
+@{
+    ViewData["Title"] = "Update player avatar";
+}
+
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
+<h1>Поновити аватар гравця</h1>
+
+<hr />
+<div class="row">
+    @if(Model != null)
+    {
+        <div class="col-md-4">
+            <div>
+                <label>@Model.FirstName</label>
+            </div>
+            <div>
+                <label>@Model.SecondName</label>
+            </div>
+            <div>
+                <img src="~/images/player/avatarBig/@Model.AvatarBig" />
+            </div>
+        </div>
+        <div class="col-md-4">
+            <form asp-action="UpdatePlayerAvatar"
+            method="post"
+            enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(p => p.Id)
+                <input type="file" name="formFiles" />
+                <div class="form-group">
+                    <input type="submit" value="Поновити" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    }
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

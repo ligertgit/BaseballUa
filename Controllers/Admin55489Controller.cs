@@ -863,16 +863,75 @@ namespace BaseballUa.Controllers
             if (ModelState.IsValid)
             {
                 var playerDAL = new PlayerToView().ConvertBack(playerVL);
+                playerDAL.AvatarSmall = Constants.DefaultPlayerSmallImage;
+                playerDAL.AvatarBig = Constants.DefaultPlayerBigImage;
                 new PlayersCrud(_db).Add(playerDAL);
             }
 
             return RedirectToAction("ListPlayers", new { teamId = playerVL.TeamId });
         }
 
+        public IActionResult DeletePlayer(int playerId)
+        {
+            var playerDAL = new PlayersCrud(_db).Get(playerId);
+            if (playerDAL != null)
+            {
+                new PlayersCrud(_db).Delete(playerDAL);
+                FileTools.RemovePlayerAvatar(playerDAL);
+                return RedirectToAction("ListPlayers", new { teamId = playerDAL.TeamId });
+            }
 
-		#endregion
+            return RedirectToAction("ListClubs");
+        }
 
-#region News
+        public IActionResult UpdatePlayerAvatar(int playerId)
+        {
+            var playerDAL = new PlayersCrud(_db).Get(playerId);
+            if(playerDAL != null)
+            {
+                var playerVL = new PlayerToView().Convert(playerDAL);
+                return View(playerVL);
+            }
+
+            return RedirectToAction("ListClubs");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdatePlayerAvatar(IFormCollection fc)
+        {
+            int playerId;
+            if(fc != null
+                && fc.ContainsKey("Id")
+                && Int32.TryParse(fc["Id"], out playerId)
+                && fc.Files != null
+                && fc.Files.Count == 1)
+            {
+                var playerDAL = new PlayersCrud(_db).Get(playerId);
+                if(playerDAL != null)
+                {
+                    var newFileName = playerDAL.AvatarBig == Constants.DefaultPlayerBigImage ?
+                                                            Path.ChangeExtension(Path.GetRandomFileName(), ".jpg")
+                                                            : playerDAL.AvatarBig;
+                    var checkedFile = FileTools.GetValidated(fc.Files.ToList(), isIcon: true).FirstOrDefault();
+
+                    if (checkedFile != null
+                        && await FileTools.ResizeAndSave(checkedFile, 0, _rootPath, newFileName, ImageType.Player)
+                        && playerDAL.AvatarBig == Constants.DefaultPlayerBigImage)
+                    {
+                        playerDAL.AvatarBig = newFileName;
+                        playerDAL.AvatarSmall = newFileName;
+                        new PlayersCrud(_db).Update(playerDAL);
+                    }
+                    return RedirectToAction("ListPlayers", new { teamId = playerDAL.TeamId });
+                }
+            }
+            return RedirectToAction("ListClubs");
+        }
+
+        #endregion
+
+        #region News
         public IActionResult ListVideos(SportType? sportType,
                                         bool? isGeneral,
                                         int? newsId,
