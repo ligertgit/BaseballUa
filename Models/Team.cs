@@ -36,5 +36,6 @@ namespace BaseballUa.Models
         public ICollection<Album>? Albums { get; set; }
         //[NotMapped]
         public ICollection<Video>? Videos { get; set; }
+        public ICollection<EventToTeams>? EventToTeams { get; set; } = null!;
     }
 }

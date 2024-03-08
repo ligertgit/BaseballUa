@@ -80,10 +80,10 @@ namespace BaseballUa.DTO
             var selectListItems = (from teams in teamsWithClubCountry
                                    select new SelectListItem
                                    {
-                                        Text = $"{teams.Name} | {teams.Club.Name} | {teams.Club.Country.Name}",
+                                        Text = $"{teams.Club.Country.Name} | {teams.Club.Name} | {teams.Name} ({teams.SportType})",
                                         Value = teams.Id.ToString()
                                    }
-                                   );
+                                   ).OrderBy(s => s.Text);
 
             return selectListItems.ToList();
         }

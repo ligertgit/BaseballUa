@@ -47,6 +47,7 @@ namespace BaseballUa.BlData
             return _dbContext.Teams.Include(t => t.Club)
                                             .ThenInclude(c => c.Country);
         }
+
         public IEnumerable<Team> GetAll(int clubId = 0)
         {
             if (clubId == 0)

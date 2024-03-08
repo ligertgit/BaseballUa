@@ -68,6 +68,8 @@ namespace BaseballUa.DTO
             //                                        Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",
             //                                        Value = a.Id.ToString()
             //                                    });
+            eventView.EventTeamsIds = null;
+            eventView.EventTeamsSL = null;
             return eventView;
         }
 

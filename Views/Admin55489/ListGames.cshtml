@@ -74,9 +74,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <a asp-action="EditGame" asp-route-gameId="@item.GameViewModelId">
                     @Html.DisplayFor(modelItem => item.Name)
-                </a>
             </td>
             <td>
                     @Html.DisplayFor(modelItem => item.StartDate)
@@ -122,6 +120,9 @@
                         if (item.HomeTeam != null)
                         {
                             <img src="~/images/team/logosmall/@item.HomeTeam.FnameLogoSmall" />
+                            <div>
+                                <label>@item.HomeTeam.Name</label>
+                            </div>
                         }
                         else
                         {
@@ -136,6 +137,9 @@
                         if(item.VisitorTeam != null)
                         {
                             <img src="~/images/team/logoSmall/@item.VisitorTeam.FnameLogoSmall" />
+                            <div>
+                                <label>@item.VisitorTeam.Name</label>
+                            </div>
                         }
                         else
                         {
@@ -145,6 +149,8 @@
                     
             </td>
             <td>
+                <a class="btn btn-warning" asp-action="EditGame" asp-route-gameId="@item.GameViewModelId">Редагувати</a>
+                <a class="btn btn-primary" asp-action="ListGameResources" asp-route-gameId="@item.GameViewModelId">Альбоми Відео</a>
                @* <a asp-action="Edit" asp-route-id="@item.GameViewModelId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.GameViewModelId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.GameViewModelId">Delete</a>*@

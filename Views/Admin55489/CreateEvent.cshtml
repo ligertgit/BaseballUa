@@ -13,9 +13,16 @@
 <h1>Створити новий турнір</h1>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateEvent">
+
+<form asp-action="CreateEvent">
+    <div class="row">
+        <div class="col-4">
+            <label asp-for="EventTeamsSL"></label>
+            <div>
+                @Html.ListBoxFor(x => x.EventTeamsIds, Model.EventTeamsSL, new {size = 20});
+            </div>
+        </div>
+        <div class="col-4">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -33,16 +40,21 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-
-            @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.SelectTournament, "Value", "Text"), optionLabel: "--- оберіть ---")
-            @Html.ValidationMessageFor(x => x.TournamentId, "", new { @class = "text-danger" })
-
+            <div class="form-group">
+                <label asp-for="Tournament" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.SelectTournament, "Value", "Text"), optionLabel: "--- оберіть ---")
+                @Html.ValidationMessageFor(x => x.TournamentId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <div class="form-group">
                 <input type="submit" value="Створити" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
 <div>
     <a asp-action="ListEvents">Повернутися до списку</a>

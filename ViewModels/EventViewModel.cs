@@ -40,6 +40,10 @@ namespace BaseballUa.ViewModels
         public List<EventSchemaItemViewModel>? SchemaItems { get; set; }
 
         public List<NewsVM>? News { get; set;}
+
+        public List<int>? EventTeamsIds { get; set; }
+        [DisplayName("Список команд")]
+        public SelectList? EventTeamsSL { get; set; }
     }
 
 

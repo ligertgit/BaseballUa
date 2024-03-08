@@ -16,5 +16,6 @@ namespace BaseballUa.Models
         //[NotMapped]
         public ICollection<News>? News { get; set; }
         //public ICollection<EventSchemaItem> EventSchemaItems { get;} = new List<EventSchemaItem>();
+        public ICollection<EventToTeams>? EventToteams { get; set; } = null!;
     }
 }

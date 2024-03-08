@@ -28,6 +28,7 @@ namespace BaseballUa.Data
         public DbSet<NewsTitlePhoto> NewsTitlePhotos { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Video> Videos { get; set; }
+        public DbSet<EventToTeams> EventToTeams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -113,6 +114,19 @@ namespace BaseballUa.Data
 
             modelBuilder.Entity<Team>().Ignore(t => t.VisitorGames);
             modelBuilder.Entity<Team>().Ignore(t => t.HomeGames);
+
+            modelBuilder.Entity<EventToTeams>()
+                            .HasOne(et => et.Event)
+                            .WithMany(e => e.EventToteams)
+                            .HasForeignKey(et => et.EventId)
+                            .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<EventToTeams>()
+                            .HasOne(et => et.Team)
+                            .WithMany(t => t.EventToTeams)
+                            .HasForeignKey(et => et.TeamId)
+                            .OnDelete(DeleteBehavior.NoAction);
+
         }
 
         //public DbSet<BaseballUa.ViewModels.PlayerViewModel>? PlayerViewModel { get; set; }
