@@ -54,13 +54,9 @@ namespace BaseballUa.BlData
 
         public void Update(SchemaGroup item)
         {
-            throw new NotImplementedException();
+            _dbContext.SchemaGroups.Update(item);
+            _dbContext.SaveChanges();
         }
 
-        //public IEnumerable<SchemaGroup> GetAllForSchema(int eventSchemaItemId)
-        //{
-
-        //    return _dbContext.SchemaGroups.Where(s => s.EventSchemaItemId == eventSchemaItemId).Include(g => g.EventSchemaItem);
-        //}
     }
 }

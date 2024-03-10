@@ -286,46 +286,86 @@ namespace BaseballUa.Controllers
 
         #region EventSchema
 
-    public IActionResult AddSchemaItem(int eventId)
-    {
-        var eventSchemaItemVL = new EventSchemaItemToView().CreateEmpty(eventId);
-        return View(eventSchemaItemVL);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult AddSchemaItem(EventSchemaItemViewModel eventSchemaItemVL)
-    {
-        if (ModelState.IsValid)
-        { 
-            var eventSchemaItemDAL = new EventSchemaItemToView().ConvertBack(eventSchemaItemVL);
-            new EventSchemaItemsCrud(_db).Add(eventSchemaItemDAL);
-
+        public IActionResult AddSchemaItem(int eventId)
+        {
+            var eventSchemaItemVL = new EventSchemaItemToView().CreateEmpty(eventId);
+            return View(eventSchemaItemVL);
         }
-        return RedirectToAction("ListEvents");
-    }
 
-    public IActionResult ListSchemaItems(int eventId) 
-    { 
-        var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetAll(eventId);
-        //var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
-        var eventSchemaItemsVL = new EventSchemaItemToView().ConvertAll(eventSchemaItemsDAL.ToList());
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddSchemaItem(EventSchemaItemViewModel eventSchemaItemVL)
+        {
+            if (ModelState.IsValid)
+            { 
+                var eventSchemaItemDAL = new EventSchemaItemToView().ConvertBack(eventSchemaItemVL);
+                new EventSchemaItemsCrud(_db).Add(eventSchemaItemDAL);
 
-        var eventt = new EventsCrud(_db).Get(eventId);
-        ViewData["eventId"] = eventId;
-        //ViewData["tournamentName"] = new TournamentsCrud(_db).Get(eventt.TournamentId).Name;
-        ViewData["tournamentName"] = eventt.Tournament.Name;
+            }
+            return RedirectToAction("ListEvents");
+        }
 
-        return View(eventSchemaItemsVL);
-    }
+        public IActionResult ListSchemaItems(int eventId) 
+        { 
+            var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetAll(eventId);
+            //var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
+            var eventSchemaItemsVL = new EventSchemaItemToView().ConvertAll(eventSchemaItemsDAL.ToList());
 
-    //public IActionResult DetailsEventSchemaItem(int eventSchemaItemId)
-    //{
-    //    var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(eventSchemaItemId);
-    //    var eventSchemaItemVL = new EventSchemaItemToView(_db).Convert(eventSchemaItemDAL);
+            var eventt = new EventsCrud(_db).Get(eventId);
+            ViewData["eventId"] = eventId;
+            //ViewData["tournamentName"] = new TournamentsCrud(_db).Get(eventt.TournamentId).Name;
+            ViewData["tournamentName"] = eventt.Tournament.Name;
 
-    //    return View(eventSchemaItemVL);
-    //}
+            return View(eventSchemaItemsVL);
+        }
+
+        public IActionResult EditSchemaItem(int eventSchemaItemId)
+        {
+            var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(eventSchemaItemId);
+            if(eventSchemaItemDAL != null)
+            {
+                var eventSchemaItemVL = new EventSchemaItemToView().Convert(eventSchemaItemDAL);
+                var schemaItemSL = Enums.GameType.Group1.ToSelectList();
+                if(schemaItemSL.Any(s => s.Text == eventSchemaItemVL.SchemaItem.ToString()))
+                {
+                    schemaItemSL.First(s => s.Text == eventSchemaItemVL.SchemaItem.ToString()).Selected = true;
+                    ViewBag.SchemaItemSL = schemaItemSL;
+                }
+                return View(eventSchemaItemVL);
+            }
+
+            return RedirectToAction("ListEvents");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditSchemaItem(EventSchemaItemViewModel eventSchemaItem)
+        {
+            if(ModelState.IsValid)
+            {
+                var eventSchemaItemDAL = new EventSchemaItemToView().ConvertBack(eventSchemaItem);
+                new EventSchemaItemsCrud(_db).Update(eventSchemaItemDAL);
+                return RedirectToAction("ListSchemaItems", new { eventId = eventSchemaItemDAL.EventId });
+            }
+
+            return RedirectToAction("ListEvents");
+        }
+
+        public IActionResult DeleteSchemaItem(int eventSchemaItemId)
+        {
+            var schemaItemDAL = new EventSchemaItemsCrud(_db).Get(eventSchemaItemId);
+            if(schemaItemDAL != null)
+            {
+                var eventGames = new EventSchemaItemsCrud(_db).GetGames(eventSchemaItemId);
+                if(eventGames.IsNullOrEmpty())
+                {
+                    new EventSchemaItemsCrud(_db).Delete(schemaItemDAL);
+                }
+                return RedirectToAction("ListSchemaItems", new { eventId = schemaItemDAL.EventId });
+            }
+
+            return RedirectToAction("ListEvents");
+        }
     #endregion
 
         #region EventSchemaGroups
@@ -382,6 +422,32 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListEvents");
         }
 
+        public IActionResult EditSchemaGroup(int schemaGroupId)
+        {
+            var schemaGroupDAL = new SchemaGroupCrud(_db).Get(schemaGroupId);
+            if(schemaGroupDAL != null)
+            {
+                var schemaGroupVL = new SchemaGroupToView().Convert(schemaGroupDAL);
+                return View(schemaGroupVL);
+            }
+
+            return RedirectToAction("ListEvents");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditSchemaGroup(SchemaGroupViewModel schemaGroupVL)
+        {
+            if(ModelState.IsValid)
+            {
+                var schemaGroupDAL = new SchemaGroupToView().ConvertBack(schemaGroupVL);
+                new SchemaGroupCrud(_db).Update(schemaGroupDAL);
+
+                return RedirectToAction("ListSchemaGroups", new { eventSchemaItemId = schemaGroupDAL.EventSchemaItemId });
+            }
+
+            return RedirectToAction("ListEvents");
+        }
         #endregion
 
         #region Games

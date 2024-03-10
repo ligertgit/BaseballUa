@@ -1,0 +1,53 @@
+﻿@using BaseballUa.Data;
+@model BaseballUa.ViewModels.EventSchemaItemViewModel
+
+@{
+    ViewData["Title"] = "Edit SchemaItem";
+}
+
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
+<h1>Edit SchemaItem</h1>
+
+<hr />
+
+@if (Model != null && ViewBag.SchemaItemSL != null)
+{
+    SelectList schemaItemSL = ViewBag.SchemaItemSl;
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditSchemaItem">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.EventSchemaItemViewModelId)
+                @Html.HiddenFor(m => m.EventId)
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Order" class="control-label"></label>
+                    <input asp-for="Order" class="form-control" />
+                    <span asp-validation-for="Order" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SchemaItem" class="control-label"></label>
+                    @Html.DropDownListFor(x => Model.SchemaItem, schemaItemSL, optionLabel: "--- оберіть ---")
+                    <span asp-validation-for="SchemaItem" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Прийняти" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="ListEvents">Back to List</a>
+    </div>
+}
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

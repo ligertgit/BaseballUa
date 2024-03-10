@@ -11,10 +11,9 @@
 </div>
 
 <h1>ListSchemaItems</h1>
-@ViewData["tournamentName"]
-@ViewData["eventId"]
+<h3>@ViewData["tournamentName"]</h3>
 <p>
-    <a asp-action="AddSchemaItem" asp-route-eventId="@ViewData["eventId"]">Додати блок до турніру</a>
+    <a class="btn btn-primary" asp-action="AddSchemaItem" asp-route-eventId="@ViewData["eventId"]">Додати блок до турніру</a>
 </p>
 <table class="table">
     <thead>
@@ -38,7 +37,15 @@
                 @Html.DisplayFor(modelItem => item.SchemaItem)
             </td>
             <td>
-                    <a asp-action="ListSchemaGroups" asp-route-eventSchemaItemId="@item.EventSchemaItemViewModelId">Подивитися групи</a>
+                <div class="m-1">
+                    <a class="btn btn-primary" asp-action="ListSchemaGroups" asp-route-eventSchemaItemId="@item.EventSchemaItemViewModelId">Подивитися групи</a>
+                </div>
+                <div class="m-1">
+                    <a class="btn btn-warning" asp-action="EditSchemaItem" asp-route-eventSchemaItemId="@item.EventSchemaItemViewModelId">Редагувати</a>
+                </div>
+                <div class="m-1">
+                    <a class="btn btn-danger" asp-action="DeleteSchemaItem" asp-route-eventSchemaItemId="@item.EventSchemaItemViewModelId">Видалити</a>
+                </div>
             </td>
         </tr>
 }

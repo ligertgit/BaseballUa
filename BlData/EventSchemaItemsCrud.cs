@@ -24,7 +24,8 @@ namespace BaseballUa.BlData
 
         public void Delete(EventSchemaItem item)
         {
-            throw new NotImplementedException();
+            _dbContext.EventSchemaItems.Remove(item);
+            _dbContext.SaveChanges();
         }
 
         public EventSchemaItem Get(int itemId)
@@ -69,74 +70,11 @@ namespace BaseballUa.BlData
             return schemaItems;
         }
 
-
-        public IEnumerable<EventSchemaItem> GetAllWithGames(int eventId)
+        public IEnumerable<Game> GetGames(int schemaItemId)
         {
-            
-            //var schemaItems = _dbContext.EventSchemaItems.Where(s => s.EventId == eventId)
-            //                            .Include(i => i.SchemaGroups)
-            //                                .ThenInclude(g => g.Games)
-            //                                    .ThenInclude(g => g.HomeTeam)
-            //                            .Include(i => i.SchemaGroups)
-            //                                .ThenInclude(g => g.Games)
-            //                                    .ThenInclude(g => g.VisitorTeam);
-
-            var temp3 = (from esi in _dbContext.EventSchemaItems
-                         where esi.EventId == eventId
-                         join sg in _dbContext.SchemaGroups on esi.Id equals sg.EventSchemaItemId into gsg
-                         from subsg in gsg.DefaultIfEmpty()
-                         join game in _dbContext.Games on subsg.Id equals game.SchemaGroupId into ggame
-                         from subgame in ggame.DefaultIfEmpty()
-                         join hteam in _dbContext.Teams on subgame.HomeTeamId equals hteam.Id into ghteam
-                         from subhteam in ghteam.DefaultIfEmpty()
-                         join vteam in _dbContext.Teams on subgame.VisitorTeamId equals vteam.Id into gvteam
-                         from subvteam in gvteam.DefaultIfEmpty()
-                         select new
-                         {
-                             esi,subsg,subgame,subhteam,subvteam
-                         }
-                         );
-
-            var temp4 = temp3.GroupBy(i => i.esi)
-                            .Select(esi => new EventSchemaItem
-                            {
-                                Id = esi.Key.Id,
-                                Order = esi.Key.Order,
-                                EventId = esi.Key.EventId,
-                                SchemaItem = esi.Key.SchemaItem,
-                                SchemaGroups = esi.GroupBy(esg => esg.subsg )
-                                                .Select(esgs => new SchemaGroup
-                                                {
-                                                    Id = esgs.Key.Id,
-                                                    GroupName = esgs.Key.GroupName,
-                                                    EventSchemaItemId = esgs.Key.EventSchemaItemId,
-                                                    Games = esgs.Select(game => new Game
-                                                    {
-                                                        Id = game.subgame.Id,
-                                                        Name = game.subgame.Name,
-                                                        StartDate = game.subgame.StartDate,
-                                                        AdditionalInfo = game.subgame.AdditionalInfo,
-                                                        RunsVisitor = game.subgame.RunsVisitor,
-                                                        RunsHome = game.subgame.RunsHome,
-                                                        PlacedAt = game.subgame.PlacedAt,
-                                                        HalfinningsPlayed = game.subgame.HalfinningsPlayed,
-                                                        GameStatus = game.subgame.GameStatus,
-                                                        PointsVisitor = game.subgame.PointsVisitor,
-                                                        PointsHome = game.subgame.PointsHome,
-                                                        Tour = game.subgame.Tour,
-                                                        ConditionVisitor = game.subgame.ConditionVisitor,
-                                                        ConditionHome = game.subgame.ConditionHome,
-                                                        SchemaGroupId = game.subgame.SchemaGroupId,
-                                                        HomeTeamId = game.subgame.HomeTeamId,
-                                                        VisitorTeamId = game.subgame.VisitorTeamId,
-                                                        HomeTeam = game.subhteam,
-                                                        VisitorTeam = game.subvteam
-                                                    }).ToList()
-                                                }).ToList()
-                            });
-            
-            return temp4;
+            return _dbContext.SchemaGroups.Where(sg => sg.EventSchemaItemId == schemaItemId).Include(sg => sg.Games).SelectMany(sg => sg.Games);
         }
+        
 
     }
 }

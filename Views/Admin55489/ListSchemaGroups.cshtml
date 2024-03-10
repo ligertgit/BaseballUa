@@ -31,7 +31,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+    @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.GroupName)
@@ -40,14 +40,17 @@
                 @Html.DisplayFor(modelItem => item.EventSchemaItemId)
             </td>
             <td>
-                <div>
+                <div class="m-1">
                     <a class="btn btn-primary" asp-action="ListGames" asp-route-schemaGroupId="@item.Id">Ігри в групі</a>
                 </div>
-                <div>
+                <div class="m-1">
+                    <a class="btn btn-warning" asp-action="EditSchemaGroup" asp-route-schemaGroupId="@item.Id">Редагвати</a>
+                </div>
+                <div class="m-1">
                     <a class="btn btn-danger" asp-action="DeleteSchemaGroup" asp-route-schemaGroupId="@item.Id">Видалити</a>
                 </div>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
