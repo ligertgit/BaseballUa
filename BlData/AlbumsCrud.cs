@@ -446,5 +446,11 @@ namespace BaseballUa.BlData
             _dbContext.SaveChanges();
         }
 
+        public void UnlinkFromGames(int gameId)
+        {
+            var albums = _dbContext.Albums.Where(a => a.GameId == gameId).ToList();
+            albums.ForEach(v => v.GameId = null);
+            _dbContext.SaveChanges();
+        }
     }
 }

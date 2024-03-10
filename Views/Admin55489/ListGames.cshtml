@@ -14,7 +14,7 @@
 <h1>Список ігор для блока @ViewData["schemaGroupId"]</h1>
 
 <p>
-    <a asp-action="AddGame" asp-route-schemaGroupId="@ViewData["schemaGroupId"]">Додати нову ігру до цього блока турніру</a>
+    <a class="btn btn-primary" asp-action="AddGame" asp-route-schemaGroupId="@ViewData["schemaGroupId"]">Додати нову ігру до цього блока турніру</a>
 </p>
 <table class="table">
     <thead>
@@ -149,8 +149,18 @@
                     
             </td>
             <td>
-                <a class="btn btn-warning" asp-action="EditGame" asp-route-gameId="@item.GameViewModelId">Редагувати</a>
-                <a class="btn btn-primary" asp-action="ListGameResources" asp-route-gameId="@item.GameViewModelId">Альбоми Відео</a>
+                <div>
+                    <a class="btn btn-primary m-1" asp-action="ListAlbums" asp-route-gameId="@item.GameViewModelId">Альбоми</a>
+                </div>
+                <div>
+                    <a class="btn btn-primary m-1" asp-action="ListVideos" asp-route-gameId="@item.GameViewModelId">Відео</a>
+                </div>
+                <div>
+                    <a class="btn btn-warning m-1" asp-action="EditGame" asp-route-gameId="@item.GameViewModelId">Редагувати</a>
+                </div>
+                <div>
+                    <a class="btn btn-danger m-1" asp-action="DeleteGame" asp-route-gameId="@item.GameViewModelId">Видалити</a>
+                </div>
                @* <a asp-action="Edit" asp-route-id="@item.GameViewModelId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.GameViewModelId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.GameViewModelId">Delete</a>*@

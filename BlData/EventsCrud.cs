@@ -34,6 +34,7 @@ namespace BaseballUa.BlData
         public Event Get(int itemId)
         {
             var eventItem = _dbContext.Events.Where(e => e.Id == itemId)
+                                                .OrderByDescending(e => e.Id)
                                                 .Include(e => e.Tournament)
                                                     .ThenInclude(t => t.Category)
                                                 //.Include(e => e.News)
@@ -46,7 +47,7 @@ namespace BaseballUa.BlData
 
         public IEnumerable<Event> GetAll()
         {
-            var eventItem = _dbContext.Events;
+            var eventItem = _dbContext.Events.OrderByDescending(e => e.Id).Include(e => e.Tournament).ThenInclude(t => t.Category);
             //throw new NotImplementedException();
             //return _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category);
             return eventItem;

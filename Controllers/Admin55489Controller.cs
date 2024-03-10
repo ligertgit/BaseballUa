@@ -38,7 +38,7 @@ namespace BaseballUa.Controllers
         {
             return View();
         }
-#region Category
+        #region Category
 
 
         public IActionResult ListCategories() 
@@ -91,7 +91,7 @@ namespace BaseballUa.Controllers
         }
 #endregion
 
-#region Tournaments
+        #region Tournaments
         public IActionResult ListTournaments()
         {
             var tournamentsDTO = new TournamentsCrud(_db).GetAll().ToList();
@@ -145,7 +145,7 @@ namespace BaseballUa.Controllers
         }
 #endregion
 
-#region Events
+        #region Events
         public IActionResult ListEvents()
         { 
             var eventsDAL = new EventsCrud(_db).GetAll();
@@ -217,51 +217,118 @@ namespace BaseballUa.Controllers
         }
         #endregion
 
-#region EventSchema
-
-        public IActionResult AddSchemaItem(int eventId)
+        #region EventTeams
+        public IActionResult ListEventTeams(int eventId)
         {
-            var eventSchemaItemVL = new EventSchemaItemToView().CreateEmpty(eventId);
-            return View(eventSchemaItemVL);
+            var eventTeamsDAL = new TeamCrud(_db).GetEventToTeam(eventId).ToList();
+            var eventTeamsVL = new TeamToView().ConvertAll(eventTeamsDAL);
+            ViewBag.EventId = eventId;
+
+            return View(eventTeamsVL);
+        }
+
+        public IActionResult AddEventTeam(int eventId)
+        {
+            var eventDAL = new EventsCrud(_db).Get(eventId);
+            var eventVL = new EventViewModel();
+            if (eventDAL.Id > 0)
+            {
+                eventVL = new EventToView().Convert(eventDAL);
+                var teamsList = new TeamCrud(_db).GetAll().ToList();
+                eventVL.EventTeamsSL = new SelectList(new TeamToView().GetFullSelestList(teamsList), "Value", "Text");
+            }
+            
+            return View(eventVL);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddSchemaItem(EventSchemaItemViewModel eventSchemaItemVL)
+        public IActionResult AddEventTeam(IFormCollection fc)
         {
-            if (ModelState.IsValid)
-            { 
-                var eventSchemaItemDAL = new EventSchemaItemToView().ConvertBack(eventSchemaItemVL);
-                new EventSchemaItemsCrud(_db).Add(eventSchemaItemDAL);
-
+            int eventId;
+            var eventTeamIdsList = new List<int>();
+            if(fc != null 
+                && fc.ContainsKey("EventViewModelId")
+                && Int32.TryParse(fc["EventViewModelId"], out eventId)
+                && fc.ContainsKey("EventTeamsIds")
+                && fc["EventTeamsIds"].Count > 0)
+            {
+                foreach(var eventTeamId in fc["EventTeamsIds"])
+                {
+                    int i;
+                    if(Int32.TryParse(eventTeamId, out i) && i > 0)
+                    {
+                        eventTeamIdsList.Add(i);
+                    }
+                }
+                var eventTeamIdsListDB = new EventToTeamsCrud(_db).GetForEvent(eventId).Select(ett => ett.TeamId).ToList();
+                var cleanedTeamList = eventTeamIdsList.Except(eventTeamIdsListDB);
+                foreach(var  teamId in cleanedTeamList)
+                {
+                    new EventToTeamsCrud(_db).Add(eventId, teamId);
+                }
+                return RedirectToAction("ListEventTeams", new { eventId = eventId });
             }
             return RedirectToAction("ListEvents");
         }
 
-        public IActionResult ListSchemaItems(int eventId) 
-        { 
-            var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetAll(eventId);
-            //var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
-            var eventSchemaItemsVL = new EventSchemaItemToView().ConvertAll(eventSchemaItemsDAL.ToList());
+        public IActionResult DeleteEventTeam(int teamId, int eventId)
+        {
+            if(teamId > 0 && eventId > 0)
+            {
+                new EventToTeamsCrud(_db).Delete(eventId, teamId);
+                return RedirectToAction("ListEventTeams", new { eventId = eventId });
+            }
 
-            var eventt = new EventsCrud(_db).Get(eventId);
-            ViewData["eventId"] = eventId;
-            //ViewData["tournamentName"] = new TournamentsCrud(_db).Get(eventt.TournamentId).Name;
-            ViewData["tournamentName"] = eventt.Tournament.Name;
-
-            return View(eventSchemaItemsVL);
+            return RedirectToAction("ListEvents");
         }
+#endregion
 
-        //public IActionResult DetailsEventSchemaItem(int eventSchemaItemId)
-        //{
-        //    var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(eventSchemaItemId);
-        //    var eventSchemaItemVL = new EventSchemaItemToView(_db).Convert(eventSchemaItemDAL);
+        #region EventSchema
 
-        //    return View(eventSchemaItemVL);
-        //}
-        #endregion
+    public IActionResult AddSchemaItem(int eventId)
+    {
+        var eventSchemaItemVL = new EventSchemaItemToView().CreateEmpty(eventId);
+        return View(eventSchemaItemVL);
+    }
 
-#region EventSchemaGroups
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult AddSchemaItem(EventSchemaItemViewModel eventSchemaItemVL)
+    {
+        if (ModelState.IsValid)
+        { 
+            var eventSchemaItemDAL = new EventSchemaItemToView().ConvertBack(eventSchemaItemVL);
+            new EventSchemaItemsCrud(_db).Add(eventSchemaItemDAL);
+
+        }
+        return RedirectToAction("ListEvents");
+    }
+
+    public IActionResult ListSchemaItems(int eventId) 
+    { 
+        var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetAll(eventId);
+        //var eventSchemaItemsDAL = new EventSchemaItemsCrud(_db).GetEventSchemaItems(eventId);
+        var eventSchemaItemsVL = new EventSchemaItemToView().ConvertAll(eventSchemaItemsDAL.ToList());
+
+        var eventt = new EventsCrud(_db).Get(eventId);
+        ViewData["eventId"] = eventId;
+        //ViewData["tournamentName"] = new TournamentsCrud(_db).Get(eventt.TournamentId).Name;
+        ViewData["tournamentName"] = eventt.Tournament.Name;
+
+        return View(eventSchemaItemsVL);
+    }
+
+    //public IActionResult DetailsEventSchemaItem(int eventSchemaItemId)
+    //{
+    //    var eventSchemaItemDAL = new EventSchemaItemsCrud(_db).Get(eventSchemaItemId);
+    //    var eventSchemaItemVL = new EventSchemaItemToView(_db).Convert(eventSchemaItemDAL);
+
+    //    return View(eventSchemaItemVL);
+    //}
+    #endregion
+
+        #region EventSchemaGroups
         public IActionResult ListSchemaGroups(int EventSchemaItemId)
         {
             var groupsDAL = new SchemaGroupCrud(_db).GetAll(EventSchemaItemId).ToList();
@@ -301,7 +368,7 @@ namespace BaseballUa.Controllers
 
         #endregion
 
-#region Games
+        #region Games
 
         public IActionResult ListGames(int schemaGroupId)
         {
@@ -319,12 +386,16 @@ namespace BaseballUa.Controllers
         public IActionResult AddGame(int schemaGroupId)
         {
             var gameView = new GameToView().CreateEmpty(schemaGroupId);
-            var teamsWithClubCountry = new TeamCrud(_db).GetAll().ToList();
+            var eventId = new SchemaGroupCrud(_db).Get(schemaGroupId)?.EventSchemaItem?.EventId;
+            if(eventId != null)
+            {
+                var teamsWithClubCountry = new TeamCrud(_db).GetEventToTeam((int)eventId).ToList();
+                ViewBag.teamsList = new TeamToView().GetFullSelestList(teamsWithClubCountry);
+                return View(gameView);
+            }
             //var teamsWithClubCountry = new TeamCrud(_db).GetAllWithClubCountry().ToList();
 
-            ViewBag.teamsList = new TeamToView().GetFullSelestList(teamsWithClubCountry);
-
-            return View(gameView);
+            return RedirectToAction("ListEvents");
         }
        
 
@@ -351,43 +422,35 @@ namespace BaseballUa.Controllers
                 {
                     editGameVL.Game = new GameToView().Convert(gameDAL);
 
-                    var teamsWithClubCountry = new TeamCrud(_db).GetAll().ToList();
-                    editGameVL.HomeTeamSL = new SelectList(new TeamToView().GetFullSelestList(teamsWithClubCountry), "Value", "Text");
-                    if (editGameVL.HomeTeamSL != null && editGameVL.HomeTeamSL.FirstOrDefault(i => i.Value == editGameVL.Game.HomeTeamId.ToString()) != null)
+                    var eventId = new SchemaGroupCrud(_db).Get(gameDAL.SchemaGroupId)?.EventSchemaItem?.EventId;
+                    if (eventId != null)
                     {
-                        editGameVL.HomeTeamSL.First(i => i.Value == editGameVL.Game.HomeTeamId.ToString()).Selected = true;
-                    }
+                        var teamsWithClubCountry = new TeamCrud(_db).GetEventToTeam((int)eventId).ToList();
+                        editGameVL.HomeTeamSL = new SelectList(new TeamToView().GetFullSelestList(teamsWithClubCountry), "Value", "Text", editGameVL.Game?.HomeTeam?.Id.ToString());
+                        editGameVL.VisitorTeamSL = new SelectList(new TeamToView().GetFullSelestList(teamsWithClubCountry), "Value", "Text", editGameVL.Game?.VisitorTeam?.Id.ToString());
+                        
+                        editGameVL.TourSL = Enums.TourNumber.Tour1.ToSelectList();
+                        if (editGameVL.TourSL != null && editGameVL.TourSL.FirstOrDefault(i => i.Text == editGameVL.Game?.Tour.ToString()) != null)
+                        {
+                            editGameVL.TourSL.First(i => i.Text == editGameVL.Game.Tour.ToString()).Selected = true;
+                        }
 
-                    editGameVL.VisitorTeamSL = new SelectList(new TeamToView().GetFullSelestList(teamsWithClubCountry), "Value", "Text");
-                    if (editGameVL.VisitorTeamSL.FirstOrDefault(i => i.Value == editGameVL.Game.VisitorTeamId.ToString()) != null)
-                    {
-                        editGameVL.VisitorTeamSL.First(i => i.Value == editGameVL.Game.VisitorTeamId.ToString()).Selected = true;
-                    }
+                        editGameVL.StatusSL = Enums.GameStatus.Canceled.ToSelectList();
+                        if (editGameVL.StatusSL != null && editGameVL.StatusSL.FirstOrDefault(i => i.Text == editGameVL.Game.GameStatus.ToString()) != null)
+                        {
+                            editGameVL.StatusSL.First(i => i.Text == editGameVL.Game.GameStatus.ToString()).Selected = true;
+                        }
 
-                    editGameVL.TourSL = Enums.TourNumber.Tour1.ToSelectList();
-                    if (editGameVL.TourSL != null && editGameVL.TourSL.FirstOrDefault(i => i.Text == editGameVL.Game.Tour.ToString()) != null)
-                    {
-                        editGameVL.TourSL.First(i => i.Text == editGameVL.Game.Tour.ToString()).Selected = true;
-                    }
+                        ViewBag.homeTeamsList = editGameVL.HomeTeamSL;
+                        ViewBag.visitorTeamsList = editGameVL.VisitorTeamSL;
+                        ViewBag.StatusList = editGameVL.StatusSL;
+                        ViewBag.TourList = editGameVL.TourSL;
 
-                    editGameVL.StatusSL = Enums.GameStatus.Canceled.ToSelectList();
-                    //var ttt = editGameVL.StatusSL.FirstOrDefault().Text;
-                    //var ttt2 = editGameVL.Game.GameStatus.ToString();
-                    if (editGameVL.StatusSL != null && editGameVL.StatusSL.FirstOrDefault(i => i.Text == editGameVL.Game.GameStatus.ToString()) != null)
-                    {
-                        editGameVL.StatusSL.First(i => i.Text == editGameVL.Game.GameStatus.ToString()).Selected = true;
-                        var ttt2 = editGameVL.StatusSL.First(i => i.Text == editGameVL.Game.GameStatus.ToString());
-                        var ttt = editGameVL.StatusSL;
+                        return View(editGameVL.Game);
                     }
                 }
             }
-
-            ViewBag.homeTeamsList = editGameVL.HomeTeamSL;
-            ViewBag.visitorTeamsList = editGameVL.VisitorTeamSL;
-            ViewBag.StatusList = editGameVL.StatusSL;
-            ViewBag.TourList = editGameVL.TourSL;
-
-            return View(editGameVL.Game);
+            return RedirectToAction("ListEvents");
         }
 
         [HttpPost]
@@ -403,9 +466,48 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListGames", new { schemaGroupId = gameVL.SchemaGroupId });
         }
 
+        public IActionResult DeleteGame(int gameId)
+        {
+            var gameDAL = new GamesCrud(_db).Get(gameId);
+            if(gameDAL != null)
+            {
+                new VideosCrud(_db).UnlinkFromGames(gameId);
+                new AlbumsCrud(_db).UnlinkFromGames(gameId);
+                new GamesCrud(_db).Delete(gameDAL);
+                return RedirectToAction("ListGames", new { schemaGroupId = gameDAL.SchemaGroupId });
+            }
+
+            return RedirectToAction("ListEvents");
+        }
+
+        public IActionResult DeleteGameAlbum(int albumId, int gameId)
+        {
+            var gameDAL = new GamesCrud(_db).Get(gameId);
+            var albumDAL = new AlbumsCrud(_db).Get(albumId);
+            if (gameDAL != null && albumDAL != null && albumDAL.GameId == gameId)
+            {
+                albumDAL.GameId = null;
+                new AlbumsCrud(_db).Update(albumDAL);
+            }
+
+            return RedirectToAction("ListAlbums", new { gameId = gameId });
+        }
+
+        public IActionResult DeleteGameVideo(int videoId, int gameId)
+        {
+            var gameDAL = new GamesCrud(_db).Get(gameId);
+            var videoDAL = new VideosCrud(_db).Get(videoId);
+            if (gameDAL != null && videoDAL != null && videoDAL.GameId == gameId)
+            {
+                videoDAL.GameId = null;
+                new VideosCrud(_db).Update(videoDAL);
+            }
+
+            return RedirectToAction("ListVideos", new { gameId = gameId });
+        }
         #endregion
 
-#region Country
+        #region Country
 
         public IActionResult ListCountries()
         {
@@ -512,7 +614,7 @@ namespace BaseballUa.Controllers
 
         #endregion
 
-#region Club
+        #region Club
         public IActionResult ListClubs()
         {
             var clubsDAL = new ClubCrud(_db).GetAll().ToList();
@@ -617,7 +719,7 @@ namespace BaseballUa.Controllers
 
         #endregion
 
-#region Team
+        #region Team
 
         public IActionResult ListTeams(int clubId) 
         { 
@@ -846,7 +948,7 @@ namespace BaseballUa.Controllers
         }
         #endregion
 
-#region Players
+        #region Players
         public IActionResult ListPlayers(int teamId)
         {
             var playersDAL = new PlayersCrud(_db).GetAll(teamId).ToList();
@@ -940,17 +1042,17 @@ namespace BaseballUa.Controllers
 
         #endregion
 
-        #region News
+        #region Videos
         public IActionResult ListVideos(SportType? sportType,
-                                        bool? isGeneral,
-                                        int? newsId,
-                                        int? categoryId,
-                                        int? teamId,
-                                        int? gameId,
-                                        DateTime? lastDate = null,
-                                        int? lastId = null,
-                                        int? skip = null
-                                        )
+                                      bool? isGeneral,
+                                      int? newsId,
+                                      int? categoryId,
+                                      int? teamId,
+                                      int? gameId,
+                                      DateTime? lastDate = null,
+                                      int? lastId = null,
+                                      int? skip = null
+                                      )
         {
 
             var count = 0;
@@ -988,10 +1090,10 @@ namespace BaseballUa.Controllers
         public IActionResult AddVideo(int? newsId)
         {
             var VideoVL = new VideoToView().CreateEmpty();
-            if(newsId != null)
+            if (newsId != null)
             {
                 var newsDAL = new NewsCrud(_db).Get((int)newsId);
-                if(newsDAL != null && newsDAL.Id == newsId)
+                if (newsDAL != null && newsDAL.Id == newsId)
                 {
                     ViewBag.News = new NewsToView().Convert(newsDAL);
                 }
@@ -1021,7 +1123,7 @@ namespace BaseballUa.Controllers
         public IActionResult DeleteVideo(int videoId)
         {
             var videoDAL = new VideosCrud(_db).Get(videoId);
-            if(videoDAL != null)
+            if (videoDAL != null)
             {
                 new VideosCrud(_db).Delete(videoDAL);
             }
@@ -1041,7 +1143,7 @@ namespace BaseballUa.Controllers
                 {
                     editVideo.Video = new VideoToView().Convert(videoDAL, false);
 
-                    if(editVideo.SportTypeSL != null && editVideo.SportTypeSL.FirstOrDefault(s => s.Text == editVideo.Video.SportType.ToString()) != null)
+                    if (editVideo.SportTypeSL != null && editVideo.SportTypeSL.FirstOrDefault(s => s.Text == editVideo.Video.SportType.ToString()) != null)
                     {
                         editVideo.SportTypeSL.FirstOrDefault(s => s.Text == editVideo.Video.SportType.ToString()).Selected = true;
                     }
@@ -1059,7 +1161,7 @@ namespace BaseballUa.Controllers
         [HttpPost]
         public IActionResult UpdateVideo(EditVideoVM editVideoVM)
         {
-            if(ModelState.IsValid && editVideoVM?.Video != null)
+            if (ModelState.IsValid && editVideoVM?.Video != null)
             {
                 var videoDAL = new VideoToView().ConvertBack(editVideoVM.Video);
                 new VideosCrud(_db).Update(videoDAL);
@@ -1067,19 +1169,9 @@ namespace BaseballUa.Controllers
 
             return RedirectToAction("ListVideos");
         }
+        #endregion
 
-        public IActionResult DeleteNewsVideo(int newsId, int videoId)
-        {
-            var videoDAL = new VideosCrud(_db).Get(videoId);
-            if(videoDAL != null && videoDAL.NewsId == newsId)
-            {
-                videoDAL.NewsId = null;
-                new VideosCrud(_db).Update(videoDAL);
-            }
-
-            return RedirectToAction("ListVideos", new { newsId = newsId });
-        }
-
+        #region Albums
         public IActionResult ListAlbums(SportType? sportType,
                                         bool? isGeneral,
                                         int? newsId,
@@ -1102,11 +1194,11 @@ namespace BaseballUa.Controllers
             var albumsDAL = new AlbumsCrud(_db).GetAllHard(out count, sportType, isGeneral, newsId, categoryId, teamId, gameId, lastDate, skipFixxed, amount).ToList();
             var albumsVL = new AlbumToView().ConvertAll(albumsDAL, false);
 
-            if(count > skipFixxed + amount)
+            if (count > skipFixxed + amount)
             {
                 ViewBag.SkipNext = skipFixxed + amount;
             }
-            if(skipFixxed > 0)
+            if (skipFixxed > 0)
             {
                 ViewBag.SkipPrev = skip - amount <= 0 ? 0 : skip - amount;
             }
@@ -1124,20 +1216,7 @@ namespace BaseballUa.Controllers
             return View(albumsVL);
         }
 
-        public IActionResult DeleteNewsAlbum(int albumId, int newsId)
-        {
-            var newsDAL = new NewsCrud(_db).Get(newsId);
-            var albumDAL = new AlbumsCrud(_db).Get(albumId);
-            if(newsDAL != null && albumDAL.NewsId != null && albumDAL.NewsId == newsId)
-            {
-                albumDAL.NewsId = null;
-                new AlbumsCrud(_db).Update(albumDAL);
-            }
-
-            return RedirectToAction("ListAlbums", new { newsId = newsId });
-        }
-
-        public IActionResult AddAlbum(int categoryId = 0, int newsId = 0, int teamId = 0, int gameId =0, SportType sportType = SportType.NotDefined)
+        public IActionResult AddAlbum(int categoryId = 0, int newsId = 0, int teamId = 0, int gameId = 0, SportType sportType = SportType.NotDefined)
         {
             var albumVL = new AlbumToView().CreateEmpty();
 
@@ -1150,9 +1229,6 @@ namespace BaseballUa.Controllers
             var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text");
             gameSL.SetSelected(gameId.ToString());
             var sportSL = Enums.SportType.NotDefined.ToSelectList();
-            var t1 = sportType;
-            var t2 = (int)sportType;
-            var t3 = Convert.ToInt32(sportType);
 
             sportSL.SetSelected(Convert.ToInt32(sportType).ToString());
 
@@ -1173,7 +1249,7 @@ namespace BaseballUa.Controllers
             {
                 var albumDL = new AlbumToView().ConvertBack(albumVL);
                 new AlbumsCrud(_db).Add(albumDL);
-                return RedirectToAction("AddPhoto", new { albumId = albumDL.Id});
+                return RedirectToAction("AddPhoto", new { albumId = albumDL.Id });
             }
 
             return RedirectToAction("ListAlbums");
@@ -1187,9 +1263,9 @@ namespace BaseballUa.Controllers
             var ttt3 = albumDAL.Photos.Where(p => !p.NewsTitlePhotos.IsNullOrEmpty());
             if (albumDAL != null && (albumDAL.Photos == null || !albumDAL.Photos.Any(p => !p.NewsTitlePhotos.IsNullOrEmpty())))
             {
-                if(albumDAL.Photos != null)
+                if (albumDAL.Photos != null)
                 {
-                    foreach(var photo in albumDAL.Photos)
+                    foreach (var photo in albumDAL.Photos)
                     {
                         FileTools.RemoveAlbumPhoto(photo);
                         //new PhotosCrud(_db).Delete(photo);
@@ -1212,35 +1288,12 @@ namespace BaseballUa.Controllers
         public IActionResult RemoveAlbumPhoto(int albumId, int id)
         {
             var photoDAL = new PhotosCrud(_db).Get(id);
-            if(photoDAL != null && photoDAL.NewsTitlePhotos != null && photoDAL.NewsTitlePhotos.Count == 0 && photoDAL.AlbumId == albumId)
+            if (photoDAL != null && photoDAL.NewsTitlePhotos != null && photoDAL.NewsTitlePhotos.Count == 0 && photoDAL.AlbumId == albumId)
             {
                 FileTools.RemoveAlbumPhoto(photoDAL);
                 new PhotosCrud(_db).Delete(photoDAL);
             }
             return RedirectToAction("ListPhotos", new { albumId = albumId });
-        }
-
-        public IActionResult ListTitlePhotos(int newsId)
-        {
-            var newsDAL = new NewsCrud(_db).Get(newsId);
-            var newsVL = new NewsToView().Convert(newsDAL);
-
-            return View(newsVL);
-        }
-
-        public IActionResult DeleteTPAlbum(int newsId, int tPId)
-        {
-            var newsDAL = new NewsCrud(_db).Get(newsId);
-            if (newsDAL != null && newsDAL.NewsTitlePhotos != null)
-            {
-                var newsTitlePhoto = newsDAL.NewsTitlePhotos.FirstOrDefault(i => i.PhotoId == tPId);
-                if(newsTitlePhoto != null && newsTitlePhoto.PhotoId == tPId)
-                {
-                    new NewsTitlePhotosCrud(_db).Delete(newsTitlePhoto);
-                }
-            }
-
-            return RedirectToAction("ListTitlePhotos", new { newsId = newsId });
         }
 
         public IActionResult AddPhoto(int albumId)
@@ -1265,10 +1318,10 @@ namespace BaseballUa.Controllers
             int albumId;
             int successfulySaves = 0;
 
-            if (fc != null 
-               && fc.ContainsKey("AlbumId") 
-               && Int32.TryParse(fc["AlbumId"], out albumId) 
-               && fc.Files != null 
+            if (fc != null
+               && fc.ContainsKey("AlbumId")
+               && Int32.TryParse(fc["AlbumId"], out albumId)
+               && fc.Files != null
                && fc.Files.Count > 0)
             {
                 var album = new AlbumsCrud(_db).Get(albumId);
@@ -1302,16 +1355,16 @@ namespace BaseballUa.Controllers
         public IActionResult AddPhoto(IFormCollection fc)
         {
 
-            if(!fc.Keys.Contains("fnames") || !fc.Keys.Contains("albumId"))
+            if (!fc.Keys.Contains("fnames") || !fc.Keys.Contains("albumId"))
             {
                 return RedirectToAction("ListAlbums");
             }
             int albumId;
-            if(!Int32.TryParse(fc["albumId"].FirstOrDefault(), out albumId))
+            if (!Int32.TryParse(fc["albumId"].FirstOrDefault(), out albumId))
             {
                 return RedirectToAction("ListAlbums");
             }
-            if(albumId <=0)
+            if (albumId <= 0)
             {
                 return RedirectToAction("ListAlbums");
             }
@@ -1320,14 +1373,14 @@ namespace BaseballUa.Controllers
                 return RedirectToAction("ListAlbums");
             }
             var fileList = (fc["fnames"].FirstOrDefault()).Split("\r\n").ToList();
-            if(fileList.Count <= 0)
+            if (fileList.Count <= 0)
             {
                 return RedirectToAction("ListAlbums");
             }
 
-            foreach(var fileName in fileList)
+            foreach (var fileName in fileList)
             {
-                if(!fileName.IsNullOrEmpty())
+                if (!fileName.IsNullOrEmpty())
                 {
                     var photoDAL = new Photo();
                     photoDAL.AlbumId = albumId;
@@ -1343,6 +1396,97 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListAlbums");
         }
 
+        public IActionResult EditAlbum(int albumId)
+        {
+            var albumDAL = new AlbumsCrud(_db).Get(albumId);
+            var albumVL = new AlbumVM();
+            if(albumDAL != null)
+            {
+                albumVL = new AlbumToView().Convert(albumDAL, doSubConvert : false);
+                var categorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text", albumVL.CategoryId?.ToString());
+                var teamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly : true), "Value", "Text", albumVL.TeamId?.ToString());
+                var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text", albumVL.GameId?.ToString());
+                var newsSL = new SelectList(new NewsCrud(_db).GetSelectItemList(), "Value", "Text", albumVL.NewsId?.ToString());
+                var sportTypeSL = Enums.SportType.NotDefined.ToSelectList();
+                if(sportTypeSL.Any(st => st.Value == albumVL.SportType.ToString()))
+                {
+                    sportTypeSL.First(st => st.Value == albumVL.SportType.ToString()).Selected = true;
+                }
+
+                ViewBag.CategorySL = categorySL;
+                ViewBag.TeamSL = teamSL;
+                ViewBag.GameSL = gameSL;
+                ViewBag.NewsSL = newsSL;
+                ViewBag.SportTypeSL = sportTypeSL;
+                return View(albumVL);
+            }
+
+            return RedirectToAction("ListAlbums");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditAlbum(AlbumVM albumVL)
+        {
+            if(ModelState.IsValid)
+            {
+                var albumDAL = new AlbumToView().ConvertBack(albumVL);
+                new AlbumsCrud(_db).Update(albumDAL);
+            }
+         
+            return RedirectToAction("ListAlbums");
+        }
+        #endregion
+
+        #region News
+
+        public IActionResult DeleteNewsVideo(int newsId, int videoId)
+        {
+            var videoDAL = new VideosCrud(_db).Get(videoId);
+            if(videoDAL != null && videoDAL.NewsId == newsId)
+            {
+                videoDAL.NewsId = null;
+                new VideosCrud(_db).Update(videoDAL);
+            }
+
+            return RedirectToAction("ListVideos", new { newsId = newsId });
+        }
+
+        public IActionResult DeleteNewsAlbum(int albumId, int newsId)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            var albumDAL = new AlbumsCrud(_db).Get(albumId);
+            if(newsDAL != null && albumDAL != null && albumDAL.NewsId == newsId)
+            {
+                albumDAL.NewsId = null;
+                new AlbumsCrud(_db).Update(albumDAL);
+            }
+
+            return RedirectToAction("ListAlbums", new { newsId = newsId });
+        }
+
+        public IActionResult ListTitlePhotos(int newsId)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            var newsVL = new NewsToView().Convert(newsDAL);
+
+            return View(newsVL);
+        }
+
+        public IActionResult DeleteTPAlbum(int newsId, int tPId)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            if (newsDAL != null && newsDAL.NewsTitlePhotos != null)
+            {
+                var newsTitlePhoto = newsDAL.NewsTitlePhotos.FirstOrDefault(i => i.PhotoId == tPId);
+                if(newsTitlePhoto != null && newsTitlePhoto.PhotoId == tPId)
+                {
+                    new NewsTitlePhotosCrud(_db).Delete(newsTitlePhoto);
+                }
+            }
+
+            return RedirectToAction("ListTitlePhotos", new { newsId = newsId });
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -1587,38 +1731,11 @@ namespace BaseballUa.Controllers
 
         public IActionResult AddPhotosToNews(int newsId)
         {
-
-            //var newsWithPhotosVL = new AddPhotosToNews();
-
-            //var newsDAL = new NewsCrud(_db).Get(newsId);
-            //newsWithPhotosVL.News = new NewsToView().Convert(newsDAL);
-            //newsWithPhotosVL.PhotosMSL = new MultiSelectList(new PhotosCrud(_db).GetSelectItemList(100), "Value", "Text");
-
-            //return View(newsWithPhotosVL);
             var newsDAL = new NewsCrud(_db).Get(newsId);
             var newsVL = new NewsToView().Convert(newsDAL);
 
             return View(newsVL);
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult AddPhotosToNews(AddPhotosToNews newsWithPhotosVL)
-        //{
-        //    if (newsWithPhotosVL.News.Id > 0 && !newsWithPhotosVL.PhotoIds.IsNullOrEmpty())
-        //    {
-        //        foreach (var photoId in newsWithPhotosVL.PhotoIds)
-        //        {
-        //            var newsTitlePhoto = new NewsTitlePhoto();
-        //            newsTitlePhoto.NewsId = newsWithPhotosVL.News.Id;
-        //            newsTitlePhoto.PhotoId = photoId;
-        //            newsTitlePhoto.Name = photoId.ToString();
-        //            new NewsTitlePhotosCrud(_db).Add(newsTitlePhoto);
-        //        }
-        //    }
-
-        //    return RedirectToAction("ListNews");
-        //}
 
         [HttpPost]
         public async Task<IActionResult> AddPhotosToNews(IFormCollection fc)

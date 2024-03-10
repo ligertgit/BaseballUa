@@ -27,7 +27,8 @@ namespace BaseballUa.BlData
 
         public void Delete(Game item)
         {
-            throw new NotImplementedException();
+            _dbContext.Games.Remove(item);
+            _dbContext.SaveChanges();
         }
 
         public Game Get(int itemId)

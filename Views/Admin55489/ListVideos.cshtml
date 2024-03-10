@@ -121,16 +121,32 @@ else
                         }
                     </td>
                     <td>
-                        <a class="btn btn-warning" asp-action="EditVideo" asp-route-videoId="@item.Id">Редагувати</a>
-                        @if (item.NewsId != null)
-                        {
-                            <a class="btn btn-danger" asp-action="DeleteNewsVideo" asp-route-newsId="@item.NewsId" asp-route-videoId="@item.Id">Видалити з новини</a>   
-                        }
-                        else
-                        {
-                            <a class="btn btn-danger disabled" href="#">Видалити з новини</a>
-                        }
-                        <a class="btn btn-danger" asp-action="DeleteVideo" asp-route-videoId="@item.Id">Видалити повністю</a>
+                        <div class="m-1">
+                            <a class="btn btn-warning" asp-action="EditVideo" asp-route-videoId="@item.Id">Редагувати</a>
+                        </div>
+                        <div class="m-1">
+                            @if (item.NewsId != null)
+                            {
+                                <a class="btn btn-danger" asp-action="DeleteNewsVideo" asp-route-newsId="@item.NewsId" asp-route-videoId="@item.Id">Видалити з новини</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" href="#">Видалити з новини</a>
+                            }
+                        </div>
+                        <div class="m-1">
+                            @if (item.GameId != null)
+                            {
+                                <a class="btn btn-danger" asp-action="DeleteGameVideo" asp-route-gameId="@item.GameId" asp-route-videoId="@item.Id">Видалити з гри</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" href="#">Видалити з гри</a>
+                            }
+                        </div>
+                        <div class="m-1">
+                            <a class="btn btn-danger" asp-action="DeleteVideo" asp-route-videoId="@item.Id">Видалити повністю</a>
+                        </div>
                     </td>
                 </tr>
             }

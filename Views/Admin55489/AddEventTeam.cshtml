@@ -1,0 +1,67 @@
+﻿@model BaseballUa.ViewModels.EventViewModel
+
+@{
+    ViewData["Title"] = "Add event team";
+}
+
+<div class="container-fluid text-warning adminhead">
+    <div class="mb-0 mt-2 mb-5 p-0">
+        @await Html.PartialAsync("_AdminHead")
+    </div>
+</div>
+
+<h1>Додати команду до Турніру</h1>
+
+<hr />
+
+@if(Model != null && Model.EventViewModelId > 0)
+{
+    <form asp-action="AddEventTeam">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(i => i.EventViewModelId);
+        <div class="row">
+            <div class="col-4">
+                <label asp-for="EventTeamsSL"></label>
+                <div>
+                    @Html.ListBoxFor(x => x.EventTeamsIds, Model.EventTeamsSL, new {size = 20});
+                </div>
+            </div>
+            <div class="col-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @if(Model.Tournament != null && Model.Tournament.Name != null)
+                {
+                    <div class="form-group">
+                        <label asp-for="Tournament.Name" class="control-label"></label>
+                        <label>@Model.Tournament.Name</label>
+                    </div>
+                }
+                <div class="form-group">
+                    <label asp-for="Year" class="control-label"></label>
+                    <label>@Model.Year</label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <label>@Model.StartDate</label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EndDate" class="control-label"></label>
+                    <label>@Model.EndDate</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <input type="submit" value="Додати" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div>
+        <a asp-action="ListEventTeam" asp-route-eventId="@Model.EventViewModelId">Повернутися до списку</a>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

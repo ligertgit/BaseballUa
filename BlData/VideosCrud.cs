@@ -36,6 +36,13 @@ namespace BaseballUa.BlData
 			_dbContext.SaveChanges();
 		}
 
+		public void UnlinkFromGames(int gameId)
+		{
+			var videos = _dbContext.Videos.Where(v => v.GameId == gameId).ToList();
+			videos.ForEach(v => v.GameId = null);
+			_dbContext.SaveChanges();
+		}
+
         public Video Get(int itemId)
 		{
 			return _dbContext.Videos.Where(v => v.Id == itemId)

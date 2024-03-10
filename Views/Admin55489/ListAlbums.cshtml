@@ -240,17 +240,49 @@ else
                         }
                     </td>
                     <td>
-                        <a asp-action="AddPhoto" asp-route-albumId="@item.Id">Додати фото</a>
-                        <a asp-action="ListPhotos" asp-route-albumId="@item.Id">Список фоток</a>
-                        @if(item.NewsId != null)
-                        {
-                            <a class="btn btn-danger" asp-action="DeleteNewsAlbum" asp-route-albumId="@item.Id" asp-route-newsId="@item.NewsId">Видалити з новини</a>
-                        }
-                        else
-                        {
-                            <a class="btn btn-danger disabled" href="#">Видалити з новини</a>
-                        }
-                        <a class="btn btn-danger" asp-action="DeleteAlbum" asp-route-albumId="@item.Id">Видалити повністю</a>
+                        <div class="m-1">
+                            <a class="btn btn-primary" asp-action="AddPhoto" asp-route-albumId="@item.Id">Додати фото</a>
+                        </div>
+                        <div class="m-1">
+                            <a class="btn btn-primary" asp-action="ListPhotos" asp-route-albumId="@item.Id">Список фоток</a>
+                        </div>
+                        <div class="m-1">
+                            <a class="btn btn-warning" asp-action="EditAlbum" asp-route-albumId="@item.Id">Редагувати</a>
+                        </div>
+                        <div class="m-1">
+                            @if(item.NewsId != null)
+                            {
+                                <a class="btn btn-danger" asp-action="DeleteNewsAlbum" asp-route-albumId="@item.Id" asp-route-newsId="@item.NewsId">Видалити з новини</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" href="#">Видалити з новини</a>
+                            }
+                        </div>
+                        <div class="m-1">
+                            @if (item.GameId != null)
+                            {
+                                <a class="btn btn-danger" asp-action="DeleteGameAlbum" asp-route-albumId="@item.Id" asp-route-gameId="@item.GameId">Видалити з гри</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" href="#">Видалити з гри</a>
+                            }
+                        </div>
+                        <div class="m-1">
+                            @if (item.TeamId != null)
+                            {
+                                <a class="btn btn-danger" asp-action="DeleteTeamAlbum" asp-route-albumId="@item.Id" asp-route-teamId="@item.TeamId">Видалити з гри</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" href="#">Видалити з команди</a>
+                            }
+                        </div>
+                        <div class="m-1">
+                            <a class="btn btn-danger" asp-action="DeleteAlbum" asp-route-albumId="@item.Id">Видалити повністю</a>
+                        </div>
+
                     </td>
                 </tr>
             }

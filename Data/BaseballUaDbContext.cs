@@ -129,6 +129,8 @@ namespace BaseballUa.Data
 
         }
 
+        public DbSet<BaseballUa.ViewModels.TeamViewModel>? TeamViewModel { get; set; }
+
         //public DbSet<BaseballUa.ViewModels.PlayerViewModel>? PlayerViewModel { get; set; }
 
         //public DbSet<BaseballUa.ViewModels.TeamViewModel>? TeamViewModel { get; set; }

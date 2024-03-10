@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row m-2">
     <div class="col-md-4">
             <form asp-action="UpdateGame">
                 @Html.AntiForgeryToken()
@@ -25,7 +25,8 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="StartDate" class="control-label"></label>
-                    <input type="datetime" asp-for="StartDate" class="form-control" value="@Model.StartDate"/>
+                    <input asp-for="StartDate" class="form-control"/>
+                    @*<input type="datetime" asp-for="StartDate" class="form-control" value="@Model.StartDate"/>*@
                     <span asp-validation-for="StartDate" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -33,12 +34,12 @@
                     <input asp-for="AdditionalInfo" class="form-control" value="@Model.AdditionalInfo" />
                     <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+            <div class="form-group m-1">
                     <label asp-for="RunsVisitor" class="control-label"></label>
                     <input class="bg-warning" asp-for="RunsVisitor" class="form-control" value="@Model.RunsVisitor" />
                     <span asp-validation-for="RunsVisitor" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+            <div class="form-group m-1">
                     <label asp-for="RunsHome" class="control-label"></label>
                     <input class="bg-warning" asp-for="RunsHome" class="form-control" value="@Model.RunsHome" />
                     <span asp-validation-for="RunsHome" class="text-danger"></span>
@@ -53,7 +54,7 @@
                     <input asp-for="HalfinningsPlayed" class="form-control" value="@Model.HalfinningsPlayed" />
                     <span asp-validation-for="HalfinningsPlayed" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group bg-warning m-1 p-1">
                     <label asp-for="GameStatus" class="control-label"></label>
                     @*@Html.DropDownListFor(x => GameStatus, ViewBag.StatusList, optionLabel: "--- оберіть ---")*@
                     @Html.DropDownListFor(x => Model.GameStatus, (SelectList)ViewBag.StatusList, optionLabel: "--- оберіть ---")
@@ -70,7 +71,7 @@
                     <input asp-for="PointsHome" class="form-control" value="@Model.PointsHome" />
                     <span asp-validation-for="PointsHome" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <label asp-for="Tour" class="control-label"></label>
                     @Html.DropDownListFor(x => Model.Tour, (SelectList)ViewBag.TourList, optionLabel: "--- оберіть ---")
                     <span asp-validation-for="Tour" class="text-danger"></span>
@@ -85,18 +86,18 @@
                     <input asp-for="ConditionHome" class="form-control" value="@Model.ConditionHome" />
                     <span asp-validation-for="ConditionHome" class="text-danger"></span>
                 </div>
-                <div>
+                <div class="form-group m-1">
                     <label asp-for="VisitorTeamId" class="control-label"></label>
                     @Html.DropDownListFor(x => Model.VisitorTeamId, (SelectList)ViewBag.visitorTeamsList, optionLabel: "--- оберіть ---" )
                     <span asp-validation-for="VisitorTeamId" class="text-danger"></span>
                 </div>
-                <div>
+                <div class="form-group m-1">
                     <label asp-for="HomeTeamId" class="control-label"></label>
                     @Html.DropDownListFor(x => Model.HomeTeamId, (SelectList)ViewBag.homeTeamsList, optionLabel: "--- оберіть ---" )
                     <span asp-validation-for="HomeTeamId" class="text-danger"></span>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group m-1">
                     <input type="submit" value="Done" class="btn btn-primary" />
                 </div>
             </form>

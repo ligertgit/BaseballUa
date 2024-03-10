@@ -88,6 +88,8 @@ namespace BaseballUa.DTO
         {
             var gameVL = new GameViewModel();
             gameVL.SchemaGroupId = schemaGroupId;
+            var dateTemp = DateTime.Now;
+            gameVL.StartDate = new DateTime(dateTemp.Year, dateTemp.Month, dateTemp.Day, dateTemp.Hour, dateTemp.Minute, 0);
             //gameVL.EventSchemaItemItem = new EventSchemaItemsCrud(_dbContext).Get(eventSchemaItemId).SchemaItem;
 
             return gameVL;

@@ -2,7 +2,7 @@
 @model BaseballUa.ViewModels.GameViewModel
 
 @{
-    ViewData["Title"] = "AddGame";
+    ViewData["Title"] = "Add Game";
 }
 
 <div class="container-fluid text-warning adminhead">
@@ -11,9 +11,8 @@
     </div>
 </div>
 
-<h1>AddGame</h1>
+<h1>Додати гру</h1>
 
-<h4>GameViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -61,9 +60,6 @@
                 @Html.DropDownListFor(x => Model.GameStatus, Enums.GameStatus.Upcoming.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
                 <span asp-validation-for="GameStatus" class="text-danger"></span>
             </div>
-
-
-            
             <div class="form-group">
                 <label asp-for="PointsVisitor" class="control-label"></label>
                 <input asp-for="PointsVisitor" class="form-control" />
@@ -89,18 +85,18 @@
                 <input asp-for="ConditionHome" class="form-control" />
                 <span asp-validation-for="ConditionHome" class="text-danger"></span>
             </div>
-            <div>
+            <div class="m-1">
                 <label asp-for="HomeTeamId" class="control-label"></label>
                 @Html.DropDownListFor(x => Model.HomeTeamId, new SelectList(ViewBag.teamsList,"Value", "Text"), optionLabel: "--- оберіть ---" )
                 <span asp-validation-for="HomeTeamId" class="text-danger"></span>
             </div>
-            <div>
+            <div class="m-1">
                 <label asp-for="VisitorTeamId" class="control-label"></label>
                 @Html.DropDownListFor(x => Model.VisitorTeamId, new SelectList(ViewBag.teamsList, "Value", "Text"), optionLabel: "--- оберіть ---" )
                 <span asp-validation-for="VisitorTeamId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Додати гру" class="btn btn-primary" />
+            <div class="form-group m-1">
+                <input class="btn btn-primary" type="submit" value="Додати гру" class="btn btn-primary" />
             </div>
         </form>
     </div>

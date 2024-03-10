@@ -85,6 +85,14 @@ namespace BaseballUa.BlData
             return eventTeams;
         }
 
+        public IEnumerable<Team> GetEventToTeam(int eventId)
+        {
+            var result = (from teams in _dbContext.Teams
+                          from ett in _dbContext.EventToTeams where (teams.Id == ett.TeamId && ett.EventId == eventId)
+                          select teams).Distinct().Include(t => t.Club).ThenInclude(c => c.Country);
+            return result;
+        }
+
 
         //public IEnumerable<Team> GetAllForClub(int clubId)
         //{
