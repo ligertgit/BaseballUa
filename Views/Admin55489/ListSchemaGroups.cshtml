@@ -16,7 +16,7 @@
 <h1>Список груп для @ViewBag.EventSchemaItem.SchemaItem</h1>
 
 <p>
-    <a asp-action="AddSchemaGroup" asp-route-eventSchemaItemId="@ViewBag.EventSchemaItem.EventSchemaItemViewModelId">Додати групу</a>
+    <a class="btn btn-primary" asp-action="AddSchemaGroup" asp-route-eventSchemaItemId="@ViewBag.EventSchemaItem.EventSchemaItemViewModelId">Додати групу</a>
 </p>
 <table class="table">
     <thead>
@@ -40,7 +40,12 @@
                 @Html.DisplayFor(modelItem => item.EventSchemaItemId)
             </td>
             <td>
-                    <a asp-action="ListGames" asp-route-schemaGroupId="@item.Id">Показати ігри в групі</a>
+                <div>
+                    <a class="btn btn-primary" asp-action="ListGames" asp-route-schemaGroupId="@item.Id">Ігри в групі</a>
+                </div>
+                <div>
+                    <a class="btn btn-danger" asp-action="DeleteSchemaGroup" asp-route-schemaGroupId="@item.Id">Видалити</a>
+                </div>
             </td>
         </tr>
 }

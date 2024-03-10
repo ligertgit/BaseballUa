@@ -366,6 +366,22 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListSchemaGroups", new { EventSchemaItemId = schemaGroupVL.EventSchemaItemId });
         }
 
+        public IActionResult DeleteSchemaGroup(int schemaGroupId)
+        {
+            var schemaGroupDAL = new SchemaGroupCrud(_db).Get(schemaGroupId);
+            if(schemaGroupDAL != null)
+            {
+                if (new GamesCrud(_db).GetAll(schemaGroupId).IsNullOrEmpty())
+                {
+                    new SchemaGroupCrud(_db).Delete(schemaGroupDAL);
+                }
+
+                return RedirectToAction("ListSchemaGroups", new { EventSchemaItemId = schemaGroupDAL.EventSchemaItemId });
+            }
+
+            return RedirectToAction("ListEvents");
+        }
+
         #endregion
 
         #region Games

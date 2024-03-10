@@ -20,7 +20,8 @@ namespace BaseballUa.BlData
 
         public void Delete(SchemaGroup item)
         {
-            throw new NotImplementedException();
+            _dbContext.SchemaGroups.Remove(item);
+            _dbContext.SaveChanges();
         }
 
         public SchemaGroup Get(int itemId)
