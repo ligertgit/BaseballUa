@@ -262,21 +262,42 @@ else
                         }
                     </td>
                     <td>
-                        <a asp-action="ListAlbums" asp-route-newsId="@item.Id">Подивитися</a>
-                        <a asp-action="AddAlbumToNews" asp-route-newsId="@item.Id">Додати</a>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="ListAlbums" asp-route-newsId="@item.Id">Подивитися</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="AddAlbumToNews" asp-route-newsId="@item.Id">Додати</a>
+                        </div>
                     </td>
                     <td>
-                        <a asp-action="ListTitlePhotos" asp-route-newsId="@item.Id">Подивитися</a>
-                        <a asp-action="AddPhotosToNews" asp-route-newsId="@item.Id">Додати</a>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="ListTitlePhotos" asp-route-newsId="@item.Id">Подивитися</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="AddPhotosToNews" asp-route-newsId="@item.Id">Додати</a>
+                        </div>
                     </td>
                     <td>
-                        <a asp-action="ListVideos" asp-route-newsId="@item.Id">Подивитися</a>
-                        <a asp-action="AddVideoToNews" asp-route-newsId="@item.Id">Додати</a>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="ListVideos" asp-route-newsId="@item.Id">Подивитися</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="AddVideoToNews" asp-route-newsId="@item.Id">Додати</a>
+                        </div>
                     </td>
                     <td>
-                        <a class="btn btn-primary m-1" asp-action="PublishNews" asp-route-newsId="@item.Id">Зараз</a>
-                        <a class="btn btn-primary m-1" asp-action="PublishNews" asp-route-newsId="@item.Id" asp-route-fordate="1">На дату</a>
-                        <a class="btn btn-danger m-1" asp-action="DeleteNews" asp-route-newsId="@item.Id">Видалити</a>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="PublishNews" asp-route-newsId="@item.Id">Зараз</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="PublishNews" asp-route-newsId="@item.Id" asp-route-fordate="1">На дату</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-warning m-1" asp-action="EditNews" asp-route-newsId="@item.Id" asp-route-fordate="1">Редагувати</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-danger m-1" asp-action="DeleteNews" asp-route-newsId="@item.Id">Видалити</a>
+                        </div>
                     </td>
                 </tr>
             }

@@ -1183,7 +1183,7 @@ namespace BaseballUa.Controllers
 
             ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
             ViewBag.CategorySL = new CategoriesCrud(_db).GetSelectItemList();
-            ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList();
+            ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList(uaOnly : true);
             ViewBag.GamesSL = new GamesCrud(_db).GetSelectItemList();
 
             return View(VideoVL);
@@ -1231,7 +1231,7 @@ namespace BaseballUa.Controllers
                     }
 
                     editVideo.CategorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text", editVideo.Video.CategoryId.ToString());
-                    editVideo.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text", editVideo.Video.TeamId.ToString());
+                    editVideo.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly : true), "Value", "Text", editVideo.Video.TeamId.ToString());
                     editVideo.GameSl = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text", editVideo.Video.GameId.ToString());
                     editVideo.NewsSL = new SelectList(new NewsCrud(_db).GetSelectItemList(), "Value", "Text", editVideo.Video.NewsId.ToString());
                 }
@@ -1652,28 +1652,11 @@ namespace BaseballUa.Controllers
             pageDataVM.Team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
             pageDataVM.LastDate = lastDate;
 
-
-            // at the moment we let only event selection
-            //pageDataVM.TeamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text");
-            //if(pageDataVM.Team != null && pageDataVM.TeamSL.First(i => i.Value == pageDataVM.Team.Id.ToString()) != null)
-            //{
-            //    pageDataVM.TeamSL.First(i => i.Value == pageDataVM.Team.Id.ToString()).Selected = true;
-            //}
             pageDataVM.EventSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text");
             if (pageDataVM.Event != null && pageDataVM.EventSL.First(i => i.Value == pageDataVM.Event.EventViewModelId.ToString()) != null)
             {
                 pageDataVM.EventSL.First(i => i.Value == pageDataVM.Event.EventViewModelId.ToString()).Selected = true;
             }
-
-            //ViewBag.sportType = sportType;
-            //ViewBag.isGeneral = isGeneral;
-            //ViewBag.eventt = eventId == null ? null : new EventToView().Convert(new EventsCrud(_db).Get((int)eventId));
-            //ViewBag.category = categoryId == null ? null : new CategoryToView().Convert(new CategoriesCrud(_db).Get((int)categoryId));
-            //ViewBag.team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
-            //ViewBag.lastDate = lastDate;
-            //ViewBag.lastId = lastId;
-            //ViewBag.amount = amount; // limit to const.defaout maximum in crud
-
 
             return View(pageDataVM);
         }
@@ -1701,6 +1684,47 @@ namespace BaseballUa.Controllers
 
             return RedirectToAction("ListNews");
         }
+
+        public IActionResult  EditNews(int newsId)
+        {
+            var newsDAL = new NewsCrud(_db).Get(newsId);
+            if(newsDAL != null)
+            {
+                var newsVL = new NewsToView().Convert(newsDAL);
+                var categoriesSL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text", newsVL.CategoryId);
+                var teamsSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly: true), "Value", "Text", newsVL.TeamId);
+                var eventsSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text", newsVL.EventId);
+                var sportTypesSL = Enums.SportType.NotDefined.ToSelectList();
+                if(sportTypesSL.Any(st => st.Text == newsVL.SportType.ToString()))
+                {
+                    sportTypesSL.First(st => st.Text == newsVL.SportType.ToString()).Selected = true;
+                }
+
+                ViewBag.categoriesSL = categoriesSL;
+                ViewBag.teamsSL = teamsSL;
+                ViewBag.eventsSL = eventsSL;
+                ViewBag.sportTypesSL = sportTypesSL;
+
+                return View(newsVL);
+            }
+
+            return RedirectToAction("ListNews");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditNews(NewsVM newsVL)
+        {
+            if(ModelState.IsValid)
+            {
+                var newsDAL = new NewsToView().ConvertBack(newsVL);
+                new NewsCrud(_db).Update(newsDAL);
+            }
+
+            return RedirectToAction("ListNews");
+        }
+
+
 
         public IActionResult PublishNews(int newsId, int? fordate)
         {

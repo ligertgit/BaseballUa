@@ -246,14 +246,25 @@ namespace BaseballUa.BlData
 
         public List<SelectListItem> GetSelectItemList(bool uaOnly = false)
         {
-            var teamsSL = new List<SelectListItem>();
-            teamsSL = _dbContext.Teams.Where(t => !uaOnly || Constants.UaClubIdList.Contains(t.ClubId)).OrderBy(t => t.ClubId).ThenBy(t => t.SportType).ThenBy(t => t.Name).Select(c => new SelectListItem
+            //var teamsSL = new List<SelectListItem>();
+            var teamsSL = _dbContext.Teams.Include(t => t.Club).Where(t => !uaOnly || t.Club.CountryId == Constants.UaCountryId).OrderBy(t => t.ClubId).ThenBy(t => t.SportType).ThenBy(t => t.Name).Select(c => new SelectListItem
                                     {
                                         Text = ((Enums.SportType)c.SportType).ToString() + " - " + c.Name,
                                         Value = c.Id.ToString()
                                     }).ToList();
             return teamsSL;
         }
+
+        //public List<SelectListItem> GetSelectItemList(bool uaOnly = false)
+        //{
+        //    var teamsSL = new List<SelectListItem>();
+        //    teamsSL = _dbContext.Teams.Where(t => !uaOnly || Constants.UaClubIdList.Contains(t.ClubId)).OrderBy(t => t.ClubId).ThenBy(t => t.SportType).ThenBy(t => t.Name).Select(c => new SelectListItem
+        //    {
+        //        Text = ((Enums.SportType)c.SportType).ToString() + " - " + c.Name,
+        //        Value = c.Id.ToString()
+        //    }).ToList();
+        //    return teamsSL;
+        //}
 
         public void Update(Team item)
         {

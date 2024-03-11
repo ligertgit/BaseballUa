@@ -55,7 +55,9 @@ namespace BaseballUa.Data
 		public const int EuroClubId = 4;
 		public const string DefaultClubSmallImage = "defaultSmall.png";
 		public const string DefaultClubBigImage = "defaultBig.png";
-        public static readonly ImmutableList<int> UaClubIdList = new List<int>() {1, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 }.ToImmutableList<int>();
+        //public static readonly ImmutableList<int> UaClubIdList = new List<int>() {1, 8, 9, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 }.ToImmutableList<int>();
+        public const int UaCountryId = 1;
+
 
         public const string DefaultPlayerSmallImage = "defaultSmall.png";
         public const string DefaultPlayerBigImage = "defaultBig.png";

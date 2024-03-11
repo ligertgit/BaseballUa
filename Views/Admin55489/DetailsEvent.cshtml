@@ -11,89 +11,94 @@
 </div>
 
 <h1>Деталі турніру</h1>
+@if(Model != null && Model.Tournament != null)
+{
+    <div>
+        <div class="row">
+            <div class="col-6">
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Tournament.Name)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Tournament.Name)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Tournament.Sport)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Tournament.Sport)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Tournament.Category.ShortName)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Tournament.Category.ShortName)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Tournament.IsAnual)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Tournament.IsAnual)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Tournament.IsInternational)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Tournament.IsInternational)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Tournament.IsOfficial)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Tournament.IsOfficial)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Tournament.IsFun)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Tournament.IsFun)
+                    </dd>
+                </dl>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Year)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Year)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.StartDate)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.StartDate)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.EndDate)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.EndDate)
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <div>
+                    @Html.DisplayNameFor(model => model.Tournament.Description)
+                </div>
+                <div>
+                    @Html.DisplayFor(model => model.Tournament.Description)
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div>
+        <a class="btn btn-warning" asp-action="EditEvent" asp-route-id="@Model.EventViewModelId">Редагувати</a>
+        <a class="btn btn-primary" asp-action="ListSchemaItems" asp-route-eventId="@Model.EventViewModelId">Дивитись схему турніру</a>
+    </div>
+}
 
-<div>
-
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tournament.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tournament.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tournament.Sport)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tournament.Sport)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tournament.Category.ShortName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tournament.Category.ShortName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tournament.IsAnual)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tournament.IsAnual)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tournament.IsInternational)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tournament.IsInternational)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tournament.IsOfficial)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tournament.IsOfficial)
-        </dd>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tournament.IsFun)
-        </dd>
-
-    </dl>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Tournament.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Tournament.Description)
-        </dd>
-    </dl>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndDate)
-        </dd>
-
-
-
-    </dl>
-</div>
-<div>
-    <a asp-action="EditEvent" asp-route-id="@Model?.EventViewModelId">Редагувати</a> |
-    <a asp-action="ListSchemaItems" asp-route-eventId="@Model?.EventViewModelId">Дивитись схему турніру</a>
-</div>
 <div class="mt-5">
     <a asp-action="ListEvents">Повернутися до списку</a>
 </div>
