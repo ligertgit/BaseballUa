@@ -109,6 +109,15 @@ namespace BaseballUa.Data
         }
     }
 
+
+    public static class DateTimeLib
+    {
+        public static DateTime CurDateNoSeconds(this DateTime curDateTime)
+        {
+            return new DateTime(curDateTime.Year, curDateTime.Month, curDateTime.Day, curDateTime.Hour, curDateTime.Minute, 0);
+        }
+    } 
+
     public static class GamesLib
     {
         public static int GetShowIndex(this List<DayGames> schedule)

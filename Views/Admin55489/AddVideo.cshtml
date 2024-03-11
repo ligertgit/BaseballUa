@@ -49,7 +49,7 @@
                 <input asp-for="PublishDate" class="form-control" />
                 <span asp-validation-for="PublishDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group m-1">
                 <label asp-for="NewsId" class="control-label"></label>
                 @if (ViewBag.News != null)
                 {
@@ -62,22 +62,22 @@
                     @Html.ValidationMessageFor(c => c.NewsId, "", new { @class = "text-danger" })
                 }
             </div>
-            <div class="form-group">
+            <div class="form-group m-1">
                 <label asp-for="CategoryId" class="control-label"></label>
                 @Html.DropDownListFor(c => Model.CategoryId, new SelectList(ViewBag.CategorySL, "Value", "Text"), optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(c => c.CategoryId, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
+            <div class="form-group m-1">
                 <label asp-for="TeamId" class="control-label"></label>
                 @Html.DropDownListFor(c => Model.TeamId, new SelectList(ViewBag.TeamSL, "Value", "Text"), optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(c => c.TeamId, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
+            <div class="form-group m-1">
                 <label asp-for="GameId" class="control-label"></label>
                 @Html.DropDownListFor(c => Model.GameId, new SelectList(ViewBag.GamesSL, "Value", "Text"), optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(c => c.GameId, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
+            <div class="form-group m-1">
                 <input type="submit" value="Додати" class="btn btn-primary" />
             </div>
         </form>

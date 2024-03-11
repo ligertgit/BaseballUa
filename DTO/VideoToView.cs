@@ -3,6 +3,7 @@ using BaseballUa.ViewModels;
 using static BaseballUa.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using BaseballUa.Data;
 
 namespace BaseballUa.DTO
 {
@@ -89,6 +90,7 @@ namespace BaseballUa.DTO
         public VideoVM CreateEmpty()
         {
             var videoVL = new VideoVM();
+			videoVL.PublishDate = DateTime.Now.CurDateNoSeconds();
 
             return videoVL;
         }

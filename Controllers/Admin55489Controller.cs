@@ -300,7 +300,7 @@ namespace BaseballUa.Controllers
             { 
                 var eventSchemaItemDAL = new EventSchemaItemToView().ConvertBack(eventSchemaItemVL);
                 new EventSchemaItemsCrud(_db).Add(eventSchemaItemDAL);
-
+                return RedirectToAction("ListSchemaItems", new { eventId = eventSchemaItemDAL.EventId});
             }
             return RedirectToAction("ListEvents");
         }
@@ -1302,6 +1302,7 @@ namespace BaseballUa.Controllers
         {
             var albumVL = new AlbumToView().CreateEmpty();
 
+
             var categorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text");
             categorySL.SetSelected(categoryId.ToString());
             var newsSL = new SelectList(new NewsCrud(_db).GetSelectItemList(), "Value", "Text");
@@ -1311,7 +1312,6 @@ namespace BaseballUa.Controllers
             var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text");
             gameSL.SetSelected(gameId.ToString());
             var sportSL = Enums.SportType.NotDefined.ToSelectList();
-
             sportSL.SetSelected(Convert.ToInt32(sportType).ToString());
 
             ViewBag.CategorySL = categorySL;

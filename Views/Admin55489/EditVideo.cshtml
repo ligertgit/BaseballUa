@@ -50,27 +50,27 @@
                     <input type="datetime" asp-for="Video.PublishDate" class="form-control" value="@Model.Video.PublishDate" />
                     <span asp-validation-for="Video.PublishDate" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <label asp-for="Video.NewsId" class="control-label"></label>
                     @Html.DropDownListFor(c => Model.Video.NewsId, Model.NewsSL, optionLabel: "--- оберіть ---")
                     @Html.ValidationMessageFor(c => Model.Video.NewsId, "", new { @class = "text-danger" })
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <label asp-for="Video.CategoryId" class="control-label"></label>
                     @Html.DropDownListFor(c => Model.Video.CategoryId, Model.CategorySL, optionLabel: "--- оберіть ---")
                     @Html.ValidationMessageFor(c => Model.Video.CategoryId, "", new { @class = "text-danger" })
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <label asp-for="Video.TeamId" class="control-label"></label>
                     @Html.DropDownListFor(c => Model.Video.TeamId, Model.TeamSL, optionLabel: "--- оберіть ---")
                     @Html.ValidationMessageFor(c => Model.Video.TeamId, "", new { @class = "text-danger" })
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <label asp-for="Video.GameId" class="control-label"></label>
                     @Html.DropDownListFor(c => Model.Video.GameId, Model.GameSl, optionLabel: "--- оберіть ---")
                     @Html.ValidationMessageFor(c => Model.Video.GameId, "", new { @class = "text-danger" })
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <input type="submit" value="Прийняти" class="btn btn-primary" />
                 </div>
             }

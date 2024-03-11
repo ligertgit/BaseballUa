@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static BaseballUa.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using BaseballUa.Data;
 
 namespace BaseballUa.DTO
 {
@@ -84,8 +85,9 @@ namespace BaseballUa.DTO
 		public AlbumVM CreateEmpty()
 		{
 			var albumVL = new AlbumVM();
+			albumVL.PublishDate = DateTime.Now.CurDateNoSeconds();
 
-			return albumVL;
+            return albumVL;
 		}
 	}
 }
