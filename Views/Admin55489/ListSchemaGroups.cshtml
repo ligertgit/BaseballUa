@@ -10,10 +10,8 @@
     </div>
 </div>
 
-@ViewBag.EventSchemaItem.Event.Tournament.Name
-@ViewBag.EventSchemaItem.Event.Year
-
 <h1>Список груп для @ViewBag.EventSchemaItem.SchemaItem</h1>
+<h3>@ViewBag.EventSchemaItem.Event.Tournament.Name</h3>
 
 <p>
     <a class="btn btn-primary" asp-action="AddSchemaGroup" asp-route-eventSchemaItemId="@ViewBag.EventSchemaItem.EventSchemaItemViewModelId">Додати групу</a>

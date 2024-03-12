@@ -13,7 +13,7 @@
 <h1>Редагування турніру</h1>
 
 <hr />
-<div class="row">
+<div class="row m-2">
     <div class="col-md-4">
         <form asp-action="EditEvent">
             @Html.AntiForgeryToken()
@@ -34,13 +34,12 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-
-
-            @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.SelectTournament, "Value", "Text", Model.TournamentId))
-            @Html.ValidationMessageFor(x => x.TournamentId, "", new { @class = "text-danger" })
-
-
-            <div class="form-group">
+            <div class="m-1">
+                @Html.LabelFor(x => x.Tournament)
+                @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.SelectTournament, "Value", "Text", Model.TournamentId))
+                @Html.ValidationMessageFor(x => x.TournamentId, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group m-1">
                 <input type="submit" value="Зберегти" class="btn btn-primary" />
             </div>
         </form>

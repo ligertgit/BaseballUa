@@ -101,8 +101,6 @@ namespace BaseballUa.Controllers
 
         public IActionResult CreateTournament()
         {
-            //var tournamentDTO = new TournamentsCrud(_db).Get(1);
-            //var tournamentDTO = new TournamentsCrud(_db).GetEmpty();
             var tournamentView = new TournamentToView().GetEmpty();
             var categoriesList = new CategoriesCrud(_db).GetAll().ToList();
             tournamentView.SelectCategories = new CategoryToView().GetSelect(categoriesList);
@@ -545,7 +543,12 @@ namespace BaseballUa.Controllers
                 new GamesCrud(_db).Update(gameDAL);
             }
 
-            return RedirectToAction("ListGames", new { schemaGroupId = gameVL.SchemaGroupId });
+            if(gameVL.SchemaGroupId > 0)
+            {
+                return RedirectToAction("ListGames", new { schemaGroupId = gameVL.SchemaGroupId });
+            }
+
+            return RedirectToAction("ListEvents");
         }
 
         public IActionResult DeleteGame(int gameId)
@@ -1320,18 +1323,22 @@ namespace BaseballUa.Controllers
             ViewBag.GameSL = gameSL;
             ViewBag.SportSL = sportSL;
 
+            ViewBag.newsId = newsId;
+            ViewBag.gameId = gameId;
+            ViewBag.teamId = teamId;
+
             return View(albumVL);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddAlbum(AlbumVM albumVL)
+        public IActionResult AddAlbum(AlbumVM albumVL, int navNewsId = 0, int navTeamId = 0, int navGameId = 0)
         {
             if (ModelState.IsValid)
             {
                 var albumDL = new AlbumToView().ConvertBack(albumVL);
                 new AlbumsCrud(_db).Add(albumDL);
-                return RedirectToAction("AddPhoto", new { albumId = albumDL.Id });
+                return RedirectToAction("AddPhoto", new { albumId = albumDL.Id, navNewsId = navNewsId, navTeamId = navTeamId, navGameId = navGameId });
             }
 
             return RedirectToAction("ListAlbums");
@@ -1340,9 +1347,9 @@ namespace BaseballUa.Controllers
         public IActionResult DeleteAlbum(int albumId)
         {
             var albumDAL = new AlbumsCrud(_db).GetWithTitlePhotos(albumId);
-            var ttt = albumDAL.Photos.Any(p => !p.NewsTitlePhotos.IsNullOrEmpty());
-            var ttt2 = albumDAL.Photos.First().NewsTitlePhotos;
-            var ttt3 = albumDAL.Photos.Where(p => !p.NewsTitlePhotos.IsNullOrEmpty());
+            //var ttt = albumDAL.Photos.Any(p => !p.NewsTitlePhotos.IsNullOrEmpty());
+            //var ttt2 = albumDAL.Photos.First().NewsTitlePhotos;
+            //var ttt3 = albumDAL.Photos.Where(p => !p.NewsTitlePhotos.IsNullOrEmpty());
             if (albumDAL != null && (albumDAL.Photos == null || !albumDAL.Photos.Any(p => !p.NewsTitlePhotos.IsNullOrEmpty())))
             {
                 if (albumDAL.Photos != null)
@@ -1378,7 +1385,7 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListPhotos", new { albumId = albumId });
         }
 
-        public IActionResult AddPhoto(int albumId)
+        public IActionResult AddPhoto(int albumId, int navGameId = 0, int navTeamId = 0, int navNewsId = 0)
         {
             var albumDAL = new AlbumsCrud(_db).Get(albumId);
             if (albumDAL == null)
@@ -1390,6 +1397,9 @@ namespace BaseballUa.Controllers
             var albumVL = new AlbumToView().Convert(albumDAL);
 
             ViewBag.album = albumVL;
+            ViewBag.navGameId = navGameId;
+            ViewBag.navTeamId = navTeamId;
+            ViewBag.navNewsId = navNewsId;
 
             return View(photoVL);
         }
@@ -1431,52 +1441,79 @@ namespace BaseballUa.Controllers
             return Ok(new { count = successfulySaves });
         }
 
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult AddPhoto(IFormCollection fc)
+        public IActionResult NavigationAddPhoto(int navGameId, int navTeamId, int navNewsId, int navAlbumId)
         {
-
-            if (!fc.Keys.Contains("fnames") || !fc.Keys.Contains("albumId"))
+            if(navGameId > 0)
             {
-                return RedirectToAction("ListAlbums");
-            }
-            int albumId;
-            if (!Int32.TryParse(fc["albumId"].FirstOrDefault(), out albumId))
-            {
-                return RedirectToAction("ListAlbums");
-            }
-            if (albumId <= 0)
-            {
-                return RedirectToAction("ListAlbums");
-            }
-            if (fc["fnames"].IsNullOrEmpty())
-            {
-                return RedirectToAction("ListAlbums");
-            }
-            var fileList = (fc["fnames"].FirstOrDefault()).Split("\r\n").ToList();
-            if (fileList.Count <= 0)
-            {
-                return RedirectToAction("ListAlbums");
-            }
-
-            foreach (var fileName in fileList)
-            {
-                if (!fileName.IsNullOrEmpty())
+                var gameDAL = new GamesCrud(_db).Get(navGameId);
+                if(gameDAL != null)
                 {
-                    var photoDAL = new Photo();
-                    photoDAL.AlbumId = albumId;
-                    photoDAL.Name = albumId + "_" + fileName;
-                    photoDAL.Description = fileName;
-                    photoDAL.FnameOrig = fileName;
-                    photoDAL.FnameBig = fileName;
-                    photoDAL.FnameSmall = fileName;
-                    new PhotosCrud(_db).Add(photoDAL);
+                    return RedirectToAction("ListGames", new { schemaGroupId = gameDAL.SchemaGroupId });
                 }
+            }
+            else if(navTeamId > 0)
+            {
+                var teamDAL = new TeamCrud(_db).Get(navTeamId);
+                if (teamDAL != null)
+                {
+                    return RedirectToAction("ListTeams", new { clubId = teamDAL.ClubId });
+                }
+            }
+            else if(navNewsId > 0)
+            {
+                return RedirectToAction("ListNews");
             }
 
             return RedirectToAction("ListAlbums");
         }
+
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AddPhoto(IFormCollection fc)
+        //{
+
+        //    if (!fc.Keys.Contains("fnames") || !fc.Keys.Contains("albumId"))
+        //    {
+        //        return RedirectToAction("ListAlbums");
+        //    }
+        //    int albumId;
+        //    if (!Int32.TryParse(fc["albumId"].FirstOrDefault(), out albumId))
+        //    {
+        //        return RedirectToAction("ListAlbums");
+        //    }
+        //    if (albumId <= 0)
+        //    {
+        //        return RedirectToAction("ListAlbums");
+        //    }
+        //    if (fc["fnames"].IsNullOrEmpty())
+        //    {
+        //        return RedirectToAction("ListAlbums");
+        //    }
+        //    var fileList = (fc["fnames"].FirstOrDefault()).Split("\r\n").ToList();
+        //    if (fileList.Count <= 0)
+        //    {
+        //        return RedirectToAction("ListAlbums");
+        //    }
+
+        //    foreach (var fileName in fileList)
+        //    {
+        //        if (!fileName.IsNullOrEmpty())
+        //        {
+        //            var photoDAL = new Photo();
+        //            photoDAL.AlbumId = albumId;
+        //            photoDAL.Name = albumId + "_" + fileName;
+        //            photoDAL.Description = fileName;
+        //            photoDAL.FnameOrig = fileName;
+        //            photoDAL.FnameBig = fileName;
+        //            photoDAL.FnameSmall = fileName;
+        //            new PhotosCrud(_db).Add(photoDAL);
+        //        }
+        //    }
+
+        //    return RedirectToAction("ListAlbums");
+        //}
 
         public IActionResult EditAlbum(int albumId)
         {

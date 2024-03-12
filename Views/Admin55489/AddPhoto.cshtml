@@ -48,12 +48,18 @@
             </div>
         </form>
 
-        <form asp-action="AddPhoto">
-            <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
-            <div class="form-group">
-                <input type="submit" value="Додати фото і опублікувати альбом" class="btn btn-primary" />
-            </div>
-        </form>
+        <a class="btn btn-primary" asp-action="NavigationAddPhoto" asp-route-navGameId="@ViewBag.navGameId" 
+                                                                    asp-route-navTeamId="@ViewBag.navTeamId"
+                                                                    asp-route-navNewsId="@ViewBag.navNewsId"
+                                                                    asp-route-navAlbumId="@Model.AlbumId">Прийняти</a>
+
+            @*<form asp-action="AddPhoto">
+                <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
+                <div class="form-group">
+                    <input type="submit" value="Додати фото і опублікувати альбом" class="btn btn-primary" />
+                </div>
+            </form>*@
+
     </div>
 </div>
 

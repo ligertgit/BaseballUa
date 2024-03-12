@@ -140,7 +140,27 @@
 </div>
 *@
 <p>
-    <a class="btn btn-primary" asp-action="AddAlbum">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
+
+           @* ViewBag.news = newsId == null ? null : new NewsToView().Convert(new NewsCrud(_db).Get((int)newsId));
+            ViewBag.team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
+            ViewBag.game = gameId == null ? null : new GameToView().Convert(new GamesCrud(_db).Get((int)gameId));*@
+
+    @if(ViewBag.game != null)
+    {
+        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-gameId="@ViewBag.game.GameViewModelId">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
+    }
+    else if(ViewBag.team != null)
+    {
+        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-teamId="@ViewBag.team.id">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
+    }
+    else if(ViewBag.news != null)
+    {
+        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-newsId="@ViewBag.news.id">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
+    }
+    else
+    {
+        <a class="btn btn-primary" asp-action="AddAlbum">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
+    }
 </p>
 
 @if (Model == null || Model.Count == 0)

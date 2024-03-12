@@ -18,7 +18,7 @@
 @if (Model != null && ViewBag.SchemaItemSL != null)
 {
     SelectList schemaItemSL = ViewBag.SchemaItemSl;
-    <div class="row">
+    <div class="row m-2">
         <div class="col-md-4">
             <form asp-action="EditSchemaItem">
                 @Html.AntiForgeryToken()
@@ -30,12 +30,12 @@
                     <input asp-for="Order" class="form-control" />
                     <span asp-validation-for="Order" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <label asp-for="SchemaItem" class="control-label"></label>
                     @Html.DropDownListFor(x => Model.SchemaItem, schemaItemSL, optionLabel: "--- оберіть ---")
                     <span asp-validation-for="SchemaItem" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <input type="submit" value="Прийняти" class="btn btn-primary" />
                 </div>
             </form>
@@ -43,7 +43,7 @@
     </div>
 
     <div>
-        <a asp-action="ListEvents">Back to List</a>
+        <a asp-action="ListSchemaItems" asp-route-eventId="@Model.EventId">Поврнутися до списку</a>
     </div>
 }
 

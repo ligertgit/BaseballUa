@@ -69,14 +69,6 @@ namespace BaseballUa.DTO
         {
             var tournamentViewModel = new TournamentViewModel();
 
-            //List<SelectListItem> categories = _db.Categories.Select(
-            //            a => new SelectListItem
-            //            {
-            //                Value = a.Id.ToString(),
-            //                Text = a.Name
-            //            }).ToList();
-            //tournamentViewModel.CategoriesNames = categories;
-
             return tournamentViewModel;
         }
 

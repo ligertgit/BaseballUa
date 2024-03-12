@@ -16,7 +16,7 @@
 
 @if(Model != null)
 {
-    <div class="row">
+    <div class="row m-2">
         <div class="col-md-4">
             <form asp-action="EditSchemaGroup">
                 @Html.AntiForgeryToken()
@@ -28,14 +28,14 @@
                     <input asp-for="GroupName" class="form-control" />
                     <span asp-validation-for="GroupName" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group m-1">
                     <input class="btn btn-primary" type="submit" value="Прийняти" />
                 </div>
             </form>
         </div>
     </div>
 
-    <div>
+    <div class="m-1">
         <a asp-action="ListSchemaGroups" asp-route-EventSchemaItemId="@Model.EventSchemaItemId">Повернутися до схеми</a>
     </div>
 }

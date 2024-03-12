@@ -15,7 +15,7 @@
 <hr />
 
 <form asp-action="CreateEvent">
-    <div class="row">
+    <div class="row m-2">
         <div class="col-4">
             <label asp-for="EventTeamsSL"></label>
             <div>
@@ -40,14 +40,14 @@
                 <input asp-for="EndDate" class="form-control" />
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group m-1">
                 <label asp-for="Tournament" class="control-label"></label>
                 @Html.DropDownListFor(x => Model.TournamentId, new SelectList(Model.SelectTournament, "Value", "Text"), optionLabel: "--- оберіть ---")
                 @Html.ValidationMessageFor(x => x.TournamentId, "", new { @class = "text-danger" })
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row m-2">
         <div class="col">
             <div class="form-group">
                 <input type="submit" value="Створити" class="btn btn-primary" />

@@ -59,15 +59,10 @@ namespace BaseballUa.DTO
         {
             var eventView = new EventViewModel();
             eventView.Year = DateTime.Now.Year;
-            eventView.StartDate = DateTime.Now;
-            eventView.EndDate = DateTime.Now;
+            eventView.StartDate = DateTime.Now.CurDateNoSeconds();
+            eventView.EndDate = DateTime.Now.CurDateNoSeconds();
             eventView.TournamentId = default;
             eventView.Tournament = null;
-            //eventView.TournamentList = _dbContext.Tournaments.Select(a => new SelectListItem
-            //                                    {
-            //                                        Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",
-            //                                        Value = a.Id.ToString()
-            //                                    });
             eventView.EventTeamsIds = null;
             eventView.EventTeamsSL = null;
             return eventView;

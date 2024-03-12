@@ -18,12 +18,12 @@
 {
     <form asp-action="AddEventTeam">
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(i => i.EventViewModelId);
-        <div class="row">
+        @Html.HiddenFor(i => i.EventViewModelId)
+        <div class="row m-2">
             <div class="col-4">
                 <label asp-for="EventTeamsSL"></label>
                 <div>
-                    @Html.ListBoxFor(x => x.EventTeamsIds, Model.EventTeamsSL, new {size = 20});
+                    @Html.ListBoxFor(x => x.EventTeamsIds, Model.EventTeamsSL, new {size = 20})
                 </div>
             </div>
             <div class="col-4">
@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row m-2">
             <div class="col">
                 <div class="form-group">
                     <input type="submit" value="Додати" class="btn btn-primary" />

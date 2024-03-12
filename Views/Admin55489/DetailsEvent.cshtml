@@ -13,7 +13,7 @@
 <h1>Деталі турніру</h1>
 @if(Model != null && Model.Tournament != null)
 {
-    <div>
+    <div class="m-2">
         <div class="row">
             <div class="col-6">
                 <dl class="row">
@@ -93,12 +93,12 @@
         </div>
         
     </div>
-    <div>
+    <div class="m-2">
         <a class="btn btn-warning" asp-action="EditEvent" asp-route-id="@Model.EventViewModelId">Редагувати</a>
         <a class="btn btn-primary" asp-action="ListSchemaItems" asp-route-eventId="@Model.EventViewModelId">Дивитись схему турніру</a>
     </div>
 }
 
-<div class="mt-5">
+<div>
     <a asp-action="ListEvents">Повернутися до списку</a>
 </div>

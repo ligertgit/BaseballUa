@@ -30,7 +30,7 @@ namespace BaseballUa.ViewModels
         public int TournamentId { get; set; }
 
         [NotMapped]
-        [DisplayName("Пов'язаний тип змагань")]
+        [DisplayName("Пов'язаний вид змагань")]
         public TournamentViewModel? Tournament { get; set; }
 
         [NotMapped]

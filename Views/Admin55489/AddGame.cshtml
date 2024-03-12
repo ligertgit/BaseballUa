@@ -14,7 +14,7 @@
 <h1>Додати гру</h1>
 
 <hr />
-<div class="row">
+<div class="row m-2">
     <div class="col-md-4">
         <form asp-action="AddGame">
             @Html.AntiForgeryToken()
@@ -22,12 +22,12 @@
             <input type="hidden" asp-for="SchemaGroupId" value="@Model.SchemaGroupId" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control bg-warning" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
+                <input asp-for="StartDate" class="form-control bg-warning" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -57,7 +57,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="GameStatus" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.GameStatus, Enums.GameStatus.Upcoming.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
+                @Html.DropDownListFor(x => Model.GameStatus, Enums.GameStatus.Upcoming.ToSelectList(), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control bg-warning"})
                 <span asp-validation-for="GameStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -87,12 +87,12 @@
             </div>
             <div class="m-1">
                 <label asp-for="HomeTeamId" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.HomeTeamId, new SelectList(ViewBag.teamsList,"Value", "Text"), optionLabel: "--- оберіть ---" )
+                @Html.DropDownListFor(x => Model.HomeTeamId, new SelectList(ViewBag.teamsList,"Value", "Text"), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control bg-warning"})
                 <span asp-validation-for="HomeTeamId" class="text-danger"></span>
             </div>
             <div class="m-1">
                 <label asp-for="VisitorTeamId" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.VisitorTeamId, new SelectList(ViewBag.teamsList, "Value", "Text"), optionLabel: "--- оберіть ---" )
+                @Html.DropDownListFor(x => Model.VisitorTeamId, new SelectList(ViewBag.teamsList, "Value", "Text"), optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control bg-warning"} )
                 <span asp-validation-for="VisitorTeamId" class="text-danger"></span>
             </div>
             <div class="form-group m-1">

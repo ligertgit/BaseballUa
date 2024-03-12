@@ -13,179 +13,91 @@
 
 <div class="row m-2">
     <div class="col-md-4">
-            <form asp-action="UpdateGame">
-                @Html.AntiForgeryToken()
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="SchemaGroupId" value="@Model.SchemaGroupId" />
-                <input type="hidden" asp-for="GameViewModelId" value="@Model.GameViewModelId" />
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" value="@Model.Name" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="StartDate" class="control-label"></label>
-                    <input asp-for="StartDate" class="form-control"/>
-                    @*<input type="datetime" asp-for="StartDate" class="form-control" value="@Model.StartDate"/>*@
-                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="AdditionalInfo" class="control-label"></label>
-                    <input asp-for="AdditionalInfo" class="form-control" value="@Model.AdditionalInfo" />
-                    <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
-                </div>
-            <div class="form-group m-1">
-                    <label asp-for="RunsVisitor" class="control-label"></label>
-                    <input class="bg-warning" asp-for="RunsVisitor" class="form-control" value="@Model.RunsVisitor" />
-                    <span asp-validation-for="RunsVisitor" class="text-danger"></span>
-                </div>
-            <div class="form-group m-1">
-                    <label asp-for="RunsHome" class="control-label"></label>
-                    <input class="bg-warning" asp-for="RunsHome" class="form-control" value="@Model.RunsHome" />
-                    <span asp-validation-for="RunsHome" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PlacedAt" class="control-label"></label>
-                    <input asp-for="PlacedAt" class="form-control" value="@Model.PlacedAt" />
-                    <span asp-validation-for="PlacedAt" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="HalfinningsPlayed" class="control-label"></label>
-                    <input asp-for="HalfinningsPlayed" class="form-control" value="@Model.HalfinningsPlayed" />
-                    <span asp-validation-for="HalfinningsPlayed" class="text-danger"></span>
-                </div>
-                <div class="form-group bg-warning m-1 p-1">
-                    <label asp-for="GameStatus" class="control-label"></label>
-                    @*@Html.DropDownListFor(x => GameStatus, ViewBag.StatusList, optionLabel: "--- оберіть ---")*@
-                    @Html.DropDownListFor(x => Model.GameStatus, (SelectList)ViewBag.StatusList, optionLabel: "--- оберіть ---")
-                    <span asp-validation-for="GameStatus" class="text-danger"></span>
-                </div>
-
-                <div class="form-group">
-                    <label asp-for="PointsVisitor" class="control-label"></label>
-                    <input asp-for="PointsVisitor" class="form-control" value="@Model.PointsVisitor" />
-                    <span asp-validation-for="PointsVisitor" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="PointsHome" class="control-label"></label>
-                    <input asp-for="PointsHome" class="form-control" value="@Model.PointsHome" />
-                    <span asp-validation-for="PointsHome" class="text-danger"></span>
-                </div>
-                <div class="form-group m-1">
-                    <label asp-for="Tour" class="control-label"></label>
-                    @Html.DropDownListFor(x => Model.Tour, (SelectList)ViewBag.TourList, optionLabel: "--- оберіть ---")
-                    <span asp-validation-for="Tour" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ConditionVisitor" class="control-label"></label>
-                    <input asp-for="ConditionVisitor" class="form-control" value="@Model.ConditionVisitor" />
-                    <span asp-validation-for="ConditionVisitor" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ConditionHome" class="control-label"></label>
-                    <input asp-for="ConditionHome" class="form-control" value="@Model.ConditionHome" />
-                    <span asp-validation-for="ConditionHome" class="text-danger"></span>
-                </div>
-                <div class="form-group m-1">
-                    <label asp-for="VisitorTeamId" class="control-label"></label>
-                    @Html.DropDownListFor(x => Model.VisitorTeamId, (SelectList)ViewBag.visitorTeamsList, optionLabel: "--- оберіть ---" )
-                    <span asp-validation-for="VisitorTeamId" class="text-danger"></span>
-                </div>
-                <div class="form-group m-1">
-                    <label asp-for="HomeTeamId" class="control-label"></label>
-                    @Html.DropDownListFor(x => Model.HomeTeamId, (SelectList)ViewBag.homeTeamsList, optionLabel: "--- оберіть ---" )
-                    <span asp-validation-for="HomeTeamId" class="text-danger"></span>
-                </div>
-
-                <div class="form-group m-1">
-                    <input type="submit" value="Done" class="btn btn-primary" />
-                </div>
-            </form>
-
-@*        <form asp-action="AddGame">
+        <form asp-action="UpdateGame">
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="@Model.Game.SchemaGroupId" value="@Model.Game.SchemaGroupId" />
+            <input type="hidden" asp-for="SchemaGroupId" value="@Model.SchemaGroupId" />
+            <input type="hidden" asp-for="GameViewModelId" value="@Model.GameViewModelId" />
             <div class="form-group">
-                <label asp-for="@Model.Game.Name" class="control-label"></label>
-                <input asp-for="@Model.Game.Name" class="form-control" value="@Model.Game.Name" />
-                <span asp-validation-for="@Model.Game.Name" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Game.StartDate" class="control-label"></label>
-                <input type="datetime" asp-for="@Model.Game.StartDate" class="form-control" value="@Model.Game.StartDate" />
-                <span asp-validation-for="@Model.Game.StartDate" class="text-danger"></span>
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control"/>
+                <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Game.AdditionalInfo" class="control-label"></label>
-                <input asp-for="@Model.Game.AdditionalInfo" class="form-control" value="@Model.Game.AdditionalInfo" />
-                <span asp-validation-for="@Model.Game.AdditionalInfo" class="text-danger"></span>
+                <label asp-for="AdditionalInfo" class="control-label"></label>
+                <input asp-for="AdditionalInfo" class="form-control" />
+                <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
+            </div>
+        <div class="form-group m-1">
+                <label asp-for="RunsVisitor" class="control-label"></label>
+                <input class="bg-warning form-control" asp-for="RunsVisitor" />
+                <span asp-validation-for="RunsVisitor" class="text-danger"></span>
+            </div>
+        <div class="form-group m-1">
+                <label asp-for="RunsHome" class="control-label"></label>
+                <input class="bg-warning form-control" asp-for="RunsHome" />
+                <span asp-validation-for="RunsHome" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Game.RunsVisitor" class="control-label"></label>
-                <input class="bg-warning" asp-for="@Model.Game.RunsVisitor" class="form-control" value="@Model.Game.RunsVisitor" />
-                <span asp-validation-for="@Model.Game.RunsVisitor" class="text-danger"></span>
+                <label asp-for="PlacedAt" class="control-label"></label>
+                <input asp-for="PlacedAt" class="form-control" />
+                <span asp-validation-for="PlacedAt" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Game.RunsHome" class="control-label"></label>
-                <input class="bg-warning" asp-for="@Model.Game.RunsHome" class="form-control" value="@Model.Game.RunsHome" />
-                <span asp-validation-for="@Model.Game.RunsHome" class="text-danger"></span>
+                <label asp-for="HalfinningsPlayed" class="control-label"></label>
+                <input asp-for="HalfinningsPlayed" class="form-control" />
+                <span asp-validation-for="HalfinningsPlayed" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Game.PlacedAt" class="control-label"></label>
-                <input asp-for="@Model.Game.PlacedAt" class="form-control" value="@Model.Game.PlacedAt" />
-                <span asp-validation-for="@Model.Game.PlacedAt" class="text-danger"></span>
+                <label asp-for="GameStatus" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.GameStatus, (SelectList)ViewBag.StatusList, optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control bg-warning"})
+                <span asp-validation-for="GameStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Game.HalfinningsPlayed" class="control-label"></label>
-                <input asp-for="@Model.Game.HalfinningsPlayed" class="form-control" value="@Model.Game.HalfinningsPlayed" />
-                <span asp-validation-for="@Model.Game.HalfinningsPlayed" class="text-danger"></span>
+                <label asp-for="PointsVisitor" class="control-label"></label>
+                <input asp-for="PointsVisitor" class="form-control" value="@Model.PointsVisitor" />
+                <span asp-validation-for="PointsVisitor" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Game.GameStatus" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.Game.GameStatus, Model.StatusSL, optionLabel: "--- оберіть ---")
-                <span asp-validation-for="@Model.Game.GameStatus" class="text-danger"></span>
+                <label asp-for="PointsHome" class="control-label"></label>
+                <input asp-for="PointsHome" class="form-control" value="@Model.PointsHome" />
+                <span asp-validation-for="PointsHome" class="text-danger"></span>
+            </div>
+            <div class="form-group m-1">
+                <label asp-for="Tour" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.Tour, (SelectList)ViewBag.TourList, optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"})
+                <span asp-validation-for="Tour" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConditionVisitor" class="control-label"></label>
+                <input asp-for="ConditionVisitor" class="form-control" value="@Model.ConditionVisitor" />
+                <span asp-validation-for="ConditionVisitor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConditionHome" class="control-label"></label>
+                <input asp-for="ConditionHome" class="form-control" value="@Model.ConditionHome" />
+                <span asp-validation-for="ConditionHome" class="text-danger"></span>
+            </div>
+            <div class="form-group m-1">
+                <label asp-for="VisitorTeamId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.VisitorTeamId, (SelectList)ViewBag.visitorTeamsList, optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"} )
+                <span asp-validation-for="VisitorTeamId" class="text-danger"></span>
+            </div>
+            <div class="form-group m-1">
+                <label asp-for="HomeTeamId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.HomeTeamId, (SelectList)ViewBag.homeTeamsList, optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"} )
+                <span asp-validation-for="HomeTeamId" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="@Model.Game.PointsVisitor" class="control-label"></label>
-                <input asp-for="@Model.Game.PointsVisitor" class="form-control" value="@Model.Game.PointsVisitor" />
-                <span asp-validation-for="@Model.Game.PointsVisitor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Game.PointsHome" class="control-label"></label>
-                <input asp-for="@Model.Game.PointsHome" class="form-control" value="@Model.Game.PointsHome" />
-                <span asp-validation-for="@Model.Game.PointsHome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Game.Tour" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.Game.Tour, Model.TourSL, optionLabel: "--- оберіть ---")
-                <span asp-validation-for="@Model.Game.Tour" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Game.ConditionVisitor" class="control-label"></label>
-                <input asp-for="@Model.Game.ConditionVisitor" class="form-control" value="@Model.Game.ConditionVisitor" />
-                <span asp-validation-for="@Model.Game.ConditionVisitor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="@Model.Game.ConditionHome" class="control-label"></label>
-                <input asp-for="@Model.Game.ConditionHome" class="form-control" value="@Model.Game.ConditionHome" />
-                <span asp-validation-for="@Model.Game.ConditionHome" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="@Model.Game.HomeTeamId" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.Game.HomeTeamId, @Model.HomeTeamSL, optionLabel: "--- оберіть ---" )
-                <span asp-validation-for="@Model.Game.HomeTeamId" class="text-danger"></span>
-            </div>
-            <div>
-                <label asp-for="@Model.Game.VisitorTeamId" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.Game.VisitorTeamId, Model.VisitorTeamSL, optionLabel: "--- оберіть ---" )
-                <span asp-validation-for="@Model.Game.VisitorTeamId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="form-group m-1">
                 <input type="submit" value="Done" class="btn btn-primary" />
             </div>
-        </form>*@
+        </form>
     </div>
 </div>
 
