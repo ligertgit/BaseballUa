@@ -19,6 +19,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Web.Mvc.Html;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Controllers
@@ -457,9 +458,11 @@ namespace BaseballUa.Controllers
             
             var gamesWithTeamsDAL = new GamesCrud(_db).GetAll(schemaGroupId).ToList();
             var gamesWithTeamsVL = new GameToView().ConvertAll(gamesWithTeamsDAL).ToList();
+            var schemaGroup = new SchemaGroupCrud(_db).Get(schemaGroupId);
 
             ViewData["schemaGroupId"] = schemaGroupId;
-
+            ViewBag.schemaGroup = new SchemaGroupToView().Convert(schemaGroup, doSubConvert : false);
+            
             return View(gamesWithTeamsVL);
         }
 
@@ -892,7 +895,9 @@ namespace BaseballUa.Controllers
             var teamDAL = new TeamCrud(_db).Get(teamId);
             if(teamDAL != null)
             {
-                var sportTypeSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text", teamDAL.SportType);
+                //var sportTypeSL = new SelectList(new TeamCrud(_db).GetSelectItemList(), "Value", "Text", teamDAL.SportType);
+                var sportTypeSL = Enums.SportType.NotDefined.ToSelectList();
+                sportTypeSL.SetSelected(((int)teamDAL.SportType).ToString());
                 var clubSL = new SelectList(new ClubCrud(_db).GetSelectItemList(), "Value", "Text", teamDAL.ClubId);
                 ViewBag.SportTypeSL = sportTypeSL;
                 ViewBag.ClubSL = clubSL;
@@ -1048,7 +1053,8 @@ namespace BaseballUa.Controllers
         public IActionResult AddPlayer(int teamId)
         {
             var playerVL = new PlayerToView().CreateEmpty(teamId);
-
+            var sexSL = new SelectList(EnumHelper.GetSelectList(typeof(Enums.Sex)), "Value", "Text");
+            ViewBag.sexSL = sexSL;
             return View(playerVL);
         }
 
@@ -1172,10 +1178,30 @@ namespace BaseballUa.Controllers
             return View(videosVL);
         }
 
-        public IActionResult AddVideo(int? newsId)
+        //public IActionResult AddVideo(int? newsId)
+        //{
+        //    var VideoVL = new VideoToView().CreateEmpty();
+        //    if (newsId != null)
+        //    {
+        //        var newsDAL = new NewsCrud(_db).Get((int)newsId);
+        //        if (newsDAL != null && newsDAL.Id == newsId)
+        //        {
+        //            ViewBag.News = new NewsToView().Convert(newsDAL);
+        //        }
+        //    }
+
+        //    ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
+        //    ViewBag.CategorySL = new CategoriesCrud(_db).GetSelectItemList();
+        //    ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList(uaOnly : true);
+        //    ViewBag.GamesSL = new GamesCrud(_db).GetSelectItemList();
+
+        //    return View(VideoVL);
+        //}
+
+        public IActionResult AddVideo(int categoryId = 0, int newsId = 0, int teamId = 0, int gameId = 0, SportType sportType = SportType.NotDefined)
         {
             var VideoVL = new VideoToView().CreateEmpty();
-            if (newsId != null)
+            if (newsId > 0)
             {
                 var newsDAL = new NewsCrud(_db).Get((int)newsId);
                 if (newsDAL != null && newsDAL.Id == newsId)
@@ -1184,21 +1210,60 @@ namespace BaseballUa.Controllers
                 }
             }
 
-            ViewBag.NewsSL = new NewsCrud(_db).GetSelectItemList();
-            ViewBag.CategorySL = new CategoriesCrud(_db).GetSelectItemList();
-            ViewBag.TeamSL = new TeamCrud(_db).GetSelectItemList(uaOnly : true);
-            ViewBag.GamesSL = new GamesCrud(_db).GetSelectItemList();
+            var categorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text");
+            categorySL.SetSelected(categoryId.ToString());
+            var newsSL = new SelectList(new NewsCrud(_db).GetSelectItemList(), "Value", "Text");
+            newsSL.SetSelected(newsId.ToString());
+            var teamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly: true), "Value", "Text");
+            teamSL.SetSelected(teamId.ToString());
+            var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text");
+            gameSL.SetSelected(gameId.ToString());
+            var sportSL = Enums.SportType.NotDefined.ToSelectList();
+            sportSL.SetSelected(Convert.ToInt32(sportType).ToString());
+
+            ViewBag.CategorySL = categorySL;
+            ViewBag.NewsSL = newsSL;
+            ViewBag.TeamSL = teamSL;
+            ViewBag.GameSL = gameSL;
+            ViewBag.SportSL = sportSL;
+
+            ViewBag.newsId = newsId;
+            ViewBag.gameId = gameId;
+            ViewBag.teamId = teamId;
 
             return View(VideoVL);
         }
 
+        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddVideo(VideoVM videoVM)
+        public IActionResult AddVideo(VideoVM videoVM, int navNewsId = 0, int navTeamId = 0, int navGameId = 0)
         {
             if (ModelState.IsValid)
             {
                 new VideosCrud(_db).Add(new VideoToView().ConvertBack(videoVM));
+            }
+
+            if (navGameId > 0)
+            {
+                var gameDAL = new GamesCrud(_db).Get(navGameId);
+                if (gameDAL != null)
+                {
+                    return RedirectToAction("ListGames", new { schemaGroupId = gameDAL.SchemaGroupId });
+                }
+            }
+            else if (navTeamId > 0)
+            {
+                var teamDAL = new TeamCrud(_db).Get(navTeamId);
+                if (teamDAL != null)
+                {
+                    return RedirectToAction("ListTeams", new { clubId = teamDAL.ClubId });
+                }
+            }
+            else if (navNewsId > 0)
+            {
+                return RedirectToAction("ListNews");
             }
 
             return RedirectToAction("ListVideos");
@@ -1698,26 +1763,53 @@ namespace BaseballUa.Controllers
             return View(pageDataVM);
         }
 
-        public IActionResult AddNews()
+        public IActionResult AddNews(int categoryId = 0, int eventId = 0, int teamId = 0, SportType sportType = SportType.NotDefined)
         {
             var newsVL = new NewsToView().CreateEmpty();
 
-            ViewBag.eventsSL = new EventsCrud(_db).GetSelectItemList();
-            ViewBag.categoriesSL = new CategoriesCrud(_db).GetSelectItemList();
-            ViewBag.teamsSL = new TeamCrud(_db).GetSelectItemList();
+            var eventSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text");
+            eventSL.SetSelected(eventId.ToString());
+            var categorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text");
+            categorySL.SetSelected(categoryId.ToString());
+            var teamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly: true), "Value", "Text");
+            teamSL.SetSelected(teamId.ToString());
+            var sportSL = Enums.SportType.NotDefined.ToSelectList();
+            sportSL.SetSelected(Convert.ToInt32(sportType).ToString());
+
+            ViewBag.CategorySL = categorySL;
+            ViewBag.TeamSL = teamSL;
+            ViewBag.SportSL = sportSL;
+            ViewBag.EventSL = eventSL;
+
+            ViewBag.eventId = eventId;
+            ViewBag.teamId = teamId;
 
             return View(newsVL);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddNews(NewsVM newsVL)
+        public IActionResult AddNews(NewsVM newsVL, int navTeamId = 0, int navEventId = 0)
         {
             if(ModelState.IsValid)
             {
                 var newsDAL = new NewsToView().ConvertBack(newsVL);
                 new NewsCrud(_db).Add(newsDAL);
             }
+
+            if (navTeamId > 0)
+            {
+                var teamDAL = new TeamCrud(_db).Get(navTeamId);
+                if (teamDAL != null)
+                {
+                    return RedirectToAction("ListTeams", new { clubId = teamDAL.ClubId });
+                }
+            }
+            else if (navEventId > 0)
+            {
+                return RedirectToAction("ListEvents");
+            }
+
 
             return RedirectToAction("ListNews");
         }

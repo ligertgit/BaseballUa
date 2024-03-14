@@ -15,7 +15,7 @@
 <img src="~/images/club/logoBig/@ViewBag.Club.FnameLogoBig" />
 
 <p>
-    <a asp-action="AddTeam" asp-route-clubId="@ViewBag.Club.Id">Додати команду</a>
+    <a class="btn btn-primary" asp-action="AddTeam" asp-route-clubId="@ViewBag.Club.Id">Додати команду</a>
 </p>
 <table class="table">
     <thead>
@@ -56,21 +56,33 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FnameLogoSmall)
                 <img src="~/images/team/logoSmall/@item.FnameLogoSmall" />
                 <a class="btn btn-warning" asp-action="UpdateTeamLogo" asp-route-teamId="@item.Id">Нове лого</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FnameLogoBig)
                 <img src="~/images/team/logoBig/@item.FnameLogoBig" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsTemp)
             </td>
             <td>
-                <a class="btn btn-primary" asp-action="ListPlayers" asp-route-teamId="@item.Id">Подивитися гравців команди</a>
-                <a class="btn btn-warning" asp-action="EditTeam" asp-route-teamId="@item.Id">Редагувати</a>
-                <a class="btn btn-danger" asp-action="DeleteTeam" asp-route-teamId="@item.Id" title="Якщо нема ігор, альбомів, новин, відео, гравців">Видалити</a>
+                <div class="m-1">
+                    <a class="btn btn-primary" asp-action="ListPlayers" asp-route-teamId="@item.Id">Гравці</a>
+                </div>
+                <div class="m-1">
+                    <a class="btn btn-primary" asp-action="ListNews" asp-route-teamId="@item.Id">Новини</a>
+                </div>
+                <div class="m-1">
+                    <a class="btn btn-primary" asp-action="ListVideos" asp-route-teamId="@item.Id">Відео</a>
+                </div>
+                <div class="m-1">
+                    <a class="btn btn-primary" asp-action="ListAlbums" asp-route-teamId="@item.Id">Альбоми</a>
+                </div>
+                <div class="m-1">
+                    <a class="btn btn-warning" asp-action="EditTeam" asp-route-teamId="@item.Id">Редагувати</a>
+                    <a class="btn btn-danger" asp-action="DeleteTeam" asp-route-teamId="@item.Id" title="Якщо нема ігор, альбомів, новин, відео, гравців">Видалити</a>
+                </div>
+                
             </td>
         </tr>
 }

@@ -10,16 +10,21 @@
     </div>
 </div>
 
-<form asp-action="PublishNews">
-    <input type="hidden" name="newsId" value="@Model" />
-    <div class="form-group">
-        <label>Новини у стрічці сортуються по датам. Можна указати дату у минулому. Якщо дата буде у майбутньому -- вона з'явиться у стрічках коли настане цей час'</label>
-        @{ 
-            var curDate = DateTime.Now;
-        }
-        <div>
-            <input class="w-25 form-control" name="publishDate" type="date" value="@curDate" />
+<div class="container-fluid">
+    <h1>Публікація новини на певну дату</h1>
+    <form asp-action="PublishNews">
+        <input type="hidden" name="newsId" value="@Model" />
+        <div class="form-group">
+            <label>Новини у стрічці сортуються по датам. Можна указати дату у минулому. Якщо дата буде у майбутньому -- вона з'явиться у стрічках коли настане цей час'</label>
+            @{
+                var curDate = DateTime.Now;
+            }
+            <div>
+                <input class="w-25 form-control" name="publishDate" type="date" value="@curDate" />
+            </div>
         </div>
-    </div>
-    <input type="submit" value="Опублікувати" class="btn btn-primary" />
-</form>
+        <div class="m-2">
+            <input type="submit" value="Опублікувати" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

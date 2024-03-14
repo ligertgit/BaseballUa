@@ -11,57 +11,45 @@
     </div>
 </div>
 
-<h1>Додати фото до альбому (@ViewBag.album.Name | @ViewBag.album.PublishDate )</h1>
+<div class="container-fluid">
+    <h1>Додати фото до альбому (@ViewBag.album.Name | @ViewBag.album.PublishDate )</h1>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-@*        <form asp-action="AddPhoto">
-            <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
-            <div class="form-group">
-                <label>Список імен фоток:</label>
-                <textarea class="form-control" name="fnames" cols="1" rows="20"></textarea>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Додати" class="btn btn-primary" />
-            </div>
-        </form>*@
-
-        <form action="UploadPhoto"
-              enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
-              method="post">
-            <dl>
-                <dt>
-                    <label for="FileUpload_FormFile">File</label>
-                </dt>
-                <dd>
-                    <input type="hidden" name="AlbumId" value="@Model.AlbumId" />
-                    <input type="file"
-                           name="formFiles" multiple />
-                </dd>
-            </dl>
-
-            <input class="btn" type="submit" value="Upload" />
-
-            <div style="margin-top:15px">
-                <output name="result"></output>
-            </div>
-        </form>
-
-        <a class="btn btn-primary" asp-action="NavigationAddPhoto" asp-route-navGameId="@ViewBag.navGameId" 
-                                                                    asp-route-navTeamId="@ViewBag.navTeamId"
-                                                                    asp-route-navNewsId="@ViewBag.navNewsId"
-                                                                    asp-route-navAlbumId="@Model.AlbumId">Прийняти</a>
-
-            @*<form asp-action="AddPhoto">
-                <input type="hidden" asp-for="AlbumId" value="@Model.AlbumId" />
-                <div class="form-group">
-                    <input type="submit" value="Додати фото і опублікувати альбом" class="btn btn-primary" />
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form action="UploadPhoto"
+                  enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
+                  method="post">
+                <dl>
+                    <dt>
+                        <label for="FileUpload_FormFile">1. Виберіть файл:</label>
+                    </dt>
+                    <dd>
+                        <input type="hidden" name="AlbumId" value="@Model.AlbumId" />
+                        <input type="file"
+                               name="formFiles" multiple />
+                    </dd>
+                </dl>
+                <label>2. Нажміть:</label>
+                <input class="btn btn-primary" type="submit" value="Завантажити" />
+                <div>
+                    <label>3. Зачекайте появи відповіді про успішне завантаження:</label>
                 </div>
-            </form>*@
+                <div style="margin-top:15px">
+                    <label>Результат: </label>
+                    <output class="h4 text-warning" name="result"></output>
+                </div>
+            </form>
 
+            <a class="btn btn-primary" asp-action="NavigationAddPhoto" asp-route-navGameId="@ViewBag.navGameId"
+               asp-route-navTeamId="@ViewBag.navTeamId"
+               asp-route-navNewsId="@ViewBag.navNewsId"
+               asp-route-navAlbumId="@Model.AlbumId">Прийняти</a>
+        </div>
     </div>
 </div>
+
+
 
 <script>
     async function AJAXSubmit(oFormElement) {

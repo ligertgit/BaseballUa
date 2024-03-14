@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Videos list";
+    int navGameId = 0;
+    int navTeamId = 0;
+    int navNewsId = 0;
 }
 
 <div class="container-fluid text-warning adminhead">
@@ -13,7 +16,29 @@
 <h1>Відео:</h1>
 
 <p>
-    <a class="btn btn-primary" asp-action="AddVideo">Додати відео З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
+    @if (ViewBag.game != null)
+    {
+        navGameId = ViewBag.game.GameViewModelId;
+        <h3>@ViewBag.game.Name</h3>
+        <h3>@ViewBag.game.VisitorTeam.Name -- @ViewBag.game.HomeTeam.Name</h3>
+        <a class="btn btn-primary" asp-action="AddVideo" asp-route-gameId="@navGameId">Додати відео до ГРИ</a>
+    }
+    else if (ViewBag.team != null)
+    {
+        navTeamId = ViewBag.team.Id;
+        <h3>@ViewBag.team.Name</h3>
+        <a class="btn btn-primary" asp-action="AddVideo" asp-route-teamId="@navTeamId">Додати відео до КОМНАДИ</a>
+    }
+    else if (ViewBag.news != null)
+    {
+        navNewsId = ViewBag.news.Id;
+        <h3>@ViewBag.news.Title</h3>
+        <a class="btn btn-primary" asp-action="AddVideo" asp-route-newsId="@navNewsId">Додати відео до НОВИНИ</a>
+    }
+    else
+    {
+        <a class="btn btn-primary" asp-action="AddVideo">Додати відео З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ</a>
+    }
 </p>
 
 @if (Model == null || Model.Count == 0)
@@ -69,9 +94,7 @@ else
             {
                 <tr>
                     <td>
-                        <a asp-action="EditVideo" asp-route-videoId="@item.Id">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </a>
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Description)

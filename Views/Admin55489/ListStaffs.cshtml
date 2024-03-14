@@ -13,7 +13,7 @@
 <h1>Список працівників клуба @ViewBag.club.Name</h1>
 
 <p>
-    <a asp-action="AddStaff" asp-route-clubId=@ViewBag.club.Id>Додати працівника</a>
+    <a class="btn btn-primary" asp-action="AddStaff" asp-route-clubId=@ViewBag.club.Id>Додати працівника</a>
 </p>
 <table class="table">
     <thead>
@@ -32,9 +32,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.AvatarSmall)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AvatarLarge)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ClubId)
@@ -58,17 +55,18 @@
                 @Html.DisplayFor(modelItem => item.RoleDescription)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AvatarSmall)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AvatarLarge)
+                <img src="~/images/staff/avatarSmall/@item.AvatarSmall" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClubId)
             </td>
             <td>
+                <div class="m-1">
                     <a class="btn btn-warning" asp-action="UpdateStaffAvatar" asp-route-staffId="@item.Id">Новий аватар</a>
+                </div>
+                <div class="m-1">
                     <a class="btn btn-danger" asp-action="DeleteStaff" asp-route-staffId="@item.Id">Видалити</a>
+                </div>
             </td>
         </tr>
 }

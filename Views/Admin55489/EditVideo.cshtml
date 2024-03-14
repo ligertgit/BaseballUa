@@ -11,72 +11,75 @@
     </div>
 </div>
 
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="UpdateVideo">
-            @Html.AntiForgeryToken()
-            @if(Model.Video != null)
-            {
-                <input type="hidden" asp-for="Video.Id" value="@Model.Video.Id" />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Video.SportType" class="control-label"></label>
-                    @Html.DropDownListFor(c => Model.Video.SportType, Model.SportTypeSL, optionLabel: "--- оберіть ---")
-                    @Html.ValidationMessageFor(c => Model.Video.SportType, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="Video.IsGeneral" value="@Model.Video.IsGeneral" /> @Html.DisplayNameFor(model => Model.Video.IsGeneral)
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Video.Name" class="control-label"></label>
-                    <input asp-for="Video.Name" class="form-control" value="@Model.Video.Name" />
-                    <span asp-validation-for="Video.Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Video.Description" class="control-label"></label>
-                    <input asp-for="Video.Description" class="form-control" value="@Model.Video.Description" />
-                    <span asp-validation-for="Video.Description" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Video.Fname" class="control-label"></label>
-                    <input asp-for="Video.Fname" class="form-control" value="@Model.Video.Fname" />
-                    <span asp-validation-for="Video.Fname" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Video.PublishDate" class="control-label"></label>
-                    <input type="datetime" asp-for="Video.PublishDate" class="form-control" value="@Model.Video.PublishDate" />
-                    <span asp-validation-for="Video.PublishDate" class="text-danger"></span>
-                </div>
-                <div class="form-group m-1">
-                    <label asp-for="Video.NewsId" class="control-label"></label>
-                    @Html.DropDownListFor(c => Model.Video.NewsId, Model.NewsSL, optionLabel: "--- оберіть ---")
-                    @Html.ValidationMessageFor(c => Model.Video.NewsId, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group m-1">
-                    <label asp-for="Video.CategoryId" class="control-label"></label>
-                    @Html.DropDownListFor(c => Model.Video.CategoryId, Model.CategorySL, optionLabel: "--- оберіть ---")
-                    @Html.ValidationMessageFor(c => Model.Video.CategoryId, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group m-1">
-                    <label asp-for="Video.TeamId" class="control-label"></label>
-                    @Html.DropDownListFor(c => Model.Video.TeamId, Model.TeamSL, optionLabel: "--- оберіть ---")
-                    @Html.ValidationMessageFor(c => Model.Video.TeamId, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group m-1">
-                    <label asp-for="Video.GameId" class="control-label"></label>
-                    @Html.DropDownListFor(c => Model.Video.GameId, Model.GameSl, optionLabel: "--- оберіть ---")
-                    @Html.ValidationMessageFor(c => Model.Video.GameId, "", new { @class = "text-danger" })
-                </div>
-                <div class="form-group m-1">
-                    <input type="submit" value="Прийняти" class="btn btn-primary" />
-                </div>
-            }
-        </form>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="UpdateVideo">
+                @Html.AntiForgeryToken()
+                @if (Model.Video != null)
+                {
+                    <input type="hidden" asp-for="Video.Id" value="@Model.Video.Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Video.SportType" class="control-label"></label>
+                        @Html.DropDownListFor(c => Model.Video.SportType, Model.SportTypeSL, optionLabel: "--- оберіть ---", htmlAttributes : new { @class = "form-control"})
+                        @Html.ValidationMessageFor(c => Model.Video.SportType, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Video.IsGeneral" value="@Model.Video.IsGeneral" /> @Html.DisplayNameFor(model => Model.Video.IsGeneral)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Video.Name" class="control-label"></label>
+                        <input asp-for="Video.Name" class="form-control" value="@Model.Video.Name" />
+                        <span asp-validation-for="Video.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Video.Description" class="control-label"></label>
+                        <input asp-for="Video.Description" class="form-control" value="@Model.Video.Description" />
+                        <span asp-validation-for="Video.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Video.Fname" class="control-label"></label>
+                        <label>(URL адреса, наприклад: https://youtube.com/something)</label>
+                        <input asp-for="Video.Fname" class="form-control" value="@Model.Video.Fname" />
+                        <span asp-validation-for="Video.Fname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Video.PublishDate" class="control-label"></label>
+                        <input type="datetime" asp-for="Video.PublishDate" class="form-control" value="@Model.Video.PublishDate" />
+                        <span asp-validation-for="Video.PublishDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group m-1">
+                        <label asp-for="Video.NewsId" class="control-label"></label>
+                        @Html.DropDownListFor(c => Model.Video.NewsId, Model.NewsSL, optionLabel: "--- оберіть ---", htmlAttributes : new { @class = "form-control"})
+                        @Html.ValidationMessageFor(c => Model.Video.NewsId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group m-1">
+                        <label asp-for="Video.CategoryId" class="control-label"></label>
+                        @Html.DropDownListFor(c => Model.Video.CategoryId, Model.CategorySL, optionLabel: "--- оберіть ---", htmlAttributes : new { @class = "form-control"})
+                        @Html.ValidationMessageFor(c => Model.Video.CategoryId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group m-1">
+                        <label asp-for="Video.TeamId" class="control-label"></label>
+                        @Html.DropDownListFor(c => Model.Video.TeamId, Model.TeamSL, optionLabel: "--- оберіть ---", htmlAttributes : new { @class = "form-control"})
+                        @Html.ValidationMessageFor(c => Model.Video.TeamId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group m-1">
+                        <label asp-for="Video.GameId" class="control-label"></label>
+                        @Html.DropDownListFor(c => Model.Video.GameId, Model.GameSl, optionLabel: "--- оберіть ---", htmlAttributes : new { @class = "form-control"})
+                        @Html.ValidationMessageFor(c => Model.Video.GameId, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group m-2">
+                        <input type="submit" value="Прийняти" class="btn btn-primary" />
+                    </div>
+                }
+            </form>
+        </div>
     </div>
 </div>
+
 
 @section Scripts {
     @{

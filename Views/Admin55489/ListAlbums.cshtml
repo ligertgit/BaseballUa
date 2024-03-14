@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Albums list";
+    int navGameId = 0;
+    int navTeamId = 0;
+    int navNewsId = 0;
 }
 
 <div class="container-fluid text-warning adminhead">
@@ -11,6 +14,222 @@
 </div>
 
 <h1>Альбоми:</h1>
+
+<p>
+    @if(ViewBag.game != null)
+    {
+        navGameId = ViewBag.game.GameViewModelId;
+        <h3>@ViewBag.game.Name</h3>
+        <h3>@ViewBag.game.VisitorTeam.Name -- @ViewBag.game.HomeTeam.Name</h3>
+        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-gameId="@navGameId">Додати альбом до ГРИ</a>
+    }
+    else if(ViewBag.team != null)
+    {
+        navTeamId = ViewBag.team.Id;
+        <h3>@ViewBag.team.Name</h3>
+        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-teamId="@navTeamId">Додати альбом до КОМНАДИ</a>
+    }
+    else if(ViewBag.news != null)
+    {
+        navNewsId = ViewBag.news.Id;
+        <h3>@ViewBag.news.Title</h3>
+        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-newsId="@navNewsId">Додати альбом до НОВИНИ</a>
+    }
+    else
+    {
+        <a class="btn btn-primary" asp-action="AddAlbum">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ</a>
+    }
+</p>
+
+@if (Model == null || Model.Count == 0)
+{
+    <div class="row m-1">
+        <h4>
+            Пусто
+        </h4>
+    </div>
+} 
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().SportType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().IsGeneral)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().PublishDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().News)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Team)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().Game)
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SportType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsGeneral)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PublishDate)
+                    </td>
+                    <td>
+                        @if (item.News != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.News.Id)
+                            @Html.DisplayFor(modelItem => item.News.Title)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Category != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Category.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Team != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Team.Name)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Game != null && item.Game.HomeTeam != null && item.Game.VisitorTeam != null)
+                        {
+                            @Html.DisplayFor(modelItem => item.Game.Name)
+                            @Html.DisplayFor(modelItem => item.Game.HomeTeam.Name)
+                            @Html.DisplayFor(modelItem => item.Game.VisitorTeam.Name)
+                            @if (item.Game.SchemaGroup?.EventSchemaItem?.Event?.Tournament != null)
+                            {
+                                @Html.DisplayFor(modelItem => item.Game.SchemaGroup.EventSchemaItem.Event.Tournament.Name)
+                            }
+
+                        }
+                    </td>
+                    <td>
+                        <div class="m-1">
+                            <a class="btn btn-primary" asp-action="AddPhoto" asp-route-albumId="@item.Id" asp-route-navGameId="@navGameId" asp-route-navTeamId="@navTeamId" asp-route-navNewsId="@navNewsId">Додати фото</a>
+                        </div>
+                        <div class="m-1">
+                            <a class="btn btn-primary" asp-action="ListPhotos" asp-route-albumId="@item.Id">Список фоток</a>
+                        </div>
+                        <div class="m-1">
+                            <a class="btn btn-warning" asp-action="EditAlbum" asp-route-albumId="@item.Id">Редагувати</a>
+                        </div>
+                        <div class="m-1">
+                            @if(item.NewsId != null)
+                            {
+                                <a class="btn btn-danger" asp-action="DeleteNewsAlbum" asp-route-albumId="@item.Id" asp-route-newsId="@item.NewsId">Видалити з новини</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" href="#">Видалити з новини</a>
+                            }
+                        </div>
+                        <div class="m-1">
+                            @if (item.GameId != null)
+                            {
+                                <a class="btn btn-danger" asp-action="DeleteGameAlbum" asp-route-albumId="@item.Id" asp-route-gameId="@item.GameId">Видалити з гри</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" href="#">Видалити з гри</a>
+                            }
+                        </div>
+                        <div class="m-1">
+                            @if (item.TeamId != null)
+                            {
+                                <a class="btn btn-danger" asp-action="DeleteTeamAlbum" asp-route-albumId="@item.Id" asp-route-teamId="@item.TeamId">Видалити з команди</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger disabled" href="#">Видалити з команди</a>
+                            }
+                        </div>
+                        <div class="m-1">
+                            <a class="btn btn-danger" asp-action="DeleteAlbum" asp-route-albumId="@item.Id">Видалити повністю</a>
+                        </div>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <ul class="pagination pagination-lg m-3">
+        @if (ViewBag.SkipPrev != null)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-skip="@ViewBag.SkipPrev"
+                                   asp-route-isGeneral="@ViewBag.isGeneral"
+                                   asp-route-newsId="@ViewBag.news?.Id"
+                                   asp-route-categoryId="@ViewBag.category?.Id"
+                                   asp-route-teamId="@ViewBag.team?.Id"
+                                   asp-route-gameId="@ViewBag.game?.GameViewModelId"
+                                   asp-route-lastDate="@ViewBag.lastDate"
+                                   asp-route-lastId="@ViewBag.lastId">&laquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&laquo;</a>
+            </li>
+        }
+
+        @if (ViewBag.SkipNext != null)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-route-skip="@ViewBag.SkipNext"
+                                   asp-route-isGeneral="@ViewBag.isGeneral"
+                                   asp-route-newsId="@ViewBag.news?.Id"
+                                   asp-route-categoryId="@ViewBag.category?.Id"
+                                   asp-route-teamId="@ViewBag.team?.Id"
+                                   asp-route-gameId="@ViewBag.game?.GameViewModelId"
+                                   asp-route-lastDate="@ViewBag.lastDate"
+                                   asp-route-lastId="@ViewBag.lastId">&raquo;</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <a href="#" class="page-link">&raquo;</a>
+            </li>
+        }
+    </ul>
+}
+
 @*<h1>Альбоми, що підходять ВСІМ умовам:</h1>
 <div class="row">
     <div class="row">
@@ -21,7 +240,7 @@
             @if (ViewBag.sportType == null)
             {
                 <label>Будь який</label>
-            } 
+            }
             else
             {
                 <label>@ViewBag.sportType</label>
@@ -139,216 +358,3 @@
     </div>
 </div>
 *@
-<p>
-
-           @* ViewBag.news = newsId == null ? null : new NewsToView().Convert(new NewsCrud(_db).Get((int)newsId));
-            ViewBag.team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
-            ViewBag.game = gameId == null ? null : new GameToView().Convert(new GamesCrud(_db).Get((int)gameId));*@
-
-    @if(ViewBag.game != null)
-    {
-        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-gameId="@ViewBag.game.GameViewModelId">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
-    }
-    else if(ViewBag.team != null)
-    {
-        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-teamId="@ViewBag.team.id">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
-    }
-    else if(ViewBag.news != null)
-    {
-        <a class="btn btn-primary" asp-action="AddAlbum" asp-route-newsId="@ViewBag.news.id">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
-    }
-    else
-    {
-        <a class="btn btn-primary" asp-action="AddAlbum">Додати альбом З ВИБОРОМ НОВИНИ, ГРИ, КОМНАДИ...</a>
-    }
-</p>
-
-@if (Model == null || Model.Count == 0)
-{
-    <div class="row m-1">
-        <h4>
-            Пусто
-        </h4>
-    </div>
-} 
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().Description)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().SportType)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().IsGeneral)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().PublishDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().News)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().Category)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().Team)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().Game)
-                </th>
-                <th>
-
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.SportType)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsGeneral)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PublishDate)
-                    </td>
-                    <td>
-                        @if (item.News != null)
-                        {
-                            @Html.DisplayFor(modelItem => item.News.Id)
-                            @Html.DisplayFor(modelItem => item.News.Title)
-                        }
-                    </td>
-                    <td>
-                        @if (item.Category != null)
-                        {
-                            @Html.DisplayFor(modelItem => item.Category.Name)
-                        }
-                    </td>
-                    <td>
-                        @if (item.Team != null)
-                        {
-                            @Html.DisplayFor(modelItem => item.Team.Name)
-                        }
-                    </td>
-                    <td>
-                        @if (item.Game != null && item.Game.HomeTeam != null && item.Game.VisitorTeam != null)
-                        {
-                            @Html.DisplayFor(modelItem => item.Game.Name)
-                            @Html.DisplayFor(modelItem => item.Game.HomeTeam.Name)
-                            @Html.DisplayFor(modelItem => item.Game.VisitorTeam.Name)
-                            @if (item.Game.SchemaGroup?.EventSchemaItem?.Event?.Tournament != null)
-                            {
-                                @Html.DisplayFor(modelItem => item.Game.SchemaGroup.EventSchemaItem.Event.Tournament.Name)
-                            }
-
-                        }
-                    </td>
-                    <td>
-                        <div class="m-1">
-                            <a class="btn btn-primary" asp-action="AddPhoto" asp-route-albumId="@item.Id">Додати фото</a>
-                        </div>
-                        <div class="m-1">
-                            <a class="btn btn-primary" asp-action="ListPhotos" asp-route-albumId="@item.Id">Список фоток</a>
-                        </div>
-                        <div class="m-1">
-                            <a class="btn btn-warning" asp-action="EditAlbum" asp-route-albumId="@item.Id">Редагувати</a>
-                        </div>
-                        <div class="m-1">
-                            @if(item.NewsId != null)
-                            {
-                                <a class="btn btn-danger" asp-action="DeleteNewsAlbum" asp-route-albumId="@item.Id" asp-route-newsId="@item.NewsId">Видалити з новини</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-danger disabled" href="#">Видалити з новини</a>
-                            }
-                        </div>
-                        <div class="m-1">
-                            @if (item.GameId != null)
-                            {
-                                <a class="btn btn-danger" asp-action="DeleteGameAlbum" asp-route-albumId="@item.Id" asp-route-gameId="@item.GameId">Видалити з гри</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-danger disabled" href="#">Видалити з гри</a>
-                            }
-                        </div>
-                        <div class="m-1">
-                            @if (item.TeamId != null)
-                            {
-                                <a class="btn btn-danger" asp-action="DeleteTeamAlbum" asp-route-albumId="@item.Id" asp-route-teamId="@item.TeamId">Видалити з гри</a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-danger disabled" href="#">Видалити з команди</a>
-                            }
-                        </div>
-                        <div class="m-1">
-                            <a class="btn btn-danger" asp-action="DeleteAlbum" asp-route-albumId="@item.Id">Видалити повністю</a>
-                        </div>
-
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <ul class="pagination pagination-lg m-3">
-        @if (ViewBag.SkipPrev != null)
-        {
-            <li class="page-item">
-                <a class="page-link" asp-route-skip="@ViewBag.SkipPrev"
-                                   asp-route-isGeneral="@ViewBag.isGeneral"
-                                   asp-route-newsId="@ViewBag.news?.Id"
-                                   asp-route-categoryId="@ViewBag.category?.Id"
-                                   asp-route-teamId="@ViewBag.team?.Id"
-                                   asp-route-gameId="@ViewBag.game?.GameViewModelId"
-                                   asp-route-lastDate="@ViewBag.lastDate"
-                                   asp-route-lastId="@ViewBag.lastId">&laquo;</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item disabled">
-                <a href="#" class="page-link">&laquo;</a>
-            </li>
-        }
-
-        @if (ViewBag.SkipNext != null)
-        {
-            <li class="page-item">
-                <a class="page-link" asp-route-skip="@ViewBag.SkipNext"
-                                   asp-route-isGeneral="@ViewBag.isGeneral"
-                                   asp-route-newsId="@ViewBag.news?.Id"
-                                   asp-route-categoryId="@ViewBag.category?.Id"
-                                   asp-route-teamId="@ViewBag.team?.Id"
-                                   asp-route-gameId="@ViewBag.game?.GameViewModelId"
-                                   asp-route-lastDate="@ViewBag.lastDate"
-                                   asp-route-lastId="@ViewBag.lastId">&raquo;</a>
-            </li>
-        }
-        else
-        {
-            <li class="page-item disabled">
-                <a href="#" class="page-link">&raquo;</a>
-            </li>
-        }
-    </ul>
-}
-

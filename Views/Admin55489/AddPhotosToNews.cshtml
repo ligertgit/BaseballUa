@@ -12,92 +12,95 @@
 
 <h1>Додати фотки до заголовка новини:</h1>
 
-<div class="row">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-3">
-            Заголовок:
+        <div class="row">
+            <div class="col-3">
+                Заголовок:
+            </div>
+            <div class="col-3">
+                @Model.Title
+            </div>
         </div>
-        <div class="col-3">
-            @Model.Title
+        <div class="row">
+            <div class="col-3">
+                Дата публікації:
+            </div>
+            <div class="col-3">
+                @Model.PublishDate
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            Дата публікації:
-        </div>
-        <div class="col-3">
-            @Model.PublishDate
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            Турнір:
-        </div>
-        <div class="col-3">
-            @if (Model.Event != null)
-            {
-                <label>@Model.Event.Year </label>
-                if (Model.Event.Tournament != null)
+        <div class="row">
+            <div class="col-3">
+                Турнір:
+            </div>
+            <div class="col-3">
+                @if (Model.Event != null)
                 {
-                    <label>@Model.Event.Tournament.Name</label>
+                    <label>@Model.Event.Year </label>
+                    if (Model.Event.Tournament != null)
+                    {
+                        <label>@Model.Event.Tournament.Name</label>
+                    }
                 }
-            }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                Категорія:
+            </div>
+            <div class="col-3">
+                @if (Model.Category != null)
+                {
+                    <label>@Model.Category.Name</label>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                Команда:
+            </div>
+            <div class="col-3">
+                @if (Model.Team != null)
+                {
+                    <label>@Model.Team.Name</label>
+                }
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-3">
-            Категорія:
+
+    <hr />
+
+    <form action="AddPhotosToNews"
+          enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
+          method="post">
+        <dl>
+            <dt>
+                <label for="FileUpload_FormFile">1. Виберіть файл:</label>
+            </dt>
+            <dd>
+                <input type="hidden" name="NewsId" value="@Model.Id" />
+                <input type="file"
+                       name="formFiles" multiple />
+            </dd>
+        </dl>
+        
+        <label>2. Нажміть:</label>
+        <input class="btn btn-primary" type="submit" value="Завантажити" />
+        <div>
+            <label>3. Зачекайте появи відповіді про успішне завантаження:</label>
         </div>
-        <div class="col-3">
-            @if (Model.Category != null)
-            {
-                <label>@Model.Category.Name</label>
-            }
+        <div style="margin-top:15px">
+            <label>Результат: </label>
+            <output class="h4 text-warning" name="result"></output>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-3">
-            Команда:
-        </div>
-        <div class="col-3">
-            @if (Model.Team != null)
-            {
-                <label>@Model.Team.Name</label>
-            }
-        </div>
-    </div>
+
+
+    </form>
+
+    <a asp-action="ListTitlePhotos" asp-route-newsId="@Model.Id">Подивитися фотки у загловку новини</a>
 </div>
 
-<hr />
-
-<form action="AddPhotosToNews"
-      enctype="multipart/form-data" onsubmit="AJAXSubmit(this);return false;"
-      method="post">
-    <dl>
-        <dt>
-            <label for="FileUpload_FormFile">File</label>
-        </dt>
-        <dd>
-            <input type="hidden" name="NewsId" value="@Model.Id" />
-            <input type="file"
-                   name="formFiles" multiple />
-        </dd>
-    </dl>
-
-    <input class="btn" type="submit" value="Upload" />
-
-    <div style="margin-top:15px">
-        <output name="result"></output>
-    </div>
-
-
-</form>
-
-<form asp-action="ListAlbums">
-    <div class="form-group">
-        <input type="submit" value="Додати фото до новини" class="btn btn-primary" />
-    </div>
-</form>
 
 <script>
     async function AJAXSubmit(oFormElement) {
@@ -120,26 +123,3 @@
         }
     }
 </script>
-
-@*<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddPhotosToNews">
-            @Html.AntiForgeryToken()
-            <input type="hidden" asp-for="News.Id" value="@Model.News.Id" />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="PhotoIds" class="control-label"></label>
-                @Html.ListBoxFor(c => Model.PhotoIds, Model.PhotosMSL, new {size = 50});
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Додати" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}*@

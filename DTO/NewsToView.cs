@@ -1,4 +1,5 @@
-﻿using BaseballUa.Models;
+﻿using BaseballUa.Data;
+using BaseballUa.Models;
 using BaseballUa.ViewModels;
 
 namespace BaseballUa.DTO
@@ -85,7 +86,7 @@ namespace BaseballUa.DTO
         public NewsVM CreateEmpty()
         {
             var newsVL = new NewsVM();
-            newsVL.PublishDate = DateTime.Now;
+            newsVL.PublishDate = DateTime.Now.CurDateNoSeconds();
 
             return newsVL;
         }

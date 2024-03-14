@@ -14,29 +14,37 @@
 <h1>Поновити клубне лого</h1>
 
 <hr />
-<div class="row">
+<div class="row m-2">
     @if(Model != null && Model.Id > 0)
     {
-        <div class="col-md-4">
-            <label asp-for="Name" class="control-label"></label>
-            <label asp-for="Description" class="control-label"></label>
-            <label asp-for="Invitation" class="control-label"></label>
-            <img src="~/images/club/logoBig/@Model.FnameLogoBig" />
-        </div>
-        <div class="col-md-4">
-            <form asp-action="UpdateClubLogo" enctype="multipart/form-data" method="post">
-                @Html.AntiForgeryToken()
-                @Html.HiddenFor(c => Model.Id)
-                <div class="form-group">
-                    <label class="control-label">Нове лого: </label>
-                    <input type="file" name="formFiles" />
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Поновити" class="btn btn-primary" />
-                </div>
-            </form>
+        <div class="col-md-2">
+            <div>
+                <img src="~/images/club/logoBig/@Model.FnameLogoBig" />
+            </div>
+            <div>
+                <label class="control-label">@Model.Name</label>
+            </div>
+            <hr />
+
+            <div class="m-2">
+                <form asp-action="UpdateClubLogo" enctype="multipart/form-data" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(c => Model.Id)
+                    <div class="form-group">
+                        <label class="control-label">Нове лого: </label>
+                        <input type="file" name="formFiles" />
+                    </div>
+                    <div class="form-group m-2">
+                        <input type="submit" value="Поновити" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
         </div>
     }
+
+    <div>
+        <a asp-action="ListClubs">Повернутися до списку клубів</a>
+    </div>
 </div>
 
 @section Scripts {

@@ -16,66 +16,69 @@
     </div>
 </div>
 
-<h1>Додати альбом</h1>
+<div class="container-fluid">
+    <h1>Додати альбом</h1>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditAlbum">
-            @Html.AntiForgeryToken()
-            @Html.HiddenFor(a => a.Id)
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="SportType" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.SportType, sportTypeSL, optionLabel: "--- оберіть ---")
-                @Html.ValidationMessageFor(c => c.SportType, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsGeneral" /> @Html.DisplayNameFor(model => model.IsGeneral)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PublishDate" class="control-label"></label>
-                <input asp-for="PublishDate" class="form-control" />
-                <span asp-validation-for="PublishDate" class="text-danger"></span>
-            </div>
-            <div class="form-group m-1">
-                <label asp-for="NewsId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.NewsId, newsSL, optionLabel: "--- оберіть ---")
-                @Html.ValidationMessageFor(c => c.NewsId, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group m-1">
-                <label asp-for="CategoryId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.CategoryId, categorySL, optionLabel: "--- оберіть ---")
-                @Html.ValidationMessageFor(c => c.CategoryId, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group m-1">
-                <label asp-for="TeamId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.TeamId, teamSL, optionLabel: "--- оберіть ---")
-                @Html.ValidationMessageFor(c => c.TeamId, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group m-1">
-                <label asp-for="GameId" class="control-label"></label>
-                @Html.DropDownListFor(c => Model.GameId, gameSL, optionLabel: "--- оберіть ---")
-                @Html.ValidationMessageFor(c => c.GameId, "", new { @class = "text-danger" })
-            </div>
-            <div class="form-group m-1">
-                <input class="btn btn-primary" type="submit" value="Прийняти" />
-            </div>
-        </form>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="EditAlbum">
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(a => a.Id)
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="SportType" class="control-label"></label>
+                    @Html.DropDownListFor(c => Model.SportType, sportTypeSL, optionLabel: "--- оберіть ---", htmlAttributes: new { @class="form-control"})
+                    @Html.ValidationMessageFor(c => c.SportType, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsGeneral" /> @Html.DisplayNameFor(model => model.IsGeneral)
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PublishDate" class="control-label"></label>
+                    <input asp-for="PublishDate" class="form-control" />
+                    <span asp-validation-for="PublishDate" class="text-danger"></span>
+                </div>
+                <div class="form-group m-1">
+                    <label asp-for="NewsId" class="control-label"></label>
+                    @Html.DropDownListFor(c => Model.NewsId, newsSL, optionLabel: "--- оберіть ---", htmlAttributes: new { @class="form-control"})
+                    @Html.ValidationMessageFor(c => c.NewsId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group m-1">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    @Html.DropDownListFor(c => Model.CategoryId, categorySL, optionLabel: "--- оберіть ---", htmlAttributes: new { @class="form-control"})
+                    @Html.ValidationMessageFor(c => c.CategoryId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group m-1">
+                    <label asp-for="TeamId" class="control-label"></label>
+                    @Html.DropDownListFor(c => Model.TeamId, teamSL, optionLabel: "--- оберіть ---", htmlAttributes: new { @class="form-control"})
+                    @Html.ValidationMessageFor(c => c.TeamId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group m-1">
+                    <label asp-for="GameId" class="control-label"></label>
+                    @Html.DropDownListFor(c => Model.GameId, gameSL, optionLabel: "--- оберіть ---", htmlAttributes: new { @class="form-control"})
+                    @Html.ValidationMessageFor(c => c.GameId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group m-2">
+                    <input class="btn btn-primary" type="submit" value="Прийняти" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+
 
 @section Scripts {
     @{

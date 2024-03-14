@@ -93,7 +93,7 @@ namespace BaseballUa.BlData
 
         public List<SelectListItem> GetSelectItemList()
         {
-            var sList = _dbContext.Clubs.Select(c => new SelectListItem
+            var sList = _dbContext.Clubs.OrderBy(c => c.CountryId).ThenBy(c => c.Name).Select(c => new SelectListItem
             {
                 Text = c.Name,
                 Value = c.Id.ToString()

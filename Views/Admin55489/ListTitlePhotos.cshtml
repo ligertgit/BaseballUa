@@ -12,123 +12,123 @@
 
 <h1>Фотки заголовка новини:</h1>
 
-
-
-@if (Model == null)
-{
-    <div class="row m-1">
-        <h4>
-            Невідома новина
-        </h4>
-    </div>
-}
-else
-{
-    <div class="row">
-        <div class="row">
-            <div class="col-3">
-                Заголовок:
-            </div>
-            <div class="col-3">
-                @Model.Title
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-3">
-                Дата публікації:
-            </div>
-            <div class="col-3">
-                @Model.PublishDate
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-3">
-                Турнір:
-            </div>
-            <div class="col-3">
-                @if (Model.Event != null)
-                {
-                    <label>@Model.Event.Year </label>
-                    if (Model.Event.Tournament != null)
-                    {
-                        <label>@Model.Event.Tournament.Name</label>
-                    }
-                }
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-3">
-                Категорія:
-            </div>
-            <div class="col-3">
-                @if (Model.Category != null)
-                {
-                    <label>@Model.Category.Name</label>
-                }
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-3">
-                Команда:
-            </div>
-            <div class="col-3">
-                @if (Model.Team != null)
-                {
-                    <label>@Model.Team.Name</label>
-                }
-            </div>
-        </div>
-    </div>
-
-    <hr />
-
-    @if (Model.Photos == null || Model.Photos.Count == 0)
+<div class="container-fluid">
+    @if (Model == null)
     {
-        <label>Нема фоток</label>
+        <div class="row">
+            <h4>
+                Невідома новина
+            </h4>
+        </div>
     }
     else
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Photos.First().Name)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Photos.First().Description)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Photos.First().FnameOrig)
-                    </th>
-                    <th>
-                    </th>
-                    <th>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var photo in Model.Photos)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => photo.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => photo.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => photo.FnameOrig)
-                        </td>
-                        <td>
-                            <img src="~/images/photo/small/@photo.AlbumId/@photo.FnameSmall" />
-                        </td>
-                        <td>
-                            <a class="btn btn-danger" asp-action="DeleteTPAlbum" asp-route-newsId="@Model.Id" asp-route-tPId="@photo.Id">Видалити з новини</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+        <div class="row">
+            <div class="row">
+                <div class="col-3">
+                    Заголовок:
+                </div>
+                <div class="col-3">
+                    @Model.Title
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    Дата публікації:
+                </div>
+                <div class="col-3">
+                    @Model.PublishDate
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    Турнір:
+                </div>
+                <div class="col-3">
+                    @if (Model.Event != null)
+                    {
+                        <label>@Model.Event.Year </label>
+                        if (Model.Event.Tournament != null)
+                        {
+                            <label>@Model.Event.Tournament.Name</label>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    Категорія:
+                </div>
+                <div class="col-3">
+                    @if (Model.Category != null)
+                    {
+                        <label>@Model.Category.Name</label>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    Команда:
+                </div>
+                <div class="col-3">
+                    @if (Model.Team != null)
+                    {
+                        <label>@Model.Team.Name</label>
+                    }
+                </div>
+            </div>
+        </div>
 
-}
+        <hr />
+
+        @if (Model.Photos == null || Model.Photos.Count == 0)
+        {
+            <label>Нема фоток</label>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Photos.First().Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Photos.First().Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Photos.First().FnameOrig)
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var photo in Model.Photos)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => photo.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => photo.Description)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => photo.FnameOrig)
+                            </td>
+                            <td>
+                                <img src="~/images/photo/small/@photo.AlbumId/@photo.FnameSmall" />
+                            </td>
+                            <td>
+                                <a class="btn btn-danger" asp-action="DeleteTPAlbum" asp-route-newsId="@Model.Id" asp-route-tPId="@photo.Id">Видалити з новини</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+</div>
+

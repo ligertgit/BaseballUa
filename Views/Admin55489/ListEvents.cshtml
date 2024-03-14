@@ -62,12 +62,16 @@
             </td>
             <td>
                 <div class="mb-1">
+                    <a class="btn btn-primary" asp-action="ListSchemaItems" asp-route-eventId="@item.EventViewModelId">Список блоків турніру</a>
+                    @*<a class="btn btn-primary" asp-action="DetailsEvent" asp-route-id="@item.EventViewModelId">Деталі</a>*@
+                </div>
+                <div class="mb-1">
+                    <a class="btn btn-primary" asp-action="ListNews" asp-route-eventId="@item.EventViewModelId">Новини</a>
+                </div>
+                <div class="mb-1">
                     <a class="btn btn-warning" asp-action="EditEvent" asp-route-id="@item.EventViewModelId">Редагувати</a>
                 </div>
-                    <div class="mb-1">
-                    <a class="btn btn-primary" asp-action="DetailsEvent" asp-route-id="@item.EventViewModelId">Деталі</a>
-                </div>
-                <div>
+                <div class="mb-1">
                     <a class="btn btn-primary" asp-action="ListEventTeams" asp-route-eventId="@item.EventViewModelId">Команди</a>
                 </div>
 @*                <a asp-action="AddGame" asp-route-eventId="@item.EventViewModelId">Додати гру</a> |

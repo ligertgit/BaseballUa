@@ -10,64 +10,78 @@
     </div>
 </div>
 
+<h1>Список клубів</h1>
 <p>
-    <a asp-action="AddClub">Додати клуб</a>
+    <a class="btn btn-primary" asp-action="AddClub">Додати клуб</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Invitation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FnameLogoSmall)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FnameLogoBig)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Invitation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FnameLogoSmall)
-                <img src="~/images/club/logoSmall/@item.FnameLogoSmall" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FnameLogoBig)
-                <img src="~/images/club/logoBig/@item.FnameLogoBig" />
-                <a class="btn btn-warning m-1" asp-action="UpdateClubLogo" asp-route-clubId="@item.Id">Завантажити</a>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country.Id)
-                <img src="~/images/country/flagBig/@item.Country.FnameFlagBig" />
-            </td>
-            <td>
-                    <a class="btn btn-primary m-1" asp-action="ListTeams" asp-route-clubId="@item.Id">Список команд</a> |
-                    <a class="btn btn-primary m-1" asp-action="ListStaffs" asp-route-clubId="@item.Id">Працівники</a>
-                    <a class="btn btn-warning m-1" asp-action="EditClub" asp-route-clubId="@item.Id">Редагувати</a>
-            </td>
-        </tr>
+@if(Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Invitation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FnameLogoSmall)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Country)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Invitation)
+                    </td>
+                    <td>
+                        <div>
+                            @Html.DisplayFor(modelItem => item.FnameLogoSmall)
+                        </div>
+                        <div>
+                            <img src="~/images/club/logoSmall/@item.FnameLogoSmall" />
+                        </div>
+                        <div>
+                            <a class="btn btn-warning m-1" asp-action="UpdateClubLogo" asp-route-clubId="@item.Id">Завантажити</a>
+                        </div>
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.Country.Id)*@
+                        @if(item.Country != null)
+                        {
+                            <img src="~/images/country/flagBig/@item.Country.FnameFlagBig" />
+                        }
+                    </td>
+                    <td>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="ListTeams" asp-route-clubId="@item.Id">Список команд</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary m-1" asp-action="ListStaffs" asp-route-clubId="@item.Id">Працівники</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-warning m-1" asp-action="EditClub" asp-route-clubId="@item.Id">Редагувати</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>
+

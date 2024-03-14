@@ -2,7 +2,8 @@
 @model BaseballUa.ViewModels.Custom.ListNewsVM
 
 @{
-    ViewData["Title"] = "Videos news";
+    ViewData["Title"] = "List news";
+
 }
 
 <div class="container-fluid text-warning adminhead">
@@ -38,132 +39,28 @@
 </div>
 
 
-<div class="container-fluid pb-5">
-
-</div>
-
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
 
-
-@*<h1>Новини, що підходять ВСІМ умовам:</h1>
-<div class="row">
-    <div class="row">
-        <div class="col-2">
-            Спорт:
-        </div>
-        <div class="col-2">
-            @if (ViewBag.sportType == null)
-            {
-                <label>Будь який</label>
-            }
-            else
-            {
-                <label>@ViewBag.sportType</label>
-            }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-2">
-            Глобального розповсюдження:
-        </div>
-        <div class="col-2">
-            @if (ViewBag.isGeneral == null)
-            {
-                <label>Не має значення</label>
-            }
-            else
-            {
-                <label>@ViewBag.isGeneral</label>
-            }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-2">
-            Належить до турніру:
-        </div>
-        <div class="col-2">
-            @if (ViewBag.eventt == null)
-            {
-                <label>Будь якого</label>
-            }
-            else
-            {
-                if (ViewBag.eventt.Tournament != null)
-                {
-                    <label>@ViewBag.Eventt.Tournament.Name | </label>
-                }
-                <label>@ViewBag.eventt.Year</label>
-            }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-2">
-            Категорія:
-        </div>
-        <div class="col-2">
-            @if (ViewBag.category == null)
-            {
-                <label>Будь яка</label>
-            }
-            else
-            {
-                <label>@ViewBag.category.Name</label>
-            }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-2">
-            Команда:
-        </div>
-        <div class="col-2">
-            @if (ViewBag.team == null)
-            {
-                <label>Будь яка</label>
-            }
-            else
-            {
-                <label>@ViewBag.team.Name</label>
-            }
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-2">
-            Педжинейшн:
-        </div>
-        <div class="col-2">
-            @if (ViewBag.lastDate == null)
-            {
-                <label>Будь яка дата</label>
-            }
-            else
-            {
-                <label>
-                    Новини не пізніше: @ViewBag.lastDate
-                </label>
-            }
-        </div>
-        <div class="col-2">
-            @if (ViewBag.lastId == null)
-            {
-                <label>ID не меньше:</label>
-            }
-            else
-            {
-                <label>
-                    Новини не пізніше: @ViewBag.lastId
-                </label>
-            }
-        </div>
-    </div>
-</div>*@
-
+<h1>Новини</h1>
 <p>
-    <a class="btn btn-primary" asp-action="AddNews">Додати новину</a>
+    @if(Model != null && Model.Team != null)
+    {
+        <h3>Для команди @Model.Team.Name</h3>
+        <a class="btn btn-primary" asp-action="AddNews" asp-route-teamId="@Model.Team.Id">Додати новину до команди</a>
+    }
+    else if(Model != null && Model.Event != null)
+    {
+        <h3>Для турніру @Model.Event.Tournament.Name</h3>
+        <a class="btn btn-primary" asp-action="AddNews" asp-route-eventId="@Model.Event.EventViewModelId">Додати новину до турніру</a>
+    }
+    else
+    {
+        <a class="btn btn-primary" asp-action="AddNews">Додати новину</a>
+    }
 </p>
 
 @if (Model == null || Model.News == null || Model.News.Count == 0)

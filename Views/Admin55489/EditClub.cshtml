@@ -14,7 +14,7 @@
 <h1>Редагувати клуб</h1>
 
 <hr />
-<div class="row">
+<div class="row m-2">
     <div class="col-md-4">
         <form asp-action="AddClub">
             @Html.AntiForgeryToken()
@@ -37,27 +37,17 @@
             </div>
             <input type="hidden" asp-for="FnameLogoBig" class="form-control" value="@Constants.DefaultClubBigImage" />
             <input type="hidden" asp-for="FnameLogoSmall" class="form-control" value="@Constants.DefaultClubSmallImage" />
-@*            <div class="form-group">
-                <label asp-for="FnameLogoSmall" class="control-label"></label>
-                <input asp-for="FnameLogoSmall" class="form-control" />
-                <span asp-validation-for="FnameLogoSmall" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FnameLogoBig" class="control-label"></label>
-                <input asp-for="FnameLogoBig" class="form-control" />
-                <span asp-validation-for="FnameLogoBig" class="text-danger"></span>
-            </div>*@
             
             <div class="form-group">
                 <label asp-for="CountryId" class="control-label"></label>
                 @{
                     SelectList countrySL = ViewBag.CountriesSL;
                 }
-                @Html.DropDownListFor(c => Model.CountryId, countrySL, optionLabel: "--- оберіть ---")
+                @Html.DropDownListFor(c => Model.CountryId, countrySL, optionLabel: "--- оберіть ---", htmlAttributes: new {@class="form-control"})
                 @*@Html.DropDownListFor(c => Model.CountryId, new SelectList(ViewBag.CountriesSL, "Value", "Text"), optionLabel: "--- оберіть ---")*@
                 @Html.ValidationMessageFor(c => c.CountryId, "", new { @class = "text-danger" })
             </div>
-            <div class="form-group">
+            <div class="form-group m-1">
                 <input type="submit" value="Прийняти" class="btn btn-primary" />
             </div>
         </form>
@@ -65,7 +55,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="ListClubs">Повернутися до списку клубів</a>
 </div>
 
 @section Scripts {
