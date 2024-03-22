@@ -12,7 +12,7 @@ namespace BaseballUa.Models
         public SportType SportType { get; set; }
         [StringLength(50)]
         public string Name { get; set; }
-        [StringLength(100)]
+        [StringLength(2500)]
         public string? Description { get; set; }
         [StringLength(50)]
         public string FnameLogoSmall { get; set; }
