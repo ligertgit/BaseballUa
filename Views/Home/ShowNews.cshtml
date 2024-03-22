@@ -59,7 +59,8 @@
                 </div>
                 <div class="col" style="min-width: 400px">
                     <div class="row pt-3">
-                        <h5>@Model.Description</h5>
+                        @*<h5>@Model.Description</h5>*@
+                        <h5>@Html.Raw(Model.Description)</h5>
                     </div>
                 </div>
             </div>

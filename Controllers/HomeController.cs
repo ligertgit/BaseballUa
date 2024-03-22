@@ -76,7 +76,8 @@ namespace BaseballUa.Controllers
 														   isInternational: filters.International,
 														   isAnnual: filters.Annual,
 														   categoryIds: selectedCategories,
-														   newestDate: DateTime.Now).ToList();
+														   newestDate: DateTime.Now,
+                                                           amount : Constants.DefaulHeaderAlbumsAmount).ToList();
 			pageDataVM.LastAlbums = new AlbumToView().ConvertAll(albumsDAL);
 
 			//var eventsDAL = new EventsCrud(_db).GetAllFilteredActive(sportType: filters.GetSelectedSport(),
@@ -106,7 +107,8 @@ namespace BaseballUa.Controllers
 															   isInternational: filters.International,
 															   isAnnual: filters.Annual,
 															   categoryIds: selectedCategories,
-															   newestDate: DateTime.Now).ToList();
+															   newestDate: DateTime.Now,
+                                                               amount : Constants.DefaulHeaderVideosAmount).ToList();
 			pageDataVM.LastVideos = new VideoToView().ConvertAll(videosDAL);
 
 			return View(pageDataVM);

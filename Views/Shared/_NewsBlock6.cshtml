@@ -1,4 +1,6 @@
 ﻿@using BaseballUa.Data;
+@using System.Web;
+@using System.Text.RegularExpressions;
 @model List<BaseballUa.ViewModels.NewsVM>
 
 @if (Model != null && Model.Count() > 0)
@@ -65,16 +67,19 @@
 						@if (news.Description != null)
 						{
 							<span class="text-wrap justify-content-between" style="font-size:18px">
-								@if (news.Description.Length > Constants.NewsPreviewLength)
+								@{
+									var DecodedDescription = HttpUtility.HtmlDecode(Regex.Replace(news.Description, "<(.|\n)*?>", ""));
+								}
+								@if (DecodedDescription.Length > Constants.NewsPreviewLength)
 								{
-									@news.Description.Substring(0, Constants.NewsPreviewLength);
+									@DecodedDescription.Substring(0, Constants.NewsPreviewLength);					;
 									<a asp-controller="Home" asp-action="ShowNews" asp-route-newsId="@news.Id" class="text-decoration-none text-decoration-underline text-white-50">
 										...
 									</a>
 								}
 								else
 								{
-									@news.Description;
+									@DecodedDescription
 								}
 							</span>
 						}

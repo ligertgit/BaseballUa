@@ -17,6 +17,7 @@ namespace BaseballUa.Data
 
 
 		public const int DefaulVideosAmount = 25;
+		public const int DefaulHeaderVideosAmount = 8;
 		public const int DefaulListVideosAmount = 100;
 		public const string DefaultVideoSmallImage = "videoSmall.png";
 		public const string DefaultVideoBigImage = "videoBig.png";
@@ -38,6 +39,7 @@ namespace BaseballUa.Data
 		public const string DefaultAlbumSmallImage = "small.png";
 		public const string DefaultAlbumBigImage = "big.png";
 		public const int DefaulAlbumsAmount = 25;
+		public const int DefaulHeaderAlbumsAmount = 10;
 		public const int DefaulListAlbumsAmount = 100;
 		public const int AlbumPreviewLength = 400;
 		public const int MaxThumbMediumAlbumName = 28;

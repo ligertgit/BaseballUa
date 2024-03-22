@@ -19,6 +19,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web.Mvc.Html;
 using static BaseballUa.Data.Enums;
 
@@ -1649,6 +1650,19 @@ namespace BaseballUa.Controllers
             return RedirectToAction("ListAlbums", new { newsId = newsId });
         }
 
+        public IActionResult DeleteTeamAlbum(int albumId, int teamId)
+        {
+            var teamDAL = new NewsCrud(_db).Get(teamId);
+            var albumDAL = new AlbumsCrud(_db).Get(albumId);
+            if (teamDAL != null && albumDAL != null && albumDAL.TeamId == teamId)
+            {
+                albumDAL.TeamId = null;
+                new AlbumsCrud(_db).Update(albumDAL);
+            }
+
+            return RedirectToAction("ListAlbums", new { teamId = teamId });
+        }
+
         public IActionResult ListTitlePhotos(int newsId)
         {
             var newsDAL = new NewsCrud(_db).Get(newsId);
@@ -1794,7 +1808,7 @@ namespace BaseballUa.Controllers
             if(ModelState.IsValid)
             {
                 var newsDAL = new NewsToView().ConvertBack(newsVL);
-                new NewsCrud(_db).Add(newsDAL);
+				new NewsCrud(_db).Add(newsDAL);
             }
 
             if (navTeamId > 0)

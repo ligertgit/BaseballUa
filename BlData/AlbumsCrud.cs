@@ -89,7 +89,7 @@ namespace BaseballUa.BlData
                                             .Include(a => a.Photos);
         }
 
-        public IEnumerable<Album> GetAllEventAlbums(int? eventId, int amount = Constants.DefaulAlbumsAmount)
+        public IEnumerable<Album> GetAllEventAlbums(int? eventId, int amount = Constants.DefaulHeaderAlbumsAmount)
 		{
 			var eventAlbums = new List<Album>();
 			if ( eventId != null && amount > 0)

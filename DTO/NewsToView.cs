@@ -1,6 +1,7 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
+using System.Text.RegularExpressions;
 
 namespace BaseballUa.DTO
 {
@@ -79,6 +80,12 @@ namespace BaseballUa.DTO
 			newsDAL.CategoryId = newsVM.CategoryId;
 			newsDAL.EventId = newsVM.EventId;
 			newsDAL.TeamId = newsVM.TeamId;
+
+			if (newsDAL.Description != null)
+			{
+				Regex rRemScript = new Regex(@"<script[^>]*>[\s\S]*?</script>");
+				newsDAL.Description = rRemScript.Replace(newsDAL.Description, "");
+			}
 
 			return newsDAL;
 		}
