@@ -23,7 +23,7 @@ namespace BaseballUa.ViewModels
 		[Required]
 		[DisplayName("Заголовок")]
 		public string Title { get; set; }
-		[StringLength(500)]
+		[StringLength(2500)]
 		[Required]
 		[DisplayName("Текст")]
 		public string Description { get; set; }

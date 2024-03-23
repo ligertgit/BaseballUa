@@ -19,7 +19,7 @@ namespace BaseballUa.ViewModels
         public string Name { get; set; }
 
         [DisplayName("Опис")]
-        [StringLength(100)]
+        [StringLength(2500)]
         public string? Description { get; set; }
 
         [DisplayName("Лого")]

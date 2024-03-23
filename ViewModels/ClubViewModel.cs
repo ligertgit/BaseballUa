@@ -18,10 +18,10 @@ namespace BaseballUa.ViewModels
 
 
         [DisplayName("Опис")]
-        [StringLength(100)]
+        [StringLength(2500)]
         public string? Description { get; set; }
         [DisplayName("Як записатися")]
-        [StringLength(100)]
+        [StringLength(150)]
         public string? Invitation { get; set; }
 
         [DisplayName("Маленьке лого")]

@@ -60,7 +60,7 @@ namespace BaseballUa.BlData
             //return _dbContext.Clubs;
         }
 
-        public IEnumerable<Club> GetAllWithTeams()
+        public IEnumerable<Club> GetAllWithTeams(bool uaOnly = false)
         {
             //var result = (from club in _dbContext.Clubs.Include(c => c.Staffs)
             //              join team in _dbContext.Teams on club.Id equals team.ClubId into subTeams
@@ -79,7 +79,7 @@ namespace BaseballUa.BlData
             //                  Teams = g.ToList()
             //              }
             //              );
-            var result = _dbContext.Clubs.Where(c => c.Id != Constants.EuroClubId).Include(c => c.Teams).Include(c => c.Staffs);
+            var result = _dbContext.Clubs.Where(c => !uaOnly || c.CountryId == Constants.UaCountryId).Include(c => c.Teams).Include(c => c.Staffs);
 
             return result;
         }

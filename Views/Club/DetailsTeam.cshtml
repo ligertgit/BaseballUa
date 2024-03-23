@@ -73,7 +73,8 @@
 {
     <div class="container-fluid bg-primary pt-3 pb-3 mb-0">
         <div class="text-white rounded-2 border border-light border-1 m-0 p-2" style="font-family: monospace; font-size:18px">
-            @Html.DisplayFor(model => model.Team.Description)
+            @*@Html.DisplayFor(model => model.Team.Description)*@
+            @Html.Raw(Model.Team.Description)
         </div>
     </div>
 

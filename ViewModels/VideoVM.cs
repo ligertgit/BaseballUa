@@ -20,10 +20,10 @@ namespace BaseballUa.ViewModels
 		[Required]
 		[DisplayName("Назва")]
 		public string Name { get; set; }
-		[StringLength(200)]
+		[StringLength(500)]
 		[DisplayName("Опис")]
 		public string? Description { get; set; }
-		[StringLength(50)]
+		[StringLength(350)]
 		[Required]
 		[DisplayName("Файл")]
 		public string Fname { get; set; }
