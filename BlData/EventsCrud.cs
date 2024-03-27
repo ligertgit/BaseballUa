@@ -37,6 +37,7 @@ namespace BaseballUa.BlData
                                                 .OrderByDescending(e => e.Id)
                                                 .Include(e => e.Tournament)
                                                     .ThenInclude(t => t.Category)
+                                                .Include(e => e.EventToteams)
                                                 //.Include(e => e.News)
                                                 //    .ThenInclude(n => n.NewsTitlePhotos)
                                                 //        .ThenInclude(t => t.Photo)

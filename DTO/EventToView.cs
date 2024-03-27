@@ -22,7 +22,11 @@ namespace BaseballUa.DTO
             {
 				eventView.Tournament = new TournamentToView().Convert(eventDAL.Tournament, false);
 			}
-            
+            if (eventDAL.EventToteams != null)
+            {
+                eventView.EventTeamsIds = eventDAL.EventToteams.Select(x => x.TeamId).ToList();
+            }
+
             //eventView.TournamentList = _dbContext.Tournaments.Select(a => new SelectListItem
             //{
             //    Text = $"{a.Sport.ToString()} | {a.Category.ShortName} | {a.Name}",

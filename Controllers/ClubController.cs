@@ -18,7 +18,7 @@ namespace BaseballUa.Controllers
         }
         public IActionResult Index()
         {
-            var ClubsDL = new ClubCrud(_db).GetAllWithTeams();
+            var ClubsDL = new ClubCrud(_db).GetAllWithTeams(uaOnly: true);
             var ClubsVL = new ClubToView().ConvertAll(ClubsDL.ToList());
             
             return View(ClubsVL);

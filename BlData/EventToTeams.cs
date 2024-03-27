@@ -1,4 +1,5 @@
 ﻿using BaseballUa.Data;
+using BaseballUa.DTO;
 using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,6 +47,12 @@ namespace BaseballUa.BlData
         public void Delete(int eventId, int teamId)
         {
             _dbContext.EventToTeams.Where(ett => ett.EventId == eventId && ett.TeamId == teamId).ExecuteDelete();
+            _dbContext.SaveChanges();
+        }
+
+        public void DeleteList(int eventId)
+        {
+            _dbContext.EventToTeams.Where(i => i.EventId == eventId).ExecuteDelete();
             _dbContext.SaveChanges();
         }
 

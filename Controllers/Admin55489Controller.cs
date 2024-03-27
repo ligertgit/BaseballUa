@@ -190,7 +190,9 @@ namespace BaseballUa.Controllers
             var eventView = new EventToView().Convert(eventDAL);
 
             var tournamentsDTO = new TournamentsCrud(_db).GetAll().ToList();
+            var teamsList = new TeamCrud(_db).GetAll().ToList();
             eventView.SelectTournament = new TournamentToView().GetSelect(tournamentsDTO);
+            eventView.EventTeamsSL = new SelectList(new TeamToView().GetFullSelestList(teamsList), "Value", "Text");
 
             return View(eventView);
         }
@@ -203,6 +205,14 @@ namespace BaseballUa.Controllers
             {
                 var eventDAL = new EventToView().ConvertBack(eventView);
                 new EventsCrud(_db).Update(eventDAL);
+                new EventToTeamsCrud(_db).DeleteList(eventDAL.Id);
+                if (!eventView.EventTeamsIds.IsNullOrEmpty() && eventDAL.Id > 0)
+                {
+                    foreach (var teamId in eventView.EventTeamsIds)
+                    {
+                        new EventToTeamsCrud(_db).Add(eventDAL.Id, teamId);
+                    }
+                }
             }
 
             return RedirectToAction("ListEvents");
