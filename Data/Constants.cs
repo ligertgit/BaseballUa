@@ -6,6 +6,7 @@ namespace BaseballUa.Data
 	public static class Constants
 	{
 		public const int DefaulSelectListAmount = 25;
+		public const int HugeSelectListAmount = 50;
 		public const int MenuTitleLength = 22;
 
 		public const int DefaultPhotoAmount = 100;
@@ -26,7 +27,7 @@ namespace BaseballUa.Data
 
 
 		public const int DefaulEventAmount = 6;
-		public const int DefaulActiveEventDaysShift = 100;
+		public const int DefaulActiveEventDaysShift = 10;
 		public const int EventPreviewLength = 400;
 
 

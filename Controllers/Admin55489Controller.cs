@@ -1227,7 +1227,7 @@ namespace BaseballUa.Controllers
             newsSL.SetSelected(newsId.ToString());
             var teamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly: true), "Value", "Text");
             teamSL.SetSelected(teamId.ToString());
-            var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text");
+            var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(gameId: gameId == 0 ? null : gameId), "Value", "Text");
             gameSL.SetSelected(gameId.ToString());
             var sportSL = Enums.SportType.NotDefined.ToSelectList();
             sportSL.SetSelected(Convert.ToInt32(sportType).ToString());
@@ -1791,7 +1791,7 @@ namespace BaseballUa.Controllers
         {
             var newsVL = new NewsToView().CreateEmpty();
 
-            var eventSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text");
+            var eventSL = new SelectList(new EventsCrud(_db).GetSelectItemList(amount: Constants.HugeSelectListAmount), "Value", "Text");
             eventSL.SetSelected(eventId.ToString());
             var categorySL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text");
             categorySL.SetSelected(categoryId.ToString());
@@ -1846,7 +1846,7 @@ namespace BaseballUa.Controllers
                 var newsVL = new NewsToView().Convert(newsDAL);
                 var categoriesSL = new SelectList(new CategoriesCrud(_db).GetSelectItemList(), "Value", "Text", newsVL.CategoryId);
                 var teamsSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly: true), "Value", "Text", newsVL.TeamId);
-                var eventsSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text", newsVL.EventId);
+                var eventsSL = new SelectList(new EventsCrud(_db).GetSelectItemList(amount : Constants.HugeSelectListAmount), "Value", "Text", newsVL.EventId);
                 var sportTypesSL = Enums.SportType.NotDefined.ToSelectList();
                 if(sportTypesSL.Any(st => st.Text == newsVL.SportType.ToString()))
                 {

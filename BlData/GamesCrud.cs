@@ -236,9 +236,10 @@ namespace BaseballUa.BlData
         //    return gamesForEventSchema;
         //}
 
-        public List<SelectListItem> GetSelectItemList()
+        public List<SelectListItem> GetSelectItemList(int? gameId = null)
         {
             var gamesSL = _dbContext.Games.Include(g => g.HomeTeam).Include(g => g.VisitorTeam)
+                                            .Where(g => gameId == null || g.Id == gameId)
                                             .OrderByDescending(g => g.Id)
                                             .Take(Constants.DefaulSelectListAmount)
                                             .OrderByDescending(g => g.StartDate)

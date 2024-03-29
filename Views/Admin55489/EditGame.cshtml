@@ -33,15 +33,15 @@
                 <input asp-for="AdditionalInfo" class="form-control" />
                 <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
             </div>
-        <div class="form-group m-1">
-                <label asp-for="RunsVisitor" class="control-label"></label>
-                <input class="bg-warning form-control" asp-for="RunsVisitor" />
-                <span asp-validation-for="RunsVisitor" class="text-danger"></span>
-            </div>
-        <div class="form-group m-1">
+            <div class="form-group m-1">
                 <label asp-for="RunsHome" class="control-label"></label>
                 <input class="bg-warning form-control" asp-for="RunsHome" />
                 <span asp-validation-for="RunsHome" class="text-danger"></span>
+            </div>
+            <div class="form-group m-1">
+                <label asp-for="RunsVisitor" class="control-label"></label>
+                <input class="bg-warning form-control" asp-for="RunsVisitor" />
+                <span asp-validation-for="RunsVisitor" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PlacedAt" class="control-label"></label>
@@ -59,14 +59,14 @@
                 <span asp-validation-for="GameStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PointsVisitor" class="control-label"></label>
-                <input asp-for="PointsVisitor" class="form-control" value="@Model.PointsVisitor" />
-                <span asp-validation-for="PointsVisitor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="PointsHome" class="control-label"></label>
                 <input asp-for="PointsHome" class="form-control" value="@Model.PointsHome" />
                 <span asp-validation-for="PointsHome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PointsVisitor" class="control-label"></label>
+                <input asp-for="PointsVisitor" class="form-control" value="@Model.PointsVisitor" />
+                <span asp-validation-for="PointsVisitor" class="text-danger"></span>
             </div>
             <div class="form-group m-1">
                 <label asp-for="Tour" class="control-label"></label>
@@ -74,26 +74,25 @@
                 <span asp-validation-for="Tour" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ConditionVisitor" class="control-label"></label>
-                <input asp-for="ConditionVisitor" class="form-control" value="@Model.ConditionVisitor" />
-                <span asp-validation-for="ConditionVisitor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="ConditionHome" class="control-label"></label>
                 <input asp-for="ConditionHome" class="form-control" value="@Model.ConditionHome" />
                 <span asp-validation-for="ConditionHome" class="text-danger"></span>
             </div>
-            <div class="form-group m-1">
-                <label asp-for="VisitorTeamId" class="control-label"></label>
-                @Html.DropDownListFor(x => Model.VisitorTeamId, (SelectList)ViewBag.visitorTeamsList, optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"} )
-                <span asp-validation-for="VisitorTeamId" class="text-danger"></span>
+            <div class="form-group">
+                <label asp-for="ConditionVisitor" class="control-label"></label>
+                <input asp-for="ConditionVisitor" class="form-control" value="@Model.ConditionVisitor" />
+                <span asp-validation-for="ConditionVisitor" class="text-danger"></span>
             </div>
             <div class="form-group m-1">
                 <label asp-for="HomeTeamId" class="control-label"></label>
                 @Html.DropDownListFor(x => Model.HomeTeamId, (SelectList)ViewBag.homeTeamsList, optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"} )
                 <span asp-validation-for="HomeTeamId" class="text-danger"></span>
             </div>
-
+            <div class="form-group m-1">
+                <label asp-for="VisitorTeamId" class="control-label"></label>
+                @Html.DropDownListFor(x => Model.VisitorTeamId, (SelectList)ViewBag.visitorTeamsList, optionLabel: "--- оберіть ---", htmlAttributes: new { @class = "form-control"} )
+                <span asp-validation-for="VisitorTeamId" class="text-danger"></span>
+            </div>
             <div class="form-group m-1">
                 <input type="submit" value="Done" class="btn btn-primary" />
             </div>
