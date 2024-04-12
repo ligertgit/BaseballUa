@@ -65,7 +65,7 @@ namespace BaseballUa.Controllers
             eventDetailsFull.Albums = new AlbumToView().ConvertAll(eventALbumsDAL.ToList());
             var eventVideosDAL = new VideosCrud(_db).GetAllEventVideos(id);
             eventDetailsFull.Videos = new VideoToView().ConvertAll(eventVideosDAL.ToList());
-            var eventTeamsDAL = new TeamCrud(_db).GetEventTeams(id);
+            var eventTeamsDAL = new TeamCrud(_db).GetEventTeams(id).Where(i => i.Id != Constants.DefaultHomeTeamId && i.Id != Constants.DefaultVisitorTeamId);
             eventDetailsFull.Teams = new TeamToView().ConvertAll(eventTeamsDAL.ToList());
             var currentGamesDAL = new GamesCrud(_db).GetEventGames(id);
             eventDetailsFull.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList(), false);
@@ -156,12 +156,15 @@ namespace BaseballUa.Controllers
             }
             else 
             {
-                gamesByDay.GamesByDay = new EventSchemaItemToView().ConvertAllToGamesByDay(schemaItemsFullDAL.ToList()).OrderBy(gd => gd.GamesDate).ToList();
+                gamesByDay.GamesByDay = new EventSchemaItemToView().ConvertAllToGamesByDay(schemaItemsFullDAL.ToList())
+                                                .OrderBy(gd => gd.GamesDate)
+                                                .ToList();
+                gamesByDay.GamesByDay.ForEach(i => i.Games = i.Games.OrderBy(j => j.StartDate).ToList());
                 showIndex = (dateIndex >= 0) && (dateIndex < gamesByDay.GamesByDay.Count) ? dateIndex : gamesByDay.GamesByDay.GetShowIndex();
             }
 
             var currentGamesDAL = new GamesCrud(_db).GetEventGames(id);
-            gamesByDay.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList(), false);
+            gamesByDay.CurrentGames = new GameToView().ConvertAll(currentGamesDAL.ToList(), false).OrderBy(i => i.StartDate).ToList();
 
             gamesByDay.ShowIndex = showIndex;
             //ViewBag.ShowIndex = showIndex;

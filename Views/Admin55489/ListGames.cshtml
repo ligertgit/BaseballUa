@@ -12,6 +12,9 @@
 </div>
 
 <h1>Список ігор для [@ViewBag.schemaGroup?.EventSchemaItem?.Event?.Tournament?.Name][@ViewBag.schemaGroup?.EventSchemaItem?.Event?.Year][@ViewBag.schemaGroup?.EventSchemaItem?.SchemaItem][@ViewBag.schemaGroup?.GroupName]</h1>
+<div class="m-4">
+    <a asp-action="ListSchemaItems" asp-route-eventId="@ViewBag.schemaGroup?.EventSchemaItem?.EventId">Back to @ViewBag.schemaGroup?.EventSchemaItem?.Event.Tournament.Name</a>
+</div>
 
 <p>
     <a class="btn btn-primary" asp-action="AddGame" asp-route-schemaGroupId="@ViewData["schemaGroupId"]">Додати нову ігру до цього блока турніру</a>

@@ -49,8 +49,7 @@ namespace BaseballUa.BlData
         public IEnumerable<Event> GetAll()
         {
             var eventItem = _dbContext.Events.OrderByDescending(e => e.Id).Include(e => e.Tournament).ThenInclude(t => t.Category);
-            //throw new NotImplementedException();
-            //return _dbContext.Events.Include(e => e.Tournament).ThenInclude(t => t.Category);
+            //var eventItem = _dbContext.Events.Where().OrderBy(e => ((DateTime)e.StartDate - DateTime.Now).TotalMinutes).Include(e => e.Tournament).ThenInclude(t => t.Category);
             return eventItem;
         }
 
@@ -243,6 +242,16 @@ namespace BaseballUa.BlData
                                     }).ToList();
 
             return eventSL;
+        }
+
+        public List<Game> GetGames(int eventId)
+        {
+            var result = from eventSchema in _dbContext.EventSchemaItems
+                         join eventGroup in _dbContext.SchemaGroups on eventSchema.Id equals eventGroup.EventSchemaItemId
+                         join game in _dbContext.Games on eventGroup.Id equals game.SchemaGroupId
+                         where eventSchema.EventId == eventId
+                         select game;
+            return result.Distinct().OrderBy(g => g.StartDate).ToList();
         }
 
 

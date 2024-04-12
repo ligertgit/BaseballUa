@@ -6,7 +6,7 @@
         public int TotalGames { get; set; }
         public int WinGames { get; set; }
         public int LooseGames { get; set; }
-        //public int Points { get; set; }
+        public int Points { get; set; }
         public double PCT { get; set; }
 
     }

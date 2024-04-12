@@ -45,15 +45,15 @@ namespace BaseballUa.Controllers
                     
                     var teamGamesDAL = new TeamCrud(_db).GetHomeGames(teamId).ToList();
                     teamGamesDAL.AddRange(new TeamCrud(_db).GetVisitorGames(teamId).ToList());
-                    teamFullVL.Games = new GameToView().ConvertAll(teamGamesDAL);
+                    teamFullVL.Games = new GameToView().ConvertAll(teamGamesDAL).OrderBy(i => i.StartDate).ToList();
 
-                    var teamEventsDAL = new EventsCrud(_db).GetAllForTeam(teamId).ToList();
+                    var teamEventsDAL = new EventsCrud(_db).GetAllForTeam(teamId).OrderBy(i => i.StartDate).ToList();
                     teamFullVL.Events = new EventToView().ConvertAll(teamEventsDAL);
 
                     var teamPlayersDAL = new PlayersCrud(_db).GetAll(teamId).ToList();
                     teamFullVL.Players = new PlayerToView().ConvertAll(teamPlayersDAL);
 
-                    var teamAlbumsDAL = new AlbumsCrud(_db).GetAllTeamAlbums(teamId).ToList();
+                    var teamAlbumsDAL = new AlbumsCrud(_db).GetAllTeamAlbums(teamId).OrderBy(i => i.PublishDate).ToList();
                     teamFullVL.Albums = new AlbumToView().ConvertAll(teamAlbumsDAL);
 
                     var teamVideosDAL = new VideosCrud(_db).GetAllTeamVideos(teamId).ToList();
@@ -61,7 +61,7 @@ namespace BaseballUa.Controllers
 
                     int queryCount;
                     int amount = Constants.DefaulNewsAmount;
-                    var teamNewsDAL = new NewsCrud(_db).GetAllTeamNews(out queryCount, teamId, skipNews, amount).ToList();
+                    var teamNewsDAL = new NewsCrud(_db).GetAllTeamNews(out queryCount, teamId, skipNews, amount).OrderBy(i => i.PublishDate).ToList();
                     if (queryCount > skipNews + amount)
                     {
                         teamFullVL.skipNewsNext = skipNews + amount;
@@ -88,7 +88,7 @@ namespace BaseballUa.Controllers
             clubDAL.Teams = new TeamCrud(_db).GetAll(clubId)?.ToList();
             clubFullVL.Club = new ClubToView().Convert(clubDAL);
 
-            var EventsDAL = new EventsCrud(_db).GetAllForClub(clubId)?.ToList();
+            var EventsDAL = new EventsCrud(_db).GetAllForClub(clubId)?.OrderBy(i => i.StartDate).ToList();
             clubFullVL.Events = new EventToView().ConvertAll(EventsDAL ?? new List<Event>()).ToList();
 
             var clubVideos = new VideosCrud(_db).GetAllClubVideos(clubId, amount : Constants.DefaulVideosAmount).ToList();

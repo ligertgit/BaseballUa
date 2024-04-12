@@ -149,7 +149,7 @@ namespace BaseballUa.BlData
                         ).Distinct();
 
             gamesCount = query.Count();
-            var clubGames = query.OrderByDescending(g => g.StartDate).ThenByDescending(g => g.Id).Skip(skip).Take(amount);
+            var clubGames = query.OrderBy(g => g.StartDate).ThenByDescending(g => g.Id).Skip(skip).Take(amount);
 
             return clubGames;    
         }

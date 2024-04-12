@@ -226,6 +226,7 @@ namespace BaseballUa.BlData
                                      select albums)
                                        .Distinct()
                                        .Take(amount)
+                                       .OrderBy(i => i.PublishDate)
                                        .Include(a => a.Photos)
                                        .ToList();
                 }

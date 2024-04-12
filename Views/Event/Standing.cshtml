@@ -34,9 +34,11 @@
                                         <thead>
                                             <tr>
                                                 <th>Команда</th>
+                                                <th>Total</th>
                                                 <th>Wins</th>
                                                 <th>Losses</th>
                                                 <th>PCT</th>
+                                                <th>Points (if any)</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -46,8 +48,11 @@
                                                 {
                                                     <tr class="align-baseline">
                                                         <td>
-                                                            @team.Team.Name
                                                             <img src="~/images/team/logoSmall/@team.Team.FnameLogoSmall" />
+                                                            @team.Team.Name
+                                                        </td>
+                                                        <td>
+                                                            @team.TotalGames
                                                         </td>
                                                         <td>
                                                             @team.WinGames
@@ -56,7 +61,10 @@
                                                             @team.LooseGames
                                                         </td>
                                                         <td>
-                                                            @team.PCT
+                                                            @team.PCT.ToString("N3")
+                                                        </td>
+                                                        <td>
+                                                            @team.Points
                                                         </td>
                                                     </tr>
                                                 }

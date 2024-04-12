@@ -285,7 +285,7 @@ namespace BaseballUa.BlData
 								where videos.TeamId == teamId
 								select videos).Take(amount)
 								.Distinct()
-								.OrderByDescending(v => v.PublishDate)
+								.OrderBy(v => v.PublishDate)
 								.Take(amount)
 								.ToList();
 			}
@@ -306,7 +306,7 @@ namespace BaseballUa.BlData
 									|| teamIds.Contains(videos.TeamId ?? 0)
 							  select videos).DefaultIfEmpty()
                                 .Distinct()
-                                .OrderByDescending(v => v.PublishDate)
+                                .OrderBy(v => v.PublishDate)
                                 .Take(amount)
                                 .ToList();
 				//clubVideos = (from videos in _dbContext.Videos

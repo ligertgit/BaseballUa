@@ -10,8 +10,11 @@
     </div>
 </div>
 
-<h1>Список груп для @ViewBag.EventSchemaItem.SchemaItem</h1>
-<h3>@ViewBag.EventSchemaItem.Event.Tournament.Name</h3>
+<h1>Список груп для блоку турніру типу: @ViewBag.EventSchemaItem.SchemaItem</h1>
+@*<h3>@ViewBag.EventSchemaItem.Event.Tournament.Name</h3>*@
+<div class="m-4">
+    <a asp-action="ListSchemaItems" asp-route-eventId="@ViewBag.EventSchemaItem.EventId">Back to @ViewBag.EventSchemaItem.Event.Tournament.Name</a>
+</div>
 
 <p>
     <a class="btn btn-primary" asp-action="AddSchemaGroup" asp-route-eventSchemaItemId="@ViewBag.EventSchemaItem.EventSchemaItemViewModelId">Додати групу</a>

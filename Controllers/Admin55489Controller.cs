@@ -148,7 +148,7 @@ namespace BaseballUa.Controllers
         #region Events
         public IActionResult ListEvents()
         { 
-            var eventsDAL = new EventsCrud(_db).GetAll();
+            var eventsDAL = new EventsCrud(_db).GetAll().Where(i => i.StartDate != null).OrderBy(i => Math.Abs(((DateTime)i.StartDate - DateTime.Now).TotalMinutes));
             var eventsView = new EventToView().ConvertAll(eventsDAL.ToList());
 
             return View(eventsView); 
@@ -1388,7 +1388,7 @@ namespace BaseballUa.Controllers
             newsSL.SetSelected(newsId.ToString());
             var teamSL = new SelectList(new TeamCrud(_db).GetSelectItemList(uaOnly: true), "Value", "Text");
             teamSL.SetSelected(teamId.ToString());
-            var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(), "Value", "Text");
+            var gameSL = new SelectList(new GamesCrud(_db).GetSelectItemList(gameId: gameId == 0 ? null : gameId), "Value", "Text");
             gameSL.SetSelected(gameId.ToString());
             var sportSL = Enums.SportType.NotDefined.ToSelectList();
             sportSL.SetSelected(Convert.ToInt32(sportType).ToString());
@@ -1778,11 +1778,12 @@ namespace BaseballUa.Controllers
             pageDataVM.Team = teamId == null ? null : new TeamToView().Convert(new TeamCrud(_db).Get((int)teamId));
             pageDataVM.LastDate = lastDate;
 
-            pageDataVM.EventSL = new SelectList(new EventsCrud(_db).GetSelectItemList(), "Value", "Text");
-            if (pageDataVM.Event != null && pageDataVM.EventSL.First(i => i.Value == pageDataVM.Event.EventViewModelId.ToString()) != null)
-            {
-                pageDataVM.EventSL.First(i => i.Value == pageDataVM.Event.EventViewModelId.ToString()).Selected = true;
-            }
+            pageDataVM.EventSL = new SelectList(new EventsCrud(_db).GetSelectItemList(amount: 1000), "Value", "Text");
+            pageDataVM.EventSL.SetSelected(pageDataVM.Event?.EventViewModelId.ToString() ?? "novalue");
+            //if (pageDataVM.Event != null && pageDataVM.EventSL.First(i => i.Value == pageDataVM.Event.EventViewModelId.ToString()) != null)
+            //{
+            //    pageDataVM.EventSL.First(i => i.Value == pageDataVM.Event.EventViewModelId.ToString()).Selected = true;
+            //}
 
             return View(pageDataVM);
         }

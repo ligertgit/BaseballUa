@@ -102,34 +102,38 @@ namespace BaseballUa.DTO
                                                         {
                                                             new {
                                                                     Team = new TeamToView().Convert(g.HomeTeam),
-                                                                    RunsHome = g.RunsHome,
-                                                                    RunsVisitor = g.RunsVisitor,
-                                                                    GameStatus = g.GameStatus
+                                                                    TeamRuns = g.RunsHome,
+                                                                    OpponentRuns = g.RunsVisitor,
+                                                                    GameStatus = g.GameStatus,
+                                                                    Points = g.PointsHome,
                                                                 },
                                                             new {
                                                                     Team = new TeamToView().Convert(g.VisitorTeam),
-                                                                    RunsHome = g.RunsVisitor,
-                                                                    RunsVisitor = g.RunsHome,
-                                                                    GameStatus = g.GameStatus
+                                                                    TeamRuns = g.RunsVisitor,
+                                                                    OpponentRuns = g.RunsHome,
+                                                                    GameStatus = g.GameStatus,
+                                                                    Points = g.PointsVisitor,
                                                                 }
                                                         })
                                                         .Select(i => new
                                                         {
                                                             TeamId = i.Team.Id,
                                                             Team = i.Team,
-                                                            RunsHome = i.RunsHome,
-                                                            RunsVisitor = i.RunsVisitor,
-                                                            GameStatus = i.GameStatus
+                                                            TeamRuns = i.TeamRuns,
+                                                            OpponentRuns = i.OpponentRuns,
+                                                            GameStatus = i.GameStatus,
+                                                            Points = i.Points,
                                                         })
                                                         .GroupBy(hg => hg.TeamId, hg => hg, (gTeamId, groupedGames) => new TeamStandingVM
                                                         {
                                                             Team = groupedGames.First().Team,
                                                             TotalGames = groupedGames.Count(i => i.GameStatus == GameStatus.Finished),
-                                                            WinGames = groupedGames.Count(i => i.RunsHome > i.RunsVisitor && i.GameStatus == GameStatus.Finished),
-                                                            LooseGames = groupedGames.Count(i => i.RunsVisitor > i.RunsHome && i.GameStatus == GameStatus.Finished),
+                                                            WinGames = groupedGames.Count(i => i.TeamRuns > i.OpponentRuns && i.GameStatus == GameStatus.Finished),
+                                                            LooseGames = groupedGames.Count(i => i.OpponentRuns > i.TeamRuns && i.GameStatus == GameStatus.Finished),
                                                             PCT = groupedGames.Any(i => i.GameStatus == GameStatus.Finished) 
-                                                                    ? groupedGames.Count(i => i.RunsHome > i.RunsVisitor && i.GameStatus == GameStatus.Finished) / groupedGames.Count(i => i.GameStatus == GameStatus.Finished) 
-                                                                    : 0
+                                                                    ? groupedGames.Count(i => i.TeamRuns > i.OpponentRuns && i.GameStatus == GameStatus.Finished) / groupedGames.Count(i => i.GameStatus == GameStatus.Finished) 
+                                                                    : 0,
+                                                            Points = groupedGames.Sum(i => i.Points == null ? 0 : (int)i.Points)
                                                         }
                                                        )
                                                        .ToList()

@@ -1,15 +1,42 @@
 ﻿using System.Collections.Immutable;
 using System.Security.Policy;
+using BaseballUa.Models.Custom;
+using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Data
 {
-	public static class Constants
+    public static class Constants
 	{
 		public const int DefaulSelectListAmount = 25;
 		public const int HugeSelectListAmount = 50;
 		public const int MenuTitleLength = 22;
+		public const int UnlimitedAmount = 1000;
+		public const int DefaultHomeTeamId = 95;
+		public const int DefaultVisitorTeamId = 94;
 
-		public const int DefaultPhotoAmount = 100;
+
+		public static readonly ImmutableList<CalendarConst> Calendars = new List<CalendarConst>()
+												{
+													new CalendarConst() { SportType = SportType.Baseball, AgeShortName = "Вишка", CalendarId = "39e496e3e7c94b3771cd1c29e3d8749fcb6e547ca0aff81f426822978b340c79@group.calendar.google.com" },
+													new CalendarConst() { SportType = SportType.Baseball, AgeShortName = "U23", CalendarId = "36f4cdb2a35cd5ad0047b2d2492468865182fbcd844a91c38e4c673881ed088e@group.calendar.google.com" },
+													new CalendarConst() { SportType = SportType.Baseball, AgeShortName = "U18", CalendarId = "2978740c5111b9784c6ef9b4d510c6e11c421bbae3b23bebe12d53fd6b155a67@group.calendar.google.com" },
+													new CalendarConst() { SportType = SportType.Baseball, AgeShortName = "U15", CalendarId = "f3a3c80688a015fe500553ea903c95d81112ef65fbd32ad206b459f75c375822@group.calendar.google.com" },
+													new CalendarConst() { SportType = SportType.Baseball, AgeShortName = "U12", CalendarId = "87781b0e2c219ee604598f659219f155fd0338e7f4b62a451754f6c4eb29d042@group.calendar.google.com" },
+													new CalendarConst() { SportType = SportType.Baseball, AgeShortName = "U10", CalendarId = "34e3d18efdd614dbabc08a692cc1cba42398f6c0804a42c0489adafaad1724a2@group.calendar.google.com" },
+													new CalendarConst() { SportType = SportType.Baseball, AgeShortName = "Ветерани", CalendarId = "aba2a9485b98e5ee732e6362e74c4a279e4d8968684a22e5aede92115a77a1e4@group.calendar.google.com" },
+                                                    
+													new CalendarConst() { SportType = SportType.Softball, AgeShortName = "Вишка", CalendarId = "b2e7bc05bea02abcc81252a192487781b878cab7a0c9315e6135873c79545d69@group.calendar.google.com" },
+                                                    new CalendarConst() { SportType = SportType.Softball, AgeShortName = "U23", CalendarId = "dc5b3c8bf17f249e48ea75458b4c0d120872c243ff95ad79450772cb15627aa7@group.calendar.google.com" },
+                                                    new CalendarConst() { SportType = SportType.Softball, AgeShortName = "U18", CalendarId = "51b8533d5fcb9f8c376b6115085213fe0472317ca99a2f2da7b75535bd233971@group.calendar.google.com" },
+                                                    new CalendarConst() { SportType = SportType.Softball, AgeShortName = "U15", CalendarId = "03c6e80c8f187ad89bf0f4b62d50dd39f11bca1a539317cf4532a217c7604d38@group.calendar.google.com" },
+                                                    new CalendarConst() { SportType = SportType.Softball, AgeShortName = "U12", CalendarId = "bbc540d5c79c85a78f3a17baad56e774b2f0292244f5431aa4e861c8a7500165@group.calendar.google.com" },
+                                                    new CalendarConst() { SportType = SportType.Softball, AgeShortName = "U10", CalendarId = "b0df7031c00b25ffd742a518fff4a7998f34daaf085f4cf1e019ecd5846dab2f@group.calendar.google.com" },
+                                                    new CalendarConst() { SportType = SportType.Softball, AgeShortName = "Ветерани", CalendarId = "646a07f46aaec37d8950b1ec5e45862fdbde535e2dd673702e826335d956b4ae@group.calendar.google.com" },
+                                                }.ToImmutableList<CalendarConst>();
+		public const int CalendarEventSplitInterval = 10;
+
+
+        public const int DefaultPhotoAmount = 100;
 
 		public const int DefaulNewsAmount = 25;
 		public const int NewsSelectDaysShift = 20;
