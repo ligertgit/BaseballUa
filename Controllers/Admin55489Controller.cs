@@ -7,6 +7,7 @@ using BaseballUa.Models;
 using BaseballUa.Models.Custom;
 using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
+using Google.Apis.Calendar.v3.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -2037,5 +2038,106 @@ namespace BaseballUa.Controllers
 
         #endregion
 
+        #region calendar
+        public IActionResult RegenerateCalendar(int year)
+        {
+            var gCalendar = new GCalendar("uaball-201a5e222d38.json");
+
+            gCalendar.ClearAll(Constants.Calendars.Select(c => c.CalendarId).ToList());
+
+
+            var categories = new CategoriesCrud(_db).GetAll();
+            foreach (var calendarData in Constants.Calendars)
+            {
+                int count;
+                var events = new EventsCrud(_db).GetAllFiltered(out count,
+                                                                    sportType: calendarData.SportType,
+                                                                    categoryIds: categories.Where(c => c.ShortName == calendarData.AgeShortName).Select(c => c.Id),
+                                                                    newestDate: new DateTime(year + 1, 1, 1),
+                                                                    eldestDate: new DateTime(year, 1, 1),
+                                                                    amount: Constants.UnlimitedAmount).ToList();
+                foreach (var eventt in events)
+                {
+                    if (eventt.StartDate != null && eventt.EndDate != null)
+                    {
+                        if (((DateTime)eventt.EndDate - (DateTime)eventt.StartDate).Days <= Constants.CalendarEventSplitInterval)
+                        {
+                            var eventData = new Google.Apis.Calendar.v3.Data.Event()
+                            {
+                                Id = Guid.NewGuid().ToString("N"),
+                                Summary = String.Format("{0} {1} {2} {3}", eventt.Tournament.Sport, eventt.Tournament.Category.ShortName, eventt.Tournament.Name, eventt.Year),
+                                Start = new EventDateTime()
+                                {
+                                    DateTime = ((DateTime)eventt.StartDate).Date,
+                                },
+                                End = new EventDateTime()
+                                {
+                                    DateTime = ((DateTime)eventt.EndDate).Date.AddHours(23),
+                                }
+                            };
+                            gCalendar.Insert(eventData, calendarData.CalendarId);
+                        }
+                        else
+                        {
+                            var eventGames = new EventsCrud(_db).GetGames(eventt.Id);
+                            var gamesDistDates = eventGames.Where(g => g.StartDate != null).Select(g => ((DateTime)g.StartDate).Date).Distinct().OrderBy(d => d);
+
+                            if (!gamesDistDates.IsNullOrEmpty())
+                            {
+                                var curTourStartDate = gamesDistDates.First();
+                                var curTourEndDate = gamesDistDates.First();
+                                var curTourId = 1;
+                                foreach (var curDate in gamesDistDates)
+                                {
+                                    if (curDate <= curTourEndDate.AddDays(3))
+                                    {
+                                        curTourEndDate = curDate;
+                                    }
+                                    else
+                                    {
+                                        var eventData = new Google.Apis.Calendar.v3.Data.Event()
+                                        {
+                                            Id = Guid.NewGuid().ToString("N"),
+                                            Summary = String.Format("{0} {1} {2} {3} PART{4}", eventt.Tournament.Sport, eventt.Tournament.Category.ShortName, eventt.Tournament.Name, eventt.Year, curTourId),
+                                            Start = new EventDateTime()
+                                            {
+                                                DateTime = curTourStartDate.Date,
+                                            },
+                                            End = new EventDateTime()
+                                            {
+                                                DateTime = curTourEndDate.Date.AddHours(23),
+                                            }
+                                        };
+                                        gCalendar.Insert(eventData, calendarData.CalendarId);
+                                        curTourId++;
+                                        curTourStartDate = curDate;
+                                        curTourEndDate = curDate;
+                                    }
+                                }
+                                var lastEventData = new Google.Apis.Calendar.v3.Data.Event()
+                                {
+                                    Id = Guid.NewGuid().ToString("N"),
+                                    Summary = String.Format("{0} {1} {2} {3} PART{4}", eventt.Tournament.Sport, eventt.Tournament.Category.ShortName, eventt.Tournament.Name, eventt.Year, curTourId),
+                                    Start = new EventDateTime()
+                                    {
+                                        DateTime = curTourStartDate.Date,
+                                    },
+                                    End = new EventDateTime()
+                                    {
+                                        DateTime = curTourEndDate.Date.AddHours(23),
+                                    }
+                                };
+
+                                gCalendar.Insert(lastEventData, calendarData.CalendarId);
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("Index", "Calendar");
+        }
+        #endregion
     }
 }
