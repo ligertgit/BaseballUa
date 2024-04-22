@@ -1,8 +1,7 @@
-using BaseballUa.BlData;
 using BaseballUa.Data;
-using BaseballUa.DTO;
-using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
+using BaseballUa.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +10,12 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<BaseballUaDbContext>(options =>
 					options.UseSqlServer(builder.Configuration.GetConnectionString("BaseballUaConnectString")));
+
+builder.Services.AddDefaultIdentity<BaseballUaUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<BaseballUaDbContext>();
+
+//builder.Services.AddDefaultIdentity<BaseballUaUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<BaseballUaDbContext>();
 
 //builder.Services.AddScoped<ICrud<Category>, CategoriesCrud>();
 //builder.Services.AddScoped<ICrud<Tournament>, TournamentsCrud>();
@@ -31,6 +36,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 

@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using static BaseballUa.Data.Enums;
 using BaseballUa.ViewModels;
+using BaseballUa.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BaseballUa.Data
 {
-    public class BaseballUaDbContext : DbContext
+    public class BaseballUaDbContext : IdentityDbContext<BaseballUaUser>
     {
 		public BaseballUaDbContext(DbContextOptions<BaseballUaDbContext> options) : base(options)
 		{
@@ -30,37 +32,38 @@ namespace BaseballUa.Data
         public DbSet<Video> Videos { get; set; }
         public DbSet<EventToTeams> EventToTeams { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
             //tournament defaults
-            modelBuilder.Entity<Tournament>()
+            builder.Entity<Tournament>()
                 .Property(b => b.IsInternational)
                 .HasDefaultValue(false);
 
-            modelBuilder.Entity<Tournament>()
+            builder.Entity<Tournament>()
                 .Property(b => b.IsAnual)
                 .HasDefaultValue(false);
 
-            modelBuilder.Entity<Tournament>()
+            builder.Entity<Tournament>()
                 .Property(b => b.IsOfficial)
                 .HasDefaultValue(false);
 
-            modelBuilder.Entity<Tournament>()
+            builder.Entity<Tournament>()
                 .Property(b => b.IsFun)
                 .HasDefaultValue(false);
 
-            modelBuilder.Entity<Tournament>()
+            builder.Entity<Tournament>()
                 .Property(b => b.Sport)
                 .HasDefaultValue(SportType.NotDefined);
 
 
-            modelBuilder.Entity<NewsTitlePhoto>()
+            builder.Entity<NewsTitlePhoto>()
                 .HasOne(t => t.News)
                 .WithMany(n => n.NewsTitlePhotos)
                 .HasForeignKey(t => t.NewsId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<NewsTitlePhoto>()
+            builder.Entity<NewsTitlePhoto>()
                 .HasOne(t => t.Photo)
                 .WithMany(n => n.NewsTitlePhotos)
                 .HasForeignKey(t => t.PhotoId)
@@ -100,28 +103,28 @@ namespace BaseballUa.Data
             //            .HasForeignKey(g => g.VisitorTeamId)
             //            .OnDelete(DeleteBehavior.ClientNoAction);
 
-            modelBuilder.Entity<Team>()
+            builder.Entity<Team>()
                             .HasMany(t => t.HomeGames)
                             .WithOne(g => g.HomeTeam)
                             .HasForeignKey(g => g.HomeTeamId)
                             .OnDelete(DeleteBehavior.Restrict); // ondelete not working due to lines with ignore. looks like can be removed
 
-            modelBuilder.Entity<Team>()
+            builder.Entity<Team>()
                             .HasMany(t => t.VisitorGames)
                             .WithOne(g => g.VisitorTeam)
                             .HasForeignKey(g => g.VisitorTeamId)
                             .OnDelete(DeleteBehavior.Restrict); // ondelete not working due to lines with ignore. looks like can be removed
 
-            modelBuilder.Entity<Team>().Ignore(t => t.VisitorGames);
-            modelBuilder.Entity<Team>().Ignore(t => t.HomeGames);
+            builder.Entity<Team>().Ignore(t => t.VisitorGames);
+            builder.Entity<Team>().Ignore(t => t.HomeGames);
 
-            modelBuilder.Entity<EventToTeams>()
+            builder.Entity<EventToTeams>()
                             .HasOne(et => et.Event)
                             .WithMany(e => e.EventToteams)
                             .HasForeignKey(et => et.EventId)
                             .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<EventToTeams>()
+            builder.Entity<EventToTeams>()
                             .HasOne(et => et.Team)
                             .WithMany(t => t.EventToTeams)
                             .HasForeignKey(et => et.TeamId)
