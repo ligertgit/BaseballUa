@@ -1,11 +1,6 @@
-﻿using BaseballUa.BlData;
-using BaseballUa.Data;
-using BaseballUa.Models;
+﻿using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using NuGet.Packaging.Rules;
-using System.Collections.Generic;
-using System.Drawing.Text;
 
 namespace BaseballUa.DTO
 {

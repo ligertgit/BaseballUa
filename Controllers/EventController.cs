@@ -1,16 +1,11 @@
-﻿using Azure;
-using BaseballUa.BlData;
+﻿using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.DTO;
 using BaseballUa.DTO.Custom;
-using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 
 namespace BaseballUa.Controllers
 {

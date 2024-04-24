@@ -2,12 +2,7 @@
 using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using NuGet.Packaging.Signing;
-using System.Drawing;
-using System.Linq;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.BlData

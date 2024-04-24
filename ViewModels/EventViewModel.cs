@@ -1,11 +1,8 @@
 ﻿using BaseballUa.Data;
-using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using static BaseballUa.Data.Within2000To2050Attribute;
 
 namespace BaseballUa.ViewModels
 {

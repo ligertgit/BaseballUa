@@ -1,9 +1,5 @@
 ﻿using BaseballUa.Models;
 using BaseballUa.ViewModels;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using static BaseballUa.Data.Enums;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
 using BaseballUa.Data;
 
 namespace BaseballUa.DTO

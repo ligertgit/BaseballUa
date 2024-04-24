@@ -1,7 +1,6 @@
 ﻿using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
 using static BaseballUa.Data.Enums;
-using BaseballUa.ViewModels;
 using BaseballUa.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 

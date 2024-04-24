@@ -1,7 +1,5 @@
 ﻿using BaseballUa.Models;
 using BaseballUa.ViewModels;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
 
 namespace BaseballUa.DTO
 {

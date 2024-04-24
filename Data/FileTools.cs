@@ -1,9 +1,6 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing.Drawing2D;
 using System.Drawing;
-using static System.Net.Mime.MediaTypeNames;
 using System.Drawing.Imaging;
-using System.IO;
 using BaseballUa.Models;
 using static BaseballUa.Data.Enums;
 

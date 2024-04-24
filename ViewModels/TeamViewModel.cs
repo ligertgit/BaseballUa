@@ -1,5 +1,4 @@
-﻿using BaseballUa.Models;
-using static BaseballUa.Data.Enums;
+﻿using static BaseballUa.Data.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;

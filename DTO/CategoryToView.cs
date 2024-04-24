@@ -1,10 +1,6 @@
-﻿using BaseballUa.BlData;
-using BaseballUa.Data;
-using BaseballUa.Models;
+﻿using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace BaseballUa.DTO
 {

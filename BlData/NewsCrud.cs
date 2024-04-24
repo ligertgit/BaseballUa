@@ -1,11 +1,8 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
-using BaseballUa.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.BlData

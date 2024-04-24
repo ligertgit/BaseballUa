@@ -1,5 +1,4 @@
-﻿using BaseballUa.Models;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BaseballUa.ViewModels

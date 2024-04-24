@@ -1,12 +1,7 @@
-﻿using BaseballUa.BlData;
-using BaseballUa.Data;
-using BaseballUa.DTO.Custom;
-using BaseballUa.Migrations;
+﻿using BaseballUa.DTO.Custom;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.DTO

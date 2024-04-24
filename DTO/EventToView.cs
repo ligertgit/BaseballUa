@@ -1,9 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace BaseballUa.DTO
 {

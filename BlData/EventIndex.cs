@@ -1,7 +1,5 @@
 ﻿using BaseballUa.Data;
-using BaseballUa.Models;
 using BaseballUa.ViewModels.Custom;
-using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
 {

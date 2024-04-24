@@ -1,6 +1,5 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace BaseballUa.BlData
 {

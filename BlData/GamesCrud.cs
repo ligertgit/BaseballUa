@@ -2,11 +2,7 @@
 using BaseballUa.Models;
 using BaseballUa.Models.Custom;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Packaging.Signing;
-using static BaseballUa.Data.Enums;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BaseballUa.Migrations;
 
 namespace BaseballUa.BlData
 {

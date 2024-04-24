@@ -1,7 +1,5 @@
-﻿using BaseballUa.Data;
-using BaseballUa.Models;
+﻿using BaseballUa.Models;
 using BaseballUa.ViewModels;
-using Microsoft.Identity.Client;
 
 namespace BaseballUa.DTO
 {

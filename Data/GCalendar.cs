@@ -1,13 +1,7 @@
-﻿using BaseballUa.Models;
-using Google.Apis.Auth.OAuth2;
+﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Calendar.v3;
-using Google.Apis.Calendar.v3.Data;
 using Google.Apis.Services;
-using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Microsoft.IdentityModel.Tokens;
-using System.Globalization;
-using System.IO;
-using System.Runtime.InteropServices;
 
 namespace BaseballUa.Data
 {

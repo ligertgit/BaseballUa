@@ -1,9 +1,7 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
-using BaseballUa.Models.Custom;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace BaseballUa.BlData
 {

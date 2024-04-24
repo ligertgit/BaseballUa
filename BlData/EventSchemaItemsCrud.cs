@@ -1,10 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
-using static BaseballUa.Data.Enums;
-using System.ComponentModel.DataAnnotations.Schema;
-using BaseballUa.Migrations;
-using System.IO;
 
 namespace BaseballUa.BlData
 {

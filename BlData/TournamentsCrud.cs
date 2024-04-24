@@ -1,7 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 
 namespace BaseballUa.BlData
 {

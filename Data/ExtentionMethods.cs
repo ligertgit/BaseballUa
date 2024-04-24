@@ -1,15 +1,9 @@
-﻿using Azure;
-using Azure.Core;
-using BaseballUa.DTO.Custom;
-using BaseballUa.Models;
+﻿using BaseballUa.DTO.Custom;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
-using static NuGet.Packaging.PackagingConstants;
 
 namespace BaseballUa.Data
 {

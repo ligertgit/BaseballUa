@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace BaseballUa.Models
+﻿namespace BaseballUa.Models
 {
     public class Event
     {

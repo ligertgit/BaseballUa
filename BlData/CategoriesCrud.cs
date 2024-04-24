@@ -1,8 +1,6 @@
 ﻿using BaseballUa.Data;
 using BaseballUa.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using static NuGet.Packaging.PackagingConstants;
 
 namespace BaseballUa.BlData
 {

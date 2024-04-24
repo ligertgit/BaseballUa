@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using BaseballUa.BlData;
+﻿using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.DTO;
 using BaseballUa.Models;
@@ -7,13 +6,7 @@ using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Drawing;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Controllers

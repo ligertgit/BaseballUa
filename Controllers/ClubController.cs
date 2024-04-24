@@ -2,7 +2,6 @@
 using BaseballUa.Data;
 using BaseballUa.DTO;
 using BaseballUa.Models;
-using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
 using Microsoft.AspNetCore.Mvc;
 
