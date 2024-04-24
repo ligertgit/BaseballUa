@@ -1,9 +1,11 @@
-﻿using BaseballUa.BlData;
+﻿using BaseballUa.Areas.Identity.Data;
+using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.DTO;
 using BaseballUa.Models;
 using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
@@ -15,13 +17,21 @@ namespace BaseballUa.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 		private readonly BaseballUaDbContext _db;
+		private readonly UserManager<BaseballUaUser> _userManager;
+		private readonly RoleManager<IdentityRole> _roleManager;
+        
 
 
-		public HomeController(ILogger<HomeController> logger, BaseballUaDbContext dbcontext)
+		public HomeController(ILogger<HomeController> logger, 
+								BaseballUaDbContext dbcontext,
+                                UserManager<BaseballUaUser> userManager,
+                                RoleManager<IdentityRole> roleManager)
 		{
 			_logger = logger;
 			_db = dbcontext;
-		}
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
 		#region news
 
 		public IActionResult Index(int skipNews = 0)
@@ -474,5 +484,32 @@ namespace BaseballUa.Controllers
 		{
 			return View();
 		}
-	}
+        public async Task<IActionResult> Setup7928()
+		{
+			string result;
+            var roles = new[] { "Admin", "Manager", "Reporter", "Member" };
+			foreach (var role in roles)
+			{
+				if (!await _roleManager.RoleExistsAsync(role))
+				{
+					await _roleManager.CreateAsync(new IdentityRole(role));
+				}
+			}
+
+            var user = await _userManager.FindByEmailAsync(Constants.AdminEmail);
+            if (user == null)
+            {
+				result = "No user with admin email in database. Pls create user or check constants";
+                return View("Setup7928", result);
+            }
+			else
+			{
+                await _userManager.AddToRoleAsync(user, "Admin");
+            }
+
+			result = "Roles exist or inserted. Admin role has been added to admin account";
+            return View("Setup7928", result);
+        }
+
+    }
 }

@@ -6,6 +6,8 @@ namespace BaseballUa.Data
 {
     public static class Constants
 	{
+
+		public const string AdminEmail = "ligert@gmail.com";
 		public const int DefaulSelectListAmount = 25;
 		public const int HugeSelectListAmount = 50;
 		public const int MenuTitleLength = 22;
