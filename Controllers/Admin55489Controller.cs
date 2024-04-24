@@ -1,39 +1,41 @@
-﻿using BaseballUa.BlData;
+﻿using BaseballUa.Areas.Identity.Data;
+using BaseballUa.BlData;
 using BaseballUa.Data;
 using BaseballUa.DTO;
-using BaseballUa.DTO.Custom;
-using BaseballUa.Migrations;
 using BaseballUa.Models;
-using BaseballUa.Models.Custom;
 using BaseballUa.ViewModels;
 using BaseballUa.ViewModels.Custom;
 using Google.Apis.Calendar.v3.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
-using NuGet.Packaging.Signing;
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using System.Web.Mvc.Html;
 using static BaseballUa.Data.Enums;
 
 namespace BaseballUa.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class Admin55489Controller : Controller
     {
         private readonly BaseballUaDbContext _db;
         private readonly string _rootPath;
+        private readonly UserManager<BaseballUaUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public Admin55489Controller(BaseballUaDbContext dbcontext, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
+        public UserManager<BaseballUaUser> UserManager { get; }
+
+        public Admin55489Controller(BaseballUaDbContext dbcontext, 
+                                    Microsoft.AspNetCore.Hosting.IWebHostEnvironment env, 
+                                    UserManager<BaseballUaUser> userManager,
+                                    RoleManager<IdentityRole> roleManager)
         {
             _db = dbcontext;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _rootPath = env.WebRootPath;
         }
 
@@ -2137,6 +2139,35 @@ namespace BaseballUa.Controllers
             }
 
             return RedirectToAction("Index", "Calendar");
+        }
+        #endregion
+
+        #region users
+        public async Task<IActionResult> ManageUsers()
+        {
+            //var roles = new[] { "Admin", "Manager", "Reporter", "Member" };
+            //foreach(var role in roles)
+            //{
+            //    if (!await _roleManager.RoleExistsAsync(role))
+            //    {
+            //        await _roleManager.CreateAsync(new IdentityRole(role));
+            //    }
+            //}
+
+            //var user = await _userManager.FindByEmailAsync("ligert@gmail.com");
+            //if (user != null)
+            //{
+            //    await _userManager.AddToRoleAsync(user, "Admin");
+            //}
+
+            var manageUsersVM = new List<ManageUserVM>();
+            var users = _userManager.Users.ToList();
+            foreach (var user in users)
+            {
+                var roles = _userManager.GetRolesAsync(user).Result;
+                manageUsersVM.Add(new ManageUserVM() { UserId = user.Id, UserEmail = user.Email, Roles = roles.OrderBy(r => r).ToList() });
+            }
+            return View(manageUsersVM);
         }
         #endregion
     }

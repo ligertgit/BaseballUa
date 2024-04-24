@@ -7,11 +7,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+	options.Password.RequireUppercase = false;
+	options.Password.RequireNonAlphanumeric = false;
+});
 
 builder.Services.AddDbContext<BaseballUaDbContext>(options =>
 					options.UseSqlServer(builder.Configuration.GetConnectionString("BaseballUaConnectString")));
 
-builder.Services.AddDefaultIdentity<BaseballUaUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<BaseballUaUser>(options => options.SignIn.RequireConfirmedAccount = false)
+	.AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<BaseballUaDbContext>();
 
 //builder.Services.AddDefaultIdentity<BaseballUaUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -43,5 +50,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();

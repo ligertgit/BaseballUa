@@ -146,27 +146,29 @@ body {
     background-color: rgba(var(--bs-primary-rgb), 0.9);
 }
 
-/*.accordion.width {*/
-    /*border: 1px solid rgba(0, 0, 0, 0.125);*/
-    /*display: flex;
+/* auth tab controls */
+.login-logout-card .card-header {
+    padding: 0px 0px 12px 0px; 
 }
 
-.accordion.width .accblock .accblockheader:not(.collapsed) {
-    pointer-events: none;
+.login-logout-card ul.nav-tabs {
+    padding: 0px 0px -12px 0px;
 }
 
-.accordion.width .accblock .accblockheader {
-    cursor: pointer;*/
-    /*transform: rotate(180deg);
-    writing-mode: vertical-rl;*/
-/*}
+.login-logout-card li.nav-item {
+    width: 50%;
+}
 
-.collapsing.width {
-    transition: width 0.35s ease;
-    height: auto;
-    width: 0;
-}*/
+.login-logout-card a.nav-link {
+    font-size: 1rem;
+    color: #495057;
+    text-align: center;
+    padding: 1rem;
+}
 
+.login-logout-card .card-body {
+    padding: 10px 20px;
+}
 
 
 
